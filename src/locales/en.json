@@ -1,0 +1,27 @@
+{
+  "api": {
+    "unknown": "An unknown error occurred while processing request."
+  },
+  "common": {
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "clients": "Clients",
+    "configuration": "Configuration",
+    "sessions": "Sessions"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome to the SympAuthy administration panel."
+    }
+  }
+}

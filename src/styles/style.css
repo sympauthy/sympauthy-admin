@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: theme(colors.blue.800);
+    --color-hover-primary: theme(colors.blue.900);
+    --color-on-primary: theme(colors.white);
+
+    --color-body: theme(colors.gray.50);
+    --color-on-body: theme(colors.gray.500);
+
+    --color-disabled: theme(colors.gray.400);
+    --color-on-disabled: theme(colors.white);
+
+    --color-danger: theme(colors.red.500);
+    --color-link: var(--color-primary);
+}
+
+body {
+    color: var(--color-background);
+}
+
+/** Button **/
+@layer components {
+    .btn {
+        @apply border rounded p-2;
+    }
+
+    .btn-primary {
+        background-color: var(--color-primary);
+        color: var(--color-on-primary);
+    }
+
+    .btn-disabled {
+        background-color: var(--color-disabled);
+        color: var(--color-on-disabled);
+    }
+}
+
+/** Text **/
+@layer components {
+    .text-primary {
+        color: var(--color-primary);
+    }
+
+    .text-danger {
+        color: var(--color-danger);
+    }
+}
+
+/** Link **/
+@layer components {
+    .a {
+        @apply underline cursor-pointer;
+    }
+
+    .a-primary {
+        color: var(--color-primary);
+        &:hover {
+            @media (hover: hover) {
+                color: var(--color-hover-primary);
+            }
+        }
+    }
+}
