@@ -18,8 +18,8 @@ export type ButtonStyle = {
 }
 
 export const primaryColoredButton: ButtonStyle = Object.freeze({
-  activeClasses: 'bg-[--color-primary] text-[color:var(--color-on-primary)]',
-  loadingClasses: 'bg-[--color-primary] text-[--color-on-primary] cursor-wait',
-  submittingClasses: 'bg-[--color-primary] text-[--color-on-primary] cursor-wait',
-  disabledClasses: 'bg-[--color-disabled] text-[--color-on-disabled] pointer-events-none'
+  activeClasses: 'bg-(--color-primary) text-(--color-on-primary)',
+  loadingClasses: 'bg-(--color-primary) text-(--color-on-primary) cursor-wait',
+  submittingClasses: 'bg-(--color-primary) text-(--color-on-primary) cursor-wait',
+  disabledClasses: 'bg-(--color-disabled) text-(--color-on-disabled) pointer-events-none'
 })

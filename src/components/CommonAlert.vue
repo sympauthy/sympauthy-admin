@@ -19,7 +19,9 @@ const props = withDefaults(
 
 /*noinspection CssUnusedSymbol*/
 .danger {
-  @apply border-red-50 text-red-700 bg-red-100;
+  border-color: var(--color-red-50);
+  color: var(--color-red-700);
+  background-color: var(--color-red-100);
 }
 
 </style>
