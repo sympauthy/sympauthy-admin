@@ -42,6 +42,20 @@
       "redirectUris": "Redirect URIs",
       "empty": "No clients found."
     },
+    "users": {
+      "title": "Users",
+      "status": "Status",
+      "createdAt": "Created at",
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "empty": "No users found.",
+      "search": "Search users...",
+      "statusFilter": "Status",
+      "allStatuses": "All statuses",
+      "claimFilters": "Claim filters",
+      "showFilters": "Show claim filters",
+      "hideFilters": "Hide claim filters"
+    },
     "claims": {
       "title": "Claims",
       "id": "ID",
