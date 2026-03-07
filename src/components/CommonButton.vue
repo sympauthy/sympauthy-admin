@@ -41,7 +41,7 @@ const computedClasses = computed(() => {
           :disabled='computedDisabled'
           class='btn'>
     <template v-if='loading'>
-      <div class='w-full flex flex-row justify-center align-items-center'>
+      <div class='w-full flex flex-row justify-center items-center'>
         <div class='me-2'>
           <common-spinner class='h-4 w-4 border-2'/>
         </div>
@@ -49,7 +49,7 @@ const computedClasses = computed(() => {
       </div>
     </template>
     <template v-else-if='submitting'>
-      <div class='w-full flex flex-row justify-center align-items-center'>
+      <div class='w-full flex flex-row justify-center items-center'>
         <div class='me-2'>
           <common-spinner class='h-4 w-4 border-2'/>
         </div>
