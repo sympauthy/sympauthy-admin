@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/useAuthStore'
 
 export interface QueryOptions {
   path: string
+  params?: Record<string, string>
   timeoutInMs?: number
 }
 
@@ -66,6 +67,11 @@ export class AbstractApi {
   private getUrl(options: QueryOptions): string {
     const url = new URL(`${document.location.protocol}//${document.location.host}`)
     url.pathname = options.path
+    if (options.params) {
+      for (const [key, value] of Object.entries(options.params)) {
+        url.searchParams.set(key, value)
+      }
+    }
     return url.toString()
   }
 
