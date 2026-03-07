@@ -16,7 +16,10 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Page {page} of {totalPages}"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -29,6 +32,14 @@
     "dashboard": {
       "title": "Dashboard",
       "welcome": "Welcome to the SympAuthy administration panel."
+    },
+    "clients": {
+      "title": "Clients",
+      "clientId": "Client ID",
+      "allowedScopes": "Allowed Scopes",
+      "defaultScopes": "Default Scopes",
+      "redirectUris": "Redirect URIs",
+      "empty": "No clients found."
     }
   }
 }
