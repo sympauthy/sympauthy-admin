@@ -36,6 +36,11 @@ async function logout() {
           {{ t('nav.clients') }}
         </router-link>
       </li>
+      <li>
+        <router-link to='/claims' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+          {{ t('nav.claims') }}
+        </router-link>
+      </li>
       <!-- <li>
         <router-link to='/configuration' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
           {{ t('nav.configuration') }}
