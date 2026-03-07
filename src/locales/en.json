@@ -1,6 +1,13 @@
 {
   "api": {
-    "unknown": "An unknown error occurred while processing request."
+    "unknown": "An unknown error occurred while processing request.",
+    "unauthorized": "Your session has expired. Please sign in again."
+  },
+  "auth": {
+    "signingIn": "Signing in...",
+    "callbackError": "An error occurred while completing the sign-in. Please try again.",
+    "logout": "Sign out",
+    "forbidden": "You do not have permission to access this page."
   },
   "common": {
     "submit": "Submit",

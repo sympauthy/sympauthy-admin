@@ -3,6 +3,7 @@ import { type ErrorResource, errorResourceSchema } from '@/client/model/ErrorRes
 import { ErrorApiResponse, makeErrorApiResponse } from '@/client/ErrorApiResponse'
 import { translateMessage } from '@/i18n'
 import { SuccessApiResponse } from '@/client/SuccessApiResponse'
+import { useAuthStore } from '@/stores/useAuthStore'
 
 export interface QueryOptions {
   path: string
@@ -21,22 +22,22 @@ export class AbstractApi {
   private readonly ajv = new Ajv()
 
   async get<T>(options: QueryOptions & JsonQueryOptions<T>): Promise<SuccessApiResponse<T> | ErrorApiResponse> {
-    const response = await this.fetch('get', options)
+    const response = await this.fetchWithRetry('get', options)
     return this.parseResponseContent(response, options)
   }
 
   async post<T>(options: QueryOptions & PostQueryOptions & JsonQueryOptions<T>): Promise<SuccessApiResponse<T> | ErrorApiResponse> {
-    const response = await this.fetch('post', options, options)
+    const response = await this.fetchWithRetry('post', options, options)
     return this.parseResponseContent(response, options)
   }
 
   async put<T>(options: QueryOptions & PostQueryOptions & JsonQueryOptions<T>): Promise<SuccessApiResponse<T> | ErrorApiResponse> {
-    const response = await this.fetch('put', options, options)
+    const response = await this.fetchWithRetry('put', options, options)
     return this.parseResponseContent(response, options)
   }
 
   async delete(options: QueryOptions): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
-    const response = await this.fetch('delete', options)
+    const response = await this.fetchWithRetry('delete', options)
     if (response instanceof ErrorApiResponse) {
       return response
     }
@@ -89,7 +90,28 @@ export class AbstractApi {
     if (postOptions?.body !== undefined) {
       headers.set('Content-Type', 'application/json')
     }
+    const authStore = useAuthStore()
+    if (authStore.accessToken) {
+      headers.set('Authorization', `Bearer ${authStore.accessToken}`)
+    }
     return headers
+  }
+
+  private async fetchWithRetry(
+    method: 'get' | 'put' | 'post' | 'delete',
+    options: QueryOptions,
+    postOptions?: PostQueryOptions
+  ): Promise<Response | ErrorApiResponse> {
+    const response = await this.fetch(method, options, postOptions)
+    if (response instanceof Response && response.status === 401) {
+      const authStore = useAuthStore()
+      const renewed = await authStore.trySilentRenew()
+      if (renewed) {
+        return await this.fetch(method, options, postOptions)
+      }
+      return makeErrorApiResponse('api.unauthorized')
+    }
+    return response
   }
 
   async parseResponseContent<T>(
