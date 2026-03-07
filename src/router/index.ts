@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardPage from '@/pages/DashboardPage.vue'
 import ClientsPage from '@/pages/ClientsPage.vue'
+import ClaimsPage from '@/pages/ClaimsPage.vue'
 import CallbackPage from '@/pages/CallbackPage.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 
@@ -32,6 +33,12 @@ export function makeRouter() {
         path: '/clients',
         name: 'clients',
         component: ClientsPage,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/claims',
+        name: 'claims',
+        component: ClaimsPage,
         meta: { requiresAuth: true }
       }
     ]

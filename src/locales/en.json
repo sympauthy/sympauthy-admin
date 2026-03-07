@@ -25,6 +25,7 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "clients": "Clients",
+    "claims": "Claims",
     "configuration": "Configuration",
     "sessions": "Sessions"
   },
@@ -40,6 +41,17 @@
       "defaultScopes": "Default Scopes",
       "redirectUris": "Redirect URIs",
       "empty": "No clients found."
+    },
+    "claims": {
+      "title": "Claims",
+      "id": "ID",
+      "status": "Status",
+      "standard": "standard",
+      "custom": "custom",
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "required": "required",
+      "empty": "No claims found."
     }
   }
 }
