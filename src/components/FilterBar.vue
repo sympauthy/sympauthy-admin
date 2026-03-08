@@ -1,26 +1,34 @@
 <script lang="ts" setup>
-import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import { reactive } from 'vue'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
-export interface DropdownConfig {
-  value: string
-  options: { label: string; value: string }[]
-}
+export type FilterConfig = {
+  key: string
+  label: string
+} & (
+  | { type: 'text' }
+  | { type: 'select'; options: { label: string; value: string }[] }
+)
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     searchPlaceholder?: string
-    dropdowns?: DropdownConfig[]
+    filters?: FilterConfig[]
   }>(),
   {
     searchPlaceholder: '',
-    dropdowns: () => [],
+    filters: () => [],
   },
 )
 
 const emit = defineEmits<{
   search: [query: string]
-  'dropdown-change': [index: number, value: string]
+  'filter-change': [key: string, value: string]
+  'filter-remove': [key: string]
 }>()
+
+const activeFilters = reactive(new Map<string, string>())
+const filterTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
 
 let searchTimeout: ReturnType<typeof setTimeout> | undefined
 
@@ -32,40 +40,103 @@ function onSearchInput(event: Event) {
   }, 300)
 }
 
-function onDropdownChange(index: number, event: Event) {
-  const value = (event.target as HTMLSelectElement).value
-  emit('dropdown-change', index, value)
+function addFilter(event: Event) {
+  const select = event.target as HTMLSelectElement
+  const key = select.value
+  if (!key) return
+  activeFilters.set(key, '')
+  select.value = ''
+}
+
+function onFilterValueChange(key: string, event: Event) {
+  const filter = props.filters.find((f) => f.key === key)
+  const value = (event.target as HTMLInputElement | HTMLSelectElement).value
+  activeFilters.set(key, value)
+
+  if (filter && filter.type === 'text') {
+    if (filterTimeouts[key]) clearTimeout(filterTimeouts[key])
+    filterTimeouts[key] = setTimeout(() => {
+      emit('filter-change', key, value)
+    }, 300)
+  } else {
+    emit('filter-change', key, value)
+  }
+}
+
+function removeFilter(key: string) {
+  activeFilters.delete(key)
+  if (filterTimeouts[key]) clearTimeout(filterTimeouts[key])
+  emit('filter-remove', key)
+}
+
+function getFilterConfig(key: string): FilterConfig | undefined {
+  return props.filters.find((f) => f.key === key)
 }
 </script>
 
 <template>
   <div class="mb-4">
     <div class="flex items-center gap-4">
-      <div class="relative flex-1 max-w-md">
+      <div class="relative flex-1">
         <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
         <input
           type="text"
           :placeholder="searchPlaceholder"
-          class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           @input="onSearchInput"
         />
       </div>
       <select
-        v-for="(dropdown, index) in dropdowns"
-        :key="index"
-        :value="dropdown.value"
-        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-        @change="onDropdownChange(index, $event)"
+        :disabled="!filters.some((f) => !activeFilters.has(f.key))"
+        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        @change="addFilter"
       >
+        <option value="">{{ $t('pages.users.addFilter') }}</option>
         <option
-          v-for="option in dropdown.options"
-          :key="option.value"
-          :value="option.value"
+          v-for="filter in filters.filter((f) => !activeFilters.has(f.key))"
+          :key="filter.key"
+          :value="filter.key"
         >
-          {{ option.label }}
+          {{ filter.label }}
         </option>
       </select>
     </div>
-    <slot name="extra" />
+
+    <div v-if="activeFilters.size > 0" class="flex flex-wrap gap-2 mt-3">
+      <div
+        v-for="[key, value] in activeFilters"
+        :key="key"
+        class="flex items-center gap-1 border border-gray-300 rounded-full px-3 py-1 text-sm bg-gray-50"
+      >
+        <span class="text-gray-600 font-medium">{{ getFilterConfig(key)?.label }}:</span>
+        <select
+          v-if="getFilterConfig(key)?.type === 'select'"
+          :value="value"
+          class="border-none bg-white text-sm focus:outline-none focus:ring-0 py-0 pl-1 pr-6"
+          @change="onFilterValueChange(key, $event)"
+        >
+          <option
+            v-for="option in (getFilterConfig(key) as FilterConfig & { type: 'select' }).options"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+        <input
+          v-else
+          type="text"
+          :value="value"
+          class="border-none bg-white text-sm focus:outline-none focus:ring-0 py-0 px-1 w-24"
+          @input="onFilterValueChange(key, $event)"
+        />
+        <button
+          class="text-gray-400 hover:text-gray-600"
+          @click="removeFilter(key)"
+        >
+          <XMarkIcon class="h-4 w-4" />
+        </button>
+      </div>
+    </div>
   </div>
 </template>

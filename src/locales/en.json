@@ -52,9 +52,7 @@
       "search": "Search users...",
       "statusFilter": "Status",
       "allStatuses": "All statuses",
-      "claimFilters": "Claim filters",
-      "showFilters": "Show claim filters",
-      "hideFilters": "Hide claim filters"
+      "addFilter": "Add filter"
     },
     "claims": {
       "title": "Claims",

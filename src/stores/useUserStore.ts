@@ -95,6 +95,16 @@ export const useUserStore = defineStore('users', () => {
     fetchUsers(0)
   }
 
+  function clearStatusFilter() {
+    statusFilter.value = ''
+    fetchUsers(0)
+  }
+
+  function clearClaimFilter(claimId: string) {
+    delete claimFilters.value[claimId]
+    fetchUsers(0)
+  }
+
   function setSelectedClaimIds(claimIds: string[]) {
     selectedClaimIds.value = claimIds
   }
@@ -117,6 +127,8 @@ export const useUserStore = defineStore('users', () => {
     setSearch,
     setStatusFilter,
     setClaimFilter,
+    clearStatusFilter,
+    clearClaimFilter,
     toggleSort,
     setSelectedClaimIds,
   }
