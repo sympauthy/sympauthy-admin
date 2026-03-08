@@ -13,12 +13,25 @@ export type AuthUser = {
   accessToken: string
 }
 
+/**
+ * Return the absolute base URL of this application (e.g. "http://localhost:8080/admin").
+ *
+ * Combines `window.location.origin` with the base path configured via Vite's `base` option
+ * (`import.meta.env.BASE_URL`), stripping any trailing slash so callers can safely append paths.
+ */
+function getBaseUrl(): string {
+  const basePath = import.meta.env.BASE_URL.replace(/\/+$/, '')
+  return `${window.location.origin}${basePath}`
+}
+
 function makeUserManagerSettings(): UserManagerSettings {
+  const baseUrl = getBaseUrl()
   return {
-    authority: import.meta.env.VITE_OIDC_AUTHORITY,
+    // Authority points to the authorization server root, not the admin UI base path.
+    authority: import.meta.env.VITE_OIDC_AUTHORITY || window.location.origin,
     client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
-    redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
-    post_logout_redirect_uri: import.meta.env.VITE_OIDC_POST_LOGOUT_REDIRECT_URI,
+    redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI || `${baseUrl}/callback`,
+    post_logout_redirect_uri: import.meta.env.VITE_OIDC_POST_LOGOUT_REDIRECT_URI || baseUrl,
     scope: import.meta.env.VITE_OIDC_SCOPE,
     response_type: 'code',
     automaticSilentRenew: true,

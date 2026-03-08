@@ -23,6 +23,14 @@ npm run dev
 
 The dev server proxies `/api` requests to `http://localhost:8080` (the SympAuthy backend).
 
+The OIDC authority and redirect URIs are derived from `window.location.origin` by default. To override them during development, create a `.env.local` file:
+
+```sh
+VITE_OIDC_AUTHORITY=http://localhost:8080
+VITE_OIDC_REDIRECT_URI=http://localhost:5174/callback
+VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
+```
+
 ### Type-Check, Compile and Minify for Production
 
 ```sh
