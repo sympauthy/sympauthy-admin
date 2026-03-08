@@ -63,7 +63,8 @@
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",
-      "empty": "No claims found."
+      "empty": "No claims found.",
+      "tags": "Tags"
     }
   }
 }
