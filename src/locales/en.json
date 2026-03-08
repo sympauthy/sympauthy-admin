@@ -50,8 +50,8 @@
       "disabled": "disabled",
       "empty": "No users found.",
       "search": "Search users...",
-      "statusFilter": "Status",
-      "allStatuses": "All statuses",
+      "statusFilter": "status",
+      "allStatuses": "all statuses",
       "addFilter": "Add filter"
     },
     "claims": {

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import DropdownButton from '@/components/DropdownButton.vue'
 
 export type FilterConfig = {
   key: string
@@ -40,12 +41,14 @@ function onSearchInput(event: Event) {
   }, 300)
 }
 
-function addFilter(event: Event) {
-  const select = event.target as HTMLSelectElement
-  const key = select.value
-  if (!key) return
+const availableFilterOptions = computed(() =>
+  props.filters
+    .filter((f) => !activeFilters.has(f.key))
+    .map((f) => ({ label: f.label, value: f.key })),
+)
+
+function addFilter(key: string) {
   activeFilters.set(key, '')
-  select.value = ''
 }
 
 function onFilterValueChange(key: string, event: Event) {
@@ -86,20 +89,12 @@ function getFilterConfig(key: string): FilterConfig | undefined {
           @input="onSearchInput"
         />
       </div>
-      <select
-        :disabled="!filters.some((f) => !activeFilters.has(f.key))"
-        class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        @change="addFilter"
-      >
-        <option value="">{{ $t('pages.users.addFilter') }}</option>
-        <option
-          v-for="filter in filters.filter((f) => !activeFilters.has(f.key))"
-          :key="filter.key"
-          :value="filter.key"
-        >
-          {{ filter.label }}
-        </option>
-      </select>
+      <DropdownButton
+        :label="$t('pages.users.addFilter')"
+        :disabled="availableFilterOptions.length === 0"
+        :options="availableFilterOptions"
+        @select="addFilter"
+      />
     </div>
 
     <div v-if="activeFilters.size > 0" class="flex flex-wrap gap-2 mt-3">

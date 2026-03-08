@@ -18,7 +18,7 @@ const enabledClaims = ref<ClaimResource[]>([])
 const filters = computed<FilterConfig[]>(() => [
   {
     key: 'status',
-    label: t('pages.users.status'),
+    label: t('pages.users.statusFilter'),
     type: 'select',
     options: [
       { label: t('pages.users.allStatuses'), value: '' },
