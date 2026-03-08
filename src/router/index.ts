@@ -16,7 +16,7 @@ declare module 'vue-router' {
 
 export function makeRouter() {
   const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
       {
         path: '/callback',
