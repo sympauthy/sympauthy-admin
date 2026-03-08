@@ -1,0 +1,146 @@
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/useUserStore'
+import { useClaimStore } from '@/stores/useClaimStore'
+import PaginatedTable from '@/components/PaginatedTable.vue'
+import SortableHeader from '@/components/SortableHeader.vue'
+import FilterBar from '@/components/FilterBar.vue'
+import type { FilterConfig } from '@/components/FilterBar.vue'
+import type { ClaimResource } from '@/client/model/ClaimResource'
+
+const { t } = useI18n()
+const userStore = useUserStore()
+const claimStore = useClaimStore()
+
+const enabledClaims = ref<ClaimResource[]>([])
+
+const filters = computed<FilterConfig[]>(() => [
+  {
+    key: 'status',
+    label: t('pages.users.statusFilter'),
+    type: 'select',
+    options: [
+      { label: t('pages.users.allStatuses'), value: '' },
+      { label: t('pages.users.enabled'), value: 'enabled' },
+      { label: t('pages.users.disabled'), value: 'disabled' },
+    ],
+  },
+  ...enabledClaims.value.map((claim) => ({
+    key: claim.id,
+    label: claim.id,
+    type: 'text' as const,
+  })),
+])
+
+function onFilterChange(key: string, value: string) {
+  if (key === 'status') {
+    userStore.setStatusFilter(value)
+  } else {
+    userStore.setClaimFilter(key, value)
+  }
+}
+
+function onFilterRemove(key: string) {
+  if (key === 'status') {
+    userStore.clearStatusFilter()
+  } else {
+    userStore.clearClaimFilter(key)
+  }
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString()
+}
+
+onMounted(async () => {
+  await claimStore.fetchClaims()
+  enabledClaims.value = claimStore.claims.filter((c) => c.enabled)
+  userStore.setSelectedClaimIds(enabledClaims.value.map((c) => c.id))
+  await userStore.fetchUsers()
+})
+</script>
+
+<template>
+  <div>
+    <h1 class="text-2xl font-bold mb-4">{{ t('pages.users.title') }}</h1>
+
+    <FilterBar
+      :search-placeholder="t('pages.users.search')"
+      :filters="filters"
+      @search="userStore.setSearch"
+      @filter-change="onFilterChange"
+      @filter-remove="onFilterRemove"
+    />
+
+    <PaginatedTable
+      :loading="userStore.loading"
+      :error="userStore.error"
+      :empty="userStore.users.length === 0"
+      :page="userStore.page"
+      :total-pages="userStore.totalPages"
+      @page-change="userStore.fetchUsers"
+    >
+      <template #header>
+        <SortableHeader
+          class="w-[10%]"
+          :label="t('pages.users.status')"
+          field="status"
+          :current-sort="userStore.sortField"
+          :current-order="userStore.sortOrder"
+          @sort="userStore.toggleSort"
+        />
+        <SortableHeader
+          v-for="claim in enabledClaims"
+          :key="claim.id"
+          :label="claim.id"
+          :field="claim.id"
+          :current-sort="userStore.sortField"
+          :current-order="userStore.sortOrder"
+          @sort="userStore.toggleSort"
+        />
+        <SortableHeader
+          class="w-[15%]"
+          :label="t('pages.users.createdAt')"
+          field="created_at"
+          :current-sort="userStore.sortField"
+          :current-order="userStore.sortOrder"
+          @sort="userStore.toggleSort"
+        />
+      </template>
+
+      <template #rows>
+        <tr v-for="user in userStore.users" :key="user.user_id">
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <span
+              v-if="user.status === 'enabled'"
+              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
+            >
+              {{ t('pages.users.enabled') }}
+            </span>
+            <span
+              v-else
+              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"
+            >
+              {{ t('pages.users.disabled') }}
+            </span>
+          </td>
+          <td
+            v-for="claim in enabledClaims"
+            :key="claim.id"
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+          >
+            {{ user.claims?.[claim.id] ?? '' }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {{ formatDate(user.created_at) }}
+          </td>
+        </tr>
+      </template>
+
+      <template #empty>
+        <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
+      </template>
+    </PaginatedTable>
+  </div>
+</template>
