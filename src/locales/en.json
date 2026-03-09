@@ -37,6 +37,7 @@
     "clients": {
       "title": "Clients",
       "clientId": "Client ID",
+      "type": "Type",
       "allowedScopes": "Allowed Scopes",
       "defaultScopes": "Default Scopes",
       "redirectUris": "Redirect URIs",

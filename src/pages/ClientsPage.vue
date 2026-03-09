@@ -28,10 +28,13 @@ onMounted(async () => {
         <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.clientId') }}
         </th>
-        <th class="w-[30%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          {{ t('pages.clients.type') }}
+        </th>
+        <th class="w-[25%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.allowedScopes') }}
         </th>
-        <th class="w-[30%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="w-[25%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.defaultScopes') }}
         </th>
         <th class="w-[30%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -43,6 +46,9 @@ onMounted(async () => {
         <tr v-for="client in clientStore.clients" :key="client.client_id">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ client.client_id }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {{ client.type }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
             <span
