@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClientStore } from '@/stores/useClientStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
+import ClientTypeHelpTooltip from '@/components/ClientTypeHelpTooltip.vue'
 
 const { t } = useI18n()
 const clientStore = useClientStore()
@@ -30,6 +31,7 @@ onMounted(async () => {
         </th>
         <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.type') }}
+          <ClientTypeHelpTooltip />
         </th>
         <th class="w-[25%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.allowedScopes') }}

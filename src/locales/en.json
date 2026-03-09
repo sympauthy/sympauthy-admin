@@ -29,6 +29,13 @@
     "configuration": "Configuration",
     "sessions": "Sessions"
   },
+  "client": {
+    "type": {
+      "help": "A confidential client can securely store credentials (e.g. server-side apps). A public client cannot (e.g. SPAs, mobile apps). See {link} for details.",
+      "helpLinkText": "OAuth 2.1 specification",
+      "helpLinkUrl": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12#section-2.1"
+    }
+  },
   "pages": {
     "dashboard": {
       "title": "Dashboard",
