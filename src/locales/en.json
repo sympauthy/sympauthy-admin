@@ -71,6 +71,7 @@
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",
+      "identifier": "identifier",
       "empty": "No claims found.",
       "tags": "Tags"
     }
