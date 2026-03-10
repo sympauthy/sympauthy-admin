@@ -70,9 +70,15 @@ onMounted(async () => {
             </span>
             <span
               v-if="claim.required"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800"
+              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 mr-1"
             >
               {{ t('pages.claims.required') }}
+            </span>
+            <span
+              v-if="claim.identifier"
+              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800"
+            >
+              {{ t('pages.claims.identifier') }}
             </span>
           </td>
         </tr>

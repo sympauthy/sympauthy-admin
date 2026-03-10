@@ -6,6 +6,7 @@ export type ClaimResource = {
   standard: boolean
   enabled: boolean
   required: boolean
+  identifier: boolean
   allowed_values?: string[]
   group?: string
 }
@@ -28,6 +29,9 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
     required: {
       type: 'boolean',
     },
+    identifier: {
+      type: 'boolean',
+    },
     allowed_values: {
       type: 'array',
       items: { type: 'string' },
@@ -38,6 +42,6 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
       nullable: true,
     },
   },
-  required: ['id', 'type', 'standard', 'enabled', 'required'],
+  required: ['id', 'type', 'standard', 'enabled', 'required', 'identifier'],
   additionalProperties: true,
 }
