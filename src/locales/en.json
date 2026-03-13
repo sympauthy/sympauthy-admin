@@ -36,6 +36,13 @@
       "helpLinkUrl": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12#section-2.1"
     }
   },
+  "claim": {
+    "identifier": {
+      "help": "Identifier claims uniquely identify a user. They serve as login identifiers for password authentication and enable automatic account merging across authentication providers. See {link} for details.",
+      "helpLinkText": "identifier claims documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/documentation/technical/configuration#auth"
+    }
+  },
   "pages": {
     "dashboard": {
       "title": "Dashboard",

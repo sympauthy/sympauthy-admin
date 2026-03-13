@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useClientStore } from '@/stores/useClientStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import ClientTypeHelpTooltip from '@/components/ClientTypeHelpTooltip.vue'
+import Tag from '@/components/Tag.vue'
 
 const { t } = useI18n()
 const clientStore = useClientStore()
@@ -53,22 +54,24 @@ onMounted(async () => {
             {{ client.type }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <span
+            <Tag
               v-for="scope in client.allowed_scopes"
               :key="scope"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-1 mb-1"
+              color="blue"
+              class="mr-1 mb-1"
             >
               {{ scope }}
-            </span>
+            </Tag>
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <span
+            <Tag
               v-for="scope in client.default_scopes"
               :key="scope"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mr-1 mb-1"
+              color="green"
+              class="mr-1 mb-1"
             >
               {{ scope }}
-            </span>
+            </Tag>
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
             <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate max-w-xs">

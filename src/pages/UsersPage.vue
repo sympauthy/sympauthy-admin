@@ -6,6 +6,7 @@ import { useClaimStore } from '@/stores/useClaimStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import SortableHeader from '@/components/SortableHeader.vue'
 import FilterBar from '@/components/FilterBar.vue'
+import Tag from '@/components/Tag.vue'
 import type { FilterConfig } from '@/components/FilterBar.vue'
 import type { ClaimResource } from '@/client/model/ClaimResource'
 
@@ -112,18 +113,12 @@ onMounted(async () => {
       <template #rows>
         <tr v-for="user in userStore.users" :key="user.user_id">
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <span
-              v-if="user.status === 'enabled'"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
-            >
+            <Tag v-if="user.status === 'enabled'" color="green">
               {{ t('pages.users.enabled') }}
-            </span>
-            <span
-              v-else
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"
-            >
+            </Tag>
+            <Tag v-else color="red">
               {{ t('pages.users.disabled') }}
-            </span>
+            </Tag>
           </td>
           <td
             v-for="claim in enabledClaims"

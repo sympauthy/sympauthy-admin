@@ -19,10 +19,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 </script>
 
 <template>
-  <span ref="tooltipRef" class="relative inline-flex items-center align-text-bottom">
-    <button @click.stop="toggle" class="text-gray-400 hover:text-gray-600 ml-1 cursor-help" type="button">
-      <span class="inline-flex items-center justify-center h-4 w-4 rounded-full border border-current text-[10px] font-bold leading-none pb-px pl-px">?</span>
-    </button>
+  <span ref="tooltipRef" class="relative">
+    <button @click.stop="toggle" class="text-current opacity-60 hover:opacity-100 cursor-help text-[0.85em] font-semibold leading-none whitespace-nowrap align-middle" type="button">&nbsp;ⓘ</button>
     <div
       v-if="open"
       class="absolute top-full left-1/2 -translate-x-1/2 mt-1 z-50 w-72 p-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg normal-case tracking-normal font-normal"

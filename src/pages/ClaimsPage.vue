@@ -3,6 +3,8 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClaimStore } from '@/stores/useClaimStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
+import Tag from '@/components/Tag.vue'
+import IdentifierHelpTooltip from '@/components/IdentifierHelpTooltip.vue'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()
@@ -39,47 +41,32 @@ onMounted(async () => {
       <template #rows>
         <tr v-for="claim in claimStore.claims" :key="claim.id">
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <span
-              v-if="claim.enabled"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
-            >
+            <Tag v-if="claim.enabled" color="green">
               {{ t('pages.claims.enabled') }}
-            </span>
-            <span
-              v-else
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"
-            >
+            </Tag>
+            <Tag v-else color="red">
               {{ t('pages.claims.disabled') }}
-            </span>
+            </Tag>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ claim.id }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <span
-              v-if="claim.standard"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mr-1"
-            >
+            <Tag v-if="claim.standard" color="blue" class="mr-1">
               {{ t('pages.claims.standard') }}
-            </span>
-            <span
-              v-else
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 mr-1"
-            >
+            </Tag>
+            <Tag v-else color="gray" class="mr-1">
               {{ t('pages.claims.custom') }}
-            </span>
-            <span
-              v-if="claim.required"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 mr-1"
-            >
+            </Tag>
+            <Tag v-if="claim.required" color="purple" class="mr-1">
               {{ t('pages.claims.required') }}
-            </span>
-            <span
-              v-if="claim.identifier"
-              class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800"
-            >
+            </Tag>
+            <Tag v-if="claim.identifier" color="yellow">
               {{ t('pages.claims.identifier') }}
-            </span>
+              <template #help>
+                <IdentifierHelpTooltip />
+              </template>
+            </Tag>
           </td>
         </tr>
       </template>
