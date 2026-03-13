@@ -11,6 +11,10 @@ declare module 'vue-router' {
     requiresAuth?: boolean
     requiredRoles?: string[]
     noLayout?: boolean
+    breadcrumb?: {
+      label: string
+      parent?: string
+    }
   }
 }
 
@@ -28,25 +32,25 @@ export function makeRouter() {
         path: '/',
         name: 'dashboard',
         component: DashboardPage,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.dashboard' } }
       },
       {
         path: '/users',
         name: 'users',
         component: UsersPage,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.users' } }
       },
       {
         path: '/clients',
         name: 'clients',
         component: ClientsPage,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.clients' } }
       },
       {
         path: '/claims',
         name: 'claims',
         component: ClaimsPage,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.claims' } }
       }
     ]
   })

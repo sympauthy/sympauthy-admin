@@ -64,8 +64,6 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">{{ t('pages.users.title') }}</h1>
-
     <FilterBar
       :search-placeholder="t('pages.users.search')"
       :filters="filters"

@@ -16,8 +16,6 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">{{ t('pages.claims.title') }}</h1>
-
     <PaginatedTable
       :loading="claimStore.loading"
       :error="claimStore.error"

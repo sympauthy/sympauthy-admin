@@ -13,7 +13,7 @@ async function logout() {
 
 <template>
   <nav class="flex flex-col w-64 min-h-screen bg-gray-800 text-white">
-    <div class="p-4 text-lg font-semibold border-b border-gray-700">
+    <div class="h-14 flex items-center px-4 text-lg font-semibold border-b border-gray-700">
       SympAuthy Admin
     </div>
     <ul class="flex flex-col mt-2 flex-1">
