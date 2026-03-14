@@ -67,7 +67,29 @@
       "search": "Search users...",
       "statusFilter": "status",
       "allStatuses": "all statuses",
-      "addFilter": "Add filter"
+      "addFilter": "Add filter",
+      "actions": "Actions",
+      "view": "View"
+    },
+    "userDetail": {
+      "title": "User",
+      "claims": "Claims",
+      "claimsHelp": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
+      "claimsHelpLinkText": "claims documentation",
+      "claimsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/claims.html",
+      "consents": "Consents",
+      "consentsHelp": "Clients this user has authorized to access their data. Revoking a consent will require the user to re-authorize the client. See {link} for details.",
+      "consentsHelpLinkText": "consents documentation",
+      "consentsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/consent.html",
+      "claim": "Claim",
+      "value": "Value",
+      "status": "status",
+      "createdAt": "created_at",
+      "client": "Client",
+      "scopes": "Scopes",
+      "actions": "Actions",
+      "revoke": "Revoke",
+      "noConsents": "No active consents."
     },
     "claims": {
       "title": "Claims",

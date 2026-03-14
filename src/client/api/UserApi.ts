@@ -3,6 +3,10 @@ import {
   type UserListResource,
   userListResourceSchema,
 } from '@/client/model/UserListResource'
+import {
+  type UserResource,
+  userResourceSchema,
+} from '@/client/model/UserResource'
 import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
 import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
 
@@ -18,6 +22,15 @@ export interface ListUsersParams {
 }
 
 export class UserApi extends AbstractApi {
+  async getUser(
+    userId: string,
+  ): Promise<SuccessApiResponse<UserResource> | ErrorApiResponse> {
+    return this.get<UserResource>({
+      path: `/api/v1/admin/users/${userId}`,
+      schema: userResourceSchema,
+    })
+  }
+
   async listUsers(
     params: ListUsersParams = {},
   ): Promise<SuccessApiResponse<UserListResource> | ErrorApiResponse> {

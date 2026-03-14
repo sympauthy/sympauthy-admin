@@ -13,6 +13,7 @@ const props = withDefaults(
     empty?: boolean
     page?: number
     totalPages?: number
+    tableLayout?: 'fixed' | 'auto'
   }>(),
   {
     loading: false,
@@ -20,6 +21,7 @@ const props = withDefaults(
     empty: false,
     page: 0,
     totalPages: 1,
+    tableLayout: 'fixed',
   },
 )
 
@@ -60,7 +62,7 @@ function nextPage() {
   <!-- Table -->
   <div v-else>
     <div class="overflow-x-auto">
-      <table class="w-full table-fixed divide-y divide-gray-200">
+      <table class="w-full divide-y divide-gray-200" :class="props.tableLayout === 'auto' ? 'table-auto' : 'table-fixed'">
         <thead class="bg-gray-50">
           <tr>
             <slot name="header" />

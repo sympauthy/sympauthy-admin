@@ -1,16 +1,21 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserStore'
 import { useClaimStore } from '@/stores/useClaimStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import SortableHeader from '@/components/SortableHeader.vue'
 import FilterBar from '@/components/FilterBar.vue'
 import Tag from '@/components/Tag.vue'
+import CommonButton from '@/components/CommonButton.vue'
+import { EyeIcon } from '@heroicons/vue/20/solid'
+import { primaryColoredButton } from '@/styles/ButtonStyle'
 import type { FilterConfig } from '@/components/FilterBar.vue'
 import type { ClaimResource } from '@/client/model/ClaimResource'
 
 const { t } = useI18n()
+const router = useRouter()
 const userStore = useUserStore()
 const claimStore = useClaimStore()
 
@@ -78,11 +83,12 @@ onMounted(async () => {
       :empty="userStore.users.length === 0"
       :page="userStore.page"
       :total-pages="userStore.totalPages"
+      table-layout="auto"
       @page-change="userStore.fetchUsers"
     >
       <template #header>
         <SortableHeader
-          class="w-[10%]"
+          class="w-0 whitespace-nowrap"
           :label="t('pages.users.status')"
           field="status"
           :current-sort="userStore.sortField"
@@ -99,13 +105,16 @@ onMounted(async () => {
           @sort="userStore.toggleSort"
         />
         <SortableHeader
-          class="w-[15%]"
+          class="w-0 whitespace-nowrap"
           :label="t('pages.users.createdAt')"
           field="created_at"
           :current-sort="userStore.sortField"
           :current-order="userStore.sortOrder"
           @sort="userStore.toggleSort"
         />
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+          {{ t('pages.users.actions') }}
+        </th>
       </template>
 
       <template #rows>
@@ -127,6 +136,17 @@ onMounted(async () => {
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {{ formatDate(user.created_at) }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <CommonButton
+              :button-style="primaryColoredButton"
+              @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
+            >
+              <span class="inline-flex items-center gap-1.5">
+                <EyeIcon class="size-4 shrink-0" />
+                {{ t('pages.users.view') }}
+              </span>
+            </CommonButton>
           </td>
         </tr>
       </template>
