@@ -22,6 +22,23 @@ export interface ListUsersParams {
 }
 
 export class UserApi extends AbstractApi {
+  async logoutUser(
+    userId: string,
+  ): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
+    return this.postVoid({
+      path: `/api/v1/admin/users/${userId}/logout`,
+    })
+  }
+
+  async logoutUserClient(
+    userId: string,
+    clientId: string,
+  ): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
+    return this.postVoid({
+      path: `/api/v1/admin/users/${userId}/logout/${clientId}`,
+    })
+  }
+
   async getUser(
     userId: string,
   ): Promise<SuccessApiResponse<UserResource> | ErrorApiResponse> {

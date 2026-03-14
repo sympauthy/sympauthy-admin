@@ -37,6 +37,17 @@ export class AbstractApi {
     return this.parseResponseContent(response, options)
   }
 
+  async postVoid(options: QueryOptions): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
+    const response = await this.fetchWithRetry('post', options)
+    if (response instanceof ErrorApiResponse) {
+      return response
+    }
+    if (!response.ok) {
+      return this.parseErrorResponseContent(response, options)
+    }
+    return new SuccessApiResponse<void>(undefined)
+  }
+
   async delete(options: QueryOptions): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
     const response = await this.fetchWithRetry('delete', options)
     if (response instanceof ErrorApiResponse) {

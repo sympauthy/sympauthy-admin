@@ -43,6 +43,14 @@
       "helpLinkUrl": "https://sympauthy.github.io/documentation/technical/configuration#auth"
     }
   },
+  "logoutDialog": {
+    "title": "Force Logout",
+    "description": "Revoke authentication tokens for this user. They will need to sign in again.",
+    "allClients": "All clients",
+    "specificClient": "Specific client",
+    "selectClient": "Select a client...",
+    "confirm": "Force Logout"
+  },
   "pages": {
     "dashboard": {
       "title": "Dashboard",
@@ -69,7 +77,8 @@
       "allStatuses": "all statuses",
       "addFilter": "Add filter",
       "actions": "Actions",
-      "view": "View"
+      "view": "View",
+      "logout": "Logout"
     },
     "userDetail": {
       "title": "User",

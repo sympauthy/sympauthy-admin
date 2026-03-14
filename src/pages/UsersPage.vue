@@ -9,8 +9,9 @@ import SortableHeader from '@/components/SortableHeader.vue'
 import FilterBar from '@/components/FilterBar.vue'
 import Tag from '@/components/Tag.vue'
 import CommonButton from '@/components/CommonButton.vue'
-import { EyeIcon } from '@heroicons/vue/20/solid'
-import { primaryColoredButton } from '@/styles/ButtonStyle'
+import LogoutDialog from '@/components/LogoutDialog.vue'
+import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
+import { primaryColoredButton, dangerColoredButton } from '@/styles/ButtonStyle'
 import type { FilterConfig } from '@/components/FilterBar.vue'
 import type { ClaimResource } from '@/client/model/ClaimResource'
 
@@ -20,6 +21,7 @@ const userStore = useUserStore()
 const claimStore = useClaimStore()
 
 const enabledClaims = ref<ClaimResource[]>([])
+const logoutUserId = ref<string | null>(null)
 
 const filters = computed<FilterConfig[]>(() => [
   {
@@ -138,15 +140,26 @@ onMounted(async () => {
             {{ formatDate(user.created_at) }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <CommonButton
-              :button-style="primaryColoredButton"
-              @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
-            >
-              <span class="inline-flex items-center gap-1.5">
-                <EyeIcon class="size-4 shrink-0" />
-                {{ t('pages.users.view') }}
-              </span>
-            </CommonButton>
+            <div class="flex gap-2">
+              <CommonButton
+                :button-style="primaryColoredButton"
+                @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
+              >
+                <span class="inline-flex items-center gap-1.5">
+                  <EyeIcon class="size-4 shrink-0" />
+                  {{ t('pages.users.view') }}
+                </span>
+              </CommonButton>
+              <CommonButton
+                :button-style="dangerColoredButton"
+                @click="logoutUserId = user.user_id"
+              >
+                <span class="inline-flex items-center gap-1.5">
+                  <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
+                  {{ t('pages.users.logout') }}
+                </span>
+              </CommonButton>
+            </div>
           </td>
         </tr>
       </template>
@@ -155,5 +168,11 @@ onMounted(async () => {
         <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
       </template>
     </PaginatedTable>
+
+    <LogoutDialog
+      :user-id="logoutUserId"
+      :open="logoutUserId !== null"
+      @close="logoutUserId = null"
+    />
   </div>
 </template>
