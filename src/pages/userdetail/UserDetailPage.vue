@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserDetailStore } from '@/stores/useUserDetailStore'
 import { useBreadcrumb } from '@/composables/useBreadcrumb'
-import UserClaimsPanel from '@/pages/UserClaimsPanel.vue'
-import UserConsentsPanel from '@/pages/UserConsentsPanel.vue'
+import UserSummaryPanel from '@/pages/userdetail/UserSummaryPanel.vue'
+import UserClaimsPanel from '@/pages/userdetail/UserClaimsPanel.vue'
+import UserConsentsPanel from '@/pages/userdetail/UserConsentsPanel.vue'
+import LogoutDialog from '@/components/LogoutDialog.vue'
 import CommonSpinner from '@/components/CommonSpinner.vue'
 import CommonAlert from '@/components/CommonAlert.vue'
 
@@ -15,16 +17,18 @@ const store = useUserDetailStore()
 const { setLabel } = useBreadcrumb()
 
 const userId = computed(() => route.params.userId as string)
+const logoutOpen = ref(false)
 
 onMounted(async () => {
   store.$reset()
   await Promise.all([
     store.fetchUser(userId.value),
+    store.fetchClaims(userId.value),
     store.fetchConsents(userId.value),
   ])
   if (store.user) {
-    const identifier = store.user.claims
-      ? Object.values(store.user.claims)[0]
+    const identifier = store.user.identifier_claims
+      ? Object.values(store.user.identifier_claims)[0]
       : undefined
     setLabel(identifier ?? userId.value)
   }
@@ -45,9 +49,19 @@ onMounted(async () => {
     </CommonAlert>
 
     <!-- Content -->
-    <div v-else-if="store.user" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <UserClaimsPanel :user="store.user" />
+    <div v-else-if="store.user" class="space-y-6">
+      <UserSummaryPanel
+        :user="store.user"
+        @logout="logoutOpen = true"
+      />
+      <UserClaimsPanel :user-id="userId" />
       <UserConsentsPanel :user-id="userId" />
     </div>
+
+    <LogoutDialog
+      :user-id="userId"
+      :open="logoutOpen"
+      @close="logoutOpen = false"
+    />
   </div>
 </template>

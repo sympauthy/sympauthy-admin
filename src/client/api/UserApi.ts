@@ -4,9 +4,13 @@ import {
   userListResourceSchema,
 } from '@/client/model/UserListResource'
 import {
-  type UserResource,
-  userResourceSchema,
-} from '@/client/model/UserResource'
+  type UserDetailResource,
+  userDetailResourceSchema,
+} from '@/client/model/UserDetailResource'
+import {
+  type UserClaimListResource,
+  userClaimListResourceSchema,
+} from '@/client/model/UserClaimListResource'
 import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
 import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
 
@@ -18,6 +22,18 @@ export interface ListUsersParams {
   status?: string
   sort?: string
   order?: string
+  [key: string]: string | number | undefined
+}
+
+export interface ListUserClaimsParams {
+  page?: number
+  size?: number
+  claim_id?: string
+  identifier?: string
+  required?: string
+  collected?: string
+  verified?: string
+  standard?: string
   [key: string]: string | number | undefined
 }
 
@@ -41,10 +57,10 @@ export class UserApi extends AbstractApi {
 
   async getUser(
     userId: string,
-  ): Promise<SuccessApiResponse<UserResource> | ErrorApiResponse> {
-    return this.get<UserResource>({
+  ): Promise<SuccessApiResponse<UserDetailResource> | ErrorApiResponse> {
+    return this.get<UserDetailResource>({
       path: `/api/v1/admin/users/${userId}`,
-      schema: userResourceSchema,
+      schema: userDetailResourceSchema,
     })
   }
 
@@ -61,6 +77,23 @@ export class UserApi extends AbstractApi {
       path: '/api/v1/admin/users',
       params: queryParams,
       schema: userListResourceSchema,
+    })
+  }
+
+  async listUserClaims(
+    userId: string,
+    params: ListUserClaimsParams = {},
+  ): Promise<SuccessApiResponse<UserClaimListResource> | ErrorApiResponse> {
+    const queryParams: Record<string, string> = {}
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== '') {
+        queryParams[key] = value.toString()
+      }
+    }
+    return this.get<UserClaimListResource>({
+      path: `/api/v1/admin/users/${userId}/claims`,
+      params: queryParams,
+      schema: userClaimListResourceSchema,
     })
   }
 }

@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserApi } from '@/client/api/UserApi'
+import type { ListUserClaimsParams } from '@/client/api/UserApi'
 import { ConsentApi } from '@/client/api/ConsentApi'
-import type { UserResource } from '@/client/model/UserResource'
+import type { UserDetailResource } from '@/client/model/UserDetailResource'
+import type { UserClaimResource } from '@/client/model/UserClaimResource'
 import type { ConsentResource } from '@/client/model/ConsentResource'
 import { isSuccess } from '@/client/SuccessApiResponse'
 import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
@@ -11,9 +13,18 @@ export const useUserDetailStore = defineStore('userDetail', () => {
   const userApi = new UserApi()
   const consentApi = new ConsentApi()
 
-  const user = ref<UserResource | null>(null)
+  const user = ref<UserDetailResource | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+
+  const claims = ref<UserClaimResource[]>([])
+  const claimsLoading = ref(false)
+  const claimsError = ref<string | null>(null)
+  const claimsPage = ref(0)
+  const claimsSize = ref(20)
+  const claimsTotal = ref(0)
+
+  const claimsTotalPages = computed(() => Math.ceil(claimsTotal.value / claimsSize.value))
 
   const consents = ref<ConsentResource[]>([])
   const consentsLoading = ref(false)
@@ -38,6 +49,28 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     }
 
     loading.value = false
+  }
+
+  async function fetchClaims(userId: string, requestedPage: number = 0, filters: ListUserClaimsParams = {}): Promise<void> {
+    claimsLoading.value = true
+    claimsError.value = null
+
+    const response = await userApi.listUserClaims(userId, {
+      ...filters,
+      page: requestedPage,
+      size: claimsSize.value,
+    })
+
+    if (isSuccess(response)) {
+      claims.value = response.content.claims
+      claimsPage.value = response.content.page
+      claimsTotal.value = response.content.total
+    } else {
+      claimsError.value = getErrorMessage(response as ErrorApiResponse)
+      claims.value = []
+    }
+
+    claimsLoading.value = false
   }
 
   async function fetchConsents(userId: string, requestedPage: number = 0): Promise<void> {
@@ -72,6 +105,11 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     user.value = null
     loading.value = false
     error.value = null
+    claims.value = []
+    claimsLoading.value = false
+    claimsError.value = null
+    claimsPage.value = 0
+    claimsTotal.value = 0
     consents.value = []
     consentsLoading.value = false
     consentsError.value = null
@@ -83,6 +121,13 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     user,
     loading,
     error,
+    claims,
+    claimsLoading,
+    claimsError,
+    claimsPage,
+    claimsSize,
+    claimsTotal,
+    claimsTotalPages,
     consents,
     consentsLoading,
     consentsError,
@@ -91,6 +136,7 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     consentsTotal,
     consentsTotalPages,
     fetchUser,
+    fetchClaims,
     fetchConsents,
     revokeConsent,
     $reset,

@@ -3,7 +3,7 @@ import DashboardPage from '@/pages/DashboardPage.vue'
 import ClientsPage from '@/pages/ClientsPage.vue'
 import ClaimsPage from '@/pages/ClaimsPage.vue'
 import UsersPage from '@/pages/UsersPage.vue'
-import UserDetailPage from '@/pages/UserDetailPage.vue'
+import UserDetailPage from '@/pages/userdetail/UserDetailPage.vue'
 import CallbackPage from '@/pages/CallbackPage.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 
