@@ -43,6 +43,7 @@ function formatDate(dateStr: string | null): string {
       :empty="store.claims.length === 0"
       :page="store.claimsPage"
       :total-pages="store.claimsTotalPages"
+      table-layout="auto"
       @page-change="(page: number) => store.fetchClaims(userId, page)"
     >
       <template #header>
