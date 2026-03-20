@@ -27,6 +27,7 @@
     "users": "Users",
     "clients": "Clients",
     "claims": "Claims",
+    "scopes": "Scopes",
     "configuration": "Configuration",
     "sessions": "Sessions"
   },
@@ -107,6 +108,30 @@
       "actions": "Actions",
       "revoke": "Revoke",
       "noConsents": "No active consents."
+    },
+    "scopes": {
+      "title": "Scopes",
+      "id": "ID",
+      "status": "Status",
+      "type": "Type",
+      "origin": {
+        "label": "Origin",
+        "oauth2": "oauth2",
+        "openid": "openid",
+        "system": "system",
+        "custom": "custom"
+      },
+      "claims": "Claims",
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "consentable": "consentable",
+      "grantable": "grantable",
+      "client": "client",
+      "typeFilter": "type",
+      "allTypes": "all types",
+      "statusFilter": "status",
+      "allStatuses": "all statuses",
+      "empty": "No scopes found."
     },
     "claims": {
       "title": "Claims",
