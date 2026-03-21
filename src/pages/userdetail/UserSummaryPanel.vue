@@ -38,7 +38,7 @@ function formatDate(dateStr: string): string {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg border border-gray-200 p-6">
+  <div class="bg-white rounded-lg border border-gray-200 p-4 sm:p-6">
     <div class="flex items-start justify-between gap-4">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1 min-w-0">
         <div class="min-w-0">

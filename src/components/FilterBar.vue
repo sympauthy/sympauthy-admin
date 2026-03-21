@@ -79,7 +79,7 @@ function getFilterConfig(key: string): FilterConfig | undefined {
 
 <template>
   <div class="mb-4">
-    <div class="flex items-center gap-4">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
       <div class="relative flex-1">
         <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
         <input

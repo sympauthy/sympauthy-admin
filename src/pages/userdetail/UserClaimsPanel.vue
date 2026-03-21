@@ -44,11 +44,11 @@ function formatDate(dateStr: string | null | undefined): string {
       :empty="store.claims.length === 0"
       :page="store.claimsPage"
       :total-pages="store.claimsTotalPages"
-      table-layout="auto"
+
       @page-change="(page: number) => store.fetchClaims(userId, page)"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.claim') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -73,7 +73,7 @@ function formatDate(dateStr: string | null | undefined): string {
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ claim.claim_id }}
           </td>
-          <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-xs">
+          <td class="px-6 py-4 text-sm text-gray-500 truncate">
             {{ claim.value ?? '—' }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">

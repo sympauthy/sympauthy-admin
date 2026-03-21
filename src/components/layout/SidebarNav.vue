@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/24/outline'
+import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+import { useSidebar } from '@/composables/useSidebar'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const { closeSidebar } = useSidebar()
 
 async function logout() {
   await authStore.signout()
@@ -12,9 +14,12 @@ async function logout() {
 </script>
 
 <template>
-  <nav class="flex flex-col w-64 min-h-screen bg-gray-800 text-white">
-    <div class="h-14 flex items-center px-4 text-lg font-semibold border-b border-gray-700">
-      SympAuthy Admin
+  <nav class="flex flex-col h-full bg-gray-800 text-white">
+    <div class="h-14 flex items-center justify-between px-4 text-lg font-semibold border-b border-gray-700">
+      <span>SympAuthy Admin</span>
+      <button :title="t('nav.closeMenu')" class="lg:hidden text-gray-400 hover:text-white" @click="closeSidebar">
+        <XMarkIcon class="h-5 w-5" />
+      </button>
     </div>
     <ul class="flex flex-col mt-2 flex-1">
       <li>

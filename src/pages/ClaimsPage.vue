@@ -23,7 +23,6 @@ onMounted(async () => {
       :empty="claimStore.claims.length === 0"
       :page="claimStore.page"
       :total-pages="claimStore.totalPages"
-      table-layout="auto"
       @page-change="claimStore.fetchClaims"
     >
       <template #header>
@@ -51,7 +50,7 @@ onMounted(async () => {
               {{ t('pages.claims.disabled') }}
             </Tag>
           </td>
-          <td class="px-6 py-4 text-sm font-medium text-gray-900 min-w-40 max-w-xs truncate">
+          <td class="px-6 py-4 text-sm font-medium text-gray-900 truncate">
             {{ claim.id }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">

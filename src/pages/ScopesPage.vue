@@ -81,7 +81,6 @@ onMounted(async () => {
       :empty="scopeStore.scopes.length === 0"
       :page="scopeStore.page"
       :total-pages="scopeStore.totalPages"
-      table-layout="auto"
       @page-change="scopeStore.fetchScopes"
     >
       <template #header>
@@ -112,7 +111,7 @@ onMounted(async () => {
               {{ t('pages.scopes.disabled') }}
             </Tag>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          <td class="px-6 py-4 text-sm font-medium text-gray-900 truncate">
             {{ scope.id }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -123,7 +122,7 @@ onMounted(async () => {
           <td class="px-6 py-4 whitespace-nowrap text-sm">
             <OriginTag :origin="scope.origin" />
           </td>
-          <td class="px-6 py-4 text-sm text-gray-500">
+          <td class="px-6 py-4 text-sm text-gray-500 truncate">
             <span v-if="scope.claims && scope.claims.length > 0">
               {{ scope.claims.join(', ') }}
             </span>

@@ -15,6 +15,10 @@ const props = defineProps<{
 const { t } = useI18n()
 const store = useUserMfaStore()
 
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString()
+}
+
 const revokeDialogOpen = ref(false)
 const revokeTargetMfaId = ref<string | null>(null)
 
@@ -65,13 +69,14 @@ function cancelRevoke() {
       @page-change="(page: number) => store.fetchMfaMethods(userId, page)"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.mfaType') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3"></th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.registeredAt') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[100px]">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.actions') }}
         </th>
       </template>
@@ -81,8 +86,9 @@ function cancelRevoke() {
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ method.type }}
           </td>
+          <td></td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            {{ method.registered_at }}
+            {{ formatDate(method.registered_at) }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
             <CommonButton

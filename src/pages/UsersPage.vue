@@ -85,7 +85,7 @@ onMounted(async () => {
       :empty="userStore.users.length === 0"
       :page="userStore.page"
       :total-pages="userStore.totalPages"
-      table-layout="auto"
+
       @page-change="userStore.fetchUsers"
     >
       <template #header>
@@ -107,7 +107,7 @@ onMounted(async () => {
           @sort="userStore.toggleSort"
         />
         <SortableHeader
-          class="w-0 whitespace-nowrap"
+          class="w-0 whitespace-nowrap hidden sm:table-cell"
           :label="t('pages.users.createdAt')"
           field="created_at"
           :current-sort="userStore.sortField"
@@ -132,11 +132,11 @@ onMounted(async () => {
           <td
             v-for="claim in enabledClaims"
             :key="claim.id"
-            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+            class="px-6 py-4 text-sm text-gray-500 truncate"
           >
             {{ user.claims?.[claim.id] ?? '' }}
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
             {{ formatDate(user.created_at) }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -147,7 +147,7 @@ onMounted(async () => {
               >
                 <span class="inline-flex items-center gap-1.5">
                   <EyeIcon class="size-4 shrink-0" />
-                  {{ t('pages.users.view') }}
+                  <span class="hidden sm:inline">{{ t('pages.users.view') }}</span>
                 </span>
               </CommonButton>
               <CommonButton
@@ -156,7 +156,7 @@ onMounted(async () => {
               >
                 <span class="inline-flex items-center gap-1.5">
                   <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
-                  {{ t('pages.users.logout') }}
+                  <span class="hidden sm:inline">{{ t('pages.users.logout') }}</span>
                 </span>
               </CommonButton>
             </div>

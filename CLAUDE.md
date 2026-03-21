@@ -54,6 +54,25 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 - `Tag` component for status badges
 - In data tables, the primary/ID column uses `font-medium text-gray-900` for bold styling (not `Tag`)
 
+## Responsive Design
+
+Mobile-first approach using Tailwind's default breakpoints:
+- **Base (< 640px)** — Phones: sidebar is a slide-over drawer toggled by hamburger menu, tables scroll horizontally, filters and pagination stack vertically
+- **`sm:` (≥ 640px)** — Large phones / small tablets: filters and pagination go side-by-side
+- **`lg:` (≥ 1024px)** — Desktops: sidebar is permanently visible, full padding (`p-6`, `px-6`)
+
+Key patterns:
+- Sidebar state managed by `useSidebar` composable (shared `ref`, auto-closes on navigation)
+- `AdminLayout` handles the drawer overlay and mobile header bar (`lg:hidden`)
+- `SidebarNav` sizing is controlled by its parent (`h-full w-full`), not by the component itself
+- Table cell padding is reduced on phones via a global CSS rule in `style.css` (avoids per-page changes)
+- `PaginatedTable` defaults to `table-layout="auto"` — do not use `fixed`
+- Table column sizing convention:
+  - **Shrink-wrap columns** (status, dates, actions): use `w-0 whitespace-nowrap` on `<th>` so they take only the space their content needs
+  - **Fill columns** (names, emails, values): no width classes — they expand to fill remaining space. Add `truncate` on `<td>` to ellipsize overflow
+  - **Hidden on phone**: use `hidden sm:table-cell` on both `<th>` and `<td>` (e.g. "Created At" in users list)
+  - Never use fixed percentage widths (`w-[10%]`, `w-[100px]`) — they break at different breakpoints
+
 ## Environment
 
 OIDC config via `VITE_OIDC_*` env vars (see `.env.local`). Dev proxy forwards `/api` and `/.well-known` to the backend.

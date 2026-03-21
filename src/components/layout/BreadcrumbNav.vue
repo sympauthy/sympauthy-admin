@@ -57,7 +57,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 </script>
 
 <template>
-  <nav v-if="breadcrumbs.length > 0" class="h-14 shrink-0 flex items-center border-b border-gray-200 bg-white px-6">
+  <nav v-if="breadcrumbs.length > 0" class="h-14 shrink-0 flex items-center border-b border-gray-200 bg-white px-4 lg:px-6">
     <ol class="flex items-center gap-2">
       <li v-for="(item, index) in breadcrumbs" :key="index" class="flex items-center gap-2">
         <ChevronRightIcon v-if="index > 0" class="h-4 w-4 text-gray-400 shrink-0" />
