@@ -107,14 +107,14 @@ onMounted(async () => {
           @sort="userStore.toggleSort"
         />
         <SortableHeader
-          class="w-0 whitespace-nowrap"
+          class="w-0 whitespace-nowrap hidden sm:table-cell"
           :label="t('pages.users.createdAt')"
           field="created_at"
           :current-sort="userStore.sortField"
           :current-order="userStore.sortOrder"
           @sort="userStore.toggleSort"
         />
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.users.actions') }}
         </th>
       </template>
@@ -132,11 +132,11 @@ onMounted(async () => {
           <td
             v-for="claim in enabledClaims"
             :key="claim.id"
-            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+            class="px-6 py-4 text-sm text-gray-500 truncate"
           >
             {{ user.claims?.[claim.id] ?? '' }}
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
             {{ formatDate(user.created_at) }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">

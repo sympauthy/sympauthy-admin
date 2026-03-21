@@ -66,7 +66,12 @@ Key patterns:
 - `AdminLayout` handles the drawer overlay and mobile header bar (`lg:hidden`)
 - `SidebarNav` sizing is controlled by its parent (`h-full w-full`), not by the component itself
 - Table cell padding is reduced on phones via a global CSS rule in `style.css` (avoids per-page changes)
-- Avoid fixed percentage widths on table columns — use `table-layout="auto"` and let `overflow-x-auto` handle overflow
+- `PaginatedTable` defaults to `table-layout="auto"` — do not use `fixed`
+- Table column sizing convention:
+  - **Shrink-wrap columns** (status, dates, actions): use `w-0 whitespace-nowrap` on `<th>` so they take only the space their content needs
+  - **Fill columns** (names, emails, values): no width classes — they expand to fill remaining space. Add `truncate` on `<td>` to ellipsize overflow
+  - **Hidden on phone**: use `hidden sm:table-cell` on both `<th>` and `<td>` (e.g. "Created At" in users list)
+  - Never use fixed percentage widths (`w-[10%]`, `w-[100px]`) — they break at different breakpoints
 
 ## Environment
 

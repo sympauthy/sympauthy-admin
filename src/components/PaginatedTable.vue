@@ -21,7 +21,7 @@ const props = withDefaults(
     empty: false,
     page: 0,
     totalPages: 1,
-    tableLayout: 'fixed',
+    tableLayout: 'auto',
   },
 )
 
