@@ -3,7 +3,7 @@ import type { JSONSchemaType } from 'ajv'
 export type ClaimResource = {
   id: string
   type: string
-  standard: boolean
+  origin: string
   enabled: boolean
   required: boolean
   identifier: boolean
@@ -20,8 +20,8 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
     type: {
       type: 'string',
     },
-    standard: {
-      type: 'boolean',
+    origin: {
+      type: 'string',
     },
     enabled: {
       type: 'boolean',
@@ -42,6 +42,6 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
       nullable: true,
     },
   },
-  required: ['id', 'type', 'standard', 'enabled', 'required', 'identifier'],
+  required: ['id', 'type', 'origin', 'enabled', 'required', 'identifier'],
   additionalProperties: true,
 }

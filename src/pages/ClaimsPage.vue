@@ -9,6 +9,17 @@ import IdentifierHelpTooltip from '@/components/IdentifierHelpTooltip.vue'
 const { t } = useI18n()
 const claimStore = useClaimStore()
 
+function originColor(origin: string): 'blue' | 'gray' | 'yellow' {
+  switch (origin) {
+    case 'openid':
+      return 'blue'
+    case 'custom':
+      return 'yellow'
+    default:
+      return 'gray'
+  }
+}
+
 onMounted(async () => {
   await claimStore.fetchClaims()
 })
@@ -50,11 +61,8 @@ onMounted(async () => {
             {{ claim.id }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <Tag v-if="claim.standard" color="blue" class="mr-1">
-              {{ t('pages.claims.standard') }}
-            </Tag>
-            <Tag v-else color="gray" class="mr-1">
-              {{ t('pages.claims.custom') }}
+            <Tag :color="originColor(claim.origin)" class="mr-1">
+              {{ t(`pages.claims.origin.${claim.origin}`) }}
             </Tag>
             <Tag v-if="claim.required" color="purple" class="mr-1">
               {{ t('pages.claims.required') }}

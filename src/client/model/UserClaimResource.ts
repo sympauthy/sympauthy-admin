@@ -4,7 +4,7 @@ export type UserClaimResource = {
   claim_id: string
   value: string | null
   type: string
-  standard: boolean
+  origin: string
   required: boolean
   identifier: boolean
   group?: string | null
@@ -25,8 +25,8 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
     type: {
       type: 'string',
     },
-    standard: {
-      type: 'boolean',
+    origin: {
+      type: 'string',
     },
     required: {
       type: 'boolean',
@@ -47,6 +47,6 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
       nullable: true,
     },
   },
-  required: ['claim_id', 'value', 'type', 'standard', 'required', 'identifier', 'collected_at', 'verified_at'],
+  required: ['claim_id', 'value', 'type', 'origin', 'required', 'identifier', 'collected_at', 'verified_at'],
   additionalProperties: true,
 }

@@ -12,6 +12,17 @@ const props = defineProps<{
 const { t } = useI18n()
 const store = useUserDetailStore()
 
+function originColor(origin: string): 'blue' | 'gray' | 'yellow' {
+  switch (origin) {
+    case 'openid':
+      return 'blue'
+    case 'custom':
+      return 'yellow'
+    default:
+      return 'gray'
+  }
+}
+
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return '—'
   return new Date(dateStr).toLocaleDateString()
@@ -74,11 +85,8 @@ function formatDate(dateStr: string | null): string {
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
             <div class="flex flex-wrap gap-1">
-              <Tag v-if="claim.standard" color="blue">
-                {{ t('pages.claims.standard') }}
-              </Tag>
-              <Tag v-else color="gray">
-                {{ t('pages.claims.custom') }}
+              <Tag :color="originColor(claim.origin)">
+                {{ t(`pages.claims.origin.${claim.origin}`) }}
               </Tag>
               <Tag v-if="claim.required" color="yellow">
                 {{ t('pages.claims.required') }}

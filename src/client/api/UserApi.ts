@@ -33,7 +33,7 @@ export interface ListUserClaimsParams {
   required?: string
   collected?: string
   verified?: string
-  standard?: string
+  origin?: string
   [key: string]: string | number | undefined
 }
 

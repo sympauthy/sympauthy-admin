@@ -146,8 +146,11 @@
       "title": "Claims",
       "id": "ID",
       "status": "Status",
-      "standard": "standard",
-      "custom": "custom",
+      "origin": {
+        "label": "Origin",
+        "openid": "openid",
+        "custom": "custom"
+      },
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",
