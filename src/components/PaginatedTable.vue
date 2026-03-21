@@ -75,7 +75,7 @@ function nextPage() {
     </div>
 
     <!-- Pagination -->
-    <div v-if="props.totalPages > 1" class="flex items-center justify-between mt-4">
+    <div v-if="props.totalPages > 1" class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mt-4">
       <span class="text-sm text-gray-600">
         {{ t('common.pagination', { page: props.page + 1, totalPages: props.totalPages }) }}
       </span>
@@ -85,16 +85,16 @@ function nextPage() {
           class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           @click="previousPage"
         >
-          <ChevronLeftIcon class="h-4 w-4 mr-1" />
-          {{ t('common.previous') }}
+          <ChevronLeftIcon class="h-4 w-4 sm:mr-1" />
+          <span class="hidden sm:inline">{{ t('common.previous') }}</span>
         </button>
         <button
           :disabled="props.page >= props.totalPages - 1"
           class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           @click="nextPage"
         >
-          {{ t('common.next') }}
-          <ChevronRightIcon class="h-4 w-4 ml-1" />
+          <span class="hidden sm:inline">{{ t('common.next') }}</span>
+          <ChevronRightIcon class="h-4 w-4 sm:ml-1" />
         </button>
       </div>
     </div>

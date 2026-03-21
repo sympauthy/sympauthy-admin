@@ -47,6 +47,15 @@ body {
     }
 }
 
+/** Responsive table padding **/
+@media (max-width: 639px) {
+    .overflow-x-auto td,
+    .overflow-x-auto th {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
 /** Link **/
 @layer components {
     .a {

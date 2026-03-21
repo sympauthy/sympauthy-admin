@@ -36,7 +36,9 @@
     "claims": "Claims",
     "scopes": "Scopes",
     "configuration": "Configuration",
-    "sessions": "Sessions"
+    "sessions": "Sessions",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "client": {
     "type": {

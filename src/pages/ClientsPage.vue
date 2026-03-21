@@ -22,23 +22,24 @@ onMounted(async () => {
       :empty="clientStore.clients.length === 0"
       :page="clientStore.page"
       :total-pages="clientStore.totalPages"
+      table-layout="auto"
       @page-change="clientStore.fetchClients"
     >
       <template #header>
-        <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.clientId') }}
         </th>
-        <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.type') }}
           <ClientTypeHelpTooltip />
         </th>
-        <th class="w-[25%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.allowedScopes') }}
         </th>
-        <th class="w-[25%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.defaultScopes') }}
         </th>
-        <th class="w-[30%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.redirectUris') }}
         </th>
       </template>
