@@ -20,7 +20,14 @@
     "confirm": "Confirm",
     "previous": "Previous",
     "next": "Next",
-    "pagination": "Page {page} of {totalPages}"
+    "pagination": "Page {page} of {totalPages}",
+    "origin": {
+      "label": "Origin",
+      "oauth2": "oauth2",
+      "openid": "openid",
+      "system": "system",
+      "custom": "custom"
+    }
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -123,13 +130,6 @@
       "id": "ID",
       "status": "Status",
       "type": "Type",
-      "origin": {
-        "label": "Origin",
-        "oauth2": "oauth2",
-        "openid": "openid",
-        "system": "system",
-        "custom": "custom"
-      },
       "claims": "Claims",
       "enabled": "enabled",
       "disabled": "disabled",
@@ -146,11 +146,6 @@
       "title": "Claims",
       "id": "ID",
       "status": "Status",
-      "origin": {
-        "label": "Origin",
-        "openid": "openid",
-        "custom": "custom"
-      },
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",

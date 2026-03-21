@@ -5,6 +5,7 @@ import { useScopeStore } from '@/stores/useScopeStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import FilterBar from '@/components/FilterBar.vue'
 import Tag from '@/components/Tag.vue'
+import OriginTag from '@/components/OriginTag.vue'
 import type { FilterConfig } from '@/components/FilterBar.vue'
 
 const { t } = useI18n()
@@ -61,18 +62,6 @@ function typeColor(type: string): 'blue' | 'purple' | 'gray' {
   }
 }
 
-function originColor(origin: string): 'blue' | 'gray' | 'yellow' {
-  switch (origin) {
-    case 'openid':
-    case 'oauth2':
-      return 'blue'
-    case 'custom':
-      return 'yellow'
-    default:
-      return 'gray'
-  }
-}
-
 onMounted(async () => {
   await scopeStore.fetchScopes()
 })
@@ -106,7 +95,7 @@ onMounted(async () => {
           {{ t('pages.scopes.type') }}
         </th>
         <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.scopes.origin.label') }}
+          {{ t('common.origin.label') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.scopes.claims') }}
@@ -132,9 +121,7 @@ onMounted(async () => {
             </Tag>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <Tag :color="originColor(scope.origin)">
-              {{ t(`pages.scopes.origin.${scope.origin}`) }}
-            </Tag>
+            <OriginTag :origin="scope.origin" />
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
             <span v-if="scope.claims && scope.claims.length > 0">

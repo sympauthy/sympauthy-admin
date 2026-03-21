@@ -4,21 +4,11 @@ import { useI18n } from 'vue-i18n'
 import { useClaimStore } from '@/stores/useClaimStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import Tag from '@/components/Tag.vue'
-import IdentifierHelpTooltip from '@/components/IdentifierHelpTooltip.vue'
+import OriginTag from '@/components/OriginTag.vue'
+import ClaimTags from '@/components/ClaimTags.vue'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()
-
-function originColor(origin: string): 'blue' | 'gray' | 'yellow' {
-  switch (origin) {
-    case 'openid':
-      return 'blue'
-    case 'custom':
-      return 'yellow'
-    default:
-      return 'gray'
-  }
-}
 
 onMounted(async () => {
   await claimStore.fetchClaims()
@@ -33,14 +23,18 @@ onMounted(async () => {
       :empty="claimStore.claims.length === 0"
       :page="claimStore.page"
       :total-pages="claimStore.totalPages"
+      table-layout="auto"
       @page-change="claimStore.fetchClaims"
     >
       <template #header>
-        <th class="w-[10%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.claims.status') }}
         </th>
-        <th class="w-[30%] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.claims.id') }}
+        </th>
+        <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          {{ t('common.origin.label') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.claims.tags') }}
@@ -57,22 +51,14 @@ onMounted(async () => {
               {{ t('pages.claims.disabled') }}
             </Tag>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          <td class="px-6 py-4 text-sm font-medium text-gray-900 min-w-40 max-w-xs truncate">
             {{ claim.id }}
           </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <OriginTag :origin="claim.origin" />
+          </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <Tag :color="originColor(claim.origin)" class="mr-1">
-              {{ t(`pages.claims.origin.${claim.origin}`) }}
-            </Tag>
-            <Tag v-if="claim.required" color="purple" class="mr-1">
-              {{ t('pages.claims.required') }}
-            </Tag>
-            <Tag v-if="claim.identifier" color="yellow">
-              {{ t('pages.claims.identifier') }}
-              <template #help>
-                <IdentifierHelpTooltip />
-              </template>
-            </Tag>
+            <ClaimTags :required="claim.required" :identifier="claim.identifier" />
           </td>
         </tr>
       </template>
