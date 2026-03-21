@@ -48,7 +48,7 @@ function formatDate(dateStr: string | null | undefined): string {
       @page-change="(page: number) => store.fetchClaims(userId, page)"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.claim') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -60,10 +60,10 @@ function formatDate(dateStr: string | null | undefined): string {
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.claimTags') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.collectedAt') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.verifiedAt') }}
         </th>
       </template>
@@ -73,7 +73,7 @@ function formatDate(dateStr: string | null | undefined): string {
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ claim.claim_id }}
           </td>
-          <td class="px-6 py-4 text-sm text-gray-500 truncate max-w-[200px] sm:max-w-xs">
+          <td class="px-6 py-4 text-sm text-gray-500 truncate">
             {{ claim.value ?? '—' }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
