@@ -7,7 +7,7 @@ import CommonButton from '@/components/CommonButton.vue'
 import Tag from '@/components/Tag.vue'
 import { dangerColoredButton } from '@/styles/ButtonStyle'
 
-const props = defineProps<{
+defineProps<{
   userId: string
 }>()
 

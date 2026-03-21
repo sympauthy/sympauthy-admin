@@ -2,14 +2,14 @@ import type { JSONSchemaType } from 'ajv'
 
 export type UserClaimResource = {
   claim_id: string
-  value: string | null
+  value?: string | null
   type: string
   origin: string
   required: boolean
   identifier: boolean
   group?: string | null
-  collected_at: string | null
-  verified_at: string | null
+  collected_at?: string | null
+  verified_at?: string | null
 }
 
 export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
@@ -47,6 +47,6 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
       nullable: true,
     },
   },
-  required: ['claim_id', 'value', 'type', 'origin', 'required', 'identifier', 'collected_at', 'verified_at'],
+  required: ['claim_id', 'type', 'origin', 'required', 'identifier'],
   additionalProperties: true,
 }

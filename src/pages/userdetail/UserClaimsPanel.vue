@@ -6,14 +6,14 @@ import PaginatedTable from '@/components/PaginatedTable.vue'
 import OriginTag from '@/components/OriginTag.vue'
 import ClaimTags from '@/components/ClaimTags.vue'
 
-const props = defineProps<{
+defineProps<{
   userId: string
 }>()
 
 const { t } = useI18n()
 const store = useUserDetailStore()
 
-function formatDate(dateStr: string | null): string {
+function formatDate(dateStr: string | null | undefined): string {
   if (!dateStr) return '—'
   return new Date(dateStr).toLocaleDateString()
 }

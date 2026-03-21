@@ -20,7 +20,6 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
   const allRoutes = router.getRoutes()
 
   let currentMeta = route.meta.breadcrumb
-  let currentRouteName = route.name as string | undefined
 
   // Walk up the parent chain to collect ancestors
   const ancestors: { label: string; name: string }[] = []
