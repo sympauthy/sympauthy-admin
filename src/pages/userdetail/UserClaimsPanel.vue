@@ -3,7 +3,8 @@ import { useI18n } from 'vue-i18n'
 import { useUserDetailStore } from '@/stores/useUserDetailStore'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
-import Tag from '@/components/Tag.vue'
+import OriginTag from '@/components/OriginTag.vue'
+import ClaimTags from '@/components/ClaimTags.vue'
 
 const props = defineProps<{
   userId: string
@@ -54,6 +55,9 @@ function formatDate(dateStr: string | null): string {
           {{ t('pages.userDetail.value') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+          {{ t('common.origin.label') }}
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
           {{ t('pages.userDetail.claimTags') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
@@ -73,20 +77,10 @@ function formatDate(dateStr: string | null): string {
             {{ claim.value ?? '—' }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <div class="flex flex-wrap gap-1">
-              <Tag v-if="claim.standard" color="blue">
-                {{ t('pages.claims.standard') }}
-              </Tag>
-              <Tag v-else color="gray">
-                {{ t('pages.claims.custom') }}
-              </Tag>
-              <Tag v-if="claim.required" color="yellow">
-                {{ t('pages.claims.required') }}
-              </Tag>
-              <Tag v-if="claim.identifier" color="purple">
-                {{ t('pages.claims.identifier') }}
-              </Tag>
-            </div>
+            <OriginTag :origin="claim.origin" />
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <ClaimTags :required="claim.required" :identifier="claim.identifier" />
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {{ formatDate(claim.collected_at) }}
