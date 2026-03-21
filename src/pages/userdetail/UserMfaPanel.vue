@@ -6,7 +6,6 @@ import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
-import Tag from '@/components/Tag.vue'
 import { dangerColoredButton } from '@/styles/ButtonStyle'
 
 const props = defineProps<{
@@ -79,10 +78,8 @@ function cancelRevoke() {
 
       <template #rows>
         <tr v-for="method in store.mfaMethods" :key="method.mfa_id">
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <Tag color="blue">
-              {{ method.type }}
-            </Tag>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {{ method.type }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
             {{ method.registered_at }}

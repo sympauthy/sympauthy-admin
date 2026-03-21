@@ -52,6 +52,7 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 - `PaginatedTable` for data tables (slot-based: `header`, `rows`, `empty`)
 - `ConfirmDialog` for destructive action confirmation
 - `Tag` component for status badges
+- In data tables, the primary/ID column uses `font-medium text-gray-900` for bold styling (not `Tag`)
 
 ## Environment
 
