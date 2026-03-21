@@ -107,7 +107,16 @@
       "scopes": "Scopes",
       "actions": "Actions",
       "revoke": "Revoke",
-      "noConsents": "No active consents."
+      "noConsents": "No active consents.",
+      "mfaMethods": "MFA Methods",
+      "mfaMethodsHelp": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
+      "mfaMethodsHelpLinkText": "authentication documentation",
+      "mfaMethodsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/authentication.html#multi-factor-authentication-mfa",
+      "mfaType": "Type",
+      "registeredAt": "Registered at",
+      "noMfaMethods": "No MFA methods registered.",
+      "revokeMfaTitle": "Revoke MFA Method",
+      "revokeMfaDescription": "This will remove the MFA method from the user's account. They will need to set it up again."
     },
     "scopes": {
       "title": "Scopes",

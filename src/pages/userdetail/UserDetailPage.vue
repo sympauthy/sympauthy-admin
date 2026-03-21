@@ -3,10 +3,13 @@ import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserDetailStore } from '@/stores/useUserDetailStore'
+import { useUserConsentStore } from '@/stores/useUserConsentStore'
+import { useUserMfaStore } from '@/stores/useUserMfaStore'
 import { useBreadcrumb } from '@/composables/useBreadcrumb'
 import UserSummaryPanel from '@/pages/userdetail/UserSummaryPanel.vue'
 import UserClaimsPanel from '@/pages/userdetail/UserClaimsPanel.vue'
 import UserConsentsPanel from '@/pages/userdetail/UserConsentsPanel.vue'
+import UserMfaPanel from '@/pages/userdetail/UserMfaPanel.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import CommonSpinner from '@/components/CommonSpinner.vue'
 import CommonAlert from '@/components/CommonAlert.vue'
@@ -14,6 +17,8 @@ import CommonAlert from '@/components/CommonAlert.vue'
 const route = useRoute()
 const { t } = useI18n()
 const store = useUserDetailStore()
+const consentStore = useUserConsentStore()
+const mfaStore = useUserMfaStore()
 const { setLabel } = useBreadcrumb()
 
 const userId = computed(() => route.params.userId as string)
@@ -21,10 +26,13 @@ const logoutOpen = ref(false)
 
 onMounted(async () => {
   store.$reset()
+  consentStore.$reset()
+  mfaStore.$reset()
   await Promise.all([
     store.fetchUser(userId.value),
     store.fetchClaims(userId.value),
-    store.fetchConsents(userId.value),
+    consentStore.fetchConsents(userId.value),
+    mfaStore.fetchMfaMethods(userId.value),
   ])
   if (store.user) {
     const identifier = store.user.identifier_claims
@@ -56,6 +64,7 @@ onMounted(async () => {
       />
       <UserClaimsPanel :user-id="userId" />
       <UserConsentsPanel :user-id="userId" />
+      <UserMfaPanel :user-id="userId" />
     </div>
 
     <LogoutDialog
