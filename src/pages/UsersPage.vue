@@ -114,7 +114,7 @@ onMounted(async () => {
           :current-order="userStore.sortOrder"
           @sort="userStore.toggleSort"
         />
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.users.actions') }}
         </th>
       </template>
@@ -147,7 +147,7 @@ onMounted(async () => {
               >
                 <span class="inline-flex items-center gap-1.5">
                   <EyeIcon class="size-4 shrink-0" />
-                  {{ t('pages.users.view') }}
+                  <span class="hidden sm:inline">{{ t('pages.users.view') }}</span>
                 </span>
               </CommonButton>
               <CommonButton
@@ -156,7 +156,7 @@ onMounted(async () => {
               >
                 <span class="inline-flex items-center gap-1.5">
                   <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
-                  {{ t('pages.users.logout') }}
+                  <span class="hidden sm:inline">{{ t('pages.users.logout') }}</span>
                 </span>
               </CommonButton>
             </div>
