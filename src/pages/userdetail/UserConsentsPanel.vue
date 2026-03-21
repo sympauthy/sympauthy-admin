@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { useUserDetailStore } from '@/stores/useUserDetailStore'
+import { useUserConsentStore } from '@/stores/useUserConsentStore'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const store = useUserDetailStore()
+const store = useUserConsentStore()
 </script>
 
 <template>
