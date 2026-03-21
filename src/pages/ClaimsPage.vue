@@ -23,7 +23,6 @@ onMounted(async () => {
       :empty="claimStore.claims.length === 0"
       :page="claimStore.page"
       :total-pages="claimStore.totalPages"
-      table-layout="auto"
       @page-change="claimStore.fetchClaims"
     >
       <template #header>

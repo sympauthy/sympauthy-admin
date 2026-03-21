@@ -22,7 +22,7 @@ onMounted(async () => {
       :empty="clientStore.clients.length === 0"
       :page="clientStore.page"
       :total-pages="clientStore.totalPages"
-      table-layout="auto"
+
       @page-change="clientStore.fetchClients"
     >
       <template #header>

@@ -81,7 +81,6 @@ onMounted(async () => {
       :empty="scopeStore.scopes.length === 0"
       :page="scopeStore.page"
       :total-pages="scopeStore.totalPages"
-      table-layout="auto"
       @page-change="scopeStore.fetchScopes"
     >
       <template #header>

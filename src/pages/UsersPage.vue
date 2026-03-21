@@ -85,7 +85,7 @@ onMounted(async () => {
       :empty="userStore.users.length === 0"
       :page="userStore.page"
       :total-pages="userStore.totalPages"
-      table-layout="auto"
+
       @page-change="userStore.fetchUsers"
     >
       <template #header>
