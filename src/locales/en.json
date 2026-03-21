@@ -49,7 +49,7 @@
     "identifier": {
       "help": "Identifier claims uniquely identify a user. They serve as login identifiers for password authentication and enable automatic account merging across authentication providers. See {link} for details.",
       "helpLinkText": "identifier claims documentation",
-      "helpLinkUrl": "https://sympauthy.github.io/documentation/technical/configuration#auth"
+      "helpLinkUrl": "https://sympauthy.github.io/technical/configuration#auth"
     }
   },
   "logoutDialog": {
@@ -99,7 +99,7 @@
       "claims": "Claims",
       "claimsHelp": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
       "claimsHelpLinkText": "claims documentation",
-      "claimsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/claims.html",
+      "claimsHelpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
       "claim": "Claim",
       "value": "Value",
       "claimTags": "Tags",
@@ -109,7 +109,7 @@
       "consents": "Consents",
       "consentsHelp": "Clients this user has authorized to access their data. Revoking a consent will require the user to re-authorize the client. See {link} for details.",
       "consentsHelpLinkText": "consents documentation",
-      "consentsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/consent.html",
+      "consentsHelpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
       "client": "Client",
       "scopes": "Scopes",
       "actions": "Actions",
@@ -118,7 +118,7 @@
       "mfaMethods": "MFA Methods",
       "mfaMethodsHelp": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
       "mfaMethodsHelpLinkText": "authentication documentation",
-      "mfaMethodsHelpLinkUrl": "https://sympauthy.github.io/documentation/functional/authentication.html#multi-factor-authentication-mfa",
+      "mfaMethodsHelpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
       "mfaType": "Type",
       "registeredAt": "Registered at",
       "noMfaMethods": "No MFA methods registered.",
