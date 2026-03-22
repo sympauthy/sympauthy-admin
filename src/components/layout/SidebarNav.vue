@@ -23,15 +23,6 @@ async function logout() {
     </div>
     <ul class="flex flex-col mt-2 flex-1">
       <li>
-        <router-link
-          to="/"
-          class="block px-4 py-2 hover:bg-gray-700 transition-colors"
-          active-class="bg-gray-900"
-        >
-          {{ t('nav.dashboard') }}
-        </router-link>
-      </li>
-      <li>
         <router-link to='/users' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
           {{ t('nav.users') }}
         </router-link>

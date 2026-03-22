@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DashboardPage from '@/pages/DashboardPage.vue'
 import ClientsPage from '@/pages/ClientsPage.vue'
 import ClaimsPage from '@/pages/ClaimsPage.vue'
 import ScopesPage from '@/pages/ScopesPage.vue'
@@ -32,9 +31,7 @@ export function makeRouter() {
       },
       {
         path: '/',
-        name: 'dashboard',
-        component: DashboardPage,
-        meta: { requiresAuth: true, breadcrumb: { label: 'nav.dashboard' } }
+        redirect: '/users'
       },
       {
         path: '/users',
@@ -91,7 +88,7 @@ export function makeRouter() {
     const requiredRoles = to.meta.requiredRoles
     if (requiredRoles && requiredRoles.length > 0) {
       if (!authStore.hasAnyRole(requiredRoles)) {
-        return { name: 'dashboard' }
+        return { name: 'users' }
       }
     }
 
