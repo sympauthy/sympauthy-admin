@@ -1,12 +1,18 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/composables/useSidebar'
 
 const { t } = useI18n()
+const route = useRoute()
 const authStore = useAuthStore()
 const { closeSidebar } = useSidebar()
+
+function isActive(path: string) {
+  return route.path === path || route.path.startsWith(path + '/')
+}
 
 async function logout() {
   await authStore.signout()
@@ -23,22 +29,22 @@ async function logout() {
     </div>
     <ul class="flex flex-col mt-2 flex-1">
       <li>
-        <router-link to='/users' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+        <router-link to='/users' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/users') }]">
           {{ t('nav.users') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/clients' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+        <router-link to='/clients' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/clients') }]">
           {{ t('nav.clients') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/claims' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+        <router-link to='/claims' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/claims') }]">
           {{ t('nav.claims') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/scopes' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+        <router-link to='/scopes' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/scopes') }]">
           {{ t('nav.scopes') }}
         </router-link>
       </li>
