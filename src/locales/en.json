@@ -120,7 +120,18 @@
       "registeredAt": "Registered at",
       "noMfaMethods": "No MFA methods registered.",
       "revokeMfaTitle": "Revoke MFA Method",
-      "revokeMfaDescription": "This will remove the MFA method from the user's account. They will need to set it up again."
+      "revokeMfaDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
+      "providerLinks": "Provider Links",
+      "providerLinksHelp": "External identity providers linked to this user's account. Unlinking a provider will prevent the user from signing in with it. See {link} for details.",
+      "providerLinksHelpLinkText": "providers documentation",
+      "providerLinksHelpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#providers",
+      "provider": "Provider",
+      "subject": "Subject",
+      "linkedAt": "Linked at",
+      "unlink": "Unlink",
+      "noProviderLinks": "No provider links found.",
+      "unlinkProviderTitle": "Unlink Provider",
+      "unlinkProviderDescription": "This will remove the link between this user and the identity provider. The user will no longer be able to sign in with this provider."
     },
     "scopes": {
       "title": "Scopes",
