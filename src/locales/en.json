@@ -30,7 +30,6 @@
     }
   },
   "nav": {
-    "dashboard": "Dashboard",
     "users": "Users",
     "clients": "Clients",
     "claims": "Claims",
@@ -63,10 +62,6 @@
     "confirm": "Force Logout"
   },
   "pages": {
-    "dashboard": {
-      "title": "Dashboard",
-      "welcome": "Welcome to the SympAuthy administration panel."
-    },
     "clients": {
       "title": "Clients",
       "clientId": "Client ID",
