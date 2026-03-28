@@ -2,7 +2,8 @@ import {
   UserManager,
   type User,
   type UserManagerSettings,
-  WebStorageStateStore
+  WebStorageStateStore,
+  IndexedDbDPoPStore
 } from 'oidc-client-ts'
 
 export type AuthUser = {
@@ -35,7 +36,11 @@ function makeUserManagerSettings(): UserManagerSettings {
     scope: import.meta.env.VITE_OIDC_SCOPE,
     response_type: 'code',
     automaticSilentRenew: true,
-    userStore: new WebStorageStateStore({ store: window.localStorage })
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
+    dpop: {
+      bind_authorization_code: true,
+      store: new IndexedDbDPoPStore()
+    }
   }
 }
 
