@@ -1,0 +1,51 @@
+# Release workflow — triggered by sympauthy's release workflow.
+#
+# Creates a git tag (e.g. v0.5.0) on the specified ref.
+# If create_release_branch is true, also creates a release/X.Y branch.
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.5.0)"
+        type: string
+        required: true
+      ref:
+        description: "Git ref to tag (branch name or SHA)"
+        type: string
+        required: true
+      create_release_branch:
+        description: "Create a release/X.Y branch from the tagged ref"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Tag and release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Create tag
+        run: |
+          git tag "v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+
+      - name: Create release branch
+        if: inputs.create_release_branch
+        run: |
+          VERSION="${{ inputs.version }}"
+          MAJOR="${VERSION%%.*}"
+          MINOR="${VERSION#*.}"
+          MINOR="${MINOR%%.*}"
+          BRANCH="release/${MAJOR}.${MINOR}"
+
+          git checkout -b "$BRANCH"
+          git push -u origin "$BRANCH"
