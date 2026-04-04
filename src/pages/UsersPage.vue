@@ -63,7 +63,7 @@ function formatDate(dateStr: string): string {
 
 onMounted(async () => {
   await claimStore.fetchClaims()
-  enabledClaims.value = claimStore.claims.filter((c) => c.enabled)
+  enabledClaims.value = claimStore.claims.filter((c) => c.enabled && c.identifier)
   userStore.setSelectedClaimIds(enabledClaims.value.map((c) => c.id))
   await userStore.fetchUsers()
 })

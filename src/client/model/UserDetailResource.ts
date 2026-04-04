@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv'
 
 export type UserDetailResource = {
   user_id: string
-  identifier_claims?: Record<string, string> | null
+  identifier_claims?: Record<string, string | null> | null
   status: string
   created_at: string
 }
@@ -17,7 +17,8 @@ export const userDetailResourceSchema: JSONSchemaType<UserDetailResource> = {
       type: 'object',
       additionalProperties: {
         type: 'string',
-      },
+        nullable: true,
+      } as any,
       required: [],
       nullable: true,
     },
