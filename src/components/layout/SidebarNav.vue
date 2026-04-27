@@ -47,6 +47,17 @@ async function logout() {
       </li>
       <li>
         <router-link
+          to="/audiences"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/audiences') }
+          ]"
+        >
+          {{ t('nav.audiences') }}
+        </router-link>
+      </li>
+      <li>
+        <router-link
           to="/clients"
           :class="[
             'block px-4 py-2 hover:bg-gray-700 transition-colors',
@@ -76,17 +87,6 @@ async function logout() {
           ]"
         >
           {{ t('nav.scopes') }}
-        </router-link>
-      </li>
-      <li>
-        <router-link
-          to="/audiences"
-          :class="[
-            'block px-4 py-2 hover:bg-gray-700 transition-colors',
-            { 'bg-gray-900': isActive('/audiences') }
-          ]"
-        >
-          {{ t('nav.audiences') }}
         </router-link>
       </li>
       <!-- <li>
