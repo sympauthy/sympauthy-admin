@@ -10,15 +10,15 @@ export const userProviderLinkResourceSchema: JSONSchemaType<UserProviderLinkReso
   type: 'object',
   properties: {
     provider_id: {
-      type: 'string',
+      type: 'string'
     },
     subject: {
-      type: 'string',
+      type: 'string'
     },
     linked_at: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
   required: ['provider_id', 'subject', 'linked_at'],
-  additionalProperties: true,
+  additionalProperties: true
 }

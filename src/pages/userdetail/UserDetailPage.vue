@@ -37,7 +37,7 @@ onMounted(async () => {
     store.fetchClaims(userId.value),
     consentStore.fetchConsents(userId.value),
     mfaStore.fetchMfaMethods(userId.value),
-    providerLinkStore.fetchProviderLinks(userId.value),
+    providerLinkStore.fetchProviderLinks(userId.value)
   ])
   if (store.user) {
     const identifier = store.user.identifier_claims
@@ -63,20 +63,13 @@ onMounted(async () => {
 
     <!-- Content -->
     <div v-else-if="store.user" class="space-y-6">
-      <UserSummaryPanel
-        :user="store.user"
-        @logout="logoutOpen = true"
-      />
+      <UserSummaryPanel :user="store.user" @logout="logoutOpen = true" />
       <UserClaimsPanel :user-id="userId" />
       <UserConsentsPanel :user-id="userId" />
       <UserMfaPanel :user-id="userId" />
       <UserProvidersPanel :user-id="userId" />
     </div>
 
-    <LogoutDialog
-      :user-id="userId"
-      :open="logoutOpen"
-      @close="logoutOpen = false"
-    />
+    <LogoutDialog :user-id="userId" :open="logoutOpen" @close="logoutOpen = false" />
   </div>
 </template>

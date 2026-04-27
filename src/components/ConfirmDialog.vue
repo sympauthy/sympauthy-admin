@@ -17,7 +17,7 @@ withDefaults(defineProps<Props>(), {
   cancelLabel: undefined,
   confirmStyle: () => dangerColoredButton,
   loading: false,
-  error: null,
+  error: null
 })
 
 defineEmits<{
@@ -36,14 +36,8 @@ const { t } = useI18n()
       enter-from-class="opacity-0"
       leave-to-class="opacity-0"
     >
-      <div
-        v-if="open"
-        class="fixed inset-0 z-50 flex items-center justify-center"
-      >
-        <div
-          class="absolute inset-0 bg-black/50"
-          @click="$emit('cancel')"
-        />
+      <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" @click="$emit('cancel')" />
         <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">
             <slot name="title" />
@@ -53,10 +47,7 @@ const { t } = useI18n()
             <slot />
           </div>
 
-          <div
-            v-if="error"
-            class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700"
-          >
+          <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
             {{ error }}
           </div>
 

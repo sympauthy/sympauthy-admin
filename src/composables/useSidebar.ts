@@ -10,7 +10,7 @@ export function useSidebar() {
     () => route.fullPath,
     () => {
       sidebarOpen.value = false
-    },
+    }
   )
 
   function openSidebar() {
@@ -29,6 +29,6 @@ export function useSidebar() {
     sidebarOpen,
     openSidebar,
     closeSidebar,
-    toggleSidebar,
+    toggleSidebar
   }
 }

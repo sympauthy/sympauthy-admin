@@ -1,15 +1,12 @@
 import { AbstractApi } from '@/client/AbstractApi'
-import {
-  type UserListResource,
-  userListResourceSchema,
-} from '@/client/model/UserListResource'
+import { type UserListResource, userListResourceSchema } from '@/client/model/UserListResource'
 import {
   type UserDetailResource,
-  userDetailResourceSchema,
+  userDetailResourceSchema
 } from '@/client/model/UserDetailResource'
 import {
   type UserClaimListResource,
-  userClaimListResourceSchema,
+  userClaimListResourceSchema
 } from '@/client/model/UserClaimListResource'
 import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
 import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
@@ -38,34 +35,32 @@ export interface ListUserClaimsParams {
 }
 
 export class UserApi extends AbstractApi {
-  async logoutUser(
-    userId: string,
-  ): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
+  async logoutUser(userId: string): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
     return this.postVoid({
-      path: `/api/v1/admin/users/${userId}/logout`,
+      path: `/api/v1/admin/users/${userId}/logout`
     })
   }
 
   async logoutUserClient(
     userId: string,
-    clientId: string,
+    clientId: string
   ): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
     return this.postVoid({
-      path: `/api/v1/admin/users/${userId}/logout/${clientId}`,
+      path: `/api/v1/admin/users/${userId}/logout/${clientId}`
     })
   }
 
   async getUser(
-    userId: string,
+    userId: string
   ): Promise<SuccessApiResponse<UserDetailResource> | ErrorApiResponse> {
     return this.get<UserDetailResource>({
       path: `/api/v1/admin/users/${userId}`,
-      schema: userDetailResourceSchema,
+      schema: userDetailResourceSchema
     })
   }
 
   async listUsers(
-    params: ListUsersParams = {},
+    params: ListUsersParams = {}
   ): Promise<SuccessApiResponse<UserListResource> | ErrorApiResponse> {
     const queryParams: Record<string, string> = {}
     for (const [key, value] of Object.entries(params)) {
@@ -76,13 +71,13 @@ export class UserApi extends AbstractApi {
     return this.get<UserListResource>({
       path: '/api/v1/admin/users',
       params: queryParams,
-      schema: userListResourceSchema,
+      schema: userListResourceSchema
     })
   }
 
   async listUserClaims(
     userId: string,
-    params: ListUserClaimsParams = {},
+    params: ListUserClaimsParams = {}
   ): Promise<SuccessApiResponse<UserClaimListResource> | ErrorApiResponse> {
     const queryParams: Record<string, string> = {}
     for (const [key, value] of Object.entries(params)) {
@@ -93,7 +88,7 @@ export class UserApi extends AbstractApi {
     return this.get<UserClaimListResource>({
       path: `/api/v1/admin/users/${userId}/claims`,
       params: queryParams,
-      schema: userClaimListResourceSchema,
+      schema: userClaimListResourceSchema
     })
   }
 }

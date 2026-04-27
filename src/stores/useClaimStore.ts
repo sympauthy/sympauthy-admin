@@ -43,6 +43,6 @@ export const useClaimStore = defineStore('claims', () => {
     size,
     total,
     totalPages,
-    fetchClaims,
+    fetchClaims
   }
 })

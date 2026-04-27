@@ -112,8 +112,8 @@ export class AuthService {
     const profile = user.profile
     return {
       sub: profile.sub,
-      name: ((profile.name ?? profile.preferred_username ?? profile.sub) as string),
-      email: ((profile.email ?? '') as string),
+      name: (profile.name ?? profile.preferred_username ?? profile.sub) as string,
+      email: (profile.email ?? '') as string,
       roles: Array.isArray(profile.roles) ? (profile.roles as string[]) : [],
       accessToken: user.access_token
     }

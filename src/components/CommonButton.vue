@@ -1,5 +1,4 @@
-<script lang='ts' setup>
-
+<script lang="ts" setup>
 import { computed } from 'vue'
 import { type ButtonStyle, primaryColoredButton } from '@/styles/ButtonStyle'
 import CommonSpinner from '@/components/CommonSpinner.vue'
@@ -33,31 +32,28 @@ const computedClasses = computed(() => {
   }
   return classes
 })
-
 </script>
 
 <template>
-  <button :class='computedClasses'
-          :disabled='computedDisabled'
-          class='btn'>
-    <template v-if='loading'>
-      <div class='w-full flex flex-row justify-center items-center'>
-        <div class='me-2'>
-          <common-spinner class='h-4 w-4 border-2'/>
+  <button :class="computedClasses" :disabled="computedDisabled" class="btn">
+    <template v-if="loading">
+      <div class="w-full flex flex-row justify-center items-center">
+        <div class="me-2">
+          <common-spinner class="h-4 w-4 border-2" />
         </div>
-        <slot name='loading' />
+        <slot name="loading" />
       </div>
     </template>
-    <template v-else-if='submitting'>
-      <div class='w-full flex flex-row justify-center items-center'>
-        <div class='me-2'>
-          <common-spinner class='h-4 w-4 border-2'/>
+    <template v-else-if="submitting">
+      <div class="w-full flex flex-row justify-center items-center">
+        <div class="me-2">
+          <common-spinner class="h-4 w-4 border-2" />
         </div>
-        <slot name='submitting' />
+        <slot name="submitting" />
       </div>
     </template>
     <template v-else>
-      <slot name='default' />
+      <slot name="default" />
     </template>
   </button>
 </template>

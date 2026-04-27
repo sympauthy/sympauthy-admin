@@ -20,7 +20,13 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 
 <template>
   <span ref="tooltipRef" class="relative">
-    <button @click.stop="toggle" class="text-current opacity-60 hover:opacity-100 cursor-help text-[0.85em] font-semibold leading-none whitespace-nowrap align-middle" type="button">&nbsp;ⓘ</button>
+    <button
+      @click.stop="toggle"
+      class="text-current opacity-60 hover:opacity-100 cursor-help text-[0.85em] font-semibold leading-none whitespace-nowrap align-middle"
+      type="button"
+    >
+      &nbsp;ⓘ
+    </button>
     <div
       v-if="open"
       class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-1 z-50 w-72 max-w-[calc(100vw-2rem)] p-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg normal-case tracking-normal font-normal"

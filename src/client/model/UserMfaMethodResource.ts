@@ -10,15 +10,15 @@ export const userMfaMethodResourceSchema: JSONSchemaType<UserMfaMethodResource> 
   type: 'object',
   properties: {
     mfa_id: {
-      type: 'string',
+      type: 'string'
     },
     type: {
-      type: 'string',
+      type: 'string'
     },
     registered_at: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
   required: ['mfa_id', 'type', 'registered_at'],
-  additionalProperties: true,
+  additionalProperties: true
 }

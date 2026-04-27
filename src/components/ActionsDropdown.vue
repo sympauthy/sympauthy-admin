@@ -12,12 +12,15 @@ export interface ActionItem {
   danger?: boolean
 }
 
-withDefaults(defineProps<{
-  actions: ActionItem[]
-  buttonStyle?: ButtonStyle
-}>(), {
-  buttonStyle: () => secondaryColoredButton,
-})
+withDefaults(
+  defineProps<{
+    actions: ActionItem[]
+    buttonStyle?: ButtonStyle
+  }>(),
+  {
+    buttonStyle: () => secondaryColoredButton
+  }
+)
 
 const emit = defineEmits<{
   action: [key: string]
@@ -54,11 +57,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="dropdownRef" class="relative">
-    <CommonButton
-      :button-style="buttonStyle"
-      :title="t('common.actions')"
-      @click="toggle"
-    >
+    <CommonButton :button-style="buttonStyle" :title="t('common.actions')" @click="toggle">
       <span class="inline-flex items-center gap-1.5">
         {{ t('common.actions') }}
         <ChevronDownIcon class="size-4" />
@@ -73,9 +72,7 @@ onBeforeUnmount(() => {
         :key="action.key"
         type="button"
         class="flex w-full items-center gap-2 px-4 py-2.5 text-sm first:rounded-t-md last:rounded-b-md cursor-pointer"
-        :class="action.danger
-          ? 'text-red-600 hover:bg-red-50'
-          : 'text-gray-700 hover:bg-gray-100'"
+        :class="action.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100'"
         @click="selectAction(action.key)"
       >
         <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />

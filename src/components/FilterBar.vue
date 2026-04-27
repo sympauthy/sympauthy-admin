@@ -6,10 +6,7 @@ import DropdownButton from '@/components/DropdownButton.vue'
 export type FilterConfig = {
   key: string
   label: string
-} & (
-  | { type: 'text' }
-  | { type: 'select'; options: { label: string; value: string }[] }
-)
+} & ({ type: 'text' } | { type: 'select'; options: { label: string; value: string }[] })
 
 const props = withDefaults(
   defineProps<{
@@ -18,8 +15,8 @@ const props = withDefaults(
   }>(),
   {
     searchPlaceholder: '',
-    filters: () => [],
-  },
+    filters: () => []
+  }
 )
 
 const emit = defineEmits<{
@@ -44,7 +41,7 @@ function onSearchInput(event: Event) {
 const availableFilterOptions = computed(() =>
   props.filters
     .filter((f) => !activeFilters.has(f.key))
-    .map((f) => ({ label: f.label, value: f.key })),
+    .map((f) => ({ label: f.label, value: f.key }))
 )
 
 function addFilter(key: string) {
@@ -81,7 +78,9 @@ function getFilterConfig(key: string): FilterConfig | undefined {
   <div class="mb-4">
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
       <div class="relative flex-1">
-        <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <MagnifyingGlassIcon
+          class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+        />
         <input
           type="text"
           :placeholder="searchPlaceholder"
@@ -125,10 +124,7 @@ function getFilterConfig(key: string): FilterConfig | undefined {
           class="border-none bg-white text-sm focus:outline-none focus:ring-0 py-0 px-1 w-24"
           @input="onFilterValueChange(key, $event)"
         />
-        <button
-          class="text-gray-400 hover:text-gray-600"
-          @click="removeFilter(key)"
-        >
+        <button class="text-gray-400 hover:text-gray-600" @click="removeFilter(key)">
           <XMarkIcon class="h-4 w-4" />
         </button>
       </div>

@@ -22,14 +22,17 @@ onMounted(async () => {
       :empty="clientStore.clients.length === 0"
       :page="clientStore.page"
       :total-pages="clientStore.totalPages"
-
       @page-change="clientStore.fetchClients"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.clients.clientId') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.clients.type') }}
           <ClientTypeHelpTooltip />
         </th>
@@ -53,12 +56,7 @@ onMounted(async () => {
             {{ client.type }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
-            <Tag
-              v-for="scope in client.allowed_scopes"
-              :key="scope"
-              color="blue"
-              class="mr-1 mb-1"
-            >
+            <Tag v-for="scope in client.allowed_scopes" :key="scope" color="blue" class="mr-1 mb-1">
               {{ scope }}
             </Tag>
           </td>

@@ -39,14 +39,18 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     loading.value = false
   }
 
-  async function fetchClaims(userId: string, requestedPage: number = 0, filters: ListUserClaimsParams = {}): Promise<void> {
+  async function fetchClaims(
+    userId: string,
+    requestedPage: number = 0,
+    filters: ListUserClaimsParams = {}
+  ): Promise<void> {
     claimsLoading.value = true
     claimsError.value = null
 
     const response = await userApi.listUserClaims(userId, {
       ...filters,
       page: requestedPage,
-      size: claimsSize.value,
+      size: claimsSize.value
     })
 
     if (isSuccess(response)) {
@@ -85,6 +89,6 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     claimsTotalPages,
     fetchUser,
     fetchClaims,
-    $reset,
+    $reset
   }
 })

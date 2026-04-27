@@ -13,18 +13,18 @@ export const clientListResourceSchema: JSONSchemaType<ClientListResource> = {
   properties: {
     clients: {
       type: 'array',
-      items: { ...clientResourceSchema },
+      items: { ...clientResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['clients', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

@@ -6,10 +6,7 @@
  * - the content responded by the server matches the one expected by the client.
  */
 export class SuccessApiResponse<T> {
-  constructor(
-    readonly content: T
-  ) {
-  }
+  constructor(readonly content: T) {}
 }
 
 export function isSuccess<T>(o: any): o is SuccessApiResponse<T> {

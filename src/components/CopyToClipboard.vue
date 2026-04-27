@@ -12,7 +12,9 @@ const copied = ref(false)
 async function copy(value: string) {
   await navigator.clipboard.writeText(value)
   copied.value = true
-  setTimeout(() => { copied.value = false }, 2000)
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
 }
 </script>
 

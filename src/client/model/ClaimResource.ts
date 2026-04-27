@@ -15,33 +15,33 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
   type: 'object',
   properties: {
     id: {
-      type: 'string',
+      type: 'string'
     },
     type: {
-      type: 'string',
+      type: 'string'
     },
     origin: {
-      type: 'string',
+      type: 'string'
     },
     enabled: {
-      type: 'boolean',
+      type: 'boolean'
     },
     required: {
-      type: 'boolean',
+      type: 'boolean'
     },
     identifier: {
-      type: 'boolean',
+      type: 'boolean'
     },
     allowed_values: {
       type: 'array',
       items: { type: 'string' },
-      nullable: true,
+      nullable: true
     },
     group: {
       type: 'string',
-      nullable: true,
-    },
+      nullable: true
+    }
   },
   required: ['id', 'type', 'origin', 'enabled', 'required', 'identifier'],
-  additionalProperties: true,
+  additionalProperties: true
 }

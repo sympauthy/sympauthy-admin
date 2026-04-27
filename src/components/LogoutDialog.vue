@@ -27,15 +27,18 @@ const selectedClientId = ref<string>('')
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-watch(() => props.open, (isOpen) => {
-  if (isOpen) {
-    mode.value = 'all'
-    selectedClientId.value = ''
-    loading.value = false
-    error.value = null
-    clientStore.fetchClients()
+watch(
+  () => props.open,
+  (isOpen) => {
+    if (isOpen) {
+      mode.value = 'all'
+      selectedClientId.value = ''
+      loading.value = false
+      error.value = null
+      clientStore.fetchClients()
+    }
   }
-})
+)
 
 async function onConfirm() {
   if (!props.userId) return
@@ -43,9 +46,10 @@ async function onConfirm() {
   loading.value = true
   error.value = null
 
-  const response = mode.value === 'specific' && selectedClientId.value
-    ? await userApi.logoutUserClient(props.userId, selectedClientId.value)
-    : await userApi.logoutUser(props.userId)
+  const response =
+    mode.value === 'specific' && selectedClientId.value
+      ? await userApi.logoutUserClient(props.userId, selectedClientId.value)
+      : await userApi.logoutUser(props.userId)
 
   if (isSuccess(response)) {
     loading.value = false

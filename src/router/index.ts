@@ -43,7 +43,10 @@ export function makeRouter() {
         path: '/users/:userId',
         name: 'userDetail',
         component: UserDetailPage,
-        meta: { requiresAuth: true, breadcrumb: { label: 'pages.userDetail.title', parent: 'users' } }
+        meta: {
+          requiresAuth: true,
+          breadcrumb: { label: 'pages.userDetail.title', parent: 'users' }
+        }
       },
       {
         path: '/clients',

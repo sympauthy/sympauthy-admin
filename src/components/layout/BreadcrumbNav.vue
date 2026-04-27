@@ -26,7 +26,7 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
   if (currentMeta?.parent) {
     let parentName: string | undefined = currentMeta.parent
     while (parentName) {
-      const parentRoute = allRoutes.find(r => r.name === parentName)
+      const parentRoute = allRoutes.find((r) => r.name === parentName)
       const parentMeta = parentRoute?.meta?.breadcrumb
       if (parentMeta) {
         ancestors.unshift({ label: t(parentMeta.label), name: parentName })
@@ -41,14 +41,14 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
   for (const ancestor of ancestors) {
     items.push({
       label: ancestor.label,
-      to: router.resolve({ name: ancestor.name }).href,
+      to: router.resolve({ name: ancestor.name }).href
     })
   }
 
   // Add current page (no link)
   if (currentMeta) {
     items.push({
-      label: dynamicLabel.value ?? t(currentMeta.label),
+      label: dynamicLabel.value ?? t(currentMeta.label)
     })
   }
 
@@ -57,7 +57,10 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 </script>
 
 <template>
-  <nav v-if="breadcrumbs.length > 0" class="h-14 shrink-0 flex items-center border-b border-gray-200 bg-white px-4 lg:px-6">
+  <nav
+    v-if="breadcrumbs.length > 0"
+    class="h-14 shrink-0 flex items-center border-b border-gray-200 bg-white px-4 lg:px-6"
+  >
     <ol class="flex items-center gap-2">
       <li v-for="(item, index) in breadcrumbs" :key="index" class="flex items-center gap-2">
         <ChevronRightIcon v-if="index > 0" class="h-4 w-4 text-gray-400 shrink-0" />

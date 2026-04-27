@@ -43,21 +43,33 @@ const store = useUserConsentStore()
       @page-change="(page: number) => store.fetchConsents(userId, page)"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
+          {{ t('pages.userDetail.audience') }}
+        </th>
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap hidden sm:table-cell"
+        >
           {{ t('pages.userDetail.client') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.userDetail.scopes') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.userDetail.actions') }}
         </th>
       </template>
 
       <template #rows>
-        <tr v-for="consent in store.consents" :key="consent.client_id">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            {{ consent.client_id }}
+        <tr v-for="consent in store.consents" :key="consent.audience_id">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {{ consent.audience_id }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+            {{ consent.prompted_by_client_id }}
           </td>
           <td class="px-6 py-4 text-sm">
             <div class="flex flex-wrap gap-1">
@@ -69,7 +81,7 @@ const store = useUserConsentStore()
           <td class="px-6 py-4 whitespace-nowrap text-sm">
             <CommonButton
               :button-style="dangerColoredButton"
-              @click="store.revokeConsent(userId, consent.client_id)"
+              @click="store.revokeConsent(userId, consent.audience_id)"
             >
               {{ t('pages.userDetail.revoke') }}
             </CommonButton>

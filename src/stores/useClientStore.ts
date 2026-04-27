@@ -43,6 +43,6 @@ export const useClientStore = defineStore('clients', () => {
     size,
     total,
     totalPages,
-    fetchClients,
+    fetchClients
   }
 })

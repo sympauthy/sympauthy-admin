@@ -44,26 +44,35 @@ function formatDate(dateStr: string | null | undefined): string {
       :empty="store.claims.length === 0"
       :page="store.claimsPage"
       :total-pages="store.claimsTotalPages"
-
       @page-change="(page: number) => store.fetchClaims(userId, page)"
     >
       <template #header>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.userDetail.claim') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.userDetail.value') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('common.origin.label') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.userDetail.claimTags') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.userDetail.collectedAt') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.userDetail.verifiedAt') }}
         </th>
       </template>

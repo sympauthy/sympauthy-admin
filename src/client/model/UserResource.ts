@@ -11,24 +11,24 @@ export const userResourceSchema: JSONSchemaType<UserResource> = {
   type: 'object',
   properties: {
     user_id: {
-      type: 'string',
+      type: 'string'
     },
     claims: {
       type: 'object',
       additionalProperties: {
         type: 'string',
-        nullable: true,
+        nullable: true
       } as any,
       required: [],
-      nullable: true,
+      nullable: true
     },
     status: {
-      type: 'string',
+      type: 'string'
     },
     created_at: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
   required: ['user_id', 'status', 'created_at'],
-  additionalProperties: true,
+  additionalProperties: true
 }
