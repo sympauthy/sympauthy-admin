@@ -34,6 +34,7 @@
     "clients": "Clients",
     "claims": "Claims",
     "scopes": "Scopes",
+    "audiences": "Audiences",
     "configuration": "Configuration",
     "sessions": "Sessions",
     "openMenu": "Open menu",
@@ -150,6 +151,12 @@
       "statusFilter": "status",
       "allStatuses": "all statuses",
       "empty": "No scopes found."
+    },
+    "audiences": {
+      "title": "Audiences",
+      "audienceId": "Audience ID",
+      "tokenAudience": "Token Audience",
+      "empty": "No audiences found."
     },
     "claims": {
       "title": "Claims",
