@@ -78,6 +78,17 @@ async function logout() {
           {{ t('nav.scopes') }}
         </router-link>
       </li>
+      <li>
+        <router-link
+          to="/audiences"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/audiences') }
+          ]"
+        >
+          {{ t('nav.audiences') }}
+        </router-link>
+      </li>
       <!-- <li>
         <router-link to='/configuration' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
           {{ t('nav.configuration') }}
