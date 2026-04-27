@@ -69,7 +69,7 @@ const store = useUserConsentStore()
             {{ consent.audience_id }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-            {{ consent.client_id }}
+            {{ consent.prompted_by_client_id }}
           </td>
           <td class="px-6 py-4 text-sm">
             <div class="flex flex-wrap gap-1">
