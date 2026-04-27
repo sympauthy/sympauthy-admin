@@ -20,8 +20,8 @@ const filters = computed<FilterConfig[]>(() => [
       { label: t('pages.scopes.allTypes'), value: '' },
       { label: t('pages.scopes.consentable'), value: 'consentable' },
       { label: t('pages.scopes.grantable'), value: 'grantable' },
-      { label: t('pages.scopes.client'), value: 'client' },
-    ],
+      { label: t('pages.scopes.client'), value: 'client' }
+    ]
   },
   {
     key: 'enabled',
@@ -30,9 +30,9 @@ const filters = computed<FilterConfig[]>(() => [
     options: [
       { label: t('pages.scopes.allStatuses'), value: '' },
       { label: t('pages.scopes.enabled'), value: 'true' },
-      { label: t('pages.scopes.disabled'), value: 'false' },
-    ],
-  },
+      { label: t('pages.scopes.disabled'), value: 'false' }
+    ]
+  }
 ])
 
 function onFilterChange(key: string, value: string) {
@@ -69,11 +69,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <FilterBar
-      :filters="filters"
-      @filter-change="onFilterChange"
-      @filter-remove="onFilterRemove"
-    />
+    <FilterBar :filters="filters" @filter-change="onFilterChange" @filter-remove="onFilterRemove" />
 
     <PaginatedTable
       :loading="scopeStore.loading"
@@ -84,16 +80,22 @@ onMounted(async () => {
       @page-change="scopeStore.fetchScopes"
     >
       <template #header>
-        <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th
+          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
           {{ t('pages.scopes.status') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.scopes.id') }}
         </th>
-        <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th
+          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
           {{ t('pages.scopes.type') }}
         </th>
-        <th class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th
+          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
           {{ t('common.origin.label') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

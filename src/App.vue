@@ -17,11 +17,14 @@ const showLoading = computed(() => {
 })
 
 // Redirect to login when the user session is lost (e.g. failed token refresh)
-watch(() => authStore.isAuthenticated, (isAuthenticated, wasAuthenticated) => {
-  if (wasAuthenticated && !isAuthenticated) {
-    authStore.signinRedirect(route.fullPath)
+watch(
+  () => authStore.isAuthenticated,
+  (isAuthenticated, wasAuthenticated) => {
+    if (wasAuthenticated && !isAuthenticated) {
+      authStore.signinRedirect(route.fullPath)
+    }
   }
-})
+)
 </script>
 
 <template>

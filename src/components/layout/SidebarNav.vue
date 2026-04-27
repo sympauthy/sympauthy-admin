@@ -21,30 +21,60 @@ async function logout() {
 
 <template>
   <nav class="flex flex-col h-full bg-gray-800 text-white">
-    <div class="h-14 flex items-center justify-between px-4 text-lg font-semibold border-b border-gray-700">
+    <div
+      class="h-14 flex items-center justify-between px-4 text-lg font-semibold border-b border-gray-700"
+    >
       <span>SympAuthy Admin</span>
-      <button :title="t('nav.closeMenu')" class="lg:hidden text-gray-400 hover:text-white" @click="closeSidebar">
+      <button
+        :title="t('nav.closeMenu')"
+        class="lg:hidden text-gray-400 hover:text-white"
+        @click="closeSidebar"
+      >
         <XMarkIcon class="h-5 w-5" />
       </button>
     </div>
     <ul class="flex flex-col mt-2 flex-1">
       <li>
-        <router-link to='/users' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/users') }]">
+        <router-link
+          to="/users"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/users') }
+          ]"
+        >
           {{ t('nav.users') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/clients' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/clients') }]">
+        <router-link
+          to="/clients"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/clients') }
+          ]"
+        >
           {{ t('nav.clients') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/claims' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/claims') }]">
+        <router-link
+          to="/claims"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/claims') }
+          ]"
+        >
           {{ t('nav.claims') }}
         </router-link>
       </li>
       <li>
-        <router-link to='/scopes' :class="['block px-4 py-2 hover:bg-gray-700 transition-colors', { 'bg-gray-900': isActive('/scopes') }]">
+        <router-link
+          to="/scopes"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/scopes') }
+          ]"
+        >
           {{ t('nav.scopes') }}
         </router-link>
       </li>

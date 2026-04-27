@@ -12,25 +12,25 @@ export const clientResourceSchema: JSONSchemaType<ClientResource> = {
   type: 'object',
   properties: {
     client_id: {
-      type: 'string',
+      type: 'string'
     },
     type: {
-      type: 'string',
+      type: 'string'
     },
     allowed_scopes: {
       type: 'array',
-      items: { type: 'string' },
+      items: { type: 'string' }
     },
     default_scopes: {
       type: 'array',
-      items: { type: 'string' },
+      items: { type: 'string' }
     },
     allowed_redirect_uris: {
       type: 'array',
       items: { type: 'string' },
-      nullable: true,
-    },
+      nullable: true
+    }
   },
   required: ['client_id', 'type', 'allowed_scopes', 'default_scopes'],
-  additionalProperties: true,
+  additionalProperties: true
 }

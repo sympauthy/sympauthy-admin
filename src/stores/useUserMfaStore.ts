@@ -63,6 +63,6 @@ export const useUserMfaStore = defineStore('userMfa', () => {
     mfaTotalPages,
     fetchMfaMethods,
     revokeMfaMethod,
-    $reset,
+    $reset
   }
 })

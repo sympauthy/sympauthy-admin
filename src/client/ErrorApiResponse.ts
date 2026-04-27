@@ -32,8 +32,7 @@ export class ErrorApiResponse {
      * The original response
      */
     readonly response?: Response
-  ) {
-  }
+  ) {}
 }
 
 export function makeErrorApiResponse(errorCode: string, descriptionKey?: string): ErrorApiResponse {

@@ -13,18 +13,18 @@ export const userClaimListResourceSchema: JSONSchemaType<UserClaimListResource> 
   properties: {
     claims: {
       type: 'array',
-      items: { ...userClaimResourceSchema },
+      items: { ...userClaimResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['claims', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

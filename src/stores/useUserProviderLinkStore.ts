@@ -16,20 +16,17 @@ export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
   const providerLinksTotal = ref(0)
 
   const providerLinksTotalPages = computed(() =>
-    Math.ceil(providerLinksTotal.value / providerLinksSize.value),
+    Math.ceil(providerLinksTotal.value / providerLinksSize.value)
   )
 
-  async function fetchProviderLinks(
-    userId: string,
-    requestedPage: number = 0,
-  ): Promise<void> {
+  async function fetchProviderLinks(userId: string, requestedPage: number = 0): Promise<void> {
     providerLinksLoading.value = true
     providerLinksError.value = null
 
     const response = await providerLinkApi.listProviderLinks(
       userId,
       requestedPage,
-      providerLinksSize.value,
+      providerLinksSize.value
     )
 
     if (isSuccess(response)) {
@@ -72,6 +69,6 @@ export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
     providerLinksTotalPages,
     fetchProviderLinks,
     unlinkProvider,
-    $reset,
+    $reset
   }
 })

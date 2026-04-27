@@ -30,7 +30,7 @@ export const useUserStore = defineStore('users', () => {
 
     const params: Record<string, string | number | undefined> = {
       page: requestedPage,
-      size: size.value,
+      size: size.value
     }
 
     if (selectedClaimIds.value.length > 0) {
@@ -130,6 +130,6 @@ export const useUserStore = defineStore('users', () => {
     clearStatusFilter,
     clearClaimFilter,
     toggleSort,
-    setSelectedClaimIds,
+    setSelectedClaimIds
   }
 })

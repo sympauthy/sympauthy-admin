@@ -28,7 +28,7 @@ export const useScopeStore = defineStore('scopes', () => {
       requestedPage,
       size.value,
       typeFilter.value || undefined,
-      enabledFilter.value || undefined,
+      enabledFilter.value || undefined
     )
 
     if (isSuccess(response)) {
@@ -77,6 +77,6 @@ export const useScopeStore = defineStore('scopes', () => {
     setTypeFilter,
     setEnabledFilter,
     clearTypeFilter,
-    clearEnabledFilter,
+    clearEnabledFilter
   }
 })

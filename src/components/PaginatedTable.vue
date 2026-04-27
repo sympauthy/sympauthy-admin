@@ -21,8 +21,8 @@ const props = withDefaults(
     empty: false,
     page: 0,
     totalPages: 1,
-    tableLayout: 'auto',
-  },
+    tableLayout: 'auto'
+  }
 )
 
 const emit = defineEmits<{
@@ -62,7 +62,10 @@ function nextPage() {
   <!-- Table -->
   <div v-else>
     <div class="overflow-x-auto">
-      <table class="w-full divide-y divide-gray-200" :class="props.tableLayout === 'auto' ? 'table-auto' : 'table-fixed'">
+      <table
+        class="w-full divide-y divide-gray-200"
+        :class="props.tableLayout === 'auto' ? 'table-auto' : 'table-fixed'"
+      >
         <thead class="bg-gray-50">
           <tr>
             <slot name="header" />
@@ -75,7 +78,10 @@ function nextPage() {
     </div>
 
     <!-- Pagination -->
-    <div v-if="props.totalPages > 1" class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mt-4">
+    <div
+      v-if="props.totalPages > 1"
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mt-4"
+    >
       <span class="text-sm text-gray-600">
         {{ t('common.pagination', { page: props.page + 1, totalPages: props.totalPages }) }}
       </span>

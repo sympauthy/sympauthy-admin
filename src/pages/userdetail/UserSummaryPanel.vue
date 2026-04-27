@@ -22,8 +22,8 @@ const actions = computed<ActionItem[]>(() => [
     key: 'logout',
     label: t('pages.userDetail.forceLogout'),
     icon: ArrowRightStartOnRectangleIcon,
-    danger: true,
-  },
+    danger: true
+  }
 ])
 
 function onAction(key: string) {
@@ -49,10 +49,7 @@ function formatDate(dateStr: string): string {
             <span class="text-sm text-gray-900 font-mono truncate">
               {{ user.user_id }}
             </span>
-            <CopyToClipboard
-              :value="user.user_id"
-              :title="t('pages.userDetail.copyUserId')"
-            />
+            <CopyToClipboard :value="user.user_id" :title="t('pages.userDetail.copyUserId')" />
           </dd>
         </div>
         <div>
@@ -77,10 +74,7 @@ function formatDate(dateStr: string): string {
           </dd>
         </div>
       </div>
-      <ActionsDropdown
-        :actions="actions"
-        @action="onAction"
-      />
+      <ActionsDropdown :actions="actions" @action="onAction" />
     </div>
   </div>
 </template>

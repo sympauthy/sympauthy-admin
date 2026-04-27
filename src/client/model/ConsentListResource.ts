@@ -13,18 +13,18 @@ export const consentListResourceSchema: JSONSchemaType<ConsentListResource> = {
   properties: {
     consents: {
       type: 'array',
-      items: { ...consentResourceSchema },
+      items: { ...consentResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['consents', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

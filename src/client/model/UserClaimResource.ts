@@ -16,37 +16,37 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
   type: 'object',
   properties: {
     claim_id: {
-      type: 'string',
+      type: 'string'
     },
     value: {
       type: 'string',
-      nullable: true,
+      nullable: true
     },
     type: {
-      type: 'string',
+      type: 'string'
     },
     origin: {
-      type: 'string',
+      type: 'string'
     },
     required: {
-      type: 'boolean',
+      type: 'boolean'
     },
     identifier: {
-      type: 'boolean',
+      type: 'boolean'
     },
     group: {
       type: 'string',
-      nullable: true,
+      nullable: true
     },
     collected_at: {
       type: 'string',
-      nullable: true,
+      nullable: true
     },
     verified_at: {
       type: 'string',
-      nullable: true,
-    },
+      nullable: true
+    }
   },
   required: ['claim_id', 'type', 'origin', 'required', 'identifier'],
-  additionalProperties: true,
+  additionalProperties: true
 }

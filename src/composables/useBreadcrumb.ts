@@ -6,9 +6,12 @@ const dynamicLabel = ref<string | null>(null)
 export function useBreadcrumb() {
   const route = useRoute()
 
-  watch(() => route.fullPath, () => {
-    dynamicLabel.value = null
-  })
+  watch(
+    () => route.fullPath,
+    () => {
+      dynamicLabel.value = null
+    }
+  )
 
   function setLabel(label: string) {
     dynamicLabel.value = label
@@ -16,6 +19,6 @@ export function useBreadcrumb() {
 
   return {
     dynamicLabel,
-    setLabel,
+    setLabel
   }
 }

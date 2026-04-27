@@ -9,8 +9,8 @@ withDefaults(
     options: { label: string; value: string }[]
   }>(),
   {
-    disabled: false,
-  },
+    disabled: false
+  }
 )
 
 const emit = defineEmits<{

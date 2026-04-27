@@ -1,5 +1,8 @@
 import type { JSONSchemaType } from 'ajv'
-import { type UserMfaMethodResource, userMfaMethodResourceSchema } from '@/client/model/UserMfaMethodResource'
+import {
+  type UserMfaMethodResource,
+  userMfaMethodResourceSchema
+} from '@/client/model/UserMfaMethodResource'
 
 export type UserMfaMethodListResource = {
   mfa_methods: UserMfaMethodResource[]
@@ -13,18 +16,18 @@ export const userMfaMethodListResourceSchema: JSONSchemaType<UserMfaMethodListRe
   properties: {
     mfa_methods: {
       type: 'array',
-      items: { ...userMfaMethodResourceSchema },
+      items: { ...userMfaMethodResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['mfa_methods', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

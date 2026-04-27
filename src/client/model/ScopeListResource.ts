@@ -13,18 +13,18 @@ export const scopeListResourceSchema: JSONSchemaType<ScopeListResource> = {
   properties: {
     scopes: {
       type: 'array',
-      items: { ...scopeResourceSchema },
+      items: { ...scopeResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['scopes', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

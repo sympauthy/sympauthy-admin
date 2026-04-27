@@ -35,8 +35,8 @@ export const useUserConsentStore = defineStore('userConsent', () => {
     consentsLoading.value = false
   }
 
-  async function revokeConsent(userId: string, clientId: string): Promise<void> {
-    const response = await consentApi.revokeConsent(userId, clientId)
+  async function revokeConsent(userId: string, audienceId: string): Promise<void> {
+    const response = await consentApi.revokeConsent(userId, audienceId)
 
     if (isSuccess(response)) {
       await fetchConsents(userId, consentsPage.value)
@@ -63,6 +63,6 @@ export const useUserConsentStore = defineStore('userConsent', () => {
     consentsTotalPages,
     fetchConsents,
     revokeConsent,
-    $reset,
+    $reset
   }
 })

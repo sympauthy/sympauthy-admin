@@ -1,6 +1,7 @@
 import type { JSONSchemaType } from 'ajv'
 
 export type ConsentResource = {
+  audience_id: string
   client_id: string
   scopes?: string[] | null
   consented_at: string
@@ -9,20 +10,23 @@ export type ConsentResource = {
 export const consentResourceSchema: JSONSchemaType<ConsentResource> = {
   type: 'object',
   properties: {
+    audience_id: {
+      type: 'string'
+    },
     client_id: {
-      type: 'string',
+      type: 'string'
     },
     scopes: {
       type: 'array',
       items: {
-        type: 'string',
+        type: 'string'
       },
-      nullable: true,
+      nullable: true
     },
     consented_at: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
-  required: ['client_id', 'consented_at'],
-  additionalProperties: true,
+  required: ['audience_id', 'client_id', 'consented_at'],
+  additionalProperties: true
 }

@@ -31,14 +31,14 @@ const filters = computed<FilterConfig[]>(() => [
     options: [
       { label: t('pages.users.allStatuses'), value: '' },
       { label: t('pages.users.enabled'), value: 'enabled' },
-      { label: t('pages.users.disabled'), value: 'disabled' },
-    ],
+      { label: t('pages.users.disabled'), value: 'disabled' }
+    ]
   },
   ...enabledClaims.value.map((claim) => ({
     key: claim.id,
     label: claim.id,
-    type: 'text' as const,
-  })),
+    type: 'text' as const
+  }))
 ])
 
 function onFilterChange(key: string, value: string) {
@@ -85,7 +85,6 @@ onMounted(async () => {
       :empty="userStore.users.length === 0"
       :page="userStore.page"
       :total-pages="userStore.totalPages"
-
       @page-change="userStore.fetchUsers"
     >
       <template #header>
@@ -114,7 +113,9 @@ onMounted(async () => {
           :current-order="userStore.sortOrder"
           @sort="userStore.toggleSort"
         />
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap">
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
           {{ t('pages.users.actions') }}
         </th>
       </template>

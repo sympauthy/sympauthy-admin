@@ -13,18 +13,18 @@ export const userListResourceSchema: JSONSchemaType<UserListResource> = {
   properties: {
     users: {
       type: 'array',
-      items: { ...userResourceSchema },
+      items: { ...userResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['users', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }

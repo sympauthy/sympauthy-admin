@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv'
 import {
   type UserProviderLinkResource,
-  userProviderLinkResourceSchema,
+  userProviderLinkResourceSchema
 } from '@/client/model/UserProviderLinkResource'
 
 export type UserProviderLinkListResource = {
@@ -16,18 +16,18 @@ export const userProviderLinkListResourceSchema: JSONSchemaType<UserProviderLink
   properties: {
     providers: {
       type: 'array',
-      items: { ...userProviderLinkResourceSchema },
+      items: { ...userProviderLinkResourceSchema }
     },
     page: {
-      type: 'number',
+      type: 'number'
     },
     size: {
-      type: 'number',
+      type: 'number'
     },
     total: {
-      type: 'number',
-    },
+      type: 'number'
+    }
   },
   required: ['providers', 'page', 'size', 'total'],
-  additionalProperties: true,
+  additionalProperties: true
 }
