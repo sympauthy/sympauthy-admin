@@ -6,7 +6,7 @@ const getNavigatorLanguage = () => {
   if (navigator.languages && navigator.languages.length) {
     return navigator.languages[0]
   } else {
-    // @ts-ignore
+    // @ts-expect-error navigator.userLanguage is a legacy IE property not in DOM types
     return navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en'
   }
 }
