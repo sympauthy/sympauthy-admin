@@ -124,6 +124,10 @@ async function onSubmit() {
               {{ t('pages.invitations.createTitle') }}
             </h3>
 
+            <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+              {{ error }}
+            </div>
+
             <div class="space-y-4 mb-6">
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -179,10 +183,6 @@ async function onSubmit() {
                   class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
                 />
               </div>
-            </div>
-
-            <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-              {{ error }}
             </div>
 
             <div class="flex justify-end gap-3">
