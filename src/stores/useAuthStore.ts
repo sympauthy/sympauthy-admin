@@ -61,8 +61,11 @@ export const useAuthStore = defineStore('auth', () => {
     return false
   }
 
-  async function signinRedirect(targetUrl?: string): Promise<void> {
-    await authService.signinRedirect(targetUrl)
+  async function signinRedirect(
+    targetUrl?: string,
+    extraQueryParams?: Record<string, string>
+  ): Promise<void> {
+    await authService.signinRedirect(targetUrl, extraQueryParams)
   }
 
   async function signinRedirectCallback(): Promise<string> {

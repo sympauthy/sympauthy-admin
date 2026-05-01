@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AudiencesPage from '@/pages/AudiencesPage.vue'
+import InvitationsPage from '@/pages/InvitationsPage.vue'
 import ClientsPage from '@/pages/ClientsPage.vue'
 import ClaimsPage from '@/pages/ClaimsPage.vue'
 import ScopesPage from '@/pages/ScopesPage.vue'
 import UsersPage from '@/pages/UsersPage.vue'
 import UserDetailPage from '@/pages/userdetail/UserDetailPage.vue'
 import CallbackPage from '@/pages/CallbackPage.vue'
+import RegisterPage from '@/pages/RegisterPage.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 
 declare module 'vue-router' {
@@ -28,6 +30,12 @@ export function makeRouter() {
         path: '/callback',
         name: 'callback',
         component: CallbackPage,
+        meta: { requiresAuth: false, noLayout: true }
+      },
+      {
+        path: '/register',
+        name: 'register',
+        component: RegisterPage,
         meta: { requiresAuth: false, noLayout: true }
       },
       {
@@ -72,6 +80,12 @@ export function makeRouter() {
         name: 'audiences',
         component: AudiencesPage,
         meta: { requiresAuth: true, breadcrumb: { label: 'nav.audiences' } }
+      },
+      {
+        path: '/invitations',
+        name: 'invitations',
+        component: InvitationsPage,
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.invitations' } }
       }
     ]
   })
