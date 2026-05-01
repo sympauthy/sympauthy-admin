@@ -212,11 +212,15 @@ async function onSubmit() {
               {{ t('pages.invitations.invitationCreated') }}
             </h3>
 
-            <div class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            <div
+              class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800"
+            >
               {{ t('pages.invitations.tokenWarning') }}
             </div>
 
-            <div class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+            <div
+              class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3"
+            >
               <code class="flex-1 text-sm break-all">{{ createdToken }}</code>
               <CopyToClipboard :value="createdToken" />
             </div>
