@@ -34,6 +34,9 @@ async function logout() {
       </button>
     </div>
     <ul class="flex flex-col mt-2 flex-1">
+      <li class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        {{ t('nav.sectionUsers') }}
+      </li>
       <li>
         <router-link
           to="/users"
@@ -44,6 +47,21 @@ async function logout() {
         >
           {{ t('nav.users') }}
         </router-link>
+      </li>
+      <li>
+        <router-link
+          to="/invitations"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/invitations') }
+          ]"
+        >
+          {{ t('nav.invitations') }}
+        </router-link>
+      </li>
+      <li class="my-2 border-t border-gray-700" />
+      <li class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        {{ t('nav.sectionConfiguration') }}
       </li>
       <li>
         <router-link

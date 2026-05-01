@@ -94,9 +94,13 @@ export class AuthService {
     }
   }
 
-  async signinRedirect(targetUrl?: string): Promise<void> {
+  async signinRedirect(
+    targetUrl?: string,
+    extraQueryParams?: Record<string, string>
+  ): Promise<void> {
     await this.userManager.signinRedirect({
-      state: { targetUrl: targetUrl ?? '/' }
+      state: { targetUrl: targetUrl ?? '/' },
+      extraQueryParams
     })
   }
 
