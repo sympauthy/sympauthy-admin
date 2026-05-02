@@ -19,8 +19,7 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
       type: 'string'
     },
     value: {
-      oneOf: [{ type: 'string' }, { type: 'number' }],
-      nullable: true
+      oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'null' }]
     } as any,
     type: {
       type: 'string'

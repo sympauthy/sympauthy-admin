@@ -16,8 +16,7 @@ export const userDetailResourceSchema: JSONSchemaType<UserDetailResource> = {
     identifier_claims: {
       type: 'object',
       additionalProperties: {
-        oneOf: [{ type: 'string' }, { type: 'number' }],
-        nullable: true
+        oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'null' }]
       } as any,
       required: [],
       nullable: true
