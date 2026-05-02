@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv'
 
 export type UserClaimResource = {
   claim_id: string
-  value?: string | null
+  value?: string | number | null
   type: string
   origin: string
   required: boolean
@@ -19,9 +19,9 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
       type: 'string'
     },
     value: {
-      type: 'string',
+      oneOf: [{ type: 'string' }, { type: 'number' }],
       nullable: true
-    },
+    } as any,
     type: {
       type: 'string'
     },

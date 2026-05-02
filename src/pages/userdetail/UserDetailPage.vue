@@ -43,7 +43,7 @@ onMounted(async () => {
     const identifier = store.user.identifier_claims
       ? Object.values(store.user.identifier_claims)[0]
       : undefined
-    setLabel(identifier ?? userId.value)
+    setLabel(identifier != null ? String(identifier) : userId.value)
   }
 })
 </script>
