@@ -3,6 +3,11 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAudienceStore } from '@/stores/useAudienceStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
+import Tag from '@/components/Tag.vue'
+import {
+  audienceRegistrationModeKey,
+  audienceRegistrationModeColor
+} from '@/client/model/AudienceResource'
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()
@@ -24,12 +29,19 @@ onMounted(async () => {
     >
       <template #header>
         <th
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
         >
           {{ t('pages.audiences.audienceId') }}
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.audiences.tokenAudience') }}
+        <th
+          class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
+          {{ t('common.audience.registrationMode.label') }}
+        </th>
+        <th
+          class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+        >
+          {{ t('pages.audiences.clientsCount') }}
         </th>
       </template>
 
@@ -38,8 +50,13 @@ onMounted(async () => {
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
             {{ audience.audience_id }}
           </td>
-          <td class="px-6 py-4 text-sm text-gray-500 truncate">
-            {{ audience.token_audience }}
+          <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm">
+            <Tag :color="audienceRegistrationModeColor(audience)">
+              {{ t(audienceRegistrationModeKey(audience)) }}
+            </Tag>
+          </td>
+          <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {{ audience.clients_count }}
           </td>
         </tr>
       </template>

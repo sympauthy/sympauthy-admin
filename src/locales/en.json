@@ -34,6 +34,15 @@
       "openid": "openid",
       "system": "system",
       "custom": "custom"
+    },
+    "audience": {
+      "registrationMode": {
+        "label": "Registration mode",
+        "open": "open",
+        "openInvitations": "open + invitations",
+        "invitationOnly": "invitation-only",
+        "closed": "closed"
+      }
     }
   },
   "nav": {
@@ -165,7 +174,7 @@
     "audiences": {
       "title": "Audiences",
       "audienceId": "Audience ID",
-      "tokenAudience": "Token Audience",
+      "clientsCount": "Clients",
       "empty": "No audiences found."
     },
     "invitations": {
