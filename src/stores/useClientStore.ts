@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ClientApi } from '@/client/api/ClientApi'
-import type { ClientResource } from '@/client/model/ClientResource'
+import type { ClientSummaryResource } from '@/client/model/ClientSummaryResource'
 import { isSuccess } from '@/client/SuccessApiResponse'
 import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
 
 export const useClientStore = defineStore('clients', () => {
   const api = new ClientApi()
 
-  const clients = ref<ClientResource[]>([])
+  const clients = ref<ClientSummaryResource[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
   const page = ref(0)

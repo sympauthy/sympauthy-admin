@@ -3,6 +3,10 @@ import {
   type ClientListResource,
   clientListResourceSchema
 } from '@/client/model/ClientListResource'
+import {
+  type ClientDetailResource,
+  clientDetailResourceSchema
+} from '@/client/model/ClientDetailResource'
 import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
 import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
 
@@ -18,6 +22,15 @@ export class ClientApi extends AbstractApi {
         size: size.toString()
       },
       schema: clientListResourceSchema
+    })
+  }
+
+  async getClient(
+    clientId: string
+  ): Promise<SuccessApiResponse<ClientDetailResource> | ErrorApiResponse> {
+    return this.get<ClientDetailResource>({
+      path: `/api/v1/admin/clients/${clientId}`,
+      schema: clientDetailResourceSchema
     })
   }
 }

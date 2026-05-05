@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AudiencesPage from '@/pages/AudiencesPage.vue'
 import InvitationsPage from '@/pages/InvitationsPage.vue'
 import ClientsPage from '@/pages/ClientsPage.vue'
+import ClientDetailPage from '@/pages/clientdetail/ClientDetailPage.vue'
 import ClaimsPage from '@/pages/ClaimsPage.vue'
 import ScopesPage from '@/pages/ScopesPage.vue'
 import UsersPage from '@/pages/UsersPage.vue'
@@ -62,6 +63,15 @@ export function makeRouter() {
         name: 'clients',
         component: ClientsPage,
         meta: { requiresAuth: true, breadcrumb: { label: 'nav.clients' } }
+      },
+      {
+        path: '/clients/:clientId',
+        name: 'clientDetail',
+        component: ClientDetailPage,
+        meta: {
+          requiresAuth: true,
+          breadcrumb: { label: 'pages.clientDetail.title', parent: 'clients' }
+        }
       },
       {
         path: '/claims',

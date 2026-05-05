@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { RouterLink } from 'vue-router'
 import { useClientStore } from '@/stores/useClientStore'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import ClientTypeHelpTooltip from '@/components/ClientTypeHelpTooltip.vue'
-import Tag from '@/components/Tag.vue'
 
 const { t } = useI18n()
 const clientStore = useClientStore()
@@ -36,11 +36,10 @@ onMounted(async () => {
           {{ t('pages.clients.type') }}
           <ClientTypeHelpTooltip />
         </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.clients.allowedScopes') }}
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.clients.defaultScopes') }}
+        <th
+          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap hidden sm:table-cell"
+        >
+          {{ t('pages.clients.audience') }}
         </th>
         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           {{ t('pages.clients.redirectUris') }}
@@ -50,25 +49,18 @@ onMounted(async () => {
       <template #rows>
         <tr v-for="client in clientStore.clients" :key="client.client_id">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            {{ client.client_id }}
+            <RouterLink
+              :to="{ name: 'clientDetail', params: { clientId: client.client_id } }"
+              class="text-indigo-600 hover:text-indigo-900"
+            >
+              {{ client.client_id }}
+            </RouterLink>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {{ client.type }}
           </td>
-          <td class="px-6 py-4 text-sm text-gray-500">
-            <Tag v-for="scope in client.allowed_scopes" :key="scope" color="blue" class="mr-1 mb-1">
-              {{ scope }}
-            </Tag>
-          </td>
-          <td class="px-6 py-4 text-sm text-gray-500">
-            <Tag
-              v-for="scope in client.default_scopes"
-              :key="scope"
-              color="green"
-              class="mr-1 mb-1"
-            >
-              {{ scope }}
-            </Tag>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+            {{ client.audience_id }}
           </td>
           <td class="px-6 py-4 text-sm text-gray-500">
             <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
