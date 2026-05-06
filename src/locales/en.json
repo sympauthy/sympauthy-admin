@@ -88,6 +88,8 @@
       "type": "Type",
       "audience": "Audience",
       "redirectUris": "Redirect URIs",
+      "actions": "Actions",
+      "view": "View",
       "empty": "No clients found."
     },
     "clientDetail": {
