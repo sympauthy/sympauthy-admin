@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserMfaStore } from '@/stores/useUserMfaStore'
+import DetailSection from '@/components/DetailSection.vue'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
@@ -42,9 +43,8 @@ function cancelRevoke() {
 </script>
 
 <template>
-  <div>
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">
-      {{ t('pages.userDetail.mfaMethods') }}
+  <DetailSection :title="t('pages.userDetail.mfaMethods')">
+    <template #help>
       <HelpTooltip>
         <i18n-t keypath="pages.userDetail.mfaMethodsHelp" tag="p">
           <template #link>
@@ -59,7 +59,7 @@ function cancelRevoke() {
           </template>
         </i18n-t>
       </HelpTooltip>
-    </h2>
+    </template>
     <PaginatedTable
       :loading="store.mfaLoading"
       :error="store.mfaError"
@@ -125,5 +125,5 @@ function cancelRevoke() {
         {{ t('pages.userDetail.revokeMfaDescription') }}
       </p>
     </ConfirmDialog>
-  </div>
+  </DetailSection>
 </template>

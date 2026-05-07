@@ -54,6 +54,19 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 - `Tag` component for status badges
 - In data tables, the primary/ID column uses `font-medium text-gray-900` for bold styling (not `Tag`)
 
+### Detail Pages
+
+Detail pages (e.g. `/users/:userId`, `/clients/:clientId`) follow a consistent layout:
+
+- **Route:** `/:resource/:id`, breadcrumb parent is the list route
+- **Page component** in `src/pages/<resource>detail/` — handles loading/error/content states, resets store on mount
+- **Summary panel** (top): card wrapper (`bg-white rounded-lg border border-gray-200 p-4 sm:p-6`), grid of key-value pairs, no section heading. Use `CopyToClipboard` on the primary ID field.
+- **Content sections**: use `DetailSection` component (`h2 / text-lg / font-semibold` heading + default slot). Optional `#help` slot for `HelpTooltip`.
+  - **Tabular data** (e.g. user claims, consents): `PaginatedTable` directly inside the slot — no card wrapper (the table provides its own styling)
+  - **Key-value data** (e.g. client scopes, authorization config): definition list inside a card (`<dl class="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">`), each row is `<div class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4">` with `<dt>` label (left, `text-xs font-medium text-gray-500 uppercase tracking-wider` — same style as summary panel labels) and `<dd>` value (right)
+  - **Simple lists** (e.g. redirect URIs): card wrapper with items listed inside
+- **Dedicated store** per detail page (e.g. `useClientDetailStore`) with `$reset()` method
+
 ## Responsive Design
 
 Mobile-first approach using Tailwind's default breakpoints:

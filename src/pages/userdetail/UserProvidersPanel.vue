@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserProviderLinkStore } from '@/stores/useUserProviderLinkStore'
+import DetailSection from '@/components/DetailSection.vue'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
@@ -42,9 +43,8 @@ function cancelUnlink() {
 </script>
 
 <template>
-  <div>
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">
-      {{ t('pages.userDetail.providerLinks') }}
+  <DetailSection :title="t('pages.userDetail.providerLinks')">
+    <template #help>
       <HelpTooltip>
         <i18n-t keypath="pages.userDetail.providerLinksHelp" tag="p">
           <template #link>
@@ -59,7 +59,7 @@ function cancelUnlink() {
           </template>
         </i18n-t>
       </HelpTooltip>
-    </h2>
+    </template>
     <PaginatedTable
       :loading="store.providerLinksLoading"
       :error="store.providerLinksError"
@@ -129,5 +129,5 @@ function cancelUnlink() {
         {{ t('pages.userDetail.unlinkProviderDescription') }}
       </p>
     </ConfirmDialog>
-  </div>
+  </DetailSection>
 </template>

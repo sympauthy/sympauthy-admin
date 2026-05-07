@@ -74,9 +74,7 @@ onMounted(async () => {
           <td class="px-6 py-4 whitespace-nowrap text-sm">
             <CommonButton
               :button-style="primaryColoredButton"
-              @click="
-                router.push({ name: 'clientDetail', params: { clientId: client.client_id } })
-              "
+              @click="router.push({ name: 'clientDetail', params: { clientId: client.client_id } })"
             >
               <span class="inline-flex items-center gap-1.5">
                 <EyeIcon class="size-4 shrink-0" />
