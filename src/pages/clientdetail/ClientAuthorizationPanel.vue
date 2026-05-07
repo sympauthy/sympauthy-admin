@@ -14,6 +14,21 @@ const { t } = useI18n()
 <template>
   <DetailSection :title="t('pages.clientDetail.authorization')">
     <dl class="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
+      <div class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center">
+        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
+          {{ t('pages.clientDetail.grantTypes') }}
+        </dt>
+        <dd class="mt-1 sm:mt-0 sm:col-span-2">
+          <Tag
+            v-for="grantType in client.allowed_grant_types"
+            :key="grantType"
+            color="blue"
+            class="mr-1 mb-1"
+          >
+            {{ grantType }}
+          </Tag>
+        </dd>
+      </div>
       <div
         v-if="client.authorization_flow_id"
         class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center"

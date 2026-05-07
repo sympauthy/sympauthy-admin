@@ -43,12 +43,9 @@ onMounted(async () => {
     <!-- Content -->
     <div v-else-if="store.client" class="space-y-6">
       <ClientSummaryPanel :client="store.client" />
+      <ClientAuthorizationPanel :client="store.client" />
       <ClientScopesPanel :client="store.client" />
       <ClientRedirectUrisPanel :client="store.client" />
-      <ClientAuthorizationPanel
-        v-if="store.client.authorization_flow_id || store.client.authorization_webhook"
-        :client="store.client"
-      />
     </div>
   </div>
 </template>
