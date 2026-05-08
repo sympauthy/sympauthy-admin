@@ -1,14 +1,13 @@
 import type { JSONSchemaType } from 'ajv'
 
-export type ClientResource = {
+export type ClientSummaryResource = {
   client_id: string
   type: string
-  allowed_scopes: string[]
-  default_scopes: string[]
+  audience_id: string
   allowed_redirect_uris?: string[]
 }
 
-export const clientResourceSchema: JSONSchemaType<ClientResource> = {
+export const clientSummaryResourceSchema: JSONSchemaType<ClientSummaryResource> = {
   type: 'object',
   properties: {
     client_id: {
@@ -17,13 +16,8 @@ export const clientResourceSchema: JSONSchemaType<ClientResource> = {
     type: {
       type: 'string'
     },
-    allowed_scopes: {
-      type: 'array',
-      items: { type: 'string' }
-    },
-    default_scopes: {
-      type: 'array',
-      items: { type: 'string' }
+    audience_id: {
+      type: 'string'
     },
     allowed_redirect_uris: {
       type: 'array',
@@ -31,6 +25,6 @@ export const clientResourceSchema: JSONSchemaType<ClientResource> = {
       nullable: true
     }
   },
-  required: ['client_id', 'type', 'allowed_scopes', 'default_scopes'],
+  required: ['client_id', 'type', 'audience_id'],
   additionalProperties: true
 }

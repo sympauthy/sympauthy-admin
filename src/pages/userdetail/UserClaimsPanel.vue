@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useUserDetailStore } from '@/stores/useUserDetailStore'
+import DetailSection from '@/components/DetailSection.vue'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import OriginTag from '@/components/OriginTag.vue'
@@ -20,9 +21,8 @@ function formatDate(dateStr: string | null | undefined): string {
 </script>
 
 <template>
-  <div>
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">
-      {{ t('pages.userDetail.claims') }}
+  <DetailSection :title="t('pages.userDetail.claims')">
+    <template #help>
       <HelpTooltip>
         <i18n-t keypath="pages.userDetail.claimsHelp" tag="p">
           <template #link>
@@ -37,7 +37,7 @@ function formatDate(dateStr: string | null | undefined): string {
           </template>
         </i18n-t>
       </HelpTooltip>
-    </h2>
+    </template>
     <PaginatedTable
       :loading="store.claimsLoading"
       :error="store.claimsError"
@@ -104,5 +104,5 @@ function formatDate(dateStr: string | null | undefined): string {
         <p class="text-gray-600">{{ t('pages.userDetail.noClaims') }}</p>
       </template>
     </PaginatedTable>
-  </div>
+  </DetailSection>
 </template>

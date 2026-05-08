@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useUserConsentStore } from '@/stores/useUserConsentStore'
+import DetailSection from '@/components/DetailSection.vue'
 import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
@@ -16,9 +17,8 @@ const store = useUserConsentStore()
 </script>
 
 <template>
-  <div>
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">
-      {{ t('pages.userDetail.consents') }}
+  <DetailSection :title="t('pages.userDetail.consents')">
+    <template #help>
       <HelpTooltip>
         <i18n-t keypath="pages.userDetail.consentsHelp" tag="p">
           <template #link>
@@ -33,7 +33,7 @@ const store = useUserConsentStore()
           </template>
         </i18n-t>
       </HelpTooltip>
-    </h2>
+    </template>
     <PaginatedTable
       :loading="store.consentsLoading"
       :error="store.consentsError"
@@ -93,5 +93,5 @@ const store = useUserConsentStore()
         <p class="text-gray-600">{{ t('pages.userDetail.noConsents') }}</p>
       </template>
     </PaginatedTable>
-  </div>
+  </DetailSection>
 </template>
