@@ -20,7 +20,7 @@
     "oidc-client-ts": "^3.4.1",
     "pinia": "^3.0.0",
     "rambda": "^11.0.0",
-    "ts-deepmerge": "^7.0.0",
+    "ts-deepmerge": "^8.0.0",
     "vee-validate": "^4.12.4",
     "vue": "^3.3.11",
     "vue-i18n": "^11.1.10",
