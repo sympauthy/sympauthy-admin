@@ -35,6 +35,40 @@ export const useClientStore = defineStore('clients', () => {
     loading.value = false
   }
 
+  // Loads every client across all pages, accumulating into `clients`. Used where a complete list is
+  // required (e.g. a client picker) rather than a single displayed page.
+  async function fetchAllClients(): Promise<void> {
+    loading.value = true
+    error.value = null
+
+    const accumulated: ClientSummaryResource[] = []
+    let currentPage = 0
+
+    do {
+      const response = await api.listClients(currentPage, size.value)
+
+      if (!isSuccess(response)) {
+        error.value = getErrorMessage(response as ErrorApiResponse)
+        clients.value = []
+        loading.value = false
+        return
+      }
+
+      accumulated.push(...response.content.clients)
+      total.value = response.content.total
+      currentPage++
+
+      // Guard against an infinite loop if a page comes back empty while `total` is still higher.
+      if (response.content.clients.length === 0) {
+        break
+      }
+    } while (accumulated.length < total.value)
+
+    clients.value = accumulated
+    page.value = 0
+    loading.value = false
+  }
+
   return {
     clients,
     loading,
@@ -43,6 +77,7 @@ export const useClientStore = defineStore('clients', () => {
     size,
     total,
     totalPages,
-    fetchClients
+    fetchClients,
+    fetchAllClients
   }
 })

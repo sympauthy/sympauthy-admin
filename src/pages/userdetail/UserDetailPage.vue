@@ -13,6 +13,7 @@ import UserConsentsPanel from '@/pages/userdetail/UserConsentsPanel.vue'
 import UserMfaPanel from '@/pages/userdetail/UserMfaPanel.vue'
 import UserProvidersPanel from '@/pages/userdetail/UserProvidersPanel.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
+import EnrollMfaDialog from '@/components/EnrollMfaDialog.vue'
 import CommonSpinner from '@/components/CommonSpinner.vue'
 import CommonAlert from '@/components/CommonAlert.vue'
 
@@ -26,6 +27,7 @@ const { setLabel } = useBreadcrumb()
 
 const userId = computed(() => route.params.userId as string)
 const logoutOpen = ref(false)
+const enrollMfaOpen = ref(false)
 
 onMounted(async () => {
   store.$reset()
@@ -63,7 +65,11 @@ onMounted(async () => {
 
     <!-- Content -->
     <div v-else-if="store.user" class="space-y-6">
-      <UserSummaryPanel :user="store.user" @logout="logoutOpen = true" />
+      <UserSummaryPanel
+        :user="store.user"
+        @logout="logoutOpen = true"
+        @enroll-mfa="enrollMfaOpen = true"
+      />
       <UserClaimsPanel :user-id="userId" />
       <UserConsentsPanel :user-id="userId" />
       <UserMfaPanel :user-id="userId" />
@@ -71,5 +77,6 @@ onMounted(async () => {
     </div>
 
     <LogoutDialog :user-id="userId" :open="logoutOpen" @close="logoutOpen = false" />
+    <EnrollMfaDialog :user-id="userId" :open="enrollMfaOpen" @close="enrollMfaOpen = false" />
   </div>
 </template>
