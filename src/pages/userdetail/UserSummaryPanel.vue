@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import Tag from '@/components/Tag.vue'
 import CopyToClipboard from '@/components/CopyToClipboard.vue'
 import ActionsDropdown, { type ActionItem } from '@/components/ActionsDropdown.vue'
-import { ArrowRightStartOnRectangleIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 import type { UserDetailResource } from '@/client/model/UserDetailResource'
 
 defineProps<{
@@ -14,6 +14,7 @@ defineProps<{
 const emit = defineEmits<{
   logout: []
   enrollMfa: []
+  linkProvider: []
 }>()
 
 const { t } = useI18n()
@@ -23,6 +24,11 @@ const actions = computed<ActionItem[]>(() => [
     key: 'enrollMfa',
     label: t('pages.userDetail.enrollMfa'),
     icon: ShieldCheckIcon
+  },
+  {
+    key: 'linkProvider',
+    label: t('pages.userDetail.linkProvider'),
+    icon: LinkIcon
   },
   {
     key: 'logout',
@@ -35,6 +41,8 @@ const actions = computed<ActionItem[]>(() => [
 function onAction(key: string) {
   if (key === 'enrollMfa') {
     emit('enrollMfa')
+  } else if (key === 'linkProvider') {
+    emit('linkProvider')
   } else if (key === 'logout') {
     emit('logout')
   }

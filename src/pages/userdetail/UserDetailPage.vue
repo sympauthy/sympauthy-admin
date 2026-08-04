@@ -14,6 +14,7 @@ import UserMfaPanel from '@/pages/userdetail/UserMfaPanel.vue'
 import UserProvidersPanel from '@/pages/userdetail/UserProvidersPanel.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import EnrollMfaDialog from '@/components/EnrollMfaDialog.vue'
+import LinkProviderDialog from '@/components/LinkProviderDialog.vue'
 import CommonSpinner from '@/components/CommonSpinner.vue'
 import CommonAlert from '@/components/CommonAlert.vue'
 
@@ -28,6 +29,7 @@ const { setLabel } = useBreadcrumb()
 const userId = computed(() => route.params.userId as string)
 const logoutOpen = ref(false)
 const enrollMfaOpen = ref(false)
+const linkProviderOpen = ref(false)
 
 onMounted(async () => {
   store.$reset()
@@ -69,6 +71,7 @@ onMounted(async () => {
         :user="store.user"
         @logout="logoutOpen = true"
         @enroll-mfa="enrollMfaOpen = true"
+        @link-provider="linkProviderOpen = true"
       />
       <UserClaimsPanel :user-id="userId" />
       <UserConsentsPanel :user-id="userId" />
@@ -78,5 +81,10 @@ onMounted(async () => {
 
     <LogoutDialog :user-id="userId" :open="logoutOpen" @close="logoutOpen = false" />
     <EnrollMfaDialog :user-id="userId" :open="enrollMfaOpen" @close="enrollMfaOpen = false" />
+    <LinkProviderDialog
+      :user-id="userId"
+      :open="linkProviderOpen"
+      @close="linkProviderOpen = false"
+    />
   </div>
 </template>

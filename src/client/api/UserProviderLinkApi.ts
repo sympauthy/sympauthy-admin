@@ -3,8 +3,18 @@ import {
   type UserProviderLinkListResource,
   userProviderLinkListResourceSchema
 } from '@/client/model/UserProviderLinkListResource'
+import {
+  type UserProviderLinkStartResource,
+  userProviderLinkStartResourceSchema
+} from '@/client/model/UserProviderLinkStartResource'
 import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
 import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
+
+export interface ProviderLinkStartInput {
+  client_id: string
+  return_uri: string
+  cancel_uri?: string
+}
 
 export class UserProviderLinkApi extends AbstractApi {
   async listProviderLinks(
@@ -28,6 +38,18 @@ export class UserProviderLinkApi extends AbstractApi {
   ): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
     return this.delete({
       path: `/api/v1/admin/users/${userId}/providers/${providerId}`
+    })
+  }
+
+  async startProviderLink(
+    userId: string,
+    providerId: string,
+    input: ProviderLinkStartInput
+  ): Promise<SuccessApiResponse<UserProviderLinkStartResource> | ErrorApiResponse> {
+    return this.post<UserProviderLinkStartResource>({
+      path: `/api/v1/admin/users/${userId}/providers/${providerId}/link`,
+      body: input,
+      schema: userProviderLinkStartResourceSchema
     })
   }
 }
