@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import BaseDialog from '@/components/BaseDialog.vue'
 import CommonButton from '@/components/CommonButton.vue'
 import CopyToClipboard from '@/components/CopyToClipboard.vue'
 import { primaryColoredButton, secondaryColoredButton } from '@/styles/ButtonStyle'
@@ -32,6 +33,12 @@ const claimsJson = ref('')
 const submitting = ref(false)
 const error = ref<string | null>(null)
 const createdToken = ref('')
+
+const dialogTitle = computed(() =>
+  phase.value === 'form'
+    ? t('pages.invitations.createTitle')
+    : t('pages.invitations.invitationCreated')
+)
 
 watch(
   () => props.open,
@@ -108,131 +115,112 @@ async function onSubmit() {
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition
-      enter-active-class="transition-opacity duration-200"
-      leave-active-class="transition-opacity duration-200"
-      enter-from-class="opacity-0"
-      leave-to-class="opacity-0"
-    >
-      <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center">
-        <div class="absolute inset-0 bg-black/50" @click="$emit('close')" />
-        <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-          <!-- Form phase -->
-          <template v-if="phase === 'form'">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              {{ t('pages.invitations.createTitle') }}
-            </h3>
+  <BaseDialog
+    :open="open"
+    :title="dialogTitle"
+    :dismiss-disabled="submitting"
+    @close="$emit('close')"
+  >
+    <!-- Form phase -->
+    <template v-if="phase === 'form'">
+      <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+        {{ error }}
+      </div>
 
-            <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-              {{ error }}
-            </div>
-
-            <div class="space-y-4 mb-6">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  {{ t('pages.invitations.audience') }}
-                </label>
-                <select
-                  v-model="audience"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-                >
-                  <option value="" disabled>
-                    {{ t('pages.invitations.selectAudience') }}
-                  </option>
-                  <option
-                    v-for="a in audienceStore.audiences"
-                    :key="a.audience_id"
-                    :value="a.audience_id"
-                  >
-                    {{ a.audience_id }}
-                  </option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  {{ t('pages.invitations.expiresAtLabel') }}
-                </label>
-                <input
-                  v-model="expiresAt"
-                  type="datetime-local"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-                />
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  {{ t('pages.invitations.noteLabel') }}
-                </label>
-                <textarea
-                  v-model="note"
-                  rows="2"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-                />
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                  {{ t('pages.invitations.claimsLabel') }}
-                </label>
-                <textarea
-                  v-model="claimsJson"
-                  rows="3"
-                  :placeholder="t('pages.invitations.claimsPlaceholder')"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-                />
-              </div>
-            </div>
-
-            <div class="flex justify-end gap-3">
-              <CommonButton
-                :button-style="secondaryColoredButton"
-                :disabled="submitting"
-                @click="$emit('close')"
-              >
-                {{ t('common.cancel') }}
-              </CommonButton>
-              <CommonButton
-                :button-style="primaryColoredButton"
-                :submitting="submitting"
-                @click="onSubmit"
-              >
-                <template #submitting>
-                  {{ t('pages.invitations.create') }}
-                </template>
-                {{ t('pages.invitations.create') }}
-              </CommonButton>
-            </div>
-          </template>
-
-          <!-- Success phase -->
-          <template v-else>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              {{ t('pages.invitations.invitationCreated') }}
-            </h3>
-
-            <div
-              class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800"
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('pages.invitations.audience') }}
+          </label>
+          <select
+            v-model="audience"
+            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
+          >
+            <option value="" disabled>
+              {{ t('pages.invitations.selectAudience') }}
+            </option>
+            <option
+              v-for="a in audienceStore.audiences"
+              :key="a.audience_id"
+              :value="a.audience_id"
             >
-              {{ t('pages.invitations.tokenWarning') }}
-            </div>
+              {{ a.audience_id }}
+            </option>
+          </select>
+        </div>
 
-            <div
-              class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3"
-            >
-              <code class="flex-1 text-sm break-all">{{ createdToken }}</code>
-              <CopyToClipboard :value="createdToken" />
-            </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('pages.invitations.expiresAtLabel') }}
+          </label>
+          <input
+            v-model="expiresAt"
+            type="datetime-local"
+            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
+          />
+        </div>
 
-            <div class="flex justify-end">
-              <CommonButton :button-style="primaryColoredButton" @click="$emit('close')">
-                {{ t('pages.invitations.done') }}
-              </CommonButton>
-            </div>
-          </template>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('pages.invitations.noteLabel') }}
+          </label>
+          <textarea
+            v-model="note"
+            rows="2"
+            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('pages.invitations.claimsLabel') }}
+          </label>
+          <textarea
+            v-model="claimsJson"
+            rows="3"
+            :placeholder="t('pages.invitations.claimsPlaceholder')"
+            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
+          />
         </div>
       </div>
-    </Transition>
-  </Teleport>
+
+      <div class="flex justify-end gap-3">
+        <CommonButton
+          :button-style="secondaryColoredButton"
+          :disabled="submitting"
+          @click="$emit('close')"
+        >
+          {{ t('common.cancel') }}
+        </CommonButton>
+        <CommonButton
+          :button-style="primaryColoredButton"
+          :submitting="submitting"
+          @click="onSubmit"
+        >
+          <template #submitting>
+            {{ t('pages.invitations.create') }}
+          </template>
+          {{ t('pages.invitations.create') }}
+        </CommonButton>
+      </div>
+    </template>
+
+    <!-- Success phase -->
+    <template v-else>
+      <div class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+        {{ t('pages.invitations.tokenWarning') }}
+      </div>
+
+      <div class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+        <code class="flex-1 text-sm break-all">{{ createdToken }}</code>
+        <CopyToClipboard :value="createdToken" />
+      </div>
+
+      <div class="flex justify-end">
+        <CommonButton :button-style="primaryColoredButton" @click="$emit('close')">
+          {{ t('pages.invitations.done') }}
+        </CommonButton>
+      </div>
+    </template>
+  </BaseDialog>
 </template>

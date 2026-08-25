@@ -1,6 +1,12 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+import {
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from 'reka-ui'
 
 withDefaults(
   defineProps<{
@@ -16,56 +22,60 @@ withDefaults(
 const emit = defineEmits<{
   select: [value: string]
 }>()
-
-const open = ref(false)
-const dropdownRef = ref<HTMLElement>()
-
-function toggle() {
-  open.value = !open.value
-}
-
-function selectOption(value: string) {
-  emit('select', value)
-  open.value = false
-}
-
-function onClickOutside(event: MouseEvent) {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    open.value = false
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', onClickOutside)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', onClickOutside)
-})
 </script>
 
 <template>
-  <div ref="dropdownRef" class="relative">
-    <button
+  <DropdownMenuRoot>
+    <DropdownMenuTrigger
       :disabled="disabled"
-      class="flex items-center gap-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-      @click="toggle"
+      class="flex items-center gap-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {{ label }}
       <ChevronDownIcon class="h-4 w-4 text-gray-500" />
-    </button>
-    <div
-      v-if="open && options.length > 0"
-      class="absolute right-0 mt-1 min-w-full w-max bg-white border border-gray-200 rounded shadow-lg z-10"
-    >
-      <button
-        v-for="option in options"
-        :key="option.value"
-        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t last:rounded-b"
-        @click="selectOption(option.value)"
+    </DropdownMenuTrigger>
+    <DropdownMenuPortal>
+      <DropdownMenuContent
+        align="end"
+        :side-offset="4"
+        class="dropdown-content z-10 w-max min-w-[var(--reka-dropdown-menu-trigger-width)] rounded border border-gray-200 bg-white shadow-lg"
       >
-        {{ option.label }}
-      </button>
-    </div>
-  </div>
+        <DropdownMenuItem
+          v-for="option in options"
+          :key="option.value"
+          class="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 outline-none first:rounded-t last:rounded-b data-[highlighted]:bg-gray-100"
+          @select="emit('select', option.value)"
+        >
+          {{ option.label }}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenuPortal>
+  </DropdownMenuRoot>
 </template>
+
+<style scoped>
+.dropdown-content[data-state='open'] {
+  animation: dropdown-in 120ms ease-out;
+}
+.dropdown-content[data-state='closed'] {
+  animation: dropdown-out 100ms ease-in;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dropdown-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+</style>
