@@ -1,7 +1,14 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, type Component } from 'vue'
+import { type Component } from 'vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { useI18n } from 'vue-i18n'
+import {
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from 'reka-ui'
 import CommonButton from '@/components/CommonButton.vue'
 import { type ButtonStyle, secondaryColoredButton } from '@/styles/ButtonStyle'
 
@@ -27,57 +34,67 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-
-const open = ref(false)
-const dropdownRef = ref<HTMLElement>()
-
-function toggle() {
-  open.value = !open.value
-}
-
-function selectAction(key: string) {
-  emit('action', key)
-  open.value = false
-}
-
-function onClickOutside(event: MouseEvent) {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    open.value = false
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', onClickOutside)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', onClickOutside)
-})
 </script>
 
 <template>
-  <div ref="dropdownRef" class="relative">
-    <CommonButton :button-style="buttonStyle" :title="t('common.actions')" @click="toggle">
-      <span class="inline-flex items-center gap-1.5">
-        {{ t('common.actions') }}
-        <ChevronDownIcon class="size-4" />
-      </span>
-    </CommonButton>
-    <div
-      v-if="open && actions.length > 0"
-      class="absolute right-0 mt-1 min-w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10"
-    >
-      <button
-        v-for="action in actions"
-        :key="action.key"
-        type="button"
-        class="flex w-full items-center gap-2 px-4 py-2.5 text-sm first:rounded-t-md last:rounded-b-md cursor-pointer"
-        :class="action.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-100'"
-        @click="selectAction(action.key)"
+  <DropdownMenuRoot>
+    <DropdownMenuTrigger as-child>
+      <CommonButton :button-style="buttonStyle" :title="t('common.actions')">
+        <span class="inline-flex items-center gap-1.5">
+          {{ t('common.actions') }}
+          <ChevronDownIcon class="size-4" />
+        </span>
+      </CommonButton>
+    </DropdownMenuTrigger>
+    <DropdownMenuPortal>
+      <DropdownMenuContent
+        align="end"
+        :side-offset="4"
+        class="dropdown-content z-10 min-w-48 rounded-md border border-gray-200 bg-white shadow-lg"
       >
-        <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />
-        {{ action.label }}
-      </button>
-    </div>
-  </div>
+        <DropdownMenuItem
+          v-for="action in actions"
+          :key="action.key"
+          class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-sm outline-none first:rounded-t-md last:rounded-b-md"
+          :class="
+            action.danger
+              ? 'text-red-600 data-[highlighted]:bg-red-50'
+              : 'text-gray-700 data-[highlighted]:bg-gray-100'
+          "
+          @select="emit('action', action.key)"
+        >
+          <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />
+          {{ action.label }}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenuPortal>
+  </DropdownMenuRoot>
 </template>
+
+<style scoped>
+.dropdown-content[data-state='open'] {
+  animation: dropdown-in 120ms ease-out;
+}
+.dropdown-content[data-state='closed'] {
+  animation: dropdown-out 100ms ease-in;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dropdown-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+</style>

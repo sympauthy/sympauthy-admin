@@ -18,11 +18,11 @@ No test framework is configured.
 
 Vue 3 (Composition API, `<script setup>`) admin panel for a Sympauthy OAuth/OIDC server.
 
-**Stack:** Vite 7 · Vue Router 5 · Pinia 3 · Tailwind CSS 4 · vue-i18n · oidc-client-ts · vee-validate + yup
+**Stack:** Vite 7 · Vue Router 5 · Pinia 3 · Tailwind CSS 4 · reka-ui (headless UI primitives) · vue-i18n · oidc-client-ts · vee-validate + yup
 
 **Key directories:**
 - `src/pages/` — Page-level components (routed views)
-- `src/components/` — Reusable UI components (no external UI library — all custom with Tailwind)
+- `src/components/` — Reusable UI components. Presentational elements are custom Tailwind; interactive/overlay primitives (dialogs, dropdown menus, popovers) wrap **reka-ui** headless components for accessibility (see UI Conventions)
 - `src/stores/` — Pinia composition-style stores (handle API calls + reactive state)
 - `src/client/` — HTTP layer: `AbstractApi` base class, per-resource API classes, model interfaces + AJV schemas
 - `src/auth/` — OIDC `AuthService` wrapper around `oidc-client-ts` UserManager
@@ -53,6 +53,15 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 - `ConfirmDialog` for destructive action confirmation
 - `Tag` component for status badges
 - In data tables, the primary/ID column uses `font-medium text-gray-900` for bold styling (not `Tag`)
+
+### Overlays & interactive primitives (reka-ui)
+
+Interactive/overlay components wrap [reka-ui](https://reka-ui.com) headless primitives: reka-ui supplies the behavior (focus trap, keyboard nav, ARIA roles, scroll lock, floating-ui positioning) while all styling stays custom Tailwind. Do **not** hand-roll click-outside / Escape / focus-management logic — reach for the matching reka-ui primitive instead.
+
+- **Dialogs:** `BaseDialog` is the shared shell (reka-ui `Dialog*`) — overlay, centered card, `h3` title (via `title` prop or `#title` slot), fade animation, and a `dismissDisabled` prop that blocks Esc/outside-click while a request is in flight. It's controlled via `:open` + `@close`; reka-ui only emits `close` on a user dismissal, never when the parent flips `open`, so no spurious close fires after a programmatic close.
+  - `ConfirmDialog` (confirm/cancel footer, `@confirm`/`@cancel`) and the form dialogs (`CreateInvitationDialog`, `EnrollMfaDialog`, `LinkProviderDialog`) all build on `BaseDialog`. New dialogs should too.
+- **Dropdown menus:** `ActionsDropdown` (action list, `@action`) and `DropdownButton` (option list, `@select`) wrap reka-ui `DropdownMenu`. Style highlighted items with `data-[highlighted]:` classes (covers both hover and keyboard focus).
+- **Popovers:** `HelpTooltip` wraps reka-ui `Popover` (click-triggered, collision-aware positioning).
 
 ### Detail Pages
 

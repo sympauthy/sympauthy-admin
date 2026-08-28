@@ -1,37 +1,53 @@
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-
-const open = ref(false)
-const tooltipRef = ref<HTMLElement>()
-
-function toggle() {
-  open.value = !open.value
-}
-
-function onClickOutside(event: MouseEvent) {
-  if (open.value && tooltipRef.value && !tooltipRef.value.contains(event.target as Node)) {
-    open.value = false
-  }
-}
-
-onMounted(() => document.addEventListener('click', onClickOutside))
-onUnmounted(() => document.removeEventListener('click', onClickOutside))
+import { PopoverRoot, PopoverTrigger, PopoverPortal, PopoverContent } from 'reka-ui'
 </script>
 
 <template>
-  <span ref="tooltipRef" class="relative">
-    <button
-      @click.stop="toggle"
-      class="text-current opacity-60 hover:opacity-100 cursor-help text-[0.85em] font-semibold leading-none whitespace-nowrap align-middle"
+  <PopoverRoot>
+    <PopoverTrigger
       type="button"
+      class="cursor-help align-middle text-[0.85em] font-semibold leading-none whitespace-nowrap text-current opacity-60 hover:opacity-100"
     >
       &nbsp;ⓘ
-    </button>
-    <div
-      v-if="open"
-      class="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-1 z-50 w-72 max-w-[calc(100vw-2rem)] p-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg normal-case tracking-normal font-normal"
-    >
-      <slot />
-    </div>
-  </span>
+    </PopoverTrigger>
+    <PopoverPortal>
+      <PopoverContent
+        side="bottom"
+        align="center"
+        :side-offset="4"
+        :collision-padding="16"
+        class="popover-content z-50 w-72 max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white p-3 text-sm font-normal normal-case tracking-normal text-gray-700 shadow-lg"
+      >
+        <slot />
+      </PopoverContent>
+    </PopoverPortal>
+  </PopoverRoot>
 </template>
+
+<style scoped>
+.popover-content[data-state='open'] {
+  animation: popover-in 120ms ease-out;
+}
+.popover-content[data-state='closed'] {
+  animation: popover-out 100ms ease-in;
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes popover-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+</style>
