@@ -65,6 +65,8 @@ function cancelRevoke() {
       :error="store.mfaError"
       :empty="store.mfaMethods.length === 0"
       :page="store.mfaPage"
+      :size="store.mfaSize"
+      :total="store.mfaTotal"
       :total-pages="store.mfaTotalPages"
       @page-change="(page: number) => store.fetchMfaMethods(userId, page)"
     >

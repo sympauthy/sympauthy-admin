@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed } from 'vue'
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import DropdownButton from '@/components/DropdownButton.vue'
 
 export type FilterConfig = {
@@ -10,10 +10,13 @@ export type FilterConfig = {
 
 const props = withDefaults(
   defineProps<{
+    /** Only set it on resources whose list endpoint supports a free text query. */
+    searchable?: boolean
     searchPlaceholder?: string
     filters?: FilterConfig[]
   }>(),
   {
+    searchable: false,
     searchPlaceholder: '',
     filters: () => []
   }
@@ -75,21 +78,22 @@ function getFilterConfig(key: string): FilterConfig | undefined {
 </script>
 
 <template>
-  <div class="mb-4">
+  <div>
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-      <div class="relative flex-1">
+      <div v-if="props.searchable" class="relative flex-1">
         <MagnifyingGlassIcon
           class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
         />
         <input
           type="text"
-          :placeholder="searchPlaceholder"
+          :placeholder="props.searchPlaceholder"
           class="w-full pl-9 pr-3 py-2 bg-white border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           @input="onSearchInput"
         />
       </div>
       <DropdownButton
-        :label="$t('pages.users.addFilter')"
+        v-if="props.filters.length > 0"
+        :label="$t('common.addFilter')"
         :disabled="availableFilterOptions.length === 0"
         :options="availableFilterOptions"
         @select="addFilter"

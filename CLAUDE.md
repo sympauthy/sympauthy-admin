@@ -54,6 +54,24 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 - `Tag` component for status badges
 - In data tables, the primary/ID column uses `font-medium text-gray-900` for bold styling (not `Tag`)
 
+### List Pages
+
+List pages (e.g. `/users`, `/clients`) are built with `ListPage`, which is the page root — nothing
+wraps it, so it can fill the height of the layout. It holds the toolbar (search bar, filters, `#actions`
+slot) above a `PaginatedTable` filling the remaining height, and forwards the table slots (`header`,
+`rows`, `empty`).
+
+- **No page scrolling**: rows scroll inside the table, under a pinned header row and above a pinned
+  pagination bar. The number of items per page is derived from the height available
+  (`useAutoPageSize`) and re-derived when the viewport is resized.
+- **Store wiring**: `@page-change` → `fetchXxx`, `@page-size-change` → `setSize`. Every list store
+  exposes `size` and `setSize`, and refetches on a size change only once a first response arrived
+  (the initial size is emitted before the page requests its first batch).
+- **Search**: only set `searchable` on resources whose list endpoint supports a free text query
+  (today, users only).
+- `PaginatedTable` keeps its plain flow layout by default (`fill` is opt-in), which is what detail
+  page panels use.
+
 ### Overlays & interactive primitives (reka-ui)
 
 Interactive/overlay components wrap [reka-ui](https://reka-ui.com) headless primitives: reka-ui supplies the behavior (focus trap, keyboard nav, ARIA roles, scroll lock, floating-ui positioning) while all styling stays custom Tailwind. Do **not** hand-roll click-outside / Escape / focus-management logic — reach for the matching reka-ui primitive instead.
@@ -62,6 +80,10 @@ Interactive/overlay components wrap [reka-ui](https://reka-ui.com) headless prim
   - `ConfirmDialog` (confirm/cancel footer, `@confirm`/`@cancel`) and the form dialogs (`CreateInvitationDialog`, `EnrollMfaDialog`, `LinkProviderDialog`) all build on `BaseDialog`. New dialogs should too.
 - **Dropdown menus:** `ActionsDropdown` (action list, `@action`) and `DropdownButton` (option list, `@select`) wrap reka-ui `DropdownMenu`. Style highlighted items with `data-[highlighted]:` classes (covers both hover and keyboard focus).
 - **Popovers:** `HelpTooltip` wraps reka-ui `Popover` (click-triggered, collision-aware positioning).
+- **Pagination:** `PaginatedTable`'s footer wraps reka-ui `Pagination*` — numbered pages with ellipsis
+  from `sm:` up, previous/next at every width, and the page indicator replacing the numbers on
+  phones. The current page is styled with `data-[selected]:`. reka-ui derives the page count from
+  `size` + `total`, so pass both (a caller with only `totalPages` still works, one item per page).
 
 ### Detail Pages
 

@@ -43,6 +43,8 @@ function formatDate(dateStr: string | null | undefined): string {
       :error="store.claimsError"
       :empty="store.claims.length === 0"
       :page="store.claimsPage"
+      :size="store.claimsSize"
+      :total="store.claimsTotal"
       :total-pages="store.claimsTotalPages"
       @page-change="(page: number) => store.fetchClaims(userId, page)"
     >
