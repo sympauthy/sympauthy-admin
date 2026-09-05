@@ -39,6 +39,8 @@ const store = useUserConsentStore()
       :error="store.consentsError"
       :empty="store.consents.length === 0"
       :page="store.consentsPage"
+      :size="store.consentsSize"
+      :total="store.consentsTotal"
       :total-pages="store.consentsTotalPages"
       @page-change="(page: number) => store.fetchConsents(userId, page)"
     >

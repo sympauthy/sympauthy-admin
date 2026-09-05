@@ -14,6 +14,9 @@ export const useUserStore = defineStore('users', () => {
   const page = ref(0)
   const size = ref(20)
   const total = ref(0)
+  // Set once a first response arrived. A page size change before that would request a page the
+  // component is about to request anyway.
+  const loaded = ref(false)
 
   const searchQuery = ref('')
   const statusFilter = ref('')
@@ -64,6 +67,7 @@ export const useUserStore = defineStore('users', () => {
       users.value = []
     }
 
+    loaded.value = true
     loading.value = false
   }
 
@@ -109,6 +113,19 @@ export const useUserStore = defineStore('users', () => {
     selectedClaimIds.value = claimIds
   }
 
+  // Adjusts the number of items per page. The page holding the first item currently displayed is
+  // requested again, so resizing the viewport keeps the user roughly in place.
+  function setSize(newSize: number) {
+    if (newSize < 1 || newSize === size.value) {
+      return
+    }
+    const firstItem = page.value * size.value
+    size.value = newSize
+    if (loaded.value) {
+      fetchUsers(Math.floor(firstItem / newSize))
+    }
+  }
+
   return {
     users,
     loading,
@@ -124,6 +141,7 @@ export const useUserStore = defineStore('users', () => {
     sortOrder,
     selectedClaimIds,
     fetchUsers,
+    setSize,
     setSearch,
     setStatusFilter,
     setClaimFilter,

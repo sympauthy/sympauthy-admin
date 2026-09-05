@@ -14,6 +14,9 @@ export const useScopeStore = defineStore('scopes', () => {
   const page = ref(0)
   const size = ref(20)
   const total = ref(0)
+  // Set once a first response arrived. A page size change before that would request a page the
+  // component is about to request anyway.
+  const loaded = ref(false)
 
   const typeFilter = ref('')
   const enabledFilter = ref('')
@@ -40,6 +43,7 @@ export const useScopeStore = defineStore('scopes', () => {
       scopes.value = []
     }
 
+    loaded.value = true
     loading.value = false
   }
 
@@ -63,6 +67,19 @@ export const useScopeStore = defineStore('scopes', () => {
     fetchScopes(0)
   }
 
+  // Adjusts the number of items per page. The page holding the first item currently displayed is
+  // requested again, so resizing the viewport keeps the user roughly in place.
+  function setSize(newSize: number) {
+    if (newSize < 1 || newSize === size.value) {
+      return
+    }
+    const firstItem = page.value * size.value
+    size.value = newSize
+    if (loaded.value) {
+      fetchScopes(Math.floor(firstItem / newSize))
+    }
+  }
+
   return {
     scopes,
     loading,
@@ -74,6 +91,7 @@ export const useScopeStore = defineStore('scopes', () => {
     typeFilter,
     enabledFilter,
     fetchScopes,
+    setSize,
     setTypeFilter,
     setEnabledFilter,
     clearTypeFilter,

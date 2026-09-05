@@ -14,6 +14,9 @@ export const useClientStore = defineStore('clients', () => {
   const page = ref(0)
   const size = ref(20)
   const total = ref(0)
+  // Set once a first response arrived. A page size change before that would request a page the
+  // component is about to request anyway.
+  const loaded = ref(false)
 
   const totalPages = computed(() => Math.ceil(total.value / size.value))
 
@@ -32,6 +35,7 @@ export const useClientStore = defineStore('clients', () => {
       clients.value = []
     }
 
+    loaded.value = true
     loading.value = false
   }
 
@@ -69,6 +73,19 @@ export const useClientStore = defineStore('clients', () => {
     loading.value = false
   }
 
+  // Adjusts the number of items per page. The page holding the first item currently displayed is
+  // requested again, so resizing the viewport keeps the user roughly in place.
+  function setSize(newSize: number) {
+    if (newSize < 1 || newSize === size.value) {
+      return
+    }
+    const firstItem = page.value * size.value
+    size.value = newSize
+    if (loaded.value) {
+      fetchClients(Math.floor(firstItem / newSize))
+    }
+  }
+
   return {
     clients,
     loading,
@@ -78,6 +95,7 @@ export const useClientStore = defineStore('clients', () => {
     total,
     totalPages,
     fetchClients,
+    setSize,
     fetchAllClients
   }
 })

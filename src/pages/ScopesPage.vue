@@ -2,8 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useScopeStore } from '@/stores/useScopeStore'
-import PaginatedTable from '@/components/PaginatedTable.vue'
-import FilterBar from '@/components/FilterBar.vue'
+import ListPage from '@/components/ListPage.vue'
 import Tag from '@/components/Tag.vue'
 import OriginTag from '@/components/OriginTag.vue'
 import type { FilterConfig } from '@/components/FilterBar.vue'
@@ -68,74 +67,76 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <FilterBar :filters="filters" @filter-change="onFilterChange" @filter-remove="onFilterRemove" />
+  <ListPage
+    :loading="scopeStore.loading"
+    :error="scopeStore.error"
+    :empty="scopeStore.scopes.length === 0"
+    :page="scopeStore.page"
+    :size="scopeStore.size"
+    :total="scopeStore.total"
+    :total-pages="scopeStore.totalPages"
+    :filters="filters"
+    @filter-change="onFilterChange"
+    @filter-remove="onFilterRemove"
+    @page-change="scopeStore.fetchScopes"
+    @page-size-change="scopeStore.setSize"
+  >
+    <template #header>
+      <th
+        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      >
+        {{ t('pages.scopes.status') }}
+      </th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        {{ t('pages.scopes.id') }}
+      </th>
+      <th
+        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      >
+        {{ t('pages.scopes.type') }}
+      </th>
+      <th
+        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      >
+        {{ t('common.origin.label') }}
+      </th>
+      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        {{ t('pages.scopes.claims') }}
+      </th>
+    </template>
 
-    <PaginatedTable
-      :loading="scopeStore.loading"
-      :error="scopeStore.error"
-      :empty="scopeStore.scopes.length === 0"
-      :page="scopeStore.page"
-      :total-pages="scopeStore.totalPages"
-      @page-change="scopeStore.fetchScopes"
-    >
-      <template #header>
-        <th
-          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          {{ t('pages.scopes.status') }}
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.scopes.id') }}
-        </th>
-        <th
-          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          {{ t('pages.scopes.type') }}
-        </th>
-        <th
-          class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          {{ t('common.origin.label') }}
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.scopes.claims') }}
-        </th>
-      </template>
+    <template #rows>
+      <tr v-for="scope in scopeStore.scopes" :key="scope.id">
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <Tag v-if="scope.enabled" color="green">
+            {{ t('pages.scopes.enabled') }}
+          </Tag>
+          <Tag v-else color="red">
+            {{ t('pages.scopes.disabled') }}
+          </Tag>
+        </td>
+        <td class="px-6 py-4 text-sm font-medium text-gray-900 truncate">
+          {{ scope.id }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <Tag :color="typeColor(scope.type)">
+            {{ t(`pages.scopes.${scope.type}`) }}
+          </Tag>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <OriginTag :origin="scope.origin" />
+        </td>
+        <td class="px-6 py-4 text-sm text-gray-500 truncate">
+          <span v-if="scope.claims && scope.claims.length > 0">
+            {{ scope.claims.join(', ') }}
+          </span>
+          <span v-else class="text-gray-300">&mdash;</span>
+        </td>
+      </tr>
+    </template>
 
-      <template #rows>
-        <tr v-for="scope in scopeStore.scopes" :key="scope.id">
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <Tag v-if="scope.enabled" color="green">
-              {{ t('pages.scopes.enabled') }}
-            </Tag>
-            <Tag v-else color="red">
-              {{ t('pages.scopes.disabled') }}
-            </Tag>
-          </td>
-          <td class="px-6 py-4 text-sm font-medium text-gray-900 truncate">
-            {{ scope.id }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <Tag :color="typeColor(scope.type)">
-              {{ t(`pages.scopes.${scope.type}`) }}
-            </Tag>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <OriginTag :origin="scope.origin" />
-          </td>
-          <td class="px-6 py-4 text-sm text-gray-500 truncate">
-            <span v-if="scope.claims && scope.claims.length > 0">
-              {{ scope.claims.join(', ') }}
-            </span>
-            <span v-else class="text-gray-300">&mdash;</span>
-          </td>
-        </tr>
-      </template>
-
-      <template #empty>
-        <p class="text-gray-600">{{ t('pages.scopes.empty') }}</p>
-      </template>
-    </PaginatedTable>
-  </div>
+    <template #empty>
+      <p class="text-gray-600">{{ t('pages.scopes.empty') }}</p>
+    </template>
+  </ListPage>
 </template>

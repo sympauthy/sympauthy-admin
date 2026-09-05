@@ -28,6 +28,8 @@
     "previous": "Previous",
     "next": "Next",
     "pagination": "Page {page} of {totalPages}",
+    "paginationRange": "Showing {from}-{to} of {total}",
+    "addFilter": "Add filter",
     "origin": {
       "label": "Origin",
       "oauth2": "oauth2",
@@ -120,7 +122,6 @@
       "search": "Search users...",
       "statusFilter": "status",
       "allStatuses": "all statuses",
-      "addFilter": "Add filter",
       "actions": "Actions",
       "view": "View",
       "logout": "Logout"

@@ -4,9 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserStore'
 import { useClaimStore } from '@/stores/useClaimStore'
-import PaginatedTable from '@/components/PaginatedTable.vue'
+import ListPage from '@/components/ListPage.vue'
 import SortableHeader from '@/components/SortableHeader.vue'
-import FilterBar from '@/components/FilterBar.vue'
 import Tag from '@/components/Tag.vue'
 import CommonButton from '@/components/CommonButton.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
@@ -70,110 +69,106 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <FilterBar
-      :search-placeholder="t('pages.users.search')"
-      :filters="filters"
-      @search="userStore.setSearch"
-      @filter-change="onFilterChange"
-      @filter-remove="onFilterRemove"
-    />
+  <ListPage
+    :loading="userStore.loading"
+    :error="userStore.error"
+    :empty="userStore.users.length === 0"
+    :page="userStore.page"
+    :size="userStore.size"
+    :total="userStore.total"
+    :total-pages="userStore.totalPages"
+    searchable
+    :search-placeholder="t('pages.users.search')"
+    :filters="filters"
+    @search="userStore.setSearch"
+    @filter-change="onFilterChange"
+    @filter-remove="onFilterRemove"
+    @page-change="userStore.fetchUsers"
+    @page-size-change="userStore.setSize"
+  >
+    <template #header>
+      <SortableHeader
+        class="w-0 whitespace-nowrap"
+        :label="t('pages.users.status')"
+        field="status"
+        :current-sort="userStore.sortField"
+        :current-order="userStore.sortOrder"
+        @sort="userStore.toggleSort"
+      />
+      <SortableHeader
+        v-for="claim in enabledClaims"
+        :key="claim.id"
+        :label="claim.id"
+        :field="claim.id"
+        :current-sort="userStore.sortField"
+        :current-order="userStore.sortOrder"
+        @sort="userStore.toggleSort"
+      />
+      <SortableHeader
+        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        :label="t('pages.users.createdAt')"
+        field="created_at"
+        :current-sort="userStore.sortField"
+        :current-order="userStore.sortOrder"
+        @sort="userStore.toggleSort"
+      />
+      <th
+        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+      >
+        {{ t('pages.users.actions') }}
+      </th>
+    </template>
 
-    <PaginatedTable
-      :loading="userStore.loading"
-      :error="userStore.error"
-      :empty="userStore.users.length === 0"
-      :page="userStore.page"
-      :total-pages="userStore.totalPages"
-      @page-change="userStore.fetchUsers"
-    >
-      <template #header>
-        <SortableHeader
-          class="w-0 whitespace-nowrap"
-          :label="t('pages.users.status')"
-          field="status"
-          :current-sort="userStore.sortField"
-          :current-order="userStore.sortOrder"
-          @sort="userStore.toggleSort"
-        />
-        <SortableHeader
+    <template #rows>
+      <tr v-for="user in userStore.users" :key="user.user_id">
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <Tag v-if="user.status === 'enabled'" color="green">
+            {{ t('pages.users.enabled') }}
+          </Tag>
+          <Tag v-else color="red">
+            {{ t('pages.users.disabled') }}
+          </Tag>
+        </td>
+        <td
           v-for="claim in enabledClaims"
           :key="claim.id"
-          :label="claim.id"
-          :field="claim.id"
-          :current-sort="userStore.sortField"
-          :current-order="userStore.sortOrder"
-          @sort="userStore.toggleSort"
-        />
-        <SortableHeader
-          class="w-0 whitespace-nowrap hidden sm:table-cell"
-          :label="t('pages.users.createdAt')"
-          field="created_at"
-          :current-sort="userStore.sortField"
-          :current-order="userStore.sortOrder"
-          @sort="userStore.toggleSort"
-        />
-        <th
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
+          class="px-6 py-4 text-sm text-gray-500 truncate"
         >
-          {{ t('pages.users.actions') }}
-        </th>
-      </template>
+          {{ user.claims?.[claim.id] ?? '' }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+          {{ formatDate(user.created_at) }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <div class="flex gap-2">
+            <CommonButton
+              :button-style="primaryColoredButton"
+              @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
+            >
+              <span class="inline-flex items-center gap-1.5">
+                <EyeIcon class="size-4 shrink-0" />
+                <span class="hidden sm:inline">{{ t('pages.users.view') }}</span>
+              </span>
+            </CommonButton>
+            <CommonButton :button-style="dangerColoredButton" @click="logoutUserId = user.user_id">
+              <span class="inline-flex items-center gap-1.5">
+                <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
+                <span class="hidden sm:inline">{{ t('pages.users.logout') }}</span>
+              </span>
+            </CommonButton>
+          </div>
+        </td>
+      </tr>
+    </template>
 
-      <template #rows>
-        <tr v-for="user in userStore.users" :key="user.user_id">
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <Tag v-if="user.status === 'enabled'" color="green">
-              {{ t('pages.users.enabled') }}
-            </Tag>
-            <Tag v-else color="red">
-              {{ t('pages.users.disabled') }}
-            </Tag>
-          </td>
-          <td
-            v-for="claim in enabledClaims"
-            :key="claim.id"
-            class="px-6 py-4 text-sm text-gray-500 truncate"
-          >
-            {{ user.claims?.[claim.id] ?? '' }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-            {{ formatDate(user.created_at) }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm">
-            <div class="flex gap-2">
-              <CommonButton
-                :button-style="primaryColoredButton"
-                @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
-              >
-                <span class="inline-flex items-center gap-1.5">
-                  <EyeIcon class="size-4 shrink-0" />
-                  <span class="hidden sm:inline">{{ t('pages.users.view') }}</span>
-                </span>
-              </CommonButton>
-              <CommonButton
-                :button-style="dangerColoredButton"
-                @click="logoutUserId = user.user_id"
-              >
-                <span class="inline-flex items-center gap-1.5">
-                  <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
-                  <span class="hidden sm:inline">{{ t('pages.users.logout') }}</span>
-                </span>
-              </CommonButton>
-            </div>
-          </td>
-        </tr>
-      </template>
+    <template #empty>
+      <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
+    </template>
+  </ListPage>
 
-      <template #empty>
-        <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
-      </template>
-    </PaginatedTable>
-
-    <LogoutDialog
-      :user-id="logoutUserId"
-      :open="logoutUserId !== null"
-      @close="logoutUserId = null"
-    />
-  </div>
+  <LogoutDialog
+    :user-id="logoutUserId"
+    :open="logoutUserId !== null"
+    @close="logoutUserId = null"
+  />
 </template>

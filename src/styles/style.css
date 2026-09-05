@@ -56,6 +56,15 @@ body {
   }
 }
 
+/** Header row kept visible while the rows of a full height table scroll under it. **/
+.table-pinned-header thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--color-gray-50);
+  box-shadow: inset 0 -1px 0 var(--color-gray-200);
+}
+
 /** Link **/
 @layer components {
   .a {

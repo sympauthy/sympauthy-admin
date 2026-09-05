@@ -65,6 +65,8 @@ function cancelUnlink() {
       :error="store.providerLinksError"
       :empty="store.providerLinks.length === 0"
       :page="store.providerLinksPage"
+      :size="store.providerLinksSize"
+      :total="store.providerLinksTotal"
       :total-pages="store.providerLinksTotalPages"
       @page-change="(page: number) => store.fetchProviderLinks(userId, page)"
     >
