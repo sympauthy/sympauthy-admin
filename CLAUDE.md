@@ -102,5 +102,5 @@ OIDC config via `VITE_OIDC_*` env vars (see `.env.local`). Dev proxy forwards `/
 ## Documentation
 
 - **Functional documentation:** https://sympauthy.github.io/functional/
-- **Contributing guidelines:** https://sympauthy.github.io/contributing/
+- **Contributing guidelines:** https://github.com/sympauthy/sympauthy/tree/main/docs
 - **Backend repository:** https://github.com/sympauthy/sympauthy
