@@ -1,70 +1,42 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { ConsentApi } from '../api/ConsentApi'
-import type { ConsentResource } from './ConsentResource'
+import { ref } from 'vue'
+import { useCollection } from '@/shared/collection'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { ConsentApi } from '../api/ConsentApi'
+import type { ConsentListResource } from './ConsentListResource'
+import type { ConsentResource } from './ConsentResource'
 
 export const useUserConsentStore = defineStore('userConsent', () => {
-  const consentApi = new ConsentApi()
+  const api = new ConsentApi()
 
-  const consents = ref<ConsentResource[]>([])
-  const consentsLoading = ref(false)
-  const consentsError = ref<string | null>(null)
-  const consentsPage = ref(0)
-  const consentsSize = ref(20)
-  const consentsTotal = ref(0)
+  // The account whose consents are read. The collection reads it at the moment it calls, so paging
+  // and filtering stay on the record the page last asked for.
+  const userId = ref('')
 
-  const consentsTotalPages = computed(() => Math.ceil(consentsTotal.value / consentsSize.value))
+  const consents = useCollection<ConsentResource, ConsentListResource>({
+    capabilities: () => api.getConsentCapabilities(userId.value),
+    page: (params) => api.listConsents(userId.value, params),
+    items: (content) => content.consents
+  })
 
-  async function fetchConsents(userId: string, requestedPage: number = 0): Promise<void> {
-    consentsLoading.value = true
-    consentsError.value = null
-
-    const response = await consentApi.listConsents(userId, {
-      page: requestedPage,
-      size: consentsSize.value
-    })
-
-    if (isSuccess(response)) {
-      consents.value = response.content.consents
-      consentsPage.value = response.content.page
-      consentsTotal.value = response.content.total
-    } else {
-      consentsError.value = getErrorMessage(response as ErrorApiResponse)
-      consents.value = []
-    }
-
-    consentsLoading.value = false
+  async function fetchConsents(id: string): Promise<void> {
+    userId.value = id
+    await consents.fetch(0)
   }
 
-  async function revokeConsent(userId: string, audienceId: string): Promise<void> {
-    const response = await consentApi.revokeConsent(userId, audienceId)
+  async function revokeConsent(audienceId: string): Promise<void> {
+    const response = await api.revokeConsent(userId.value, audienceId)
 
     if (isSuccess(response)) {
-      await fetchConsents(userId, consentsPage.value)
+      await consents.fetch(consents.page)
     } else {
-      consentsError.value = getErrorMessage(response as ErrorApiResponse)
+      consents.error = getErrorMessage(response as ErrorApiResponse)
     }
   }
 
   function $reset() {
-    consents.value = []
-    consentsLoading.value = false
-    consentsError.value = null
-    consentsPage.value = 0
-    consentsTotal.value = 0
+    consents.reset()
   }
 
-  return {
-    consents,
-    consentsLoading,
-    consentsError,
-    consentsPage,
-    consentsSize,
-    consentsTotal,
-    consentsTotalPages,
-    fetchConsents,
-    revokeConsent,
-    $reset
-  }
+  return { consents, fetchConsents, revokeConsent, $reset }
 })
