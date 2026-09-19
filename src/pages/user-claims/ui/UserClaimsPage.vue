@@ -68,20 +68,20 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ claim.claim_id }}
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.userClaims.value')" truncate>
           {{ claim.value }}
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.userClaims.tags')" fit>
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.userClaims.collectedAt')" fit>
           <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.userClaims.verifiedAt')" fit>
           <span v-if="claim.verified_at">{{ formatDate(claim.verified_at) }}</span>
           <EmptyValue v-else />
         </TableCell>

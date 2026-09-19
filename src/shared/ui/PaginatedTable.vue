@@ -116,7 +116,7 @@ const pageButtonClasses = `${pageControlClasses} min-w-8 data-[selected]:border-
       <!-- Table -->
       <table
         v-else
-        class="w-full divide-y divide-gray-200"
+        class="table-as-cards w-full divide-y divide-gray-200"
         :class="[
           props.tableLayout === 'auto' ? 'table-auto' : 'table-fixed',
           props.fill ? 'table-pinned-header' : ''

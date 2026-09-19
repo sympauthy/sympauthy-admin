@@ -15,12 +15,6 @@ interface Props {
   icon?: Component
   /** Drawn after the label, for a button that opens something rather than doing it. */
   trailingIcon?: Component
-  /**
-   * Drops the label below `sm:`, leaving the icon alone. For a button repeated down a table, where
-   * the row beside it already says what the button acts on; a button standing on its own keeps its
-   * label at every width.
-   */
-  collapseLabel?: boolean
   loading?: boolean
   submitting?: boolean
   disabled?: boolean
@@ -31,7 +25,6 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   icon: undefined,
   trailingIcon: undefined,
-  collapseLabel: false,
   loading: false,
   submitting: false,
   disabled: false
@@ -70,9 +63,7 @@ const stateSlot = computed(() => {
     <span class="inline-flex w-full items-center justify-center gap-1.5">
       <CommonSpinner v-if="loading || submitting" size="sm" />
       <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
-      <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
-        <slot :name="stateSlot">{{ props.label }}</slot>
-      </span>
+      <slot :name="stateSlot">{{ props.label }}</slot>
       <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
     </span>
   </button>

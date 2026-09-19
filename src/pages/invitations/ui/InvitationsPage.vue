@@ -115,7 +115,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="invitation in invitationStore.invitations.items" :key="invitation.invitation_id">
-        <TableCell fit>
+        <TableCell :label="t('pages.invitations.status')" fit>
           <Tag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
           </Tag>
@@ -123,14 +123,14 @@ onMounted(async () => {
         <TableCell primary mono>
           {{ invitation.token_prefix }}
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.invitations.audience')" truncate>
           {{ invitation.audience_id }}
         </TableCell>
-        <TableCell truncate hidden-below="sm">
+        <TableCell :label="t('pages.invitations.note')" truncate hidden-below="sm">
           <span v-if="invitation.note">{{ invitation.note }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.invitations.expiresAt')" fit hidden-below="sm">
           <span v-if="invitation.expires_at">{{ formatDate(invitation.expires_at) }}</span>
           <EmptyValue v-else />
         </TableCell>

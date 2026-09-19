@@ -59,9 +59,11 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 <template>
   <nav
     v-if="breadcrumbs.length > 0"
-    class="flex h-14 shrink-0 items-center border-b border-gray-200 bg-white px-4 lg:px-6"
+    class="flex h-14 shrink-0 items-center border-b border-gray-200 bg-white"
   >
-    <ol class="flex items-center gap-2">
+    <!-- Lined up with the column the content below is centred in, so the record's name sits over
+         the record rather than at the far edge of a wide monitor. -->
+    <ol class="mx-auto flex w-full max-w-page items-center gap-2 px-4 lg:px-6">
       <li v-for="(item, index) in breadcrumbs" :key="index" class="flex items-center gap-2">
         <ChevronRightIcon v-if="index > 0" class="size-4 shrink-0 text-gray-400" />
         <router-link

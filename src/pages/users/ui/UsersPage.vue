@@ -71,7 +71,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="user in userStore.users.items" :key="user.user_id">
-        <TableCell fit>
+        <TableCell :label="t('pages.users.status')" fit>
           <Tag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
           </Tag>
@@ -79,23 +79,26 @@ onMounted(async () => {
             {{ t('pages.users.disabled') }}
           </Tag>
         </TableCell>
-        <TableCell v-for="claim in claimStore.identifierClaims" :key="claim.id" truncate>
+        <TableCell
+          :label="claim.id"
+          v-for="claim in claimStore.identifierClaims"
+          :key="claim.id"
+          truncate
+        >
           {{ user.claims?.[claim.id] ?? '' }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
           {{ formatDate(user.created_at) }}
         </TableCell>
         <TableCell fit>
           <div class="flex gap-2">
             <CommonButton
-              collapse-label
               :button-style="primaryColoredButton"
               :label="t('pages.users.view')"
               :icon="EyeIcon"
               @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
             />
             <CommonButton
-              collapse-label
               :button-style="dangerColoredButton"
               :label="t('pages.users.logout')"
               :icon="ArrowRightStartOnRectangleIcon"

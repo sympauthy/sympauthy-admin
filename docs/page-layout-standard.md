@@ -67,6 +67,10 @@ the one that re-reads a live list, the `HelpTooltip` explaining what the collect
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.
 
+**Below `sm:` the table is drawn as a card per record**, by `PaginatedTable`, from the same `#header`
+and `#rows` a wider screen reads. A page describes its records once; it does not write a phone
+layout of its own, and a column added to it reaches the phone with it.
+
 ## Table columns
 
 **A column is a `CollectionSortHeader` where the collection may order on it, and a `TableHeader`
@@ -94,7 +98,12 @@ next, and `PaginatedTable` keeps `table-layout: auto` for that reason.
 **A cell the record has no value for holds an `EmptyValue`.** A blank cell and a cell the fetch did
 not fill read alike; a dash does not.
 
-**A cell's `hidden-below` matches its header's.** They are two components and one column.
+**A cell's `hidden-below` matches its header's.** They are two components and one column, and a
+column dropped on a phone stays dropped once the row is a card.
+
+**Every cell carries its column's name as `label`,** which is what the card shows above the value.
+The two that do not are the `primary` cell, which is the card's title, and the cell holding the
+row's actions.
 
 ## Record pages
 
@@ -130,11 +139,29 @@ record is fetched once by the shell, so a section below it reads what is already
 **The shell owns the dialogs its summary opens.** It holds the flag each is opened by, and the
 summary asks for one by emitting. A dialog belonging to one tab is that tab's.
 
-## Adapting to width
+## The widths it is for
+
+**The panel is built for 360px and up.** That is the narrowest phone still in use; below it nothing
+is checked and nothing is promised.
+
+**It stops growing at `max-w-page`**, the `--container-page` token in
+[the global stylesheet](../src/app/styles/style.css), and centres past it. A label and the value
+beside it drifting a monitor apart is not more readable for the room.
+
+**Three arrangements carry that range, and there is no fourth.**
+
+| Width | Sidebar | A collection | A record's fields |
+| --- | --- | --- | --- |
+| 360–639 | drawer, behind a header | a card per record | one column |
+| 640–1023 (`sm:`) | drawer | a table | three columns |
+| 1024+ (`lg:`) | permanent | a table | three columns |
 
 **Write the phone layout first and add the wider ones with `sm:` and `lg:`.** The panel uses
-Tailwind's default breakpoints and only those two: `sm:` for a large phone and above, `lg:` for a
-desktop.
+Tailwind's default breakpoints and only those two.
+
+**Nothing scrolls sideways at any supported width** — not the page, and not a table inside it. A
+column that cannot be made to fit is dropped with `hidden-below`, not left to overflow. The one
+exception is `RecordTabs`, which scrolls its strip because dropping a tab would hide a view.
 
 **The sidebar is a drawer below `lg:` and permanent from it.** `useSidebar` holds the state and
 closes it on navigation; `AdminLayout` draws the backdrop and the mobile header; `SidebarNav` is
@@ -144,11 +171,8 @@ sized by its parent (`h-full w-full`), never by itself.
 `p-4` to `sm:p-6`. [The design system standard](design-system-standard.md#the-scale) holds the
 whole scale.
 
-**A toolbar or a pagination bar stacks on a phone and goes side by side from `sm:`.**
-
-**A button repeated down a table is passed `collapseLabel`,** which shows its icon alone below
-`sm:` and keeps the label as a `title`. A button standing on its own keeps its label at every
-width.
+**A toolbar or a pagination bar stacks on a phone and goes side by side from `sm:`.** Stacked, the
+field takes the width and the control beside it takes its own.
 
 ## What this standard does not cover
 

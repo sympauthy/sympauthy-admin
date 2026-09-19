@@ -35,12 +35,12 @@ function filterOf(field: string) {
 
 <template>
   <div>
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+    <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
       <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
            query still narrowing the collection would otherwise come back to an empty field. -->
       <FormInput
         v-if="props.collection.searchable"
-        class="flex-1"
+        class="w-full sm:flex-1"
         :icon="MagnifyingGlassIcon"
         :model-value="props.collection.criteria.query"
         :placeholder="props.searchPlaceholder"

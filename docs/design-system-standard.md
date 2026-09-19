@@ -74,7 +74,8 @@ next.
 | `space-y-6` | two sections of a record |
 | `p-4 sm:p-6` | a card and its content |
 | `px-4 py-3 sm:px-6` | a definition row and its label |
-| `px-6 py-4` | a table cell, `py-3` in a header, `px-3` below `sm:` |
+| `px-6 py-4` | a table cell, `py-3` in a header |
+| `p-4`, `gap-3` inside | a record's card, below `sm:`, and its lines |
 
 **Text is `text-xs`, `text-sm`, `text-lg` or `text-2xl`.** A label and a tag are `text-xs`;
 everything an operator reads is `text-sm`; `text-lg font-semibold` heads a section or a dialog; the
@@ -91,6 +92,10 @@ one `text-2xl font-bold` is the registration page's title.
 **A width is never written.** A column is shrink-wrapped or takes what is left
 ([the page layout standard](page-layout-standard.md#table-columns) owns which), and everything else
 is sized by its parent.
+
+**The one width that is written is `--container-page`**, where a screen stops growing and starts
+centring. [The page layout standard](page-layout-standard.md#the-widths-it-is-for) says what range
+the panel is built for.
 
 ## Controls
 
@@ -118,9 +123,8 @@ showing and what its `title` carries, so the same string is never written twice.
 **An icon on a button is its `icon` prop, and one that opens something its `trailingIcon`.** Both
 are drawn `size-4 shrink-0` by the button.
 
-**A button repeated down a table is passed `collapseLabel`**, which leaves the icon alone below
-`sm:` and keeps the label as a title. A button standing on its own — a page action, a dialog's
-footer — keeps its label at every width, because a lone icon names nothing.
+**A button keeps its label at every supported width.** Below `sm:` a row is a card rather than a
+cell of a table, so the width that would have been saved by hiding the label is not needed.
 
 **A button in flight is passed `submitting`, and one waiting on its screen `loading`.** Both disable
 it and draw a spinner; the label stays unless a `#submitting` or `#loading` slot overrides it.
@@ -188,8 +192,9 @@ gap beside it are the button's to decide.
 **A heading is styled by the component that owns it.** `DetailSection` draws the `h2` of a section
 and `BaseDialog` the `h3` of a dialog, so neither is written by hand.
 
-**A label above a value is `.field-label`.** `TableHeader`, `SummaryField` and `DefinitionRow` are
-the three that draw one, and a fourth place needing one reaches for whichever of them fits.
+**A label above a value is `.field-label`.** `TableHeader`, `SummaryField` and `DefinitionRow` draw
+one, and a stacked `TableCell` grows one from its `label`; a fifth place needing one reaches for
+whichever of them fits.
 
 **An identifier is `font-mono`**, reached as the `mono` prop of the cell, field or row holding it,
 and one an operator has to paste elsewhere is a `CopyableValue`.
@@ -225,6 +230,9 @@ issues the identifiers one would point at.
 
 **A lint rule over the scale.** Prettier sorts a class list and the components own the steps, but
 nothing rejects a step written by hand.
+
+**A width below 360px.** [The page layout standard](page-layout-standard.md#the-widths-it-is-for)
+names the range, and nothing under it is checked.
 
 **Accessibility beyond what the primitives bring.** Nothing is audited, and no target is set.
 

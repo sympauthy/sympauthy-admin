@@ -14,8 +14,10 @@ const slots = useSlots()
 
 <template>
   <CommonCard>
-    <div class="flex items-start justify-between gap-4">
-      <dl class="grid min-w-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
+    <!-- The actions sit beside the fields where there is room for both, and under them where
+         putting them side by side would leave an identifier a hundred pixels to read itself in. -->
+    <div class="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
+      <dl class="grid w-full min-w-0 grid-cols-1 gap-4 sm:flex-1 sm:grid-cols-3">
         <slot />
       </dl>
       <div v-if="slots.actions" class="shrink-0">

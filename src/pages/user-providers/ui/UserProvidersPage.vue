@@ -65,10 +65,10 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ link.provider_id }}
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.userProviders.subject')" truncate>
           {{ link.subject }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">
           {{ formatDate(link.linked_at) }}
         </TableCell>
         <TableCell fit>

@@ -44,12 +44,12 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ audience.audience_id }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('common.audience.registrationMode.label')" fit hidden-below="sm">
           <Tag :color="audienceRegistrationModeColor(audience)">
             {{ t(audienceRegistrationModeKey(audience)) }}
           </Tag>
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.audiences.clientsCount')" fit hidden-below="sm">
           {{ audience.clients_count }}
         </TableCell>
       </tr>

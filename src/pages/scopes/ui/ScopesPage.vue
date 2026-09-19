@@ -57,7 +57,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="scope in scopeStore.scopes.items" :key="scope.id">
-        <TableCell fit>
+        <TableCell :label="t('pages.scopes.status')" fit>
           <Tag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}
           </Tag>
@@ -68,15 +68,15 @@ onMounted(async () => {
         <TableCell primary truncate>
           {{ scope.id }}
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.scopes.type')" fit>
           <Tag :color="typeColor(scope.type)">
             {{ t(`pages.scopes.${scope.type}`) }}
           </Tag>
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="scope.origin" />
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.scopes.claims')" truncate>
           <span v-if="scope.claims && scope.claims.length > 0">
             {{ scope.claims.join(', ') }}
           </span>

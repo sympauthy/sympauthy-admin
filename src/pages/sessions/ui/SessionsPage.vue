@@ -81,12 +81,12 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="session in sessionStore.sessions.items" :key="session.id">
-        <TableCell fit>
+        <TableCell :label="t('pages.sessions.status')" fit>
           <Tag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </Tag>
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.sessions.user')" truncate>
           <router-link
             v-if="session.user"
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
@@ -99,29 +99,28 @@ onMounted(async () => {
           </Tag>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell fit mono hidden-below="lg">
+        <TableCell :label="t('pages.sessions.ip')" fit mono hidden-below="lg">
           <span v-if="session.ip">{{ session.ip }}</span>
           <EmptyValue v-else />
         </TableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no
              longer declares, and a link landing on an error page is worse than no link. -->
-        <TableCell truncate>
+        <TableCell :label="t('pages.sessions.client')" truncate>
           <span v-if="session.client_id">{{ session.client_id }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.sessions.startedFor')" truncate>
           {{ purposeLabel(session.initiating_purpose) }}
         </TableCell>
-        <TableCell truncate hidden-below="sm">
+        <TableCell :label="t('pages.sessions.stoppedAt')" truncate hidden-below="sm">
           <span v-if="session.current_purpose">{{ purposeLabel(session.current_purpose) }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.sessions.started')" fit hidden-below="sm">
           {{ formatDateTime(session.session_date) }}
         </TableCell>
         <TableCell fit>
           <CommonButton
-            collapse-label
             :button-style="primaryColoredButton"
             :label="t('pages.sessions.view')"
             :icon="EyeIcon"

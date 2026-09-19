@@ -64,17 +64,17 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ consent.audience_id }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.userConsents.client')" fit hidden-below="sm">
           {{ consent.prompted_by_client_id }}
         </TableCell>
-        <TableCell>
+        <TableCell :label="t('pages.userConsents.scopes')">
           <div class="flex flex-wrap gap-1">
             <Tag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}
             </Tag>
           </div>
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">
           {{ formatDateTime(consent.consented_at) }}
         </TableCell>
         <TableCell fit>

@@ -59,7 +59,7 @@ onMounted(async () => {
           {{ method.type }}
         </TableCell>
         <TableCell />
-        <TableCell fit>
+        <TableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
         </TableCell>
         <TableCell fit>

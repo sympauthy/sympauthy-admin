@@ -79,11 +79,11 @@ onMounted(async () => {
         <TableCell primary fit mono>
           {{ context.ip }}
         </TableCell>
-        <TableCell truncate>
+        <TableCell :label="t('pages.sessionSecurityContexts.userAgent')" truncate>
           <span v-if="context.user_agent">{{ context.user_agent }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell truncate hidden-below="lg">
+        <TableCell :label="t('pages.sessionSecurityContexts.location')" truncate hidden-below="lg">
           <span v-if="securityContextLocation(context)">
             {{ securityContextLocation(context) }}
           </span>
@@ -92,19 +92,19 @@ onMounted(async () => {
             {{ context.time_zone }}
           </div>
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.sessionSecurityContexts.requests')" fit>
           {{ context.observation_count }}
         </TableCell>
-        <TableCell fit hidden-below="lg">
+        <TableCell :label="t('pages.sessionSecurityContexts.firstSeen')" fit hidden-below="lg">
           {{ formatDateTime(context.first_seen_date) }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.sessionSecurityContexts.lastSeen')" fit hidden-below="sm">
           {{ formatDateTime(context.last_seen_date) }}
         </TableCell>
         <!-- Only a place a credential was proven from carries a date. A place without one is
              merely where requests came from, which anybody holding the session's state can
              produce. -->
-        <TableCell fit>
+        <TableCell :label="t('pages.sessionSecurityContexts.proven')" fit>
           <span v-if="context.proven_date">{{ formatDateTime(context.proven_date) }}</span>
           <EmptyValue v-else />
         </TableCell>

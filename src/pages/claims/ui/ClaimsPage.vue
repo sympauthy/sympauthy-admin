@@ -44,7 +44,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in claimStore.claims.items" :key="claim.id">
-        <TableCell fit>
+        <TableCell :label="t('pages.claims.status')" fit>
           <Tag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
           </Tag>
@@ -55,10 +55,10 @@ onMounted(async () => {
         <TableCell primary truncate>
           {{ claim.id }}
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
         </TableCell>
-        <TableCell>
+        <TableCell :label="t('pages.claims.tags')">
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
         </TableCell>
       </tr>

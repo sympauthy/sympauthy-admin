@@ -12,6 +12,10 @@
 
   --color-disabled: var(--color-gray-400);
   --color-on-disabled: var(--color-white);
+
+  /* The width a screen stops growing at. Past it the panel is centred, because a label and the
+     value beside it drifting a monitor apart is not more readable for the room. */
+  --container-page: 96rem;
 }
 
 /**
@@ -29,7 +33,8 @@
    * beside a row of a definition list. Three components draw it, and it is the same name each
    * time.
    */
-  .field-label {
+  .field-label,
+  .table-as-cards td[data-label]::before {
     @apply text-xs font-medium tracking-wider text-gray-500 uppercase;
   }
 
@@ -38,12 +43,70 @@
   }
 }
 
-/** A phone gives a table less room than a cell's own padding asks for. */
+/**
+ * Below `sm:` a table of records is a list of them: every row becomes a card and every cell a
+ * labelled line down it. The markup is the table's own — a phone is handed the same description of
+ * a record, laid out down instead of across — so a column added to a screen reaches the phone with
+ * it and a card cannot fall behind the table it was written beside.
+ *
+ * These rules sit outside every layer on purpose: they undo utilities (`truncate`, `max-w-0`,
+ * `whitespace-nowrap`, `divide-y`) that a layered rule could not reach, whatever its specificity.
+ */
 @media (max-width: 639px) {
-  .overflow-x-auto td,
-  .overflow-x-auto th {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+  .table-as-cards,
+  .table-as-cards tbody,
+  .table-as-cards tr {
+    display: block;
+  }
+
+  /* The column names move into the cells; the header row has nothing left to say. */
+  .table-as-cards thead {
+    display: none;
+  }
+
+  .table-as-cards tr {
+    border-width: 1px;
+    border-radius: var(--radius-lg);
+    padding: calc(var(--spacing) * 4);
+  }
+
+  .table-as-cards tr + tr {
+    margin-top: calc(var(--spacing) * 4);
+  }
+
+  /* A column the page drops on a phone stays dropped: it carries `hidden`, and what a screen has
+     already decided not to show a phone is not resurrected by being stacked. */
+  .table-as-cards td:not(.hidden) {
+    display: block;
+  }
+
+  .table-as-cards td {
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .table-as-cards td + td {
+    margin-top: calc(var(--spacing) * 3);
+  }
+
+  .table-as-cards td:empty {
+    display: none;
+  }
+
+  /* A value cut with an ellipsis across a row has the width of the card to wrap into down one. */
+  .table-as-cards td > .cell-truncate {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .table-as-cards td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: calc(var(--spacing) * 1);
   }
 }
 

@@ -51,20 +51,19 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ client.client_id }}
         </TableCell>
-        <TableCell fit>
+        <TableCell :label="t('pages.clients.type')" fit>
           {{ client.type }}
         </TableCell>
-        <TableCell fit hidden-below="sm">
+        <TableCell :label="t('pages.clients.audience')" fit hidden-below="sm">
           {{ client.audience_id }}
         </TableCell>
-        <TableCell>
+        <TableCell :label="t('pages.clients.redirectUris')">
           <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
             {{ uri }}
           </div>
         </TableCell>
         <TableCell fit>
           <CommonButton
-            collapse-label
             :button-style="primaryColoredButton"
             :label="t('pages.clients.view')"
             :icon="EyeIcon"

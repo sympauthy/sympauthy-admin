@@ -34,8 +34,10 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
         <span class="ml-3 text-lg font-semibold text-gray-900">SympAuthy Admin</span>
       </div>
       <BreadcrumbNav />
-      <main class="flex-1 overflow-y-auto p-4 lg:p-6">
-        <slot />
+      <main class="flex-1 overflow-y-auto">
+        <div class="mx-auto h-full w-full max-w-page p-4 lg:p-6">
+          <slot />
+        </div>
       </main>
     </div>
   </div>
