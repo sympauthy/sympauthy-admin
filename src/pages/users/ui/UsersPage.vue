@@ -9,6 +9,7 @@ import {
   CollectionSortHeader,
   CommonAlert,
   CommonButton,
+  EmptyValue,
   TableCell,
   TableHeader,
   Tag,
@@ -79,13 +80,17 @@ onMounted(async () => {
             {{ t('pages.users.disabled') }}
           </Tag>
         </TableCell>
+        <!-- The first identifier is what names the account, so it titles the card rather than
+             being another labelled line of it. -->
         <TableCell
-          :label="claim.id"
-          v-for="claim in claimStore.identifierClaims"
+          v-for="(claim, index) in claimStore.identifierClaims"
           :key="claim.id"
           truncate
+          :primary="index === 0"
+          :label="index === 0 ? undefined : claim.id"
         >
-          {{ user.claims?.[claim.id] ?? '' }}
+          <span v-if="user.claims?.[claim.id]">{{ user.claims[claim.id] }}</span>
+          <EmptyValue v-else />
         </TableCell>
         <TableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
           {{ formatDate(user.created_at) }}

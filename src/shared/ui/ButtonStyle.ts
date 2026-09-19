@@ -28,7 +28,9 @@ export const secondaryColoredButton: ButtonStyle = Object.freeze({
   activeClasses: 'border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200',
   loadingClasses: 'border-gray-200 bg-gray-100 text-gray-700 cursor-wait',
   submittingClasses: 'border-gray-200 bg-gray-100 text-gray-700 cursor-wait',
-  disabledClasses: 'border-transparent bg-disabled text-on-disabled pointer-events-none'
+  // Paler than its active state, not darker: this is the style the toolbar's refresh control
+  // wears, and it is disabled on every fetch.
+  disabledClasses: 'border-gray-200 bg-gray-50 text-gray-400 pointer-events-none'
 })
 
 export const dangerColoredButton: ButtonStyle = Object.freeze({

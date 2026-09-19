@@ -74,7 +74,7 @@ onMounted(async () => {
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </Tag>
         </TableCell>
-        <TableCell :label="t('pages.sessions.user')" truncate>
+        <TableCell primary truncate>
           <router-link
             v-if="session.user"
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"

@@ -7,6 +7,7 @@ import {
   CollectionPage,
   CollectionSortHeader,
   CommonButton,
+  EmptyValue,
   TableCell,
   TableHeader,
   primaryColoredButton
@@ -58,9 +59,12 @@ onMounted(async () => {
           {{ client.audience_id }}
         </TableCell>
         <TableCell :label="t('pages.clients.redirectUris')">
-          <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
-            {{ uri }}
-          </div>
+          <template v-if="client.allowed_redirect_uris?.length">
+            <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
+              {{ uri }}
+            </div>
+          </template>
+          <EmptyValue v-else />
         </TableCell>
         <TableCell fit>
           <CommonButton

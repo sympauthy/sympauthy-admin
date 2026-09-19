@@ -13,9 +13,20 @@
   --color-disabled: var(--color-gray-400);
   --color-on-disabled: var(--color-white);
 
+  --color-body: var(--color-gray-50);
+
   /* The width a screen stops growing at. Past it the panel is centred, because a label and the
      value beside it drifting a monitor apart is not more readable for the room. */
   --container-page: 96rem;
+}
+
+/**
+ * The ground the panel is read against, which every card, table and dialog is white upon.
+ * `index.html` paints it inline as well, so a slow stylesheet does not flash white first — which
+ * is why the token has to stay declared here even though no utility spells it.
+ */
+body {
+  background-color: var(--color-body);
 }
 
 /**
@@ -64,10 +75,19 @@
     display: none;
   }
 
+  /* `divide-y` colours a row's top border and deliberately skips the last child, so a card
+     bordered on four sides states its own colour — and its own ground, since the gutters between
+     cards belong to the page and not to the white the table body paints. */
   .table-as-cards tr {
     border-width: 1px;
+    border-color: var(--color-gray-200);
     border-radius: var(--radius-lg);
+    background-color: var(--color-white);
     padding: calc(var(--spacing) * 4);
+  }
+
+  .table-as-cards tbody {
+    background-color: transparent;
   }
 
   .table-as-cards tr + tr {

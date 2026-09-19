@@ -29,6 +29,12 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
   const { enabled = () => true, minSize = 1, maxSize = 100, onChange } = options
 
   let currentSize = 0
+  // The size held before the current one. A measurement is the average of the rows on screen, and
+  // which rows those are is decided by the size that asked for them — so a window holding a tall
+  // record asks for fewer, the shorter window that arrives asks for more, and the two take turns
+  // forever. Refusing to go back to the size just left bounds that to one step. A resize clears it,
+  // since a layout that has genuinely changed must be free to land anywhere.
+  let previousSize = 0
   // 0 until measured from real rows, and the last known height whenever there are none to measure
   // — the loading, error and empty states render no row.
   let rowHeight = 0
@@ -92,7 +98,8 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
 
     const fitting = Math.floor(available / (rowHeight || FALLBACK_ROW_HEIGHT))
     const size = Math.min(Math.max(fitting, minSize), maxSize)
-    if (size !== currentSize) {
+    if (size !== currentSize && size !== previousSize) {
+      previousSize = currentSize
       currentSize = size
       onChange(size)
     }
@@ -131,6 +138,7 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
       observedHeight = height
       observedWidth = width
       rowHeight = 0
+      previousSize = 0
       // Two frames, not one: the first is where the breakpoint's own layout lands, and measuring a
       // row in it reads the height of the arrangement being left rather than the one arriving.
       requestAnimationFrame(() => requestAnimationFrame(measure))
