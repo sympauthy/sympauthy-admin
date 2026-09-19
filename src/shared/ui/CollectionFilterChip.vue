@@ -92,8 +92,10 @@ function onTypedValuesChange(event: Event) {
   })
 }
 
-const selectClasses = 'border-none bg-white py-0 pl-1 pr-6 text-sm focus:outline-none focus:ring-0'
-const inputClasses = 'w-28 border-none bg-white px-1 py-0 text-sm focus:outline-none focus:ring-0'
+// A chip is not a row of controls: the field, the operator and the value read as one sentence, so
+// the controls inside it drop the box every other control is drawn in and keep only its text size.
+const selectClasses = 'border-none bg-white py-0 pr-6 pl-1 text-sm focus:ring-0 focus:outline-none'
+const inputClasses = 'w-28 border-none bg-white px-1 py-0 text-sm focus:ring-0 focus:outline-none'
 </script>
 
 <template>
@@ -178,7 +180,7 @@ const inputClasses = 'w-28 border-none bg-white px-1 py-0 text-sm focus:outline-
       :aria-label="t('common.collection.removeFilter')"
       @click="emit('remove')"
     >
-      <XMarkIcon class="h-4 w-4" />
+      <XMarkIcon class="size-4" />
     </button>
   </div>
 </template>

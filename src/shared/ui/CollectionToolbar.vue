@@ -6,6 +6,7 @@ import type { Collection } from '@/shared/collection'
 import CollectionFilterChip from './CollectionFilterChip.vue'
 import CommonAlert from './CommonAlert.vue'
 import DropdownButton from './DropdownButton.vue'
+import FormInput from './FormInput.vue'
 
 /**
  * What a collection is narrowed by: the free text field where it searches on something, the menu of
@@ -30,30 +31,22 @@ const filterOptions = computed(() =>
 function filterOf(field: string) {
   return props.collection.filters.find((filter) => filter.field === field)
 }
-
-function onSearchInput(event: Event) {
-  props.collection.setSearch((event.target as HTMLInputElement).value)
-}
 </script>
 
 <template>
   <div>
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-      <div v-if="props.collection.searchable" class="relative flex-1">
-        <MagnifyingGlassIcon
-          class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-        />
-        <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
-             query still narrowing the collection would otherwise come back to an empty field. -->
-        <input
-          type="text"
-          :value="props.collection.criteria.query"
-          :placeholder="props.searchPlaceholder"
-          :aria-label="props.searchPlaceholder || t('common.collection.search')"
-          class="w-full rounded border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          @input="onSearchInput"
-        />
-      </div>
+      <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
+           query still narrowing the collection would otherwise come back to an empty field. -->
+      <FormInput
+        v-if="props.collection.searchable"
+        class="flex-1"
+        :icon="MagnifyingGlassIcon"
+        :model-value="props.collection.criteria.query"
+        :placeholder="props.searchPlaceholder"
+        :aria-label="props.searchPlaceholder || t('common.collection.search')"
+        @update:model-value="props.collection.setSearch"
+      />
       <DropdownButton
         v-if="filterOptions.length > 0"
         :label="t('common.addFilter')"

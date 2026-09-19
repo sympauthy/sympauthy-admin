@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ConfirmDialog } from '@/shared/ui'
+import { ConfirmDialog, FormSelect } from '@/shared/ui'
 import { UserApi } from '@/entities/user'
 import { useClientStore } from '@/entities/client'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
@@ -73,36 +73,27 @@ async function onConfirm() {
       {{ t('logoutDialog.title') }}
     </template>
 
-    <p class="text-sm text-gray-600 mb-4">
+    <p class="mb-4 text-sm text-gray-600">
       {{ t('logoutDialog.description') }}
     </p>
 
     <div class="space-y-3">
-      <label class="flex items-center gap-2 cursor-pointer">
-        <input
-          v-model="mode"
-          type="radio"
-          value="all"
-          class="text-(--color-primary) focus:ring-(--color-primary)"
-        />
+      <label class="flex cursor-pointer items-center gap-2">
+        <input v-model="mode" type="radio" value="all" class="text-primary focus:ring-primary" />
         <span class="text-sm text-gray-700">{{ t('logoutDialog.allClients') }}</span>
       </label>
 
-      <label class="flex items-center gap-2 cursor-pointer">
+      <label class="flex cursor-pointer items-center gap-2">
         <input
           v-model="mode"
           type="radio"
           value="specific"
-          class="text-(--color-primary) focus:ring-(--color-primary)"
+          class="text-primary focus:ring-primary"
         />
         <span class="text-sm text-gray-700">{{ t('logoutDialog.specificClient') }}</span>
       </label>
 
-      <select
-        v-if="mode === 'specific'"
-        v-model="selectedClientId"
-        class="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-      >
+      <FormSelect v-if="mode === 'specific'" v-model="selectedClientId">
         <option value="" disabled>
           {{ t('logoutDialog.selectClient') }}
         </option>
@@ -113,7 +104,7 @@ async function onConfirm() {
         >
           {{ client.client_id }}
         </option>
-      </select>
+      </FormSelect>
     </div>
   </ConfirmDialog>
 </template>

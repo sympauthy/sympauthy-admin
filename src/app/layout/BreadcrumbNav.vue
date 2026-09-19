@@ -59,15 +59,15 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 <template>
   <nav
     v-if="breadcrumbs.length > 0"
-    class="h-14 shrink-0 flex items-center border-b border-gray-200 bg-white px-4 lg:px-6"
+    class="flex h-14 shrink-0 items-center border-b border-gray-200 bg-white px-4 lg:px-6"
   >
     <ol class="flex items-center gap-2">
       <li v-for="(item, index) in breadcrumbs" :key="index" class="flex items-center gap-2">
-        <ChevronRightIcon v-if="index > 0" class="h-4 w-4 text-gray-400 shrink-0" />
+        <ChevronRightIcon v-if="index > 0" class="size-4 shrink-0 text-gray-400" />
         <router-link
           v-if="item.to"
           :to="item.to"
-          class="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          class="text-sm text-gray-500 transition-colors hover:text-gray-700"
         >
           {{ item.label }}
         </router-link>

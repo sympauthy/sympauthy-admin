@@ -8,6 +8,8 @@ import {
   CollectionPage,
   CollectionSortHeader,
   CommonButton,
+  TableCell,
+  TableHeader,
   Tag,
   dangerColoredButton
 } from '@/shared/ui'
@@ -30,13 +32,14 @@ onMounted(async () => {
   <CollectionPage :collection="store.consents" :search-placeholder="t('pages.userConsents.search')">
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.consents"
         :label="t('pages.userConsents.audience')"
         field="audience_id"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="store.consents"
         :label="t('pages.userConsents.client')"
         field="prompted_by_client_id"
@@ -47,49 +50,45 @@ onMounted(async () => {
         field="scope"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="store.consents"
         :label="t('pages.userConsents.consentedAt')"
         field="consented_at"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.userConsents.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.userConsents.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="consent in store.consents.items" :key="consent.audience_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ consent.audience_id }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           {{ consent.prompted_by_client_id }}
-        </td>
-        <td class="px-6 py-4 text-sm">
+        </TableCell>
+        <TableCell>
           <div class="flex flex-wrap gap-1">
             <Tag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}
             </Tag>
           </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           {{ formatDateTime(consent.consented_at) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             :button-style="dangerColoredButton"
+            :label="t('pages.userConsents.revoke')"
             @click="store.revokeConsent(consent.audience_id)"
-          >
-            {{ t('pages.userConsents.revoke') }}
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.userConsents.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.userConsents.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

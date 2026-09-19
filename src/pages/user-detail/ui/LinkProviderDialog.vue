@@ -3,8 +3,12 @@ import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   BaseDialog,
+  CommonAlert,
   CommonButton,
-  CopyToClipboard,
+  FormField,
+  FormInput,
+  FormSelect,
+  OneTimeSecret,
   primaryColoredButton,
   secondaryColoredButton
 } from '@/shared/ui'
@@ -123,140 +127,103 @@ async function onSubmit() {
     :dismiss-disabled="submitting"
     @close="$emit('close')"
   >
-    <!-- Form phase -->
-    <template v-if="phase === 'form'">
-      <p class="text-sm text-gray-600 mb-4">
-        {{ t('pages.userDetail.linkProviderDescription') }}
-      </p>
+    <template #default>
+      <!-- Form phase -->
+      <template v-if="phase === 'form'">
+        <p class="mb-4 text-sm text-gray-600">
+          {{ t('pages.userDetail.linkProviderDescription') }}
+        </p>
 
-      <div v-if="displayError" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-        {{ displayError }}
-      </div>
+        <CommonAlert v-if="displayError" color="danger" class="mb-4">
+          {{ displayError }}
+        </CommonAlert>
 
-      <div class="space-y-4 mb-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.linkProviderProviderId') }}
-          </label>
-          <input
-            v-model="providerId"
-            type="text"
-            :placeholder="t('pages.userDetail.linkProviderProviderIdPlaceholder')"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-          />
-          <p class="mt-1 text-xs text-gray-500">
-            {{ t('pages.userDetail.linkProviderProviderIdHelp') }}
-          </p>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.linkProviderClient') }}
-          </label>
-          <select
-            v-model="clientId"
-            :disabled="clientStore.allClientsLoading"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
+        <div class="space-y-4">
+          <FormField
+            :label="t('pages.userDetail.linkProviderProviderId')"
+            :hint="t('pages.userDetail.linkProviderProviderIdHelp')"
           >
-            <option value="" disabled>
-              {{
-                clientStore.allClientsLoading
-                  ? t('common.loading')
-                  : t('pages.userDetail.linkProviderSelectClient')
-              }}
-            </option>
-            <option
-              v-for="client in clientStore.allClients"
-              :key="client.client_id"
-              :value="client.client_id"
-            >
-              {{ client.client_id }}
-            </option>
-          </select>
-        </div>
+            <FormInput
+              v-model="providerId"
+              :placeholder="t('pages.userDetail.linkProviderProviderIdPlaceholder')"
+            />
+          </FormField>
 
-        <div
-          v-if="clientId && !hasRedirectUris"
-          class="rounded-md bg-amber-50 p-3 text-sm text-amber-800"
-        >
-          {{ t('pages.userDetail.linkProviderNoRedirectUris') }}
-        </div>
+          <FormField :label="t('pages.userDetail.linkProviderClient')">
+            <FormSelect v-model="clientId" :disabled="clientStore.allClientsLoading">
+              <option value="" disabled>
+                {{
+                  clientStore.allClientsLoading
+                    ? t('common.loading')
+                    : t('pages.userDetail.linkProviderSelectClient')
+                }}
+              </option>
+              <option
+                v-for="client in clientStore.allClients"
+                :key="client.client_id"
+                :value="client.client_id"
+              >
+                {{ client.client_id }}
+              </option>
+            </FormSelect>
+          </FormField>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.linkProviderReturnUrl') }}
-          </label>
-          <select
-            v-model="returnUri"
-            :disabled="!hasRedirectUris"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
-          >
-            <option value="" disabled>
-              {{ t('pages.userDetail.linkProviderSelectReturnUrl') }}
-            </option>
-            <option v-for="uri in redirectUris" :key="uri" :value="uri">
-              {{ uri }}
-            </option>
-          </select>
-        </div>
+          <CommonAlert v-if="clientId && !hasRedirectUris" color="warning">
+            {{ t('pages.userDetail.linkProviderNoRedirectUris') }}
+          </CommonAlert>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.linkProviderCancelUrl') }}
-          </label>
-          <select
-            v-model="cancelUri"
-            :disabled="!hasRedirectUris"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
-          >
-            <option value="">
-              {{ t('pages.userDetail.linkProviderNoCancelUrl') }}
-            </option>
-            <option v-for="uri in redirectUris" :key="uri" :value="uri">
-              {{ uri }}
-            </option>
-          </select>
-        </div>
-      </div>
+          <FormField :label="t('pages.userDetail.linkProviderReturnUrl')">
+            <FormSelect v-model="returnUri" :disabled="!hasRedirectUris">
+              <option value="" disabled>
+                {{ t('pages.userDetail.linkProviderSelectReturnUrl') }}
+              </option>
+              <option v-for="uri in redirectUris" :key="uri" :value="uri">
+                {{ uri }}
+              </option>
+            </FormSelect>
+          </FormField>
 
-      <div class="flex justify-end gap-3">
+          <FormField :label="t('pages.userDetail.linkProviderCancelUrl')">
+            <FormSelect v-model="cancelUri" :disabled="!hasRedirectUris">
+              <option value="">
+                {{ t('pages.userDetail.linkProviderNoCancelUrl') }}
+              </option>
+              <option v-for="uri in redirectUris" :key="uri" :value="uri">
+                {{ uri }}
+              </option>
+            </FormSelect>
+          </FormField>
+        </div>
+      </template>
+
+      <!-- Success phase -->
+      <OneTimeSecret v-else :value="redirectUrl">
+        <template #warning>{{ t('pages.userDetail.linkProviderLinkWarning') }}</template>
+      </OneTimeSecret>
+    </template>
+
+    <template #actions>
+      <template v-if="phase === 'form'">
         <CommonButton
           :button-style="secondaryColoredButton"
+          :label="t('common.cancel')"
           :disabled="submitting"
           @click="$emit('close')"
-        >
-          {{ t('common.cancel') }}
-        </CommonButton>
+        />
         <CommonButton
           :button-style="primaryColoredButton"
+          :label="t('pages.userDetail.linkProviderGenerate')"
           :submitting="submitting"
           :disabled="!!clientId && !hasRedirectUris"
           @click="onSubmit"
-        >
-          <template #submitting>
-            {{ t('pages.userDetail.linkProviderGenerate') }}
-          </template>
-          {{ t('pages.userDetail.linkProviderGenerate') }}
-        </CommonButton>
-      </div>
-    </template>
-
-    <!-- Success phase -->
-    <template v-else>
-      <div class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-        {{ t('pages.userDetail.linkProviderLinkWarning') }}
-      </div>
-
-      <div class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
-        <code class="flex-1 text-sm break-all">{{ redirectUrl }}</code>
-        <CopyToClipboard :value="redirectUrl" />
-      </div>
-
-      <div class="flex justify-end">
-        <CommonButton :button-style="primaryColoredButton" @click="$emit('close')">
-          {{ t('pages.userDetail.linkProviderDone') }}
-        </CommonButton>
-      </div>
+        />
+      </template>
+      <CommonButton
+        v-else
+        :button-style="primaryColoredButton"
+        :label="t('pages.userDetail.linkProviderDone')"
+        @click="$emit('close')"
+      />
     </template>
   </BaseDialog>
 </template>

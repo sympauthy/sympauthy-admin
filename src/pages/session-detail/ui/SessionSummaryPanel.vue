@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { Tag, CopyToClipboard } from '@/shared/ui'
+import { CopyableValue, EmptyValue, SummaryCard, SummaryField, Tag } from '@/shared/ui'
 import {
   purposeLabel,
   interactiveFlowSessionStatusColor,
@@ -18,87 +18,44 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="bg-white rounded-lg border border-gray-200 p-4 sm:p-6">
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="min-w-0">
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.sessionId') }}
-        </dt>
-        <dd class="mt-1 flex items-center gap-1.5 min-w-0">
-          <span class="text-sm text-gray-900 font-mono truncate">{{ session.id }}</span>
-          <CopyToClipboard :value="session.id" :title="t('pages.sessionDetail.copySessionId')" />
-        </dd>
-      </div>
-      <div>
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.status') }}
-        </dt>
-        <dd class="mt-1">
-          <Tag :color="interactiveFlowSessionStatusColor(session.status)">
-            {{ interactiveFlowSessionStatusLabel(session.status) }}
-          </Tag>
-        </dd>
-      </div>
-      <div class="min-w-0">
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.startedFor') }}
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          {{ purposeLabel(session.initiating_purpose) }}
-        </dd>
-      </div>
-      <div class="min-w-0">
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.client') }}
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 font-mono truncate">
-          <span v-if="session.client_id">{{ session.client_id }}</span>
-          <span v-else class="text-gray-300 font-sans">&mdash;</span>
-        </dd>
-      </div>
-      <div class="min-w-0">
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.flow') }}
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900 font-mono truncate">
-          <span v-if="session.flow_id">{{ session.flow_id }}</span>
-          <span v-else class="text-gray-300 font-sans">&mdash;</span>
-        </dd>
-      </div>
-      <div class="min-w-0">
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.user') }}
-        </dt>
-        <dd class="mt-1 text-sm truncate">
-          <router-link
-            v-if="session.user"
-            :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-            class="text-gray-900 hover:underline"
-          >
-            {{ userIdentifierLabel(session.user) }}
-          </router-link>
-          <Tag v-else-if="session.signed_up" color="gray">
-            {{ t('pages.sessions.signingUp') }}
-          </Tag>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </dd>
-      </div>
-      <div>
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.startedAt') }}
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          {{ formatDateTime(session.session_date) }}
-        </dd>
-      </div>
-      <div>
-        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {{ t('pages.sessionDetail.expiresAt') }}
-        </dt>
-        <dd class="mt-1 text-sm text-gray-900">
-          {{ formatDateTime(session.expiration_date) }}
-        </dd>
-      </div>
-    </div>
-  </div>
+  <SummaryCard>
+    <SummaryField mono :label="t('pages.sessionDetail.sessionId')">
+      <CopyableValue :value="session.id" :title="t('pages.sessionDetail.copySessionId')" />
+    </SummaryField>
+    <SummaryField :label="t('pages.sessionDetail.status')">
+      <Tag :color="interactiveFlowSessionStatusColor(session.status)">
+        {{ interactiveFlowSessionStatusLabel(session.status) }}
+      </Tag>
+    </SummaryField>
+    <SummaryField :label="t('pages.sessionDetail.startedFor')">
+      {{ purposeLabel(session.initiating_purpose) }}
+    </SummaryField>
+    <SummaryField mono :label="t('pages.sessionDetail.client')">
+      <span v-if="session.client_id">{{ session.client_id }}</span>
+      <EmptyValue v-else />
+    </SummaryField>
+    <SummaryField mono :label="t('pages.sessionDetail.flow')">
+      <span v-if="session.flow_id">{{ session.flow_id }}</span>
+      <EmptyValue v-else />
+    </SummaryField>
+    <SummaryField :label="t('pages.sessionDetail.user')">
+      <router-link
+        v-if="session.user"
+        :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
+        class="hover:underline"
+      >
+        {{ userIdentifierLabel(session.user) }}
+      </router-link>
+      <Tag v-else-if="session.signed_up" color="gray">
+        {{ t('pages.sessions.signingUp') }}
+      </Tag>
+      <EmptyValue v-else />
+    </SummaryField>
+    <SummaryField :label="t('pages.sessionDetail.startedAt')">
+      {{ formatDateTime(session.session_date) }}
+    </SummaryField>
+    <SummaryField :label="t('pages.sessionDetail.expiresAt')">
+      {{ formatDateTime(session.expiration_date) }}
+    </SummaryField>
+  </SummaryCard>
 </template>

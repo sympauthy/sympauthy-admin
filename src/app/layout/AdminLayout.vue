@@ -14,7 +14,7 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
     <!-- Backdrop (mobile/tablet only) -->
     <div
       v-if="sidebarOpen"
-      class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+      class="fixed inset-0 z-40 bg-black/50 lg:hidden"
       @click="closeSidebar"
     />
 
@@ -25,11 +25,11 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
     />
 
     <!-- Main content -->
-    <div class="flex-1 flex flex-col min-h-0 min-w-0">
+    <div class="flex min-h-0 min-w-0 flex-1 flex-col">
       <!-- Mobile header -->
-      <div class="h-14 shrink-0 flex items-center px-4 border-b border-gray-200 bg-white lg:hidden">
+      <div class="flex h-14 shrink-0 items-center border-b border-gray-200 bg-white px-4 lg:hidden">
         <button :title="t('nav.openMenu')" @click="toggleSidebar">
-          <Bars3Icon class="h-6 w-6 text-gray-600" />
+          <Bars3Icon class="size-6 text-gray-600" />
         </button>
         <span class="ml-3 text-lg font-semibold text-gray-900">SympAuthy Admin</span>
       </div>

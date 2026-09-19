@@ -39,7 +39,7 @@ function preventWhenDisabled(event: Event) {
     <DialogPortal>
       <DialogOverlay class="dialog-overlay fixed inset-0 z-50 bg-black/50" />
       <DialogContent
-        class="dialog-content fixed left-1/2 top-1/2 z-50 mx-4 max-h-[calc(100vh-2rem)] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
+        class="dialog-content fixed top-1/2 left-1/2 z-50 mx-4 max-h-[calc(100vh-2rem)] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg bg-white p-4 shadow-xl sm:p-6"
         :aria-describedby="undefined"
         @escape-key-down="preventWhenDisabled"
         @pointer-down-outside="preventWhenDisabled"
@@ -48,11 +48,14 @@ function preventWhenDisabled(event: Event) {
         <DialogTitle
           v-if="title || slots.title"
           as="h3"
-          class="text-lg font-semibold text-gray-900 mb-4"
+          class="mb-4 text-lg font-semibold text-gray-900"
         >
           <slot name="title">{{ title }}</slot>
         </DialogTitle>
         <slot />
+        <div v-if="slots.actions" class="mt-6 flex justify-end gap-3">
+          <slot name="actions" />
+        </div>
       </DialogContent>
     </DialogPortal>
   </DialogRoot>

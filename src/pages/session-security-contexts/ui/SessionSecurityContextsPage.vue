@@ -6,7 +6,13 @@ import {
   useInteractiveFlowSessionSecurityContextStore,
   securityContextLocation
 } from '@/entities/session'
-import { CollectionPage, CollectionSortHeader } from '@/shared/ui'
+import {
+  CollectionPage,
+  CollectionSortHeader,
+  EmptyValue,
+  TableCell,
+  TableHeader
+} from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()
@@ -29,40 +35,36 @@ onMounted(async () => {
     :search-placeholder="t('pages.sessionSecurityContexts.search')"
   >
     <template #header>
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.sessionSecurityContexts.ip') }}
-      </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.sessionSecurityContexts.userAgent') }}
-      </th>
+      <TableHeader fit>{{ t('pages.sessionSecurityContexts.ip') }}</TableHeader>
+      <TableHeader>{{ t('pages.sessionSecurityContexts.userAgent') }}</TableHeader>
       <CollectionSortHeader
-        class="hidden lg:table-cell"
+        hidden-below="lg"
         :collection="store.securityContexts"
         :label="t('pages.sessionSecurityContexts.location')"
         field="country_code"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.securityContexts"
         :label="t('pages.sessionSecurityContexts.requests')"
         field="observation_count"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden lg:table-cell"
+        fit
+        hidden-below="lg"
         :collection="store.securityContexts"
         :label="t('pages.sessionSecurityContexts.firstSeen')"
         field="first_seen_date"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="store.securityContexts"
         :label="t('pages.sessionSecurityContexts.lastSeen')"
         field="last_seen_date"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.securityContexts"
         :label="t('pages.sessionSecurityContexts.proven')"
         field="proven_date"
@@ -74,43 +76,43 @@ onMounted(async () => {
         v-for="context in store.securityContexts.items"
         :key="`${context.ip}|${context.user_agent ?? ''}`"
       >
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
+        <TableCell primary fit mono>
           {{ context.ip }}
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500 truncate">
+        </TableCell>
+        <TableCell truncate>
           <span v-if="context.user_agent">{{ context.user_agent }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500 truncate hidden lg:table-cell">
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell truncate hidden-below="lg">
           <span v-if="securityContextLocation(context)">
             {{ securityContextLocation(context) }}
           </span>
-          <span v-else class="text-gray-300">&mdash;</span>
+          <EmptyValue v-else />
           <div v-if="context.time_zone" class="text-xs text-gray-400">
             {{ context.time_zone }}
           </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        </TableCell>
+        <TableCell fit>
           {{ context.observation_count }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden lg:table-cell">
+        </TableCell>
+        <TableCell fit hidden-below="lg">
           {{ formatDateTime(context.first_seen_date) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           {{ formatDateTime(context.last_seen_date) }}
-        </td>
+        </TableCell>
         <!-- Only a place a credential was proven from carries a date. A place without one is
              merely where requests came from, which anybody holding the session's state can
              produce. -->
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <TableCell fit>
           <span v-if="context.proven_date">{{ formatDateTime(context.proven_date) }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
+          <EmptyValue v-else />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.sessionSecurityContexts.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.sessionSecurityContexts.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

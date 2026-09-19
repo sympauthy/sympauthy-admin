@@ -69,23 +69,32 @@ the one that re-reads a live list, the `HelpTooltip` explaining what the collect
 
 ## Table columns
 
-| Kind of column | Classes on `<th>` | Classes on `<td>` |
-| --- | --- | --- |
-| status, date, actions | `w-0 whitespace-nowrap` | `whitespace-nowrap` |
-| name, identifier, value | none | `truncate` |
-| secondary, hidden on a phone | `hidden sm:table-cell` | `hidden sm:table-cell` |
+**A column is a `CollectionSortHeader` where the collection may order on it, and a `TableHeader`
+where it may not.** Both draw the same header; only one of them responds to a click.
 
-**A shrink-wrap column takes only the space its content needs, and a fill column takes the rest.**
+**Every cell under one is a `TableCell`.** Neither a page's header nor its rows write a padding, a
+text size or a colour — [the design system standard](design-system-standard.md#the-scale) says which
+step each takes, and the component takes it.
+
+| Kind of column | Props on the header | Props on the cell |
+| --- | --- | --- |
+| status, date, actions | `fit` | `fit` |
+| name, identifier, value | none | `truncate` |
+| the column identifying the record | — | `primary` |
+| an address, a token, a key | — | `mono` |
+| secondary, dropped on a phone | `hidden-below="sm"` | `hidden-below="sm"` |
+| secondary, dropped below a desktop | `hidden-below="lg"` | `hidden-below="lg"` |
+
+**A `fit` column takes only the space its content needs, and a column without it takes the rest.**
 That is the whole sizing model.
 
 **Never write a fixed width.** `w-[100px]` and `w-[10%]` hold at one breakpoint and break at the
 next, and `PaginatedTable` keeps `table-layout: auto` for that reason.
 
-**A cell is `px-6 py-4`, and a header cell `px-6 py-3`.** A phone's narrower padding is applied
-globally, not per page.
+**A cell the record has no value for holds an `EmptyValue`.** A blank cell and a cell the fetch did
+not fill read alike; a dash does not.
 
-**The primary column is `font-medium text-gray-900`.** It identifies the record; a `Tag` is for a
-status.
+**A cell's `hidden-below` matches its header's.** They are two components and one column.
 
 ## Record pages
 
@@ -94,11 +103,12 @@ filling what is left.** Its root is `flex h-full min-h-0 flex-col`, so the tab b
 a height and its table scrolls rather than the page.
 
 **A record's page renders loading, error and content, and resets its store in `onMounted` before
-fetching.** It re-reads the record when the identifier changes and not when the tab does.
+fetching.** The wait is a `LoadingState` and the failure a `CommonAlert`. It re-reads the record
+when the identifier changes and not when the tab does.
 
-**The first thing on the page is the summary panel**: a card, `bg-white rounded-lg border
-border-gray-200 p-4 sm:p-6`, holding a grid of labelled values and no heading. The record's
-identifier carries a `CopyToClipboard`, and the record's actions an `ActionsDropdown`.
+**The first thing on the page is a `SummaryCard` of `SummaryField`s**, one per value that identifies
+the record, and no heading. The record's identifier is a `CopyableValue`, and the record's
+actions go in the card's `#actions` slot as an `ActionsDropdown`.
 
 **Everything below it is a `DetailSection`,** whose `#help` slot takes the `HelpTooltip` when the
 section needs one.
@@ -107,15 +117,12 @@ section needs one.
 
 | Holds | Rendered as |
 | --- | --- |
-| fields of one record | a `<dl>` in a card, a row per field |
-| plain values | a card listing them |
+| fields of one record | a `DefinitionList` of `DefinitionRow`s |
+| plain values | a `CommonCard` listing them |
 
 **Records are not a section.** A paged set of them is a collection, and a collection is a tab of its
 own — [the collection standard](collection-standard.md#a-collection-under-a-record) says how one
 hangs off a record.
-
-**A row of a definition list is `px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4`,** its `<dt>`
-the label and its `<dd>` the value.
 
 **A section is a `…Panel.vue` in the page's slice, and it takes what it renders as props.** The
 record is fetched once by the shell, so a section below it reads what is already there.
@@ -133,12 +140,15 @@ desktop.
 closes it on navigation; `AdminLayout` draws the backdrop and the mobile header; `SidebarNav` is
 sized by its parent (`h-full w-full`), never by itself.
 
-**Padding steps once**: `p-4` becomes `lg:p-6` for the page, and a card is `p-4 sm:p-6`.
+**Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `CommonCard` steps its own from
+`p-4` to `sm:p-6`. [The design system standard](design-system-standard.md#the-scale) holds the
+whole scale.
 
 **A toolbar or a pagination bar stacks on a phone and goes side by side from `sm:`.**
 
-**A control whose label does not fit shows its icon alone below `sm:`,** keeping the label as a
-`title`.
+**A button repeated down a table is passed `collapseLabel`,** which shows its icon alone below
+`sm:` and keeps the label as a `title`. A button standing on its own keeps its label at every
+width.
 
 ## What this standard does not cover
 

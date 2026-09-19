@@ -3,8 +3,11 @@ import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   BaseDialog,
+  CommonAlert,
   CommonButton,
-  CopyToClipboard,
+  FormField,
+  FormSelect,
+  OneTimeSecret,
   primaryColoredButton,
   secondaryColoredButton
 } from '@/shared/ui'
@@ -113,125 +116,93 @@ async function onSubmit() {
     :dismiss-disabled="submitting"
     @close="$emit('close')"
   >
-    <!-- Form phase -->
-    <template v-if="phase === 'form'">
-      <p class="text-sm text-gray-600 mb-4">
-        {{ t('pages.userDetail.enrollMfaDescription') }}
-      </p>
+    <template #default>
+      <!-- Form phase -->
+      <template v-if="phase === 'form'">
+        <p class="mb-4 text-sm text-gray-600">
+          {{ t('pages.userDetail.enrollMfaDescription') }}
+        </p>
 
-      <div v-if="displayError" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-        {{ displayError }}
-      </div>
+        <CommonAlert v-if="displayError" color="danger" class="mb-4">
+          {{ displayError }}
+        </CommonAlert>
 
-      <div class="space-y-4 mb-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.enrollMfaClient') }}
-          </label>
-          <select
-            v-model="clientId"
-            :disabled="clientStore.allClientsLoading"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
-          >
-            <option value="" disabled>
-              {{
-                clientStore.allClientsLoading
-                  ? t('common.loading')
-                  : t('pages.userDetail.enrollMfaSelectClient')
-              }}
-            </option>
-            <option
-              v-for="client in clientStore.allClients"
-              :key="client.client_id"
-              :value="client.client_id"
-            >
-              {{ client.client_id }}
-            </option>
-          </select>
+        <div class="space-y-4">
+          <FormField :label="t('pages.userDetail.enrollMfaClient')">
+            <FormSelect v-model="clientId" :disabled="clientStore.allClientsLoading">
+              <option value="" disabled>
+                {{
+                  clientStore.allClientsLoading
+                    ? t('common.loading')
+                    : t('pages.userDetail.enrollMfaSelectClient')
+                }}
+              </option>
+              <option
+                v-for="client in clientStore.allClients"
+                :key="client.client_id"
+                :value="client.client_id"
+              >
+                {{ client.client_id }}
+              </option>
+            </FormSelect>
+          </FormField>
+
+          <CommonAlert v-if="clientId && !hasRedirectUris" color="warning">
+            {{ t('pages.userDetail.enrollMfaNoRedirectUris') }}
+          </CommonAlert>
+
+          <FormField :label="t('pages.userDetail.enrollMfaReturnUrl')">
+            <FormSelect v-model="returnUri" :disabled="!hasRedirectUris">
+              <option value="" disabled>
+                {{ t('pages.userDetail.enrollMfaSelectReturnUrl') }}
+              </option>
+              <option v-for="uri in redirectUris" :key="uri" :value="uri">
+                {{ uri }}
+              </option>
+            </FormSelect>
+          </FormField>
+
+          <FormField :label="t('pages.userDetail.enrollMfaCancelUrl')">
+            <FormSelect v-model="cancelUri" :disabled="!hasRedirectUris">
+              <option value="">
+                {{ t('pages.userDetail.enrollMfaNoCancelUrl') }}
+              </option>
+              <option v-for="uri in redirectUris" :key="uri" :value="uri">
+                {{ uri }}
+              </option>
+            </FormSelect>
+          </FormField>
         </div>
+      </template>
 
-        <div
-          v-if="clientId && !hasRedirectUris"
-          class="rounded-md bg-amber-50 p-3 text-sm text-amber-800"
-        >
-          {{ t('pages.userDetail.enrollMfaNoRedirectUris') }}
-        </div>
+      <!-- Success phase -->
+      <OneTimeSecret v-else :value="redirectUrl">
+        <template #warning>{{ t('pages.userDetail.enrollMfaLinkWarning') }}</template>
+      </OneTimeSecret>
+    </template>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.enrollMfaReturnUrl') }}
-          </label>
-          <select
-            v-model="returnUri"
-            :disabled="!hasRedirectUris"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
-          >
-            <option value="" disabled>
-              {{ t('pages.userDetail.enrollMfaSelectReturnUrl') }}
-            </option>
-            <option v-for="uri in redirectUris" :key="uri" :value="uri">
-              {{ uri }}
-            </option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.userDetail.enrollMfaCancelUrl') }}
-          </label>
-          <select
-            v-model="cancelUri"
-            :disabled="!hasRedirectUris"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
-          >
-            <option value="">
-              {{ t('pages.userDetail.enrollMfaNoCancelUrl') }}
-            </option>
-            <option v-for="uri in redirectUris" :key="uri" :value="uri">
-              {{ uri }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="flex justify-end gap-3">
+    <template #actions>
+      <template v-if="phase === 'form'">
         <CommonButton
           :button-style="secondaryColoredButton"
+          :label="t('common.cancel')"
           :disabled="submitting"
           @click="$emit('close')"
-        >
-          {{ t('common.cancel') }}
-        </CommonButton>
+        />
         <CommonButton
           :button-style="primaryColoredButton"
+          :label="t('pages.userDetail.enrollMfaGenerate')"
           :submitting="submitting"
           :disabled="!!clientId && !hasRedirectUris"
           @click="onSubmit"
-        >
-          <template #submitting>
-            {{ t('pages.userDetail.enrollMfaGenerate') }}
-          </template>
-          {{ t('pages.userDetail.enrollMfaGenerate') }}
-        </CommonButton>
-      </div>
-    </template>
-
-    <!-- Success phase -->
-    <template v-else>
-      <div class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-        {{ t('pages.userDetail.enrollMfaLinkWarning') }}
-      </div>
-
-      <div class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
-        <code class="flex-1 text-sm break-all">{{ redirectUrl }}</code>
-        <CopyToClipboard :value="redirectUrl" />
-      </div>
-
-      <div class="flex justify-end">
-        <CommonButton :button-style="primaryColoredButton" @click="$emit('close')">
-          {{ t('pages.userDetail.enrollMfaDone') }}
-        </CommonButton>
-      </div>
+        />
+      </template>
+      <CommonButton
+        v-else
+        :button-style="primaryColoredButton"
+        :label="t('pages.userDetail.enrollMfaDone')"
+        @click="$emit('close')"
+      />
     </template>
   </BaseDialog>
 </template>

@@ -31,7 +31,7 @@ watch(
   <RouterView v-if="route.meta.noLayout" />
 
   <div v-else-if="showLoading" class="flex min-h-screen items-center justify-center">
-    <CommonSpinner class="h-8 w-8 border-4" />
+    <CommonSpinner size="lg" />
   </div>
 
   <AdminLayout v-else-if="showLayout">

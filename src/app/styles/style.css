@@ -1,53 +1,44 @@
 @import 'tailwindcss';
 
-:root {
+/**
+ * The colours a deployment could want to change. Declared to Tailwind rather than beside it, so the
+ * panel reaches them as generated utilities — `bg-primary`, `text-on-primary`, `ring-primary` — and
+ * no screen writes a raw `var()`.
+ */
+@theme {
   --color-primary: var(--color-blue-800);
-  --color-hover-primary: var(--color-blue-900);
+  --color-primary-hover: var(--color-blue-900);
   --color-on-primary: var(--color-white);
-
-  --color-body: var(--color-gray-50);
-  --color-on-body: var(--color-gray-500);
 
   --color-disabled: var(--color-gray-400);
   --color-on-disabled: var(--color-white);
-
-  --color-danger: var(--color-red-500);
-  --color-link: var(--color-primary);
 }
 
-body {
-  color: var(--color-background);
-}
-
-/** Button **/
+/**
+ * One box for every control an operator points at — an input, a select, a textarea, a button, a
+ * dropdown trigger. They share a rule rather than a copied class list, so a row of them is the
+ * same height whatever each is made of, and a padding cannot drift on one of them alone.
+ */
 @layer components {
-  .btn {
-    @apply border rounded p-2;
+  .control {
+    @apply rounded-md border px-3 py-2 text-sm;
   }
 
-  .btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+  /**
+   * The name above a value, wherever a value is read: over a column, over a field of a summary,
+   * beside a row of a definition list. Three components draw it, and it is the same name each
+   * time.
+   */
+  .field-label {
+    @apply text-xs font-medium tracking-wider text-gray-500 uppercase;
   }
 
-  .btn-disabled {
-    background-color: var(--color-disabled);
-    color: var(--color-on-disabled);
-  }
-}
-
-/** Text **/
-@layer components {
-  .text-primary {
-    color: var(--color-primary);
-  }
-
-  .text-danger {
-    color: var(--color-danger);
+  .control-focus {
+    @apply focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none;
   }
 }
 
-/** Responsive table padding **/
+/** A phone gives a table less room than a cell's own padding asks for. */
 @media (max-width: 639px) {
   .overflow-x-auto td,
   .overflow-x-auto th {
@@ -65,18 +56,48 @@ body {
   box-shadow: inset 0 -1px 0 var(--color-gray-200);
 }
 
-/** Link **/
+/**
+ * A menu an overlay drops: the actions of a record, the fields a collection filters on. Both are
+ * the same list, so both are the same box — only the trigger above them differs.
+ */
 @layer components {
-  .a {
-    @apply underline cursor-pointer;
+  .menu {
+    @apply z-10 rounded-md border border-gray-200 bg-white shadow-lg;
   }
 
-  .a-primary {
-    color: var(--color-primary);
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-hover-primary);
-      }
-    }
+  .menu-item {
+    @apply flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm outline-none first:rounded-t-md last:rounded-b-md;
+  }
+}
+
+/**
+ * The one motion the panel has: an overlay arriving from just above what opened it. Carried by a
+ * class rather than repeated in each overlay's own scoped block, so the three of them cannot come
+ * to open at three speeds.
+ */
+.overlay-animated[data-state='open'] {
+  animation: overlay-in 120ms ease-out;
+}
+.overlay-animated[data-state='closed'] {
+  animation: overlay-out 100ms ease-in;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }

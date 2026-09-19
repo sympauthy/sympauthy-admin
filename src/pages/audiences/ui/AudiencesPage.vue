@@ -6,7 +6,7 @@ import {
   audienceRegistrationModeKey,
   audienceRegistrationModeColor
 } from '@/entities/audience'
-import { CollectionPage, CollectionSortHeader, Tag } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, TableCell, TableHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()
@@ -27,13 +27,12 @@ onMounted(async () => {
         :label="t('pages.audiences.audienceId')"
         field="id"
       />
-      <th
-        class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
+      <TableHeader fit hidden-below="sm">
         {{ t('common.audience.registrationMode.label') }}
-      </th>
+      </TableHeader>
       <CollectionSortHeader
-        class="hidden sm:table-cell w-0 whitespace-nowrap"
+        fit
+        hidden-below="sm"
         :collection="audienceStore.audiences"
         :label="t('pages.audiences.clientsCount')"
         field="client_count"
@@ -42,22 +41,22 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="audience in audienceStore.audiences.items" :key="audience.audience_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ audience.audience_id }}
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           <Tag :color="audienceRegistrationModeColor(audience)">
             {{ t(audienceRegistrationModeKey(audience)) }}
           </Tag>
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           {{ audience.clients_count }}
-        </td>
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.audiences.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.audiences.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

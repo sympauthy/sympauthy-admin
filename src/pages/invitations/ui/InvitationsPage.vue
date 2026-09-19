@@ -6,9 +6,12 @@ import { useInvitationStore } from '@/entities/invitation'
 import {
   CollectionPage,
   CollectionSortHeader,
-  Tag,
   CommonButton,
   ConfirmDialog,
+  EmptyValue,
+  TableCell,
+  TableHeader,
+  Tag,
   dangerColoredButton,
   primaryColoredButton
 } from '@/shared/ui'
@@ -78,82 +81,72 @@ onMounted(async () => {
     :search-placeholder="t('pages.invitations.search')"
   >
     <template #actions>
-      <CommonButton :button-style="primaryColoredButton" @click="showCreateDialog = true">
-        <span class="inline-flex items-center gap-1.5">
-          <PlusIcon class="size-4 shrink-0" />
-          {{ t('pages.invitations.create') }}
-        </span>
-      </CommonButton>
+      <CommonButton
+        :button-style="primaryColoredButton"
+        :label="t('pages.invitations.create')"
+        :icon="PlusIcon"
+        @click="showCreateDialog = true"
+      />
     </template>
 
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="invitationStore.invitations"
         :label="t('pages.invitations.status')"
         field="status"
       />
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.invitations.tokenPrefix') }}
-      </th>
+      <TableHeader>{{ t('pages.invitations.tokenPrefix') }}</TableHeader>
       <CollectionSortHeader
         :collection="invitationStore.invitations"
         :label="t('pages.invitations.audience')"
         field="audience_id"
       />
-      <th
-        class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.invitations.note') }}
-      </th>
+      <TableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</TableHeader>
       <CollectionSortHeader
-        class="hidden sm:table-cell w-0 whitespace-nowrap"
+        fit
+        hidden-below="sm"
         :collection="invitationStore.invitations"
         :label="t('pages.invitations.expiresAt')"
         field="expires_at"
       />
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.invitations.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.invitations.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="invitation in invitationStore.invitations.items" :key="invitation.invitation_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        <TableCell fit>
           <Tag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
           </Tag>
-        </td>
-        <td class="px-6 py-4 text-sm">
-          <code class="font-medium text-gray-900">{{ invitation.token_prefix }}</code>
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500 truncate">
+        </TableCell>
+        <TableCell primary mono>
+          {{ invitation.token_prefix }}
+        </TableCell>
+        <TableCell truncate>
           {{ invitation.audience_id }}
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-500 truncate">
+        </TableCell>
+        <TableCell truncate hidden-below="sm">
           <span v-if="invitation.note">{{ invitation.note }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           <span v-if="invitation.expires_at">{{ formatDate(invitation.expires_at) }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             v-if="invitation.status === 'pending'"
             :button-style="dangerColoredButton"
+            :label="t('pages.invitations.revoke')"
             @click="onRevoke(invitation.invitation_id)"
-          >
-            {{ t('pages.invitations.revoke') }}
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.invitations.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.invitations.empty') }}</p>
     </template>
   </CollectionPage>
 

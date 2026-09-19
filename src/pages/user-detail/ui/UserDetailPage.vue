@@ -8,7 +8,7 @@ import UserSummaryPanel from './UserSummaryPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
 import LinkProviderDialog from './LinkProviderDialog.vue'
-import { CommonSpinner, CommonAlert, RecordTabs, type RecordTab } from '@/shared/ui'
+import { CommonAlert, LoadingState, RecordTabs, type RecordTab } from '@/shared/ui'
 
 /**
  * One account: its summary, and a tab per collection hanging off it. Each tab is a route of its
@@ -62,10 +62,7 @@ onMounted(() => load(userId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <div v-if="store.loading" class="flex items-center gap-2">
-      <CommonSpinner class="h-6 w-6 border-4" />
-      <span class="text-gray-600">{{ t('common.loading') }}</span>
-    </div>
+    <LoadingState v-if="store.loading" />
 
     <!-- Error state -->
     <CommonAlert v-else-if="store.error" color="danger">

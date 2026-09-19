@@ -8,6 +8,8 @@ import {
   CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
+  TableCell,
+  TableHeader,
   dangerColoredButton
 } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -42,51 +44,45 @@ onMounted(async () => {
   >
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.providerLinks"
         :label="t('pages.userProviders.provider')"
         field="provider_id"
       />
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.userProviders.subject') }}
-      </th>
+      <TableHeader>{{ t('pages.userProviders.subject') }}</TableHeader>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="store.providerLinks"
         :label="t('pages.userProviders.linkedAt')"
         field="link_date"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.userProviders.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.userProviders.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="link in store.providerLinks.items" :key="link.provider_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ link.provider_id }}
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-900 truncate">
+        </TableCell>
+        <TableCell truncate>
           {{ link.subject }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 hidden sm:table-cell">
+        </TableCell>
+        <TableCell fit hidden-below="sm">
           {{ formatDate(link.linked_at) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             :button-style="dangerColoredButton"
+            :label="t('pages.userProviders.unlink')"
             @click="unlinkTargetProviderId = link.provider_id"
-          >
-            {{ t('pages.userProviders.unlink') }}
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.userProviders.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.userProviders.empty') }}</p>
     </template>
   </CollectionPage>
 

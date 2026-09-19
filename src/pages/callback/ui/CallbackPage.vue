@@ -28,8 +28,8 @@ onMounted(async () => {
       {{ error }}
     </CommonAlert>
     <div v-else class="flex flex-col items-center gap-4">
-      <CommonSpinner class="h-8 w-8 border-4" />
-      <p class="text-gray-600">{{ t('auth.signingIn') }}</p>
+      <CommonSpinner size="lg" />
+      <p class="text-sm text-gray-600">{{ t('auth.signingIn') }}</p>
     </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { RouteLocationRaw } from 'vue-router'
+import DocLink from './DocLink.vue'
 import HelpTooltip from './HelpTooltip.vue'
 
 /**
@@ -35,7 +36,7 @@ defineProps<{
 // The two states name no utility in common. `active-class` would leave both sets on the element and
 // let the stylesheet's order settle it, and Tailwind emits a custom-property colour before a named
 // one — so `border-transparent` would win over the active border every time.
-const activeTabClasses = 'border-(--color-primary) text-(--color-primary)'
+const activeTabClasses = 'border-primary text-primary'
 const inactiveTabClasses =
   'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
 </script>
@@ -54,7 +55,7 @@ const inactiveTabClasses =
            to want explained. It is drawn outside the link, or opening it would navigate, and the
            underline is on the row around the two so that it spans both. -->
       <div
-        class="flex shrink-0 items-center whitespace-nowrap border-b-2 px-4"
+        class="flex shrink-0 items-center border-b-2 px-4 whitespace-nowrap"
         :class="isActive ? activeTabClasses : inactiveTabClasses"
       >
         <a
@@ -70,14 +71,9 @@ const inactiveTabClasses =
                `i18n-t` hunting for a component scope that no component here declares. -->
           <i18n-t :keypath="tab.help.keypath" tag="p" scope="global">
             <template v-if="tab.help.linkUrl" #link>
-              <a
-                :href="tab.help.linkUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-blue-600 hover:underline"
-              >
+              <DocLink :href="tab.help.linkUrl">
                 {{ tab.help.linkText }}
-              </a>
+              </DocLink>
             </template>
           </i18n-t>
         </HelpTooltip>

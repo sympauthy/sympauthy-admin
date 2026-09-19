@@ -3,8 +3,13 @@ import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   BaseDialog,
+  CommonAlert,
   CommonButton,
-  CopyToClipboard,
+  FormField,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+  OneTimeSecret,
   primaryColoredButton,
   secondaryColoredButton
 } from '@/shared/ui'
@@ -126,106 +131,75 @@ async function onSubmit() {
     :dismiss-disabled="submitting"
     @close="$emit('close')"
   >
-    <!-- Form phase -->
-    <template v-if="phase === 'form'">
-      <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-        {{ error }}
-      </div>
+    <template #default>
+      <!-- Form phase -->
+      <template v-if="phase === 'form'">
+        <CommonAlert v-if="error" color="danger" class="mb-4">
+          {{ error }}
+        </CommonAlert>
 
-      <div class="space-y-4 mb-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.invitations.audience') }}
-          </label>
-          <select
-            v-model="audience"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-          >
-            <option value="" disabled>
-              {{ t('pages.invitations.selectAudience') }}
-            </option>
-            <option
-              v-for="a in audienceStore.allAudiences"
-              :key="a.audience_id"
-              :value="a.audience_id"
-            >
-              {{ a.audience_id }}
-            </option>
-          </select>
+        <div class="space-y-4">
+          <FormField :label="t('pages.invitations.audience')">
+            <FormSelect v-model="audience">
+              <option value="" disabled>
+                {{ t('pages.invitations.selectAudience') }}
+              </option>
+              <option
+                v-for="a in audienceStore.allAudiences"
+                :key="a.audience_id"
+                :value="a.audience_id"
+              >
+                {{ a.audience_id }}
+              </option>
+            </FormSelect>
+          </FormField>
+
+          <FormField :label="t('pages.invitations.expiresAtLabel')">
+            <FormInput v-model="expiresAt" type="datetime-local" />
+          </FormField>
+
+          <FormField :label="t('pages.invitations.noteLabel')">
+            <FormTextarea v-model="note" :rows="2" />
+          </FormField>
+
+          <FormField :label="t('pages.invitations.claimsLabel')">
+            <FormTextarea
+              v-model="claimsJson"
+              mono
+              :rows="3"
+              :placeholder="t('pages.invitations.claimsPlaceholder')"
+            />
+          </FormField>
         </div>
+      </template>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.invitations.expiresAtLabel') }}
-          </label>
-          <input
-            v-model="expiresAt"
-            type="datetime-local"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.invitations.noteLabel') }}
-          </label>
-          <textarea
-            v-model="note"
-            rows="2"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('pages.invitations.claimsLabel') }}
-          </label>
-          <textarea
-            v-model="claimsJson"
-            rows="3"
-            :placeholder="t('pages.invitations.claimsPlaceholder')"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary)"
-          />
-        </div>
-      </div>
-
-      <div class="flex justify-end gap-3">
-        <CommonButton
-          :button-style="secondaryColoredButton"
-          :disabled="submitting"
-          @click="$emit('close')"
-        >
-          {{ t('common.cancel') }}
-        </CommonButton>
-        <CommonButton
-          :button-style="primaryColoredButton"
-          :submitting="submitting"
-          @click="onSubmit"
-        >
-          <template #submitting>
-            {{ t('pages.invitations.create') }}
-          </template>
-          {{ t('pages.invitations.create') }}
-        </CommonButton>
-      </div>
+      <!-- Success phase -->
+      <OneTimeSecret v-else :value="createdToken">
+        <template #warning>{{ t('pages.invitations.tokenWarning') }}</template>
+      </OneTimeSecret>
     </template>
 
-    <!-- Success phase -->
-    <template v-else>
-      <div class="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-        {{ t('pages.invitations.tokenWarning') }}
-      </div>
-
-      <div class="mb-6 flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
-        <code class="flex-1 text-sm break-all">{{ createdToken }}</code>
-        <CopyToClipboard :value="createdToken" />
-      </div>
-
-      <div class="flex justify-end">
-        <CommonButton :button-style="primaryColoredButton" @click="$emit('close')">
-          {{ t('pages.invitations.done') }}
-        </CommonButton>
-      </div>
+    <template #actions>
+      <template v-if="phase === 'form'">
+        <CommonButton
+          :button-style="secondaryColoredButton"
+          :label="t('common.cancel')"
+          :disabled="submitting"
+          @click="$emit('close')"
+        />
+        <CommonButton
+          :button-style="primaryColoredButton"
+          :label="t('pages.invitations.create')"
+          :submitting="submitting"
+          @click="onSubmit"
+        />
+      </template>
+      <CommonButton
+        v-else
+        :button-style="primaryColoredButton"
+        :label="t('pages.invitations.done')"
+        @click="$emit('close')"
+      />
     </template>
   </BaseDialog>
 </template>

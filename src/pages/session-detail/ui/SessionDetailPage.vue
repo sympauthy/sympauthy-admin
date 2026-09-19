@@ -6,7 +6,7 @@ import { useInteractiveFlowSessionDetailStore } from '@/entities/session'
 import { useBreadcrumb } from '@/shared/lib'
 import SessionSummaryPanel from './SessionSummaryPanel.vue'
 import SessionFailurePanel from './SessionFailurePanel.vue'
-import { CommonSpinner, CommonAlert, RecordTabs, type RecordTab } from '@/shared/ui'
+import { CommonAlert, CommonCard, LoadingState, RecordTabs, type RecordTab } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 
 /**
@@ -49,16 +49,13 @@ onMounted(() => load(sessionId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <div v-if="store.loading" class="flex items-center gap-2">
-      <CommonSpinner class="h-6 w-6 border-4" />
-      <span class="text-gray-600">{{ t('common.loading') }}</span>
-    </div>
+    <LoadingState v-if="store.loading" />
 
     <!-- Collected state. This is a live view rather than a history, so a session that is gone is
          the expected outcome and reads as one rather than as a failure. -->
-    <div v-else-if="store.notFound" class="bg-white rounded-lg border border-gray-200 p-4 sm:p-6">
+    <CommonCard v-else-if="store.notFound">
       <p class="text-sm text-gray-600">{{ t('pages.sessionDetail.notFound') }}</p>
-    </div>
+    </CommonCard>
 
     <!-- Error state -->
     <CommonAlert v-else-if="store.error" color="danger">

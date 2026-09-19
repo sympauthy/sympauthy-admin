@@ -37,8 +37,9 @@ an agent when a file it governs is read.
   what, and the naming, typing and comment rules that hold everywhere.
 - **[Component code standard](component-code-standard.md)** — the shape of a `.vue` file, its props,
   emits and slots, where its state lives, and how a form is handled.
-- **[Design system standard](design-system-standard.md)** — the shared kit, the reka-ui primitives
-  the interactive components wrap, and the colours, icons and text styles they are built from.
+- **[Design system standard](design-system-standard.md)** — the shared kit, the scale its sizes and
+  spaces come from, the reka-ui primitives the interactive components wrap, and the colours, icons
+  and text styles they are built from.
 - **[Page layout standard](page-layout-standard.md)** — what a route, a collection page and a record
   are made of, how a table's columns are sized, and how each adapts to width.
 - **[API standard](api-standard.md)** — one client per surface, a validated resource per response,
