@@ -60,6 +60,20 @@ export function isCriterionComplete(criterion: CollectionCriterion): boolean {
 }
 
 /**
+ * The value [criterion] is sent under.
+ *
+ * `is_null` asks whether the row carries a value at all and takes a boolean rather than one of the
+ * field's own values, so it is always sent as `true`: the panel offers *is empty* and leaves
+ * `is_null=false` — *carries any value* — to a caller writing the query string themselves.
+ */
+function collectionQueryValue(criterion: CollectionCriterion): string {
+  if (isValuelessOperator(criterion.operator)) {
+    return 'true'
+  }
+  return isMultiValuedOperator(criterion.operator) ? criterion.values.join(',') : criterion.value
+}
+
+/**
  * [criteria] and the page asked for, as the query parameters the collection grammar spells them in.
  *
  * This is the one place that grammar is written: a bare `field=` is an exact match and every other
@@ -86,9 +100,7 @@ export function collectionQueryParams(
     if (params[name] !== undefined) {
       continue
     }
-    params[name] = isMultiValuedOperator(criterion.operator)
-      ? criterion.values.join(',')
-      : criterion.value
+    params[name] = collectionQueryValue(criterion)
   }
 
   if (criteria.sort.length > 0) {

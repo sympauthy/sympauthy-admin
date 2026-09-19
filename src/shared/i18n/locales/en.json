@@ -65,6 +65,39 @@
       "cancelled": "cancelled",
       "failed": "failed",
       "expired": "expired"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "collection": {
+      "search": "Search",
+      "operator": "Condition",
+      "selectValue": "Choose…",
+      "removeFilter": "Remove this filter",
+      "capabilitiesFailed": "The filters of this list could not be read. The records below are complete."
+    },
+    "operators": {
+      "eq": "is",
+      "ne": "is not",
+      "lt": "is less than",
+      "lte": "is at most",
+      "gt": "is more than",
+      "gte": "is at least",
+      "in": "is one of",
+      "contains": "contains",
+      "starts_with": "starts with",
+      "is_null": "is empty",
+      "date": {
+        "eq": "is on",
+        "ne": "is not on",
+        "lt": "is before",
+        "lte": "is on or before",
+        "gt": "is after",
+        "gte": "is on or after",
+        "in": "is one of",
+        "contains": "contains",
+        "starts_with": "starts with",
+        "is_null": "is empty"
+      }
     }
   },
   "nav": {
