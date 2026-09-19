@@ -204,6 +204,10 @@ a record.
 **Filters in the URL.** A search or a filter lives in its store, and reloading a collection page
 clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks ending that.
 
+**Which fields a card shows, and how tightly.** A card stacks every column a phone keeps, a label
+over each value, so a screen reads one or two records;
+[#136](https://github.com/sympauthy/sympauthy-admin/issues/136) tracks curating and tightening it.
+
 **Dashboards.** Every screen shows one collection or one record.
 
 **Printing and keyboard shortcuts.** Neither is considered.
