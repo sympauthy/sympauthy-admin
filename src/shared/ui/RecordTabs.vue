@@ -16,6 +16,14 @@ export interface RecordTab {
 defineProps<{
   tabs: RecordTab[]
 }>()
+
+// The two states name no utility in common. `active-class` would leave both sets on the element and
+// let the stylesheet's order settle it, and Tailwind emits a custom-property colour before a named
+// one — so `border-transparent` would win over the active border every time.
+const tabClasses = 'whitespace-nowrap border-b-2 px-4 py-2 text-sm font-medium'
+const activeTabClasses = 'border-(--color-primary) text-(--color-primary)'
+const inactiveTabClasses =
+  'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
 </script>
 
 <template>
@@ -23,11 +31,18 @@ defineProps<{
     <RouterLink
       v-for="tab in tabs"
       :key="tab.label"
+      v-slot="{ href, navigate, isActive }"
       :to="tab.to"
-      class="whitespace-nowrap border-b-2 border-transparent px-4 py-2 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-      active-class="border-(--color-primary) text-(--color-primary) hover:border-(--color-primary)"
+      custom
     >
-      {{ tab.label }}
+      <a
+        :href="href"
+        :class="[tabClasses, isActive ? activeTabClasses : inactiveTabClasses]"
+        :aria-current="isActive ? 'page' : undefined"
+        @click="navigate"
+      >
+        {{ tab.label }}
+      </a>
     </RouterLink>
   </nav>
 </template>
