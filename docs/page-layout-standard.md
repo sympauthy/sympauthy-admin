@@ -1,6 +1,6 @@
 ---
-description: What a route, a list page and a detail page are made of, how a table's columns are
-  sized, and how each adapts to the width it is given.
+description: What a route, a collection page and a record page are made of, how a table's columns
+  are sized, and how each adapts to the width it is given.
 paths:
   - "src/pages/**"
   - "src/app/**"
@@ -8,14 +8,18 @@ paths:
 
 # Page layout standard
 
-Two shapes of screen carry everything the panel does: a list of one resource, and the detail of one
-record. [The design system standard](design-system-standard.md) owns the components both are built
-from.
+Two shapes of screen carry everything the panel does: one collection, and one record with its
+collections under it. [The design system standard](design-system-standard.md) owns the components
+both are built from, and [the collection standard](collection-standard.md) what a collection page
+reads.
 
 ## A route per screen
 
 **A resource is `/<resource>` and a record `/<resource>/:<resource>Id`.** `/users` and
 `/users/:userId`.
+
+**A collection hanging off a record is a child route named after it.** `/users/:userId/claims`,
+`/sessions/:sessionId/security-contexts` — the path mirrors the one the API publishes it under.
 
 **A route is named in camelCase, after what it shows.** `users`, `userDetail` — the name is what a
 breadcrumb and a `router.push` refer to.
@@ -24,14 +28,16 @@ breadcrumb and a `router.push` refer to.
 `pages/user-detail` exports `UserDetailPage`.
 
 **A route states `requiresAuth` and its breadcrumb in `meta`.** The breadcrumb carries the i18n key
-of its label, and a detail route also the `parent` route name it hangs under.
+of its label, and a record route also the `parent` route name it hangs under.
 
 ```ts
 {
   path: '/users/:userId',
   name: 'userDetail',
   component: UserDetailPage,
-  meta: { requiresAuth: true, breadcrumb: { label: 'pages.userDetail.title', parent: 'users' } }
+  redirect: { name: 'userClaims' },
+  meta: { requiresAuth: true, breadcrumb: { label: 'pages.userDetail.title', parent: 'users' } },
+  children: [{ path: 'claims', name: 'userClaims', component: UserClaimsPage, meta: { … } }]
 }
 ```
 
@@ -41,33 +47,23 @@ callback and the invitation registration are the two.
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.
 
-## List pages
+**A record's route carries the breadcrumb for every tab under it**, and redirects to its first tab
+so the URL always names a view.
 
-**A list page is built from `ListPage`, and `ListPage` is the page's root element.** Nothing wraps
-it, so its toolbar and its table fill the height the layout gives them.
+## Collection pages
+
+**A page showing a collection is built from `CollectionPage`, and `CollectionPage` is the page's
+root element.** [The collection standard](collection-standard.md#the-page) owns what it is handed
+and what it draws; this section owns where it sits.
 
 **The page never scrolls.** Rows scroll inside the table, under a pinned header row and above a
 pinned pagination bar.
 
 **The number of rows per page is derived from the height available.** `PaginatedTable` measures it
-and emits `page-size-change`; the store answers by refetching at the new size.
+and emits `page-size-change`; the collection answers by refetching at the new size.
 
-**A list page wires the store into `ListPage` whole:**
-
-```html
-<ListPage :loading="store.loading" :error="store.error" :empty="store.users.length === 0"
-  :page="store.page" :size="store.size" :total="store.total" :total-pages="store.totalPages"
-  @page-change="store.fetchUsers" @page-size-change="store.setSize">
-```
-
-**`searchable` is set only on a resource whose list endpoint takes a free text query.** Today the
-users and the interactive flow sessions.
-
-**A filter is a `FilterConfig` the page computes**, and its change and removal are answered by the
-store method that owns that filter.
-
-**A column the list endpoint can sort on is a `SortableHeader`**, handed the store's `sortField` and
-`sortOrder` and emitting back into `toggleSort`.
+**A page action is the `actions` slot**, beside the toolbar: the button that opens a create dialog,
+the one that re-reads a live list, the `HelpTooltip` explaining what the collection holds.
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.
 
@@ -91,10 +87,14 @@ globally, not per page.
 **The primary column is `font-medium text-gray-900`.** It identifies the record; a `Tag` is for a
 status.
 
-## Detail pages
+## Record pages
 
-**A detail page renders loading, error and content, and resets its stores in `onMounted` before
-fetching.** The requests that fill the page are awaited together.
+**A record's page is a shell: its summary panel, a `RecordTabs` strip, and the tab's own page
+filling what is left.** Its root is `flex h-full min-h-0 flex-col`, so the tab below the strip gets
+a height and its table scrolls rather than the page.
+
+**A record's page renders loading, error and content, and resets its store in `onMounted` before
+fetching.** It re-reads the record when the identifier changes and not when the tab does.
 
 **The first thing on the page is the summary panel**: a card, `bg-white rounded-lg border
 border-gray-200 p-4 sm:p-6`, holding a grid of labelled values and no heading. The record's
@@ -107,22 +107,21 @@ section needs one.
 
 | Holds | Rendered as |
 | --- | --- |
-| records | a `PaginatedTable` directly in the slot, with no card around it |
 | fields of one record | a `<dl>` in a card, a row per field |
 | plain values | a card listing them |
 
-**A table outside a list page keeps `PaginatedTable`'s plain flow layout.** `fill` and
-`auto-page-size` are what `ListPage` opts into; setting `fill` inside a `DetailSection`, which has
-no height of its own, collapses the table to nothing.
+**Records are not a section.** A paged set of them is a collection, and a collection is a tab of its
+own — [the collection standard](collection-standard.md#a-collection-under-a-record) says how one
+hangs off a record.
 
 **A row of a definition list is `px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4`,** its `<dt>`
 the label and its `<dd>` the value.
 
-**A section is a `…Panel.vue` in the page's slice, and it reads its own store.** The page hands it
-the identifier from the route and nothing else.
+**A section is a `…Panel.vue` in the page's slice, and it takes what it renders as props.** The
+record is fetched once by the shell, so a section below it reads what is already there.
 
-**The page owns the dialogs.** It holds the flag each is opened by, and a panel asks for one by
-emitting.
+**The shell owns the dialogs its summary opens.** It holds the flag each is opened by, and the
+summary asks for one by emitting. A dialog belonging to one tab is that tab's.
 
 ## Adapting to width
 
@@ -145,10 +144,10 @@ sized by its parent (`h-full w-full`), never by itself.
 
 **A `md:` layout.** No screen has a third arrangement.
 
-**Filters in the URL.** A search or a filter lives in its store, and reloading a list page clears
-it.
+**Filters in the URL.** A search or a filter lives in its store, and reloading a collection page
+clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks ending that.
 
-**Dashboards.** Every screen shows one resource.
+**Dashboards.** Every screen shows one collection or one record.
 
 **Printing and keyboard shortcuts.** Neither is considered.
 

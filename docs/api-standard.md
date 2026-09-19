@@ -35,8 +35,14 @@ return this.get<UserClaimListResource>({
 **A call expecting a body uses `get`, `post` or `put` and passes its schema.** A call expecting none
 uses `postVoid` or `delete`, and resolves to a `SuccessApiResponse<void>`.
 
-**The parameters of a list call are a `List…Params` interface**, every field optional, with a
-`[key: string]: string | number | undefined` index signature so a filter named at runtime fits.
+**The parameters of a call listing a collection are `CollectionParams`.** A collection reading a
+parameter of its own extends it and names that one — `ListUsersParams` adds `claims`. A criterion is
+not a parameter anything declares; it arrives through the index signature and is resolved against
+what the collection published.
+
+**A collection's client publishes a `get…Capabilities` beside its `list…`,** answering the
+`CollectionCapabilitiesResource` that [the collection
+standard](collection-standard.md#the-capability-document) describes.
 
 **Query parameters go through `toQueryParams`.** It drops what the caller left unset, because an
 absent filter and an empty one mean the same thing to every list endpoint.
@@ -61,6 +67,9 @@ that publishes one more must not blank a screen.
 **A body holding a page of records is a `…ListResource` carrying `page`, `size`, `total` and an
 array named after what it holds.** The item resource is spread into it — `items: {
 ...userResourceSchema }` — so one declaration validates both.
+
+**A response body every surface shares lives in `shared/collection`.** The capability document is
+the one, because it describes a collection rather than any entity.
 
 **A resource is named for the entity it belongs to, not for the concept it shares with another.**
 The claims the server is configured with are `ClaimResource`; the values held for a person are
@@ -93,12 +102,20 @@ property paths to the messages a form shows beside its fields.
 panel raises itself are `api.unknown` and `api.unauthorized`;
 [the i18n standard](i18n-standard.md) owns the bundle they are read from.
 
+**A code the panel holds no key for shows the server's own sentence.** `getErrorMessage` reads the
+description first, which is what a `collection.*` refusal — a panel bug, not an operator's mistake —
+comes back as.
+
 **A body that fails its schema is logged and becomes `api.unknown`.** A contract that drifted is a
 server error, and a screen says so rather than rendering an undefined field.
 
 **A caller never renews a token and never retries.** `AbstractApi` answers a 401 with one silent
 renew and one retry, and gives up with `api.unauthorized`;
 [authentication](authentication.md#staying-signed-in) describes the rest of that flow.
+
+**Every request carries `Accept-Language`, from the locale the panel renders in.** `AbstractApi`
+sets it, so what the server names in the reader's language and what the panel writes around it are
+the same language by construction.
 
 **Nothing outside `shared/api` and a slice's `api/` segment calls `fetch`.**
 

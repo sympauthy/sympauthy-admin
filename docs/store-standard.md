@@ -36,8 +36,9 @@ request.
 
 ## Fetching
 
-**A fetch method is named `fetch…`, takes the identifiers it needs and the page to request**, and
-resolves to `void`.
+**A fetch method is named `fetch…` and takes the identifiers it needs**, and resolves to `void`. A
+collection's own paging is the collection's, so a `fetch…` over one takes the parent's identifier
+and nothing else.
 
 **It raises `loading`, clears `error`, and lowers `loading` at the end whatever happened.**
 
@@ -56,36 +57,35 @@ if (isSuccess(response)) {
 }
 ```
 
-**A filter, a search term and a sort live in the store, and their setter refetches from the first
-page.** `setStatusFilter`, `clearClaimFilter`, `toggleSort` — the page calls one and reads the
-result, and never builds query parameters itself.
+**A page never builds a query parameter.** It calls a method the store exposes, or one of the
+collection the store holds.
 
-## A list store
+## A collection
 
-**A list store exposes `page`, `size`, `total`, `totalPages`, `loading`, `error`, its collection, a
-`fetch…` and a `setSize`.** [The list page](page-layout-standard.md#list-pages) is wired to exactly
-those.
+**A store holding a paged collection exposes one `useCollection` under the plural of what it
+holds.** `useUserStore` returns `{ users }`, and everything a page is wired to — the rows, the
+paging, the criteria, the capability document — is on it.
+[The collection standard](collection-standard.md#a-store-holds-a-collection) owns the rest.
 
-**`setSize` ignores a size below one or unchanged, and requests the page holding the first row
-currently displayed.** Resizing the viewport then keeps the operator roughly where they were.
-
-**`setSize` refetches only once a first response has arrived.** A `loaded` flag guards it, because
-the initial size is emitted before the page has requested anything and would otherwise fetch twice.
+**A store holding a collection and something else names each.** `clients` is the collection the page
+lists; `allClients` is every client there is, for a picker — one is not the other, and a dialog
+filling the second must not replace what the first is displaying.
 
 ## A detail store
 
 **A detail store exposes `$reset()`, and the page calls it in `onMounted` before fetching.** Every
 ref goes back to its initial value, so a second record never renders under the first one's data.
 
-**A store holding more than one collection prefixes each one's state.** `claims`, `claimsLoading`,
-`claimsError`, `claimsPage` — a shared `loading` would make one panel's request blank another's.
+**A second concern is a second store, not a prefix.** A user's detail, their claims, their second
+factors, their linked providers and their consents are five stores, each owning its own `loading`,
+`error` and page — which is what a `…Loading` prefix used to stand in for.
 
 ## Mutating
 
 **A mutation refetches what it changed, at the page currently displayed.**
 
-**A mutation records its own failure in the store's `error`**, except where the caller needs the
-message beside a field.
+**A mutation records its own failure in the `error` of what it changed**, except where the caller
+needs the message beside a field.
 
 **A mutation returns what its caller has to act on, and nothing more**: `void` where the refetched
 state is the whole answer, a boolean where a dialog closes on success, the response itself where the
