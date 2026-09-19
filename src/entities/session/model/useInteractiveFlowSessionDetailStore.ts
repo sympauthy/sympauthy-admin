@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { InteractiveFlowSessionApi } from '../api/InteractiveFlowSessionApi'
 import type { InteractiveFlowSessionDetailResource } from './InteractiveFlowSessionDetailResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useInteractiveFlowSessionDetailStore = defineStore(
   'interactiveFlowSessionDetail',
@@ -26,7 +26,7 @@ export const useInteractiveFlowSessionDetailStore = defineStore(
       if (isSuccess(response)) {
         session.value = response.content
       } else {
-        const errorResponse = response as ErrorApiResponse
+        const errorResponse = response
         session.value = null
         if (errorResponse.response?.status === 404) {
           notFound.value = true

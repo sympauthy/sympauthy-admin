@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserProviderLinkApi } from '../api/UserProviderLinkApi'
 import type { UserProviderLinkResource } from './UserProviderLinkResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
   const providerLinkApi = new UserProviderLinkApi()
@@ -33,7 +33,7 @@ export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
       providerLinksPage.value = response.content.page
       providerLinksTotal.value = response.content.total
     } else {
-      providerLinksError.value = getErrorMessage(response as ErrorApiResponse)
+      providerLinksError.value = getErrorMessage(response)
       providerLinks.value = []
     }
 
@@ -46,7 +46,7 @@ export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
     if (isSuccess(response)) {
       await fetchProviderLinks(userId, providerLinksPage.value)
     } else {
-      providerLinksError.value = getErrorMessage(response as ErrorApiResponse)
+      providerLinksError.value = getErrorMessage(response)
     }
   }
 

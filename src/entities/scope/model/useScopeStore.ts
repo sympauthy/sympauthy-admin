@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ScopeApi } from '../api/ScopeApi'
 import type { ScopeResource } from './ScopeResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useScopeStore = defineStore('scopes', () => {
   const api = new ScopeApi()
@@ -38,7 +38,7 @@ export const useScopeStore = defineStore('scopes', () => {
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       scopes.value = []
     }
 

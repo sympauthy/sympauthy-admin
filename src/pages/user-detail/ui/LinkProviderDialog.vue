@@ -10,7 +10,7 @@ import {
 } from '@/shared/ui'
 import { useClientStore } from '@/entities/client'
 import { UserProviderLinkApi, type ProviderLinkStartInput } from '@/entities/user'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 interface Props {
   open: boolean
@@ -109,7 +109,7 @@ async function onSubmit() {
     redirectUrl.value = response.content.redirect_url
     phase.value = 'success'
   } else {
-    error.value = getErrorMessage(response as ErrorApiResponse)
+    error.value = getErrorMessage(response)
   }
 
   submitting.value = false

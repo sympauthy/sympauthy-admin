@@ -44,7 +44,7 @@ export const useInvitationStore = defineStore('invitations', () => {
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       invitations.value = []
     }
 
@@ -85,7 +85,7 @@ export const useInvitationStore = defineStore('invitations', () => {
       await fetchInvitations(page.value)
       return true
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       return false
     }
   }

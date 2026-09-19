@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserMfaApi } from '../api/UserMfaApi'
 import type { UserMfaMethodResource } from './UserMfaMethodResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useUserMfaStore = defineStore('userMfa', () => {
   const userMfaApi = new UserMfaApi()
@@ -27,7 +27,7 @@ export const useUserMfaStore = defineStore('userMfa', () => {
       mfaPage.value = response.content.page
       mfaTotal.value = response.content.total
     } else {
-      mfaError.value = getErrorMessage(response as ErrorApiResponse)
+      mfaError.value = getErrorMessage(response)
       mfaMethods.value = []
     }
 
@@ -40,7 +40,7 @@ export const useUserMfaStore = defineStore('userMfa', () => {
     if (isSuccess(response)) {
       await fetchMfaMethods(userId, mfaPage.value)
     } else {
-      mfaError.value = getErrorMessage(response as ErrorApiResponse)
+      mfaError.value = getErrorMessage(response)
     }
   }
 

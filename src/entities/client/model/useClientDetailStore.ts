@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { ClientApi } from '../api/ClientApi'
 import type { ClientDetailResource } from './ClientDetailResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useClientDetailStore = defineStore('clientDetail', () => {
   const api = new ClientApi()
@@ -20,7 +20,7 @@ export const useClientDetailStore = defineStore('clientDetail', () => {
     if (isSuccess(response)) {
       client.value = response.content
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       client.value = null
     }
 
