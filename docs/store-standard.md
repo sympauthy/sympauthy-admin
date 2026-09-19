@@ -12,9 +12,17 @@ A store holds what more than one screen reads, so a panel and the dialog acting 
 state. It calls [an API client](api-standard.md) and exposes the result; it renders nothing and
 knows nothing about the route.
 
-**What one screen reads, that screen holds.** A collection is the case: the page an operator is on
-and the filters they typed belong to the screen showing them, and [the collection
+**A store lives in `entities/` only where more than one slice reads it.** `allClients` is one
+because a dialog in `features/logout-user` and two under `pages/user-detail` offer the same list;
+an account's own record is not, because only the shell above its tabs reads it.
+
+**What one slice reads, that slice holds** — in the component that reads it, or in the slice's own
+`model/` where more than one component of it does. A collection is the case that recurs: the page
+an operator is on and the filters they typed belong to the screen showing them, and [the collection
 standard](collection-standard.md#a-page-holds-a-collection) owns what it does with them.
+
+**A store that stops being read by a second slice goes back where it is read**, and one read by a
+second slice moves up. The file is the same either way: `use…Store.ts` in a `model/` segment.
 
 ## Shape
 
@@ -66,9 +74,10 @@ collection it holds.
 
 ## A complete list
 
-**Every record of a collection, for a picker, is a store's.** `allClients`, `allAudiences`: a dialog
-offering all of them is not the screen listing a page of them, more than one screen opens that
-dialog, and what it reads must not replace what the list behind it is displaying.
+**Every record of a collection, for a picker several slices open, is a store's.** `allClients`: a
+dialog offering all of them is not the screen listing a page of them, and what the dialog reads
+must not replace what the list behind it is displaying. A picker one slice opens is that slice's,
+read where it is offered.
 
 **It is named for the whole set**, `all…`, beside the `…Loading` and `…Error` it carries — a store
 holding one names what it is, because the collection it is not is elsewhere.

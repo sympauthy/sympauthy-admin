@@ -2,7 +2,8 @@
 import { onMounted, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useUserDetailStore } from '@/entities/user'
+import { UserApi, type UserDetailResource } from '@/entities/user'
+import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
 import UserSummaryPanel from './UserSummaryPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
@@ -28,8 +29,12 @@ import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@hero
  */
 const route = useRoute()
 const { t } = useI18n()
-const store = useUserDetailStore()
+const api = new UserApi()
 const { setLabel } = useBreadcrumb()
+
+const user = ref<UserDetailResource | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
 
 const userId = computed(() => route.params.userId as string)
 const logoutOpen = ref(false)
@@ -75,14 +80,25 @@ const tabs = computed<RecordTab[]>(() => {
 })
 
 async function load(id: string) {
-  store.$reset()
-  await store.fetchUser(id)
-  if (store.user) {
-    const identifier = store.user.identifier_claims
-      ? Object.values(store.user.identifier_claims)[0]
+  // The record is nulled before the next one is read, which is what unmounts the tab below and
+  // mounts it again on the account being opened.
+  user.value = null
+  loading.value = true
+  error.value = null
+
+  const response = await api.getUser(id)
+
+  if (isSuccess(response)) {
+    user.value = response.content
+    const identifier = user.value.identifier_claims
+      ? Object.values(user.value.identifier_claims)[0]
       : undefined
     setLabel(identifier != null ? String(identifier) : id)
+  } else {
+    error.value = getErrorMessage(response as ErrorApiResponse)
   }
+
+  loading.value = false
 }
 
 // The shell stays mounted while the operator moves between tabs; only a different account is
@@ -95,19 +111,19 @@ onMounted(() => load(userId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <LoadingState v-if="store.loading" />
+    <LoadingState v-if="loading" />
 
     <!-- Error state -->
-    <CommonAlert v-else-if="store.error" color="danger">
-      {{ store.error }}
+    <CommonAlert v-else-if="error" color="danger">
+      {{ error }}
     </CommonAlert>
 
     <!-- Content -->
-    <template v-else-if="store.user">
+    <template v-else-if="user">
       <PageActions>
         <ActionsDropdown :actions="actions" @action="onAction" />
       </PageActions>
-      <UserSummaryPanel class="shrink-0" :user="store.user" />
+      <UserSummaryPanel class="shrink-0" :user="user" />
       <RecordTabs :tabs="tabs" />
       <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
            page. -->

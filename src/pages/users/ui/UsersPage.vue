@@ -3,7 +3,8 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { UserApi, type UserListResource, type UserResource } from '@/entities/user'
-import { useClaimStore } from '@/entities/claim'
+import { ClaimApi, type ClaimResource } from '@/entities/claim'
+import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonAlert,
@@ -22,11 +23,33 @@ import { formatDate } from '@/shared/lib'
 const { t } = useI18n()
 const router = useRouter()
 const api = new UserApi()
+const claimApi = new ClaimApi()
+
 // The claims an account is identified by are this table's columns and what `claims=` asks the
 // server to embed in each row. They are read rather than taken from the capability document: that
 // document says which claims the collection can be *filtered* on, which is every configured one,
 // and a column is a different question.
-const claimStore = useClaimStore()
+const identifierClaims = ref<ClaimResource[]>([])
+const identifierClaimsError = ref<string | null>(null)
+
+/**
+ * One request, sized past any plausible number of configured claims, so the columns of a table that
+ * draws one per claim are known before its first page is asked for.
+ */
+const CONFIGURED_CLAIMS_PAGE_SIZE = 100
+
+async function fetchIdentifierClaims(): Promise<void> {
+  identifierClaimsError.value = null
+
+  const response = await claimApi.listClaims({ page: 0, size: CONFIGURED_CLAIMS_PAGE_SIZE })
+
+  if (isSuccess(response)) {
+    identifierClaims.value = response.content.claims.filter((c) => c.enabled && c.identifier)
+  } else {
+    identifierClaimsError.value = getErrorMessage(response as ErrorApiResponse)
+    identifierClaims.value = []
+  }
+}
 
 // Which claims each user comes back with. It picks the columns this table draws rather than the
 // rows the server keeps, so it is not a criterion and travels beside them.
@@ -44,15 +67,15 @@ const users = useCollection<UserResource, UserListResource>({
 const logoutUserId = ref<string | null>(null)
 
 onMounted(async () => {
-  await claimStore.fetchIdentifierClaims()
-  selectedClaimIds.value = claimStore.identifierClaims.map((c) => c.id)
+  await fetchIdentifierClaims()
+  selectedClaimIds.value = identifierClaims.value.map((c) => c.id)
   await users.fetch()
 })
 </script>
 
 <template>
   <CollectionPage :collection="users" :search-placeholder="t('pages.users.search')">
-    <template v-if="claimStore.identifierClaimsError" #notice>
+    <template v-if="identifierClaimsError" #notice>
       <CommonAlert color="warning">
         {{ t('pages.users.identifierClaimsFailed') }}
       </CommonAlert>
@@ -66,7 +89,7 @@ onMounted(async () => {
         field="status"
       />
       <CollectionSortHeader
-        v-for="claim in claimStore.identifierClaims"
+        v-for="claim in identifierClaims"
         :key="claim.id"
         :collection="users"
         :label="claim.id"
@@ -95,7 +118,7 @@ onMounted(async () => {
         <!-- The first identifier is what names the account, so it titles the card rather than
              being another labelled line of it. -->
         <TableCell
-          v-for="(claim, index) in claimStore.identifierClaims"
+          v-for="(claim, index) in identifierClaims"
           :key="claim.id"
           truncate
           :primary="index === 0"

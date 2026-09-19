@@ -1,6 +1,5 @@
 export * from './api/ClaimApi'
 export * from './model/ClaimListResource'
 export * from './model/ClaimResource'
-export * from './model/useClaimStore'
 export { default as ClaimIdentifierHelpTooltip } from './ui/ClaimIdentifierHelpTooltip.vue'
 export { default as ClaimTags } from './ui/ClaimTags.vue'
