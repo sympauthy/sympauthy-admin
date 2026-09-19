@@ -11,6 +11,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import CreateInvitationDialog from '@/components/CreateInvitationDialog.vue'
 import { dangerColoredButton, primaryColoredButton } from '@/styles/ButtonStyle'
 import type { FilterConfig } from '@/components/FilterBar.vue'
+import { formatDate } from '@/utils/DateUtils'
 
 const { t } = useI18n()
 const invitationStore = useInvitationStore()
@@ -77,10 +78,6 @@ function statusColor(status: string): 'yellow' | 'green' | 'red' | 'gray' {
     default:
       return 'gray'
   }
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString()
 }
 
 function onRevoke(invitationId: string) {

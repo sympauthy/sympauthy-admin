@@ -13,6 +13,7 @@ import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid
 import { primaryColoredButton, dangerColoredButton } from '@/styles/ButtonStyle'
 import type { FilterConfig } from '@/components/FilterBar.vue'
 import type { ClaimResource } from '@/client/model/ClaimResource'
+import { formatDate } from '@/utils/DateUtils'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -54,10 +55,6 @@ function onFilterRemove(key: string) {
   } else {
     userStore.clearClaimFilter(key)
   }
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString()
 }
 
 onMounted(async () => {

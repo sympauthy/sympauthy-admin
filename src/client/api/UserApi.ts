@@ -62,12 +62,7 @@ export class UserApi extends AbstractApi {
   async listUsers(
     params: ListUsersParams = {}
   ): Promise<SuccessApiResponse<UserListResource> | ErrorApiResponse> {
-    const queryParams: Record<string, string> = {}
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== '') {
-        queryParams[key] = value.toString()
-      }
-    }
+    const queryParams = this.toQueryParams(params)
     return this.get<UserListResource>({
       path: '/api/v1/admin/users',
       params: queryParams,
@@ -79,12 +74,7 @@ export class UserApi extends AbstractApi {
     userId: string,
     params: ListUserClaimsParams = {}
   ): Promise<SuccessApiResponse<UserClaimListResource> | ErrorApiResponse> {
-    const queryParams: Record<string, string> = {}
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== '') {
-        queryParams[key] = value.toString()
-      }
-    }
+    const queryParams = this.toQueryParams(params)
     return this.get<UserClaimListResource>({
       path: `/api/v1/admin/users/${userId}/claims`,
       params: queryParams,

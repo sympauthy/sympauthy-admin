@@ -6,6 +6,7 @@ import HelpTooltip from '@/components/HelpTooltip.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import OriginTag from '@/components/OriginTag.vue'
 import ClaimTags from '@/components/ClaimTags.vue'
+import { formatDate } from '@/utils/DateUtils'
 
 defineProps<{
   userId: string
@@ -14,9 +15,9 @@ defineProps<{
 const { t } = useI18n()
 const store = useUserDetailStore()
 
-function formatDate(dateStr: string | null | undefined): string {
+function formatOptionalDate(dateStr: string | null | undefined): string {
   if (!dateStr) return '—'
-  return new Date(dateStr).toLocaleDateString()
+  return formatDate(dateStr)
 }
 </script>
 
@@ -94,10 +95,10 @@ function formatDate(dateStr: string | null | undefined): string {
             <ClaimTags :required="claim.required" :identifier="claim.identifier" />
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {{ formatDate(claim.collected_at) }}
+            {{ formatOptionalDate(claim.collected_at) }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {{ formatDate(claim.verified_at) }}
+            {{ formatOptionalDate(claim.verified_at) }}
           </td>
         </tr>
       </template>

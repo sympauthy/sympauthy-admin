@@ -6,7 +6,9 @@ import ClientDetailPage from '@/pages/clientdetail/ClientDetailPage.vue'
 import ClaimsPage from '@/pages/ClaimsPage.vue'
 import ScopesPage from '@/pages/ScopesPage.vue'
 import UsersPage from '@/pages/UsersPage.vue'
+import SessionsPage from '@/pages/SessionsPage.vue'
 import UserDetailPage from '@/pages/userdetail/UserDetailPage.vue'
+import SessionDetailPage from '@/pages/sessiondetail/SessionDetailPage.vue'
 import CallbackPage from '@/pages/CallbackPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
@@ -96,6 +98,21 @@ export function makeRouter() {
         name: 'invitations',
         component: InvitationsPage,
         meta: { requiresAuth: true, breadcrumb: { label: 'nav.invitations' } }
+      },
+      {
+        path: '/sessions',
+        name: 'sessions',
+        component: SessionsPage,
+        meta: { requiresAuth: true, breadcrumb: { label: 'nav.sessions' } }
+      },
+      {
+        path: '/sessions/:sessionId',
+        name: 'sessionDetail',
+        component: SessionDetailPage,
+        meta: {
+          requiresAuth: true,
+          breadcrumb: { label: 'pages.sessionDetail.title', parent: 'sessions' }
+        }
       }
     ]
   })
