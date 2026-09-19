@@ -2,8 +2,8 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useInteractiveFlowSessionDetailStore } from '@/stores/useInteractiveFlowSessionDetailStore'
-import { useInteractiveFlowSessionSecurityContextStore } from '@/stores/useInteractiveFlowSessionSecurityContextStore'
+import { useInteractiveFlowSessionDetailStore } from '@/entities/session/model/useInteractiveFlowSessionDetailStore'
+import { useInteractiveFlowSessionSecurityContextStore } from '@/entities/session/model/useInteractiveFlowSessionSecurityContextStore'
 import { useBreadcrumb } from '@/shared/lib/useBreadcrumb'
 import SessionSummaryPanel from '@/pages/sessiondetail/SessionSummaryPanel.vue'
 import SessionFailurePanel from '@/pages/sessiondetail/SessionFailurePanel.vue'
@@ -11,7 +11,7 @@ import SessionSecurityContextPanel from '@/pages/sessiondetail/SessionSecurityCo
 import SessionPurposesPanel from '@/pages/sessiondetail/SessionPurposesPanel.vue'
 import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
 import CommonAlert from '@/shared/ui/CommonAlert.vue'
-import { userIdentifierLabel } from '@/client/model/UserResource'
+import { userIdentifierLabel } from '@/entities/user/model/UserResource'
 
 const route = useRoute()
 const { t } = useI18n()

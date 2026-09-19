@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useAudienceStore } from '@/stores/useAudienceStore'
+import { useAudienceStore } from '@/entities/audience/model/useAudienceStore'
 import ListPage from '@/shared/ui/ListPage.vue'
 import Tag from '@/shared/ui/Tag.vue'
 import {
   audienceRegistrationModeKey,
   audienceRegistrationModeColor
-} from '@/client/model/AudienceResource'
+} from '@/entities/audience/model/AudienceResource'
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useScopeStore } from '@/stores/useScopeStore'
+import { useScopeStore } from '@/entities/scope/model/useScopeStore'
 import ListPage from '@/shared/ui/ListPage.vue'
 import Tag from '@/shared/ui/Tag.vue'
 import OriginTag from '@/shared/ui/OriginTag.vue'

@@ -3,12 +3,12 @@ import { useI18n } from 'vue-i18n'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
 import Tag from '@/shared/ui/Tag.vue'
-import { purposeLabel } from '@/client/model/InteractiveFlowPurposeResource'
+import { purposeLabel } from '@/entities/session/model/InteractiveFlowPurposeResource'
 import {
   purposeProgressColor,
   purposeProgressLabel
-} from '@/client/model/InteractiveFlowSessionPurposeProgressResource'
-import type { InteractiveFlowSessionDetailResource } from '@/client/model/InteractiveFlowSessionDetailResource'
+} from '@/entities/session/model/InteractiveFlowSessionPurposeProgressResource'
+import type { InteractiveFlowSessionDetailResource } from '@/entities/session/model/InteractiveFlowSessionDetailResource'
 
 defineProps<{
   session: InteractiveFlowSessionDetailResource

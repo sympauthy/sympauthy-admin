@@ -5,7 +5,7 @@ import Tag from '@/shared/ui/Tag.vue'
 import CopyToClipboard from '@/shared/ui/CopyToClipboard.vue'
 import ActionsDropdown, { type ActionItem } from '@/shared/ui/ActionsDropdown.vue'
 import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
-import type { UserDetailResource } from '@/client/model/UserDetailResource'
+import type { UserDetailResource } from '@/entities/user/model/UserDetailResource'
 import { formatDate } from '@/shared/lib/DateUtils'
 
 defineProps<{

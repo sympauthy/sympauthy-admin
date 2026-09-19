@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUserProviderLinkStore } from '@/stores/useUserProviderLinkStore'
+import { useUserProviderLinkStore } from '@/entities/user/model/useUserProviderLinkStore'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
 import PaginatedTable from '@/shared/ui/PaginatedTable.vue'

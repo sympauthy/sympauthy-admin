@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { useUserConsentStore } from '@/stores/useUserConsentStore'
+import { useUserConsentStore } from '@/entities/consent/model/useUserConsentStore'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
 import PaginatedTable from '@/shared/ui/PaginatedTable.vue'

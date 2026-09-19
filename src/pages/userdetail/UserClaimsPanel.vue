@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { useUserDetailStore } from '@/stores/useUserDetailStore'
+import { useUserDetailStore } from '@/entities/user/model/useUserDetailStore'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
 import PaginatedTable from '@/shared/ui/PaginatedTable.vue'
 import OriginTag from '@/shared/ui/OriginTag.vue'
-import ClaimTags from '@/components/ClaimTags.vue'
+import ClaimTags from '@/entities/claim/ui/ClaimTags.vue'
 import { formatDate } from '@/shared/lib/DateUtils'
 
 defineProps<{

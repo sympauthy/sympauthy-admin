@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
 import CommonAlert from '@/shared/ui/CommonAlert.vue'
-import type { InteractiveFlowSessionDetailResource } from '@/client/model/InteractiveFlowSessionDetailResource'
+import type { InteractiveFlowSessionDetailResource } from '@/entities/session/model/InteractiveFlowSessionDetailResource'
 
 defineProps<{
   session: InteractiveFlowSessionDetailResource

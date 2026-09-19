@@ -2,8 +2,8 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ConfirmDialog from '@/shared/ui/ConfirmDialog.vue'
-import { UserApi } from '@/client/api/UserApi'
-import { useClientStore } from '@/stores/useClientStore'
+import { UserApi } from '@/entities/user/api/UserApi'
+import { useClientStore } from '@/entities/client/model/useClientStore'
 import { isSuccess } from '@/shared/api/SuccessApiResponse'
 import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 

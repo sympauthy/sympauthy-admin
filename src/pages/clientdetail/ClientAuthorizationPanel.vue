@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import DetailSection from '@/shared/ui/DetailSection.vue'
 import Tag from '@/shared/ui/Tag.vue'
-import type { ClientDetailResource } from '@/client/model/ClientDetailResource'
+import type { ClientDetailResource } from '@/entities/client/model/ClientDetailResource'
 
 defineProps<{
   client: ClientDetailResource

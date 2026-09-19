@@ -3,7 +3,7 @@ import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ArrowPathIcon, EyeIcon } from '@heroicons/vue/20/solid'
-import { useInteractiveFlowSessionStore } from '@/stores/useInteractiveFlowSessionStore'
+import { useInteractiveFlowSessionStore } from '@/entities/session/model/useInteractiveFlowSessionStore'
 import ListPage from '@/shared/ui/ListPage.vue'
 import SortableHeader from '@/shared/ui/SortableHeader.vue'
 import Tag from '@/shared/ui/Tag.vue'
@@ -13,13 +13,13 @@ import {
   interactiveFlowPurposes,
   purposeLabel,
   purposeValueLabel
-} from '@/client/model/InteractiveFlowPurposeResource'
+} from '@/entities/session/model/InteractiveFlowPurposeResource'
 import {
   interactiveFlowSessionStatuses,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
-} from '@/client/model/InteractiveFlowSessionSummaryResource'
-import { userIdentifierLabel } from '@/client/model/UserResource'
+} from '@/entities/session/model/InteractiveFlowSessionSummaryResource'
+import { userIdentifierLabel } from '@/entities/user/model/UserResource'
 import { formatDateTime } from '@/shared/lib/DateUtils'
 import type { FilterConfig } from '@/shared/ui/FilterBar.vue'
 

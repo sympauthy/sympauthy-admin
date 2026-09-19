@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useClaimStore } from '@/stores/useClaimStore'
+import { useClaimStore } from '@/entities/claim/model/useClaimStore'
 import ListPage from '@/shared/ui/ListPage.vue'
 import Tag from '@/shared/ui/Tag.vue'
 import OriginTag from '@/shared/ui/OriginTag.vue'
-import ClaimTags from '@/components/ClaimTags.vue'
+import ClaimTags from '@/entities/claim/ui/ClaimTags.vue'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()

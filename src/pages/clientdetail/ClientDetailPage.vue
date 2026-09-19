@@ -2,7 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useClientDetailStore } from '@/stores/useClientDetailStore'
+import { useClientDetailStore } from '@/entities/client/model/useClientDetailStore'
 import { useBreadcrumb } from '@/shared/lib/useBreadcrumb'
 import ClientSummaryPanel from '@/pages/clientdetail/ClientSummaryPanel.vue'
 import ClientScopesPanel from '@/pages/clientdetail/ClientScopesPanel.vue'

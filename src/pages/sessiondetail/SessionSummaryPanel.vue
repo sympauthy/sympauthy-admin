@@ -2,14 +2,14 @@
 import { useI18n } from 'vue-i18n'
 import Tag from '@/shared/ui/Tag.vue'
 import CopyToClipboard from '@/shared/ui/CopyToClipboard.vue'
-import { purposeLabel } from '@/client/model/InteractiveFlowPurposeResource'
+import { purposeLabel } from '@/entities/session/model/InteractiveFlowPurposeResource'
 import {
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
-} from '@/client/model/InteractiveFlowSessionSummaryResource'
-import { userIdentifierLabel } from '@/client/model/UserResource'
+} from '@/entities/session/model/InteractiveFlowSessionSummaryResource'
+import { userIdentifierLabel } from '@/entities/user/model/UserResource'
 import { formatDateTime } from '@/shared/lib/DateUtils'
-import type { InteractiveFlowSessionDetailResource } from '@/client/model/InteractiveFlowSessionDetailResource'
+import type { InteractiveFlowSessionDetailResource } from '@/entities/session/model/InteractiveFlowSessionDetailResource'
 
 defineProps<{
   session: InteractiveFlowSessionDetailResource
