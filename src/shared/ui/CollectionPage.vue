@@ -11,7 +11,8 @@ import PaginatedTable from './PaginatedTable.vue'
  *
  * Everything but the columns comes from the collection it is handed — the toolbar from the
  * capability document, the paging and the order from what the caller asked. The page writes its
- * `header` and `rows` slots and nothing else.
+ * `header` and `rows` slots and nothing else; what the page lets an operator do is a `PageActions`,
+ * which puts it in the bar naming the screen rather than in the row narrowing the list.
  */
 const props = withDefaults(
   defineProps<{
@@ -41,20 +42,12 @@ const hasToolbar = computed(
 
 <template>
   <div class="flex h-full min-h-0 flex-col">
-    <div
-      v-if="hasToolbar || slots.actions"
-      class="mb-4 flex shrink-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
-    >
-      <CollectionToolbar
-        v-if="hasToolbar"
-        class="min-w-0 flex-1"
-        :collection="props.collection"
-        :search-placeholder="props.searchPlaceholder"
-      />
-      <div v-if="slots.actions" class="flex shrink-0 items-center gap-2">
-        <slot name="actions" />
-      </div>
-    </div>
+    <CollectionToolbar
+      v-if="hasToolbar"
+      class="mb-4 shrink-0"
+      :collection="props.collection"
+      :search-placeholder="props.searchPlaceholder"
+    />
 
     <!-- What the page could not draw, above what it could. The toolbar says the same of a capability
          document it failed to read; this is for whatever else the page needed and did not get. -->

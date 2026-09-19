@@ -37,6 +37,7 @@ to reach for, by need.
 | `FormInput`, `FormSelect`, `FormTextarea` | the control inside it |
 | `DetailSection` | a titled section of a record page |
 | `SummaryCard`, `SummaryField` | the panel identifying the record above its sections |
+| `PageActions` | what the screen lets an operator do, drawn in its header |
 | `DefinitionList`, `DefinitionRow` | the fields of a record, inside a section |
 | `CollectionPage` | the root of a page showing a collection |
 | `CollectionToolbar` | the search field and the filters of a collection |

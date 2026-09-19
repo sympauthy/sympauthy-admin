@@ -50,6 +50,26 @@ once the record has arrived, falling back to the identifier in the path.
 **A record's route carries the breadcrumb for every tab under it**, and redirects to its first tab
 so the URL always names a view.
 
+## Page actions
+
+**What a screen lets an operator do is a `PageActions`.** It draws the control in the bar naming the
+screen, so it sits in one position on every screen and does not move when a filter chip appears
+under it. Nothing else goes in that bar.
+
+**A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has
+one or two — open a create dialog, re-read a live list — and a record has a set, read together.
+
+**A record's action stays with the record, even where it fills a tab below it.** Enrolling a factor
+and linking a provider each create a record in a tab under the account, and are listed beside
+forcing a logout all the same: an action an operator has to open a tab to find is one they have to
+know about first. **A tab adds nothing to the bar** — one screen, one set of actions.
+
+**The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
+summary panel under it renders the record and nothing else.
+
+**A screen outside the panel shell has no bar, and so no actions.** The callback and the invitation
+registration are the two.
+
 ## Collection pages
 
 **A page showing a collection is built from `CollectionPage`, and `CollectionPage` is the page's
@@ -61,9 +81,6 @@ pinned pagination bar.
 
 **The number of rows per page is derived from the height available.** `PaginatedTable` measures it
 and emits `page-size-change`; the collection answers by refetching at the new size.
-
-**A page action is the `actions` slot**, beside the toolbar: the button that opens a create dialog,
-the one that re-reads a live list, the `HelpTooltip` explaining what the collection holds.
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.
 
@@ -116,8 +133,8 @@ fetching.** The wait is a `LoadingState` and the failure a `CommonAlert`. It re-
 when the identifier changes and not when the tab does.
 
 **The first thing on the page is a `SummaryCard` of `SummaryField`s**, one per value that identifies
-the record, and no heading. The record's identifier is a `CopyableValue`, and the record's
-actions go in the card's `#actions` slot as an `ActionsDropdown`.
+the record, and no heading — the bar above names the record and carries what is done to it. The
+record's identifier is a `CopyableValue`.
 
 **Everything below it is a `DetailSection`,** whose `#help` slot takes the `HelpTooltip` when the
 section needs one.
@@ -136,8 +153,8 @@ hangs off a record.
 **A section is a `…Panel.vue` in the page's slice, and it takes what it renders as props.** The
 record is fetched once by the shell, so a section below it reads what is already there.
 
-**The shell owns the dialogs its summary opens.** It holds the flag each is opened by, and the
-summary asks for one by emitting. A dialog belonging to one tab is that tab's.
+**A section is never an action.** [Page actions](#page-actions) says where those go and which
+component owns them.
 
 ## The widths it is for
 

@@ -9,6 +9,7 @@ import {
   CommonButton,
   ConfirmDialog,
   EmptyValue,
+  PageActions,
   TableCell,
   TableHeader,
   Tag,
@@ -76,19 +77,19 @@ onMounted(async () => {
 </script>
 
 <template>
+  <PageActions>
+    <CommonButton
+      :button-style="primaryColoredButton"
+      :label="t('pages.invitations.create')"
+      :icon="PlusIcon"
+      @click="showCreateDialog = true"
+    />
+  </PageActions>
+
   <CollectionPage
     :collection="invitationStore.invitations"
     :search-placeholder="t('pages.invitations.search')"
   >
-    <template #actions>
-      <CommonButton
-        :button-style="primaryColoredButton"
-        :label="t('pages.invitations.create')"
-        :icon="PlusIcon"
-        @click="showCreateDialog = true"
-      />
-    </template>
-
     <template #header>
       <CollectionSortHeader
         fit
