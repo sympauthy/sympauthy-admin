@@ -16,7 +16,7 @@ import {
   EmptyValue,
   TableCell,
   TableHeader,
-  Tag,
+  CommonTag,
   primaryColoredButton
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
@@ -68,9 +68,9 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="session in sessions.items" :key="session.id">
         <TableCell :label="t('pages.sessions.status')" fit>
-          <Tag :color="interactiveFlowSessionStatusColor(session.status)">
+          <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary truncate>
           <router-link
@@ -80,9 +80,9 @@ onMounted(async () => {
           >
             {{ userIdentifierLabel(session.user) }}
           </router-link>
-          <Tag v-else-if="session.signed_up" color="gray">
+          <CommonTag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
-          </Tag>
+          </CommonTag>
           <EmptyValue v-else />
         </TableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no

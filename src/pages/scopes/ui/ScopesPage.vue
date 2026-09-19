@@ -5,7 +5,7 @@ import { ScopeApi } from '../api/ScopeApi'
 import type { ScopeListResource } from '../model/ScopeListResource'
 import type { ScopeResource } from '../model/ScopeResource'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { EmptyValue, OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
+import { EmptyValue, OriginTag, TableCell, TableHeader, CommonTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ScopeApi()
@@ -50,20 +50,20 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="scope in scopes.items" :key="scope.id">
         <TableCell :label="t('pages.scopes.status')" fit>
-          <Tag v-if="scope.enabled" color="green">
+          <CommonTag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}
-          </Tag>
-          <Tag v-else color="red">
+          </CommonTag>
+          <CommonTag v-else color="red">
             {{ t('pages.scopes.disabled') }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary truncate>
           {{ scope.id }}
         </TableCell>
         <TableCell :label="t('pages.scopes.type')" fit>
-          <Tag :color="typeColor(scope.type)">
+          <CommonTag :color="typeColor(scope.type)">
             {{ t(`pages.scopes.${scope.type}`) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="scope.origin" />

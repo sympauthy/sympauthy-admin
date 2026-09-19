@@ -12,7 +12,7 @@ import {
   EmptyValue,
   TableCell,
   TableHeader,
-  Tag,
+  CommonTag,
   dangerColoredButton,
   primaryColoredButton
 } from '@/shared/ui'
@@ -108,12 +108,12 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="user in users.items" :key="user.user_id">
         <TableCell :label="t('pages.users.status')" fit>
-          <Tag v-if="user.status === 'enabled'" color="green">
+          <CommonTag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
-          </Tag>
-          <Tag v-else color="red">
+          </CommonTag>
+          <CommonTag v-else color="red">
             {{ t('pages.users.disabled') }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <!-- The first identifier is what names the account, so it titles the card rather than
              being another labelled line of it. -->

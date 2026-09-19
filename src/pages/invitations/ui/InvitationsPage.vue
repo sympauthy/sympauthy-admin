@@ -14,7 +14,7 @@ import {
   PageActions,
   TableCell,
   TableHeader,
-  Tag,
+  CommonTag,
   dangerColoredButton,
   primaryColoredButton
 } from '@/shared/ui'
@@ -126,9 +126,9 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="invitation in invitations.items" :key="invitation.invitation_id">
         <TableCell :label="t('pages.invitations.status')" fit>
-          <Tag :color="statusColor(invitation.status)">
+          <CommonTag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary mono>
           {{ invitation.token_prefix }}

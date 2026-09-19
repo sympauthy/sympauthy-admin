@@ -9,7 +9,7 @@ import {
   type AudienceResource
 } from '@/entities/audience'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { TableCell, TableHeader, Tag } from '@/shared/ui'
+import { TableCell, TableHeader, CommonTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new AudienceApi()
@@ -51,9 +51,9 @@ onMounted(async () => {
           {{ audience.audience_id }}
         </TableCell>
         <TableCell :label="t('common.audience.registrationMode.label')" fit hidden-below="sm">
-          <Tag :color="audienceRegistrationModeColor(audience)">
+          <CommonTag :color="audienceRegistrationModeColor(audience)">
             {{ t(audienceRegistrationModeKey(audience)) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell :label="t('pages.audiences.clientsCount')" fit hidden-below="sm">
           {{ audience.clients_count }}

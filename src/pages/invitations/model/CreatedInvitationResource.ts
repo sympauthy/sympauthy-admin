@@ -31,7 +31,7 @@ export const createdInvitationResourceSchema: JSONSchemaType<CreatedInvitationRe
       additionalProperties: {
         type: 'string',
         nullable: true
-      } as any,
+      },
       required: [],
       nullable: true
     },

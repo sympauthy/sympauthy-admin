@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Tag from './Tag.vue'
+import CommonTag from './CommonTag.vue'
 
 const props = defineProps<{
   origin: string
@@ -23,7 +23,7 @@ const color = computed<'blue' | 'gray' | 'yellow'>(() => {
 </script>
 
 <template>
-  <Tag :color="color">
+  <CommonTag :color="color">
     {{ t(`common.origin.${origin}`) }}
-  </Tag>
+  </CommonTag>
 </template>

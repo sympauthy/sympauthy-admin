@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DefinitionList, DefinitionRow, DetailSection, Tag } from '@/shared/ui'
+import { DefinitionList, DefinitionRow, DetailSection, CommonTag } from '@/shared/ui'
 import type { ClientDetailResource } from '@/entities/client'
 
 defineProps<{
@@ -15,9 +15,9 @@ const { t } = useI18n()
     <DefinitionList>
       <DefinitionRow :label="t('pages.clientDetail.grantTypes')">
         <div class="flex flex-wrap gap-1">
-          <Tag v-for="grantType in client.allowed_grant_types" :key="grantType" color="blue">
+          <CommonTag v-for="grantType in client.allowed_grant_types" :key="grantType" color="blue">
             {{ grantType }}
-          </Tag>
+          </CommonTag>
         </div>
       </DefinitionRow>
       <DefinitionRow
@@ -32,9 +32,11 @@ const { t } = useI18n()
           {{ client.authorization_webhook.url }}
         </DefinitionRow>
         <DefinitionRow :label="t('pages.clientDetail.webhookOnFailure')">
-          <Tag :color="client.authorization_webhook.on_failure === 'deny_all' ? 'red' : 'yellow'">
+          <CommonTag
+            :color="client.authorization_webhook.on_failure === 'deny_all' ? 'red' : 'yellow'"
+          >
             {{ client.authorization_webhook.on_failure }}
-          </Tag>
+          </CommonTag>
         </DefinitionRow>
       </template>
     </DefinitionList>

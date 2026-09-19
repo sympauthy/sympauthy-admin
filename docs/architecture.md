@@ -81,8 +81,11 @@ and nothing else reaches across.
 
 ## No rule is disabled
 
-[`steiger.config.ts`](../steiger.config.ts) is `fsd.configs.recommended` and nothing else, so what
-the structure claims and what is checked are the same thing.
+[`steiger.config.ts`](../steiger.config.ts) is `fsd.configs.recommended` and nothing else, and
+[`eslint.config.js`](../eslint.config.js) is Vue's essential rules, the TypeScript recommended set
+and Prettier's opt-out, with no rule of its own turned off. What the code claims and what CI checks
+are the same thing, and an exception is a line in the file needing it — the three AJV schemas [the
+API standard](api-standard.md#resources) explains, and nothing else.
 
 `fsd/insignificant-slice` is what keeps `entities/` to the nouns that earn a slice: one read by a
 single route is that route's, held in its own `api/` and `model/`, and reaches `entities/` when a

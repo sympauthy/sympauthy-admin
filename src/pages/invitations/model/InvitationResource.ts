@@ -34,7 +34,7 @@ export const invitationResourceSchema: JSONSchemaType<InvitationResource> = {
       additionalProperties: {
         type: 'string',
         nullable: true
-      } as any,
+      },
       required: [],
       nullable: true
     },

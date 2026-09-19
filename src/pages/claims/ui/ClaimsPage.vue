@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ClaimApi, ClaimTags, type ClaimListResource, type ClaimResource } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
+import { OriginTag, TableCell, TableHeader, CommonTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()
@@ -41,12 +41,12 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.id">
         <TableCell :label="t('pages.claims.status')" fit>
-          <Tag v-if="claim.enabled" color="green">
+          <CommonTag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
-          </Tag>
-          <Tag v-else color="red">
+          </CommonTag>
+          <CommonTag v-else color="red">
             {{ t('pages.claims.disabled') }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary truncate>
           {{ claim.id }}

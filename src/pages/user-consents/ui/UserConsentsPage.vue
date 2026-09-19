@@ -8,7 +8,7 @@ import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonButton, TableCell, TableHeader, Tag, dangerColoredButton } from '@/shared/ui'
+import { CommonButton, TableCell, TableHeader, CommonTag, dangerColoredButton } from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -83,9 +83,9 @@ onMounted(async () => {
         </TableCell>
         <TableCell :label="t('pages.userConsents.scopes')">
           <div class="flex flex-wrap gap-1">
-            <Tag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
+            <CommonTag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}
-            </Tag>
+            </CommonTag>
           </div>
         </TableCell>
         <TableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">

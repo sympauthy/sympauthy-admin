@@ -4,8 +4,8 @@ import { computed } from 'vue'
 /**
  * One labelled value of a `SummaryCard`: the label above, the value under it.
  *
- * The value keeps the slot rather than a prop, since as often as not it is a `Tag`, a link or an
- * identifier carrying a `CopyToClipboard` beside it.
+ * The value keeps the slot rather than a prop, since as often as not it is a `CommonTag`, a link
+ * or an identifier carrying a `CopyToClipboard` beside it.
  */
 const props = withDefaults(
   defineProps<{

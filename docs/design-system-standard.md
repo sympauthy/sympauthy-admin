@@ -26,7 +26,7 @@ to reach for, by need.
 | `LoadingState` | the wait a screen shows while it fetches |
 | `CommonAlert` | a failure a screen keeps showing, or a `warning` for what is missing from one |
 | `CommonCard` | the white box anything on a record page is drawn in |
-| `Tag` | a short status or label |
+| `CommonTag` | a short status or label |
 | `OriginTag` | the origin of a claim or a scope |
 | `EmptyValue` | a field the record does not carry |
 | `CopyableValue` | an identifier an operator has to paste elsewhere |
@@ -190,9 +190,9 @@ behind a table header, `gray-200` for a border, `gray-300` for a value a record 
 `amber-200`/`amber-50`/`amber-800` for what an operator has to read before closing a dialog. No
 screen draws its own.
 
-**A `Tag` picks its colour from the meaning, not the palette.** Green for what is enabled, red for
-what is not, yellow for what needs attention, purple and blue for a classification, gray for the
-rest.
+**A `CommonTag` picks its colour from the meaning, not the palette.** Green for what is enabled,
+red for what is not, yellow for what needs attention, purple and blue for a classification, gray
+for the rest.
 
 ## Icons
 

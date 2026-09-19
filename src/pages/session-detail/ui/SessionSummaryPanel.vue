@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { CopyableValue, EmptyValue, SummaryCard, SummaryField, Tag } from '@/shared/ui'
+import { CopyableValue, EmptyValue, SummaryCard, SummaryField, CommonTag } from '@/shared/ui'
 import {
   purposeLabel,
   interactiveFlowSessionStatusColor,
@@ -23,9 +23,9 @@ const { t } = useI18n()
       <CopyableValue :value="session.id" :title="t('pages.sessionDetail.copySessionId')" />
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.status')">
-      <Tag :color="interactiveFlowSessionStatusColor(session.status)">
+      <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
         {{ interactiveFlowSessionStatusLabel(session.status) }}
-      </Tag>
+      </CommonTag>
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.startedFor')">
       {{ purposeLabel(session.initiating_purpose) }}
@@ -46,9 +46,9 @@ const { t } = useI18n()
       >
         {{ userIdentifierLabel(session.user) }}
       </router-link>
-      <Tag v-else-if="session.signed_up" color="gray">
+      <CommonTag v-else-if="session.signed_up" color="gray">
         {{ t('pages.sessions.signingUp') }}
-      </Tag>
+      </CommonTag>
       <EmptyValue v-else />
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.startedAt')">

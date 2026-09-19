@@ -72,6 +72,11 @@ that publishes one more must not blank a screen.
 **`required` lists exactly the fields the type declares non-optional**, and every optional field is
 `nullable: true`.
 
+**A value whose type is a union including null is a named schema beside the one reading it.** AJV's
+`JSONSchemaType` cannot type one, so the schema is declared `any` under an
+`eslint-disable-next-line` carrying the reason — the name and the comment are what the type would
+otherwise have said, and what is validated is unchanged.
+
 **A body holding a page of records is a `…ListResource` carrying `page`, `size`, `total` and an
 array named after what it holds.** The item resource is spread into it — `items: {
 ...userResourceSchema }` — so one declaration validates both.
