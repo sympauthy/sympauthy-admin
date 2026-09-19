@@ -95,6 +95,21 @@ export const useInteractiveFlowSessionStore = defineStore('interactiveFlowSessio
     fetchSessions(0)
   }
 
+  // The search box and the filter chips are rebuilt empty every time the page is mounted, so the
+  // criteria are cleared with them: keeping them would narrow the list with nothing on screen
+  // saying so.
+  function $reset() {
+    sessions.value = []
+    error.value = null
+    page.value = 0
+    total.value = 0
+    loaded.value = false
+    searchQuery.value = ''
+    statusFilter.value = ''
+    purposeFilter.value = ''
+    order.value = 'asc'
+  }
+
   // Adjusts the number of items per page. The page holding the first item currently displayed is
   // requested again, so resizing the viewport keeps the user roughly in place.
   function setSize(newSize: number) {
@@ -121,6 +136,7 @@ export const useInteractiveFlowSessionStore = defineStore('interactiveFlowSessio
     purposeFilter,
     order,
     fetchSessions,
+    $reset,
     setSize,
     setSearch,
     setStatusFilter,

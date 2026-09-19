@@ -43,12 +43,7 @@ export class InteractiveFlowSessionApi extends AbstractApi {
   async listSessions(
     params: ListInteractiveFlowSessionsParams = {}
   ): Promise<SuccessApiResponse<InteractiveFlowSessionListResource> | ErrorApiResponse> {
-    const queryParams: Record<string, string> = {}
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== '') {
-        queryParams[key] = value.toString()
-      }
-    }
+    const queryParams = this.toQueryParams(params)
     return this.get<InteractiveFlowSessionListResource>({
       path: '/api/v1/admin/interactive-flow-sessions',
       params: queryParams,
@@ -71,12 +66,7 @@ export class InteractiveFlowSessionApi extends AbstractApi {
   ): Promise<
     SuccessApiResponse<InteractiveFlowSessionSecurityContextListResource> | ErrorApiResponse
   > {
-    const queryParams: Record<string, string> = {}
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== '') {
-        queryParams[key] = value.toString()
-      }
-    }
+    const queryParams = this.toQueryParams(params)
     return this.get<InteractiveFlowSessionSecurityContextListResource>({
       path: `/api/v1/admin/interactive-flow-sessions/${sessionId}/security-contexts`,
       params: queryParams,

@@ -82,7 +82,7 @@ export const interactiveFlowSessionSecurityContextResourceSchema: JSONSchemaType
 export function securityContextLocation(
   context: InteractiveFlowSessionSecurityContextResource
 ): string | null {
-  const parts = [context.city, context.region ?? context.region_code, context.country_code].filter(
+  const parts = [context.city, context.region || context.region_code, context.country_code].filter(
     (part) => part != null && part !== ''
   )
   return parts.length > 0 ? parts.join(', ') : null

@@ -83,6 +83,15 @@ export const interactiveFlowSessionSummaryResourceSchema: JSONSchemaType<Interac
     additionalProperties: true
   }
 
+/** Every status the server publishes. The filter dropdown is the only thing that enumerates them. */
+export const interactiveFlowSessionStatuses = [
+  'ongoing',
+  'completed',
+  'cancelled',
+  'failed',
+  'expired'
+]
+
 export function interactiveFlowSessionStatusColor(
   status: string
 ): 'blue' | 'green' | 'gray' | 'red' | 'yellow' {

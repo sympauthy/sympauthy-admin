@@ -32,6 +32,10 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
   // 0 until measured from real rows. Reset whenever the viewport is resized, since a breakpoint
   // change alters the cell padding.
   let rowHeight = 0
+  // Set once the table has been rendered, and never cleared: it says the metrics of the state the
+  // rows are displayed in have been seen at least once, which `rowHeight` cannot say on its own
+  // since a resize clears it.
+  let tableRendered = false
   let observedHeight = 0
   let observer: ResizeObserver | undefined
 
@@ -57,12 +61,14 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
     // The table is replaced by the loading, error or empty state, and the height it leaves is not
     // the one the rows are displayed in: its header is gone and so is the horizontal scrollbar a
     // wide table adds. Measuring it anyway would make the two states take turns forever, since the
-    // size each one derives triggers a request that renders the other. Only the very first
-    // measurement, taken before any row has ever been seen, goes ahead without a table — it has
-    // nothing else to size the first request from.
-    if (!header && rowHeight !== 0) {
+    // size each one derives triggers a request that renders the other. Only the measurements taken
+    // before the table has ever been rendered go ahead without one — they have nothing else to size
+    // the first request from. A later resize is answered when the table comes back, which `onUpdated`
+    // reports.
+    if (!header && tableRendered) {
       return
     }
+    tableRendered = tableRendered || header !== null
 
     const available =
       element.clientHeight -

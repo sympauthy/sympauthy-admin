@@ -15,6 +15,7 @@ import {
   purposeValueLabel
 } from '@/client/model/InteractiveFlowPurposeResource'
 import {
+  interactiveFlowSessionStatuses,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/client/model/InteractiveFlowSessionSummaryResource'
@@ -36,11 +37,10 @@ const filters = computed<FilterConfig[]>(() => [
     type: 'select',
     options: [
       { label: t('pages.sessions.allStatuses'), value: '' },
-      { label: interactiveFlowSessionStatusLabel('ongoing'), value: 'ongoing' },
-      { label: interactiveFlowSessionStatusLabel('completed'), value: 'completed' },
-      { label: interactiveFlowSessionStatusLabel('cancelled'), value: 'cancelled' },
-      { label: interactiveFlowSessionStatusLabel('failed'), value: 'failed' },
-      { label: interactiveFlowSessionStatusLabel('expired'), value: 'expired' }
+      ...interactiveFlowSessionStatuses.map((status) => ({
+        label: interactiveFlowSessionStatusLabel(status),
+        value: status
+      }))
     ]
   },
   {
@@ -74,6 +74,7 @@ function onFilterRemove(key: string) {
 }
 
 onMounted(async () => {
+  sessionStore.$reset()
   await sessionStore.fetchSessions()
 })
 </script>
@@ -100,6 +101,7 @@ onMounted(async () => {
     <template #actions>
       <CommonButton
         :button-style="secondaryColoredButton"
+        :disabled="sessionStore.loading"
         @click="sessionStore.fetchSessions(sessionStore.page)"
       >
         <span class="inline-flex items-center gap-1.5">

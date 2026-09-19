@@ -22,6 +22,23 @@ export interface JsonQueryOptions<T> {
 export class AbstractApi {
   private readonly ajv = new Ajv()
 
+  /**
+   * Turns the parameters of a list call into query parameters, dropping the ones the caller left
+   * unset: an absent filter and an empty one mean the same thing to every list endpoint, and
+   * sending the empty one would have it refuse a value naming nothing.
+   */
+  protected toQueryParams(
+    params: Record<string, string | number | undefined>
+  ): Record<string, string> {
+    const queryParams: Record<string, string> = {}
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== '') {
+        queryParams[key] = value.toString()
+      }
+    }
+    return queryParams
+  }
+
   async get<T>(
     options: QueryOptions & JsonQueryOptions<T>
   ): Promise<SuccessApiResponse<T> | ErrorApiResponse> {
