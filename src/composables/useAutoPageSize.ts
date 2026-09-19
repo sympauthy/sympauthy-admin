@@ -47,18 +47,26 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
     return total / rows.length
   }
 
-  function measureHeaderHeight(element: HTMLElement): number {
-    const header = element.querySelector<HTMLElement>('thead')
-    return header ? header.getBoundingClientRect().height : FALLBACK_HEADER_HEIGHT
-  }
-
   function measure() {
     const element = viewport.value
     if (!element || !enabled()) {
       return
     }
 
-    const available = element.clientHeight - measureHeaderHeight(element)
+    const header = element.querySelector<HTMLElement>('thead')
+    // The table is replaced by the loading, error or empty state, and the height it leaves is not
+    // the one the rows are displayed in: its header is gone and so is the horizontal scrollbar a
+    // wide table adds. Measuring it anyway would make the two states take turns forever, since the
+    // size each one derives triggers a request that renders the other. Only the very first
+    // measurement, taken before any row has ever been seen, goes ahead without a table — it has
+    // nothing else to size the first request from.
+    if (!header && rowHeight !== 0) {
+      return
+    }
+
+    const available =
+      element.clientHeight -
+      (header ? header.getBoundingClientRect().height : FALLBACK_HEADER_HEIGHT)
     if (available <= 0) {
       return
     }

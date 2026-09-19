@@ -45,11 +45,32 @@
         "invitationOnly": "invitation-only",
         "closed": "closed"
       }
+    },
+    "interactiveFlowPurpose": {
+      "confirm": "Approving an action",
+      "oauth2_authorize": "Signing in at a client's request",
+      "mfa_enrollment": "Setting up a second factor",
+      "mfa_challenge": "Checking a second factor",
+      "reauthentication": "Proving the account again",
+      "link_provider": "Linking a third-party provider"
+    },
+    "interactiveFlowPurposeStatus": {
+      "completed": "completed",
+      "current": "current",
+      "pending": "pending"
+    },
+    "interactiveFlowSessionStatus": {
+      "ongoing": "ongoing",
+      "completed": "completed",
+      "cancelled": "cancelled",
+      "failed": "failed",
+      "expired": "expired"
     }
   },
   "nav": {
     "sectionUsers": "Users",
     "sectionConfiguration": "Configuration",
+    "sectionDiagnostics": "Diagnostics",
     "users": "Users",
     "clients": "Clients",
     "claims": "Claims",
@@ -276,6 +297,57 @@
       "identifier": "identifier",
       "empty": "No claims found.",
       "tags": "Tags"
+    },
+    "sessions": {
+      "title": "Sessions",
+      "status": "Status",
+      "user": "User",
+      "ip": "IP",
+      "client": "Client",
+      "startedFor": "Started for",
+      "stoppedAt": "Stopped at",
+      "started": "Started",
+      "actions": "Actions",
+      "view": "View",
+      "refresh": "Refresh",
+      "signingUp": "Signing up",
+      "search": "Search by IP, user agent or client",
+      "statusFilter": "status",
+      "allStatuses": "all statuses",
+      "purposeFilter": "purpose",
+      "allPurposes": "all purposes",
+      "empty": "No interactive flow session is in flight. This is a live view rather than a history — expired sessions are collected every fifteen minutes, so a session that has finished may already be gone."
+    },
+    "sessionDetail": {
+      "title": "Session",
+      "sessionId": "Session ID",
+      "copySessionId": "Copy session ID",
+      "status": "Status",
+      "startedFor": "Started for",
+      "client": "Client",
+      "flow": "Flow",
+      "user": "User",
+      "startedAt": "Started at",
+      "expiresAt": "Expires at",
+      "notFound": "This session no longer exists. It may have completed and been collected — expired sessions are collected every fifteen minutes.",
+      "failure": "Failure",
+      "failureAlert": "This session failed. The identifiers below are the messages it failed with.",
+      "failureHelp": "These are message identifiers rather than sentences. The API publishes them unrendered on purpose: an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
+      "errorDetailsId": "Details ID",
+      "errorDescriptionId": "Description ID",
+      "securityContexts": "Security contexts",
+      "securityContextsHelp": "One entry per distinct address and user agent the session was driven from, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go.",
+      "ip": "IP",
+      "userAgent": "User agent",
+      "location": "Location",
+      "requests": "Requests",
+      "firstSeen": "First seen",
+      "lastSeen": "Last seen",
+      "proven": "Proven",
+      "noSecurityContexts": "Nothing was recorded against this session. Recording is best-effort and never fails a flow, so a session may hold no place at all.",
+      "purposes": "Purposes",
+      "purposesHelp": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
+      "noDebugInformation": "This purpose has nothing to say about the session."
     }
   }
 }

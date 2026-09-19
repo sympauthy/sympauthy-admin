@@ -112,11 +112,21 @@ async function logout() {
           {{ t('nav.configuration') }}
         </router-link>
       </li> -->
-      <!-- <li>
-        <router-link to='/sessions' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
+      <li class="my-2 border-t border-gray-700" />
+      <li class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        {{ t('nav.sectionDiagnostics') }}
+      </li>
+      <li>
+        <router-link
+          to="/sessions"
+          :class="[
+            'block px-4 py-2 hover:bg-gray-700 transition-colors',
+            { 'bg-gray-900': isActive('/sessions') }
+          ]"
+        >
           {{ t('nav.sessions') }}
         </router-link>
-      </li> -->
+      </li>
     </ul>
     <div class="border-t border-gray-700 p-4">
       <div class="text-sm text-gray-300 truncate mb-2">{{ authStore.userName }}</div>

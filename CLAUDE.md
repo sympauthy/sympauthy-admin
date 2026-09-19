@@ -68,7 +68,7 @@ slot) above a `PaginatedTable` filling the remaining height, and forwards the ta
   exposes `size` and `setSize`, and refetches on a size change only once a first response arrived
   (the initial size is emitted before the page requests its first batch).
 - **Search**: only set `searchable` on resources whose list endpoint supports a free text query
-  (today, users only).
+  (today, users and sessions).
 - `PaginatedTable` keeps its plain flow layout by default (`fill` is opt-in), which is what detail
   page panels use.
 

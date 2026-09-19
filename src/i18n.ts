@@ -28,3 +28,15 @@ export function translateMessage(messageKey: string, values?: NamedValue): strin
   const { t } = i18n.global
   return t(messageKey, values)
 }
+
+/**
+ * Translates a message, falling back to a label the API supplied when this admin panel holds no
+ * translation for it. The fallback is returned as it arrived: a label written by the server is data
+ * rather than a message format.
+ */
+export function translateMessageOr(messageKey: string, fallback: string): string {
+  const { t } = i18n.global
+  // A key this panel does not know resolves to the key itself.
+  const message = t(messageKey)
+  return message === messageKey ? fallback : message
+}

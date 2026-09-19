@@ -32,3 +32,12 @@ export const userResourceSchema: JSONSchemaType<UserResource> = {
   required: ['user_id', 'status', 'created_at'],
   additionalProperties: true
 }
+
+/**
+ * The first identifier claim the user can be recognised by, falling back to their identifier: a
+ * UUID is not something an operator reads a person off, but it beats an empty cell.
+ */
+export function userIdentifierLabel(user: UserResource): string {
+  const identifier = Object.values(user.claims ?? {}).find((value) => value != null && value !== '')
+  return identifier != null ? String(identifier) : user.user_id
+}
