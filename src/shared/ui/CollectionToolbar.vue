@@ -43,8 +43,11 @@ function onSearchInput(event: Event) {
         <MagnifyingGlassIcon
           class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
         />
+        <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
+             query still narrowing the collection would otherwise come back to an empty field. -->
         <input
           type="text"
+          :value="props.collection.criteria.query"
           :placeholder="props.searchPlaceholder"
           :aria-label="props.searchPlaceholder || t('common.collection.search')"
           class="w-full rounded border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"

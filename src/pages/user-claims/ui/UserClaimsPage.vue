@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserClaimStore } from '@/entities/user'
@@ -18,10 +18,8 @@ function formatOptionalDate(dateStr: string | null | undefined): string {
   return formatDate(dateStr)
 }
 
-// The tab is kept mounted while the operator moves between records from a link, so the account it
-// reads is watched rather than only read once.
-watch(userId, (id) => store.fetchClaims(id))
-
+// The shell above this route nulls the record before re-reading it, which unmounts this tab and
+// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
 onMounted(async () => {
   store.$reset()
   await store.fetchClaims(userId.value)

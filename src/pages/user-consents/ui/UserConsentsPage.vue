@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserConsentStore } from '@/entities/consent'
@@ -18,8 +18,8 @@ const store = useUserConsentStore()
 
 const userId = computed(() => route.params.userId as string)
 
-watch(userId, (id) => store.fetchConsents(id))
-
+// The shell above this route nulls the record before re-reading it, which unmounts this tab and
+// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
 onMounted(async () => {
   store.$reset()
   await store.fetchConsents(userId.value)

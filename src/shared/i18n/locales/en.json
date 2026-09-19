@@ -73,7 +73,8 @@
       "operator": "Condition",
       "selectValue": "Choose…",
       "removeFilter": "Remove this filter",
-      "capabilitiesFailed": "The filters of this list could not be read. The records below are complete."
+      "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
+      "valueList": "a, b, c"
     },
     "operators": {
       "eq": "is",
@@ -177,7 +178,8 @@
       "search": "Search users...",
       "actions": "Actions",
       "view": "View",
-      "logout": "Logout"
+      "logout": "Logout",
+      "identifierClaimsFailed": "The configured claims could not be read, so the columns naming each account are missing. The accounts below are complete."
     },
     "userDetail": {
       "title": "User",

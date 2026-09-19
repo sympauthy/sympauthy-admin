@@ -56,6 +56,12 @@ const hasToolbar = computed(
       </div>
     </div>
 
+    <!-- What the page could not draw, above what it could. The toolbar says the same of a capability
+         document it failed to read; this is for whatever else the page needed and did not get. -->
+    <div v-if="slots.notice" class="mb-4 shrink-0">
+      <slot name="notice" />
+    </div>
+
     <PaginatedTable
       class="min-h-0 flex-1"
       fill

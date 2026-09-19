@@ -116,11 +116,13 @@ export function useCollection<T, R extends CollectionPageResource>(
   // Set once a first response has arrived. A page size change before that would request a page the
   // component is about to request anyway.
   const loaded = ref(false)
-  // The document describes the collection rather than a record, so it reads the same under every
-  // parent and is requested once per collection rather than once per record.
-  let capabilitiesRequested = false
+  let capabilitiesInFlight = false
   let nextFilterId = 0
   let criteriaTimeout: ReturnType<typeof setTimeout> | undefined
+  // Which page request is the current one. A response from any earlier one is dropped rather than
+  // painted: two requests can be in flight — a debounced criteria change and a page click — and the
+  // one that answers last is not the one the caller is waiting for.
+  let currentRequest = 0
 
   const totalPages = computed(() => Math.max(1, Math.ceil(total.value / size.value)))
   const filters = computed(() => knownCollectionFilters(capabilities.value))
@@ -131,9 +133,21 @@ export function useCollection<T, R extends CollectionPageResource>(
     return capabilities.value?.sorts.some((sort) => sort.field === field) ?? false
   }
 
+  /**
+   * Reads the document, unless a read of it is already in flight.
+   *
+   * It describes the collection rather than a record, so it reads the same under every parent and
+   * is asked for once rather than once per record — but a read that failed leaves nothing to keep,
+   * and the next page request asks again rather than leaving the toolbar gone for good.
+   */
   async function fetchCapabilities(): Promise<void> {
-    capabilitiesRequested = true
+    if (capabilitiesInFlight) {
+      return
+    }
+    capabilitiesInFlight = true
     const response = await source.capabilities()
+    capabilitiesInFlight = false
+
     if (isSuccess<CollectionCapabilitiesResource>(response)) {
       capabilities.value = response.content
       capabilitiesError.value = null
@@ -143,12 +157,13 @@ export function useCollection<T, R extends CollectionPageResource>(
   }
 
   async function fetch(requestedPage: number = 0): Promise<void> {
-    if (!capabilitiesRequested) {
+    if (!capabilities.value) {
       // Not awaited: the page being requested carries no criteria the document has to be read to
       // build, so the two travel together and the toolbar renders when the document lands.
       void fetchCapabilities()
     }
 
+    const request = ++currentRequest
     loading.value = true
     error.value = null
 
@@ -156,6 +171,12 @@ export function useCollection<T, R extends CollectionPageResource>(
       ...(source.selection?.() ?? {}),
       ...collectionQueryParams(criteria.value, requestedPage, size.value)
     })
+
+    // A later request went out while this one was travelling — or the collection was reset onto
+    // another record. Either way this answer is to a question nobody is asking any more.
+    if (request !== currentRequest) {
+      return
+    }
 
     if (isSuccess<R>(response)) {
       items.value = source.items(response.content)
@@ -249,10 +270,16 @@ export function useCollection<T, R extends CollectionPageResource>(
   /**
    * Everything the caller asked for, back to its initial value. The capability document is kept: it
    * describes the collection and not the record, so it reads the same under the next parent.
+   *
+   * A request still travelling is disowned rather than awaited, so the record being left cannot
+   * paint its rows, its failure or its spinner over the one being opened.
    */
   function reset() {
+    currentRequest++
     items.value = []
+    loading.value = false
     error.value = null
+    capabilitiesError.value = null
     page.value = 0
     total.value = 0
     loaded.value = false

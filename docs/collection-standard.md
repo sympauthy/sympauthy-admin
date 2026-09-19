@@ -33,6 +33,9 @@ criteria, so nothing about it waits; the toolbar appears when the document lands
 than a row, so the one under a parent path reads the same for every parent —
 [`reset()`](#a-store-holds-a-collection) keeps it.
 
+**A read that failed is asked for again by the next page request.** There is nothing to keep, and a
+transient failure must not leave a collection without a toolbar until the tab is reloaded.
+
 **A field whose type or operators the panel does not know is dropped, and the rest still render.**
 `knownCollectionFilters` decides that. A server ahead of its panel must cost the one field it added,
 not the whole toolbar.
@@ -62,6 +65,9 @@ delayed.
 **A criteria change asks for the first page.** A narrowed collection has a different first page, so
 the one being read is never the one to come back to.
 
+**Only the last request asked for is painted.** A debounced criteria change and a page click can be
+in flight together, and the one that answers last is not the one the caller is waiting for.
+
 ## A store holds a collection
 
 **A store exposes one `useCollection` per collection, under the plural of what it holds.**
@@ -84,14 +90,18 @@ const claims = useCollection<UserClaimResource, UserClaimListResource>({
 criteria and is not resolved against the document.
 
 **`$reset()` is `<collection>.reset()`**, and a record's page calls it in `onMounted` before
-fetching.
+fetching. It disowns a request still travelling, so the record being left cannot paint its rows, its
+failure or its spinner over the one being opened.
 
 **A mutation refetches its collection at the page displayed, and records its failure in
 `<collection>.error`.**
 
 **A complete list for a picker is its own state, never the collection's rows.** `allClients`,
-`allAudiences` — a dialog walking every page into the collection replaces what the list page behind
-it is displaying.
+`allAudiences` — a dialog walking every page into the collection replaces what the page behind it is
+displaying.
+
+**`fetchAllPages` is what walks it.** One copy of the loop, one place where a server capping the
+page size below the one asked for stops it rather than re-reading the same window.
 
 ## The client
 
@@ -126,6 +136,13 @@ renders an unsortable column, so it is read off the capability document rather t
 **The search field appears where the collection searches on something**, and nowhere else — which
 is the document's answer, not a prop.
 
+**Every control is bound to the criteria, never left to the DOM.** A store outlives the page that
+read it, so a query it still holds would otherwise narrow the collection from a field that looks
+empty.
+
+**What the page could not draw goes in the `notice` slot**, above the table. The toolbar says the
+same of a capability document it failed to read.
+
 ## The filter bar
 
 **A chip opens on the operator its field's type reads best and offers the rest the field admits.**
@@ -141,6 +158,7 @@ falls back to the first operator it lists.
 | `date`, `date_time` | a date or datetime input |
 | `number` | a number input |
 | `string`, `email`, `phone_number`, `uuid`, `timezone` | a text input |
+| under `in` with no published values | a text input, the list typed comma-separated |
 | under `is_null` | none |
 
 **Changing a chip's operator clears its value.** `in` holds a list where the others hold one, so

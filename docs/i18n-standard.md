@@ -20,7 +20,11 @@ what is there at build time, so adding a language is adding a file and nothing e
 the English string, and a key missing everywhere resolves to itself.
 
 **The locale comes from the browser**, with `en` behind it. Nothing lets an operator pick another
-one, and `currentLocale()` is what a request asks the server to answer in.
+one.
+
+**`currentLocale()` is what a request asks the server to answer in**, and it answers the locale a
+bundle exists for rather than the one the browser asked for. A screen rendered from `en.json`
+through the fallback must not carry field names the server wrote in another language.
 
 ## Keys
 

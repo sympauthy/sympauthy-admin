@@ -3,10 +3,11 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/entities/user'
-import { ClaimApi, type ClaimResource } from '@/entities/claim'
+import { useClaimStore } from '@/entities/claim'
 import {
   CollectionPage,
   CollectionSortHeader,
+  CommonAlert,
   Tag,
   CommonButton,
   primaryColoredButton,
@@ -14,38 +15,34 @@ import {
 } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
-import { isSuccess } from '@/shared/api'
 import { formatDate } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
-const claimApi = new ClaimApi()
-
-// The claims a user is identified by are the columns of this table, and what `claims=` asks the
-// server to embed in each row. They are read here rather than taken from the capability document:
-// that document says which claims the collection can be *filtered* on, which is every configured
-// one, and a column is a different question.
-const identifierClaims = ref<ClaimResource[]>([])
-
-// One request, sized past any plausible number of configured claims, so the columns are known
-// before the first page of users is asked for.
-const CONFIGURED_CLAIMS_PAGE_SIZE = 100
+// The claims an account is identified by are this table's columns and what `claims=` asks the
+// server to embed in each row. They are read rather than taken from the capability document: that
+// document says which claims the collection can be *filtered* on, which is every configured one,
+// and a column is a different question.
+const claimStore = useClaimStore()
 
 const logoutUserId = ref<string | null>(null)
 
 onMounted(async () => {
-  const response = await claimApi.listClaims({ page: 0, size: CONFIGURED_CLAIMS_PAGE_SIZE })
-  if (isSuccess(response)) {
-    identifierClaims.value = response.content.claims.filter((c) => c.enabled && c.identifier)
-  }
-  userStore.setSelectedClaimIds(identifierClaims.value.map((c) => c.id))
+  await claimStore.fetchIdentifierClaims()
+  userStore.setSelectedClaimIds(claimStore.identifierClaims.map((c) => c.id))
   await userStore.users.fetch()
 })
 </script>
 
 <template>
   <CollectionPage :collection="userStore.users" :search-placeholder="t('pages.users.search')">
+    <template v-if="claimStore.identifierClaimsError" #notice>
+      <CommonAlert color="warning">
+        {{ t('pages.users.identifierClaimsFailed') }}
+      </CommonAlert>
+    </template>
+
     <template #header>
       <CollectionSortHeader
         class="w-0 whitespace-nowrap"
@@ -54,7 +51,7 @@ onMounted(async () => {
         field="status"
       />
       <CollectionSortHeader
-        v-for="claim in identifierClaims"
+        v-for="claim in claimStore.identifierClaims"
         :key="claim.id"
         :collection="userStore.users"
         :label="claim.id"
@@ -84,7 +81,7 @@ onMounted(async () => {
           </Tag>
         </td>
         <td
-          v-for="claim in identifierClaims"
+          v-for="claim in claimStore.identifierClaims"
           :key="claim.id"
           class="px-6 py-4 text-sm text-gray-500 truncate"
         >

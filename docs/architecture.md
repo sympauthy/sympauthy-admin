@@ -53,8 +53,8 @@ import { useUserStore } from '@/entities/user'   // yes
 import { useUserStore } from '@/entities/user/model/useUserStore'   // no
 ```
 
-Inside a slice, files import each other by relative path (`./UserClaimsPanel.vue`). A page publishes
-only its route component; its panels and dialogs stay internal.
+Inside a slice, files import each other by relative path (`./UserSummaryPanel.vue`). A page
+publishes only its route component; its panels and dialogs stay internal.
 
 ## Cross-imports
 

@@ -39,14 +39,14 @@ an agent when a file it governs is read.
   emits and slots, where its state lives, and how a form is handled.
 - **[Design system standard](design-system-standard.md)** — the shared kit, the reka-ui primitives
   the interactive components wrap, and the colours, icons and text styles they are built from.
-- **[Page layout standard](page-layout-standard.md)** — what a route, a list page and a detail page
+- **[Page layout standard](page-layout-standard.md)** — what a route, a collection page and a record
   are made of, how a table's columns are sized, and how each adapts to width.
 - **[API standard](api-standard.md)** — one client per surface, a validated resource per response,
   and what a call resolves to.
 - **[Collection standard](collection-standard.md)** — the document a paged collection publishes
   about itself, the criteria built against it, and the page it is drawn as.
 - **[Store standard](store-standard.md)** — what a Pinia store holds, how it fetches and reports
-  failure, and the contract a list store and a detail store each answer.
+  failure, and the contract a collection store and a detail store each answer.
 - **[Internationalization standard](i18n-standard.md)** — the bundle, how a key is named, and how it
   reaches the screen.
 - **[Documentation standard](docs-standard.md)** — how a standard here is written, and what it

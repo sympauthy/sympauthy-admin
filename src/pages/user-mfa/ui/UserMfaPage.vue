@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserMfaStore } from '@/entities/user'
@@ -27,8 +27,8 @@ async function confirmRevoke() {
   revokeTargetMfaId.value = null
 }
 
-watch(userId, (id) => store.fetchMfaMethods(id))
-
+// The shell above this route nulls the record before re-reading it, which unmounts this tab and
+// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
 onMounted(async () => {
   store.$reset()
   await store.fetchMfaMethods(userId.value)

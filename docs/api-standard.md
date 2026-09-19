@@ -45,7 +45,7 @@ what the collection published.
 standard](collection-standard.md#the-capability-document) describes.
 
 **Query parameters go through `toQueryParams`.** It drops what the caller left unset, because an
-absent filter and an empty one mean the same thing to every list endpoint.
+absent criterion and an empty one mean the same thing to every collection.
 
 ## Resources
 
@@ -114,8 +114,9 @@ renew and one retry, and gives up with `api.unauthorized`;
 [authentication](authentication.md#staying-signed-in) describes the rest of that flow.
 
 **Every request carries `Accept-Language`, from the locale the panel renders in.** `AbstractApi`
-sets it, so what the server names in the reader's language and what the panel writes around it are
-the same language by construction.
+takes it from `currentLocale()`, which answers the locale a bundle exists for rather than the one
+the browser asked for — a deployment shipping one bundle must not be handed field names in a
+language its own screens cannot speak.
 
 **Nothing outside `shared/api` and a slice's `api/` segment calls `fetch`.**
 

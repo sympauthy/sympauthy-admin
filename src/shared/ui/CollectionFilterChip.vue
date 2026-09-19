@@ -40,6 +40,14 @@ const operatorOptions = computed(() =>
 
 const valueless = computed(() => isValuelessOperator(props.criterion.operator))
 const multiValued = computed(() => isMultiValuedOperator(props.criterion.operator))
+
+// `select multiple` is the one control whose value is not a string, so it is bound rather than
+// read off the event: setting `value` on the element cannot express a selection of several, and
+// patching it would clear the whole list the moment a second option was picked.
+const selectedValues = computed({
+  get: () => props.criterion.values,
+  set: (values: string[]) => emit('update', { values })
+})
 // A field publishing its values is rendered as a choice among them whatever its type: the set is
 // this deployment's, and a caller typing a value it does not hold is answered with a 400.
 const closedSet = computed(() => (props.filter.values?.length ?? 0) > 0)
@@ -68,9 +76,20 @@ function onValueChange(event: Event) {
   emit('update', { value: (event.target as HTMLInputElement | HTMLSelectElement).value })
 }
 
-function onValuesChange(event: Event) {
-  const selected = Array.from((event.target as HTMLSelectElement).selectedOptions)
-  emit('update', { values: selected.map((option) => option.value) })
+/**
+ * Reads an `in` over a field that publishes no values, where the caller types the list themselves.
+ *
+ * The separator is the comma the grammar joins them back with, which is also why no field whose
+ * values may hold one admits `in`.
+ */
+function onTypedValuesChange(event: Event) {
+  const typed = (event.target as HTMLInputElement).value
+  emit('update', {
+    values: typed
+      .split(',')
+      .map((value) => value.trim())
+      .filter((value) => value !== '')
+  })
 }
 
 const selectClasses = 'border-none bg-white py-0 pl-1 pr-6 text-sm focus:outline-none focus:ring-0'
@@ -98,11 +117,10 @@ const inputClasses = 'w-28 border-none bg-white px-1 py-0 text-sm focus:outline-
     <template v-if="!valueless">
       <select
         v-if="closedSet && multiValued"
+        v-model="selectedValues"
         multiple
         :class="selectClasses"
-        :value="props.criterion.values"
         :aria-label="props.filter.name"
-        @change="onValuesChange"
       >
         <option v-for="value in props.filter.values" :key="value.value" :value="value.value">
           {{ value.name }}
@@ -133,6 +151,16 @@ const inputClasses = 'w-28 border-none bg-white px-1 py-0 text-sm focus:outline-
         <option value="true">{{ t('common.yes') }}</option>
         <option value="false">{{ t('common.no') }}</option>
       </select>
+
+      <input
+        v-else-if="multiValued"
+        type="text"
+        :class="inputClasses"
+        :value="props.criterion.values.join(', ')"
+        :aria-label="props.filter.name"
+        :placeholder="t('common.collection.valueList')"
+        @input="onTypedValuesChange"
+      />
 
       <input
         v-else
