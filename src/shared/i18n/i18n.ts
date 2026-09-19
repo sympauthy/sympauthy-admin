@@ -21,6 +21,17 @@ export const i18n = createI18n({
   missingWarn: false
 })
 
+/**
+ * The locale the panel is rendering in, which is what a request asks the server to answer in.
+ *
+ * `i18n.global.locale` is a string under the legacy mode and a ref under the composition one, and
+ * which of the two this is depends on the version rather than on anything written here.
+ */
+export function currentLocale(): string {
+  const locale = i18n.global.locale
+  return typeof locale === 'string' ? locale : locale.value
+}
+
 export function translateMessage(messageKey: string, values?: NamedValue): string {
   if (!values) {
     values = {}

@@ -1,7 +1,7 @@
 import Ajv, { type JSONSchemaType } from 'ajv'
 import { type ErrorResource, errorResourceSchema } from './ErrorResource'
 import { ErrorApiResponse, makeErrorApiResponse } from './ErrorApiResponse'
-import { translateMessage } from '@/shared/i18n'
+import { currentLocale, translateMessage } from '@/shared/i18n'
 import { SuccessApiResponse } from './SuccessApiResponse'
 import { useAuthStore } from '@/shared/auth'
 
@@ -124,6 +124,10 @@ export class AbstractApi {
   private makeHeaders(postOptions?: PostQueryOptions): Headers {
     const headers = new Headers()
     headers.set('Accept', 'application/json')
+    // A capability document names its fields and their values in the language the request asked
+    // for. Sending the locale the panel renders in makes the two agree by construction, rather than
+    // by the browser's own header happening to start with the same language.
+    headers.set('Accept-Language', currentLocale())
     if (postOptions?.body !== undefined) {
       headers.set('Content-Type', 'application/json')
     }
