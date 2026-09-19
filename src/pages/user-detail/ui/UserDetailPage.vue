@@ -1,26 +1,25 @@
 <script lang="ts" setup>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useUserDetailStore, useUserMfaStore, useUserProviderLinkStore } from '@/entities/user'
-import { useUserConsentStore } from '@/entities/consent'
+import { useUserDetailStore } from '@/entities/user'
 import { useBreadcrumb } from '@/shared/lib'
 import UserSummaryPanel from './UserSummaryPanel.vue'
-import UserClaimsPanel from './UserClaimsPanel.vue'
-import UserConsentsPanel from './UserConsentsPanel.vue'
-import UserMfaPanel from './UserMfaPanel.vue'
-import UserProvidersPanel from './UserProvidersPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
 import LinkProviderDialog from './LinkProviderDialog.vue'
-import { CommonSpinner, CommonAlert } from '@/shared/ui'
+import { CommonSpinner, CommonAlert, RecordTabs, type RecordTab } from '@/shared/ui'
 
+/**
+ * One account: its summary, and a tab per collection hanging off it. Each tab is a route of its
+ * own, so the view an operator is on is addressable and survives a reload.
+ *
+ * The summary stays above the tabs rather than being a tab of its own — it is what identifies the
+ * record, and every tab is read against it.
+ */
 const route = useRoute()
 const { t } = useI18n()
 const store = useUserDetailStore()
-const consentStore = useUserConsentStore()
-const mfaStore = useUserMfaStore()
-const providerLinkStore = useUserProviderLinkStore()
 const { setLabel } = useBreadcrumb()
 
 const userId = computed(() => route.params.userId as string)
@@ -28,29 +27,40 @@ const logoutOpen = ref(false)
 const enrollMfaOpen = ref(false)
 const linkProviderOpen = ref(false)
 
-onMounted(async () => {
+// A tab names its own view and carries that view's explanation, both read under the route it opens.
+const tabs = computed<RecordTab[]>(() => {
+  const params = { userId: userId.value }
+  return (['userClaims', 'userConsents', 'userMfa', 'userProviders'] as const).map((name) => ({
+    label: t(`pages.${name}.title`),
+    to: { name, params },
+    help: {
+      keypath: `pages.${name}.help`,
+      linkText: t(`pages.${name}.helpLinkText`),
+      linkUrl: t(`pages.${name}.helpLinkUrl`)
+    }
+  }))
+})
+
+async function load(id: string) {
   store.$reset()
-  consentStore.$reset()
-  mfaStore.$reset()
-  providerLinkStore.$reset()
-  await Promise.all([
-    store.fetchUser(userId.value),
-    store.fetchClaims(userId.value),
-    consentStore.fetchConsents(userId.value),
-    mfaStore.fetchMfaMethods(userId.value),
-    providerLinkStore.fetchProviderLinks(userId.value)
-  ])
+  await store.fetchUser(id)
   if (store.user) {
     const identifier = store.user.identifier_claims
       ? Object.values(store.user.identifier_claims)[0]
       : undefined
-    setLabel(identifier != null ? String(identifier) : userId.value)
+    setLabel(identifier != null ? String(identifier) : id)
   }
-})
+}
+
+// The shell stays mounted while the operator moves between tabs; only a different account is
+// re-read. Moving from one tab to another must not refetch the record.
+watch(userId, load)
+
+onMounted(() => load(userId.value))
 </script>
 
 <template>
-  <div>
+  <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
     <div v-if="store.loading" class="flex items-center gap-2">
       <CommonSpinner class="h-6 w-6 border-4" />
@@ -63,25 +73,28 @@ onMounted(async () => {
     </CommonAlert>
 
     <!-- Content -->
-    <div v-else-if="store.user" class="space-y-6">
+    <template v-else-if="store.user">
       <UserSummaryPanel
+        class="shrink-0"
         :user="store.user"
         @logout="logoutOpen = true"
         @enroll-mfa="enrollMfaOpen = true"
         @link-provider="linkProviderOpen = true"
       />
-      <UserClaimsPanel :user-id="userId" />
-      <UserConsentsPanel :user-id="userId" />
-      <UserMfaPanel :user-id="userId" />
-      <UserProvidersPanel :user-id="userId" />
-    </div>
-
-    <LogoutDialog :user-id="userId" :open="logoutOpen" @close="logoutOpen = false" />
-    <EnrollMfaDialog :user-id="userId" :open="enrollMfaOpen" @close="enrollMfaOpen = false" />
-    <LinkProviderDialog
-      :user-id="userId"
-      :open="linkProviderOpen"
-      @close="linkProviderOpen = false"
-    />
+      <RecordTabs :tabs="tabs" />
+      <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
+           page. -->
+      <div class="min-h-0 flex-1">
+        <RouterView />
+      </div>
+    </template>
   </div>
+
+  <LogoutDialog :user-id="userId" :open="logoutOpen" @close="logoutOpen = false" />
+  <EnrollMfaDialog :user-id="userId" :open="enrollMfaOpen" @close="enrollMfaOpen = false" />
+  <LinkProviderDialog
+    :user-id="userId"
+    :open="linkProviderOpen"
+    @close="linkProviderOpen = false"
+  />
 </template>

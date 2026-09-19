@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type InteractiveFlowSessionListResource,
   interactiveFlowSessionListResourceSchema
 } from '@/entities/session/model/InteractiveFlowSessionListResource'
@@ -12,40 +17,23 @@ import {
   interactiveFlowSessionSecurityContextListResourceSchema
 } from '@/entities/session/model/InteractiveFlowSessionSecurityContextListResource'
 
-export interface ListInteractiveFlowSessionSecurityContextsParams {
-  page?: number
-  size?: number
-  [key: string]: string | number | undefined
-}
-
-export interface ListInteractiveFlowSessionsParams {
-  page?: number
-  size?: number
-  /**
-   * Partial, case-insensitive, across the address and user agent of every place the session was
-   * driven from, and the initiating client id.
-   */
-  q?: string
-  purpose?: string
-  status?: string
-  /** Identifier of the user the session identified. */
-  user?: string
-  /** Exact client id. A value naming no configured client is answered with a 400. */
-  client?: string
-  /** Sort direction over the date the session started: `asc` or `desc`. */
-  order?: string
-  [key: string]: string | number | undefined
-}
-
 export class InteractiveFlowSessionApi extends AbstractApi {
   async listSessions(
-    params: ListInteractiveFlowSessionsParams = {}
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<InteractiveFlowSessionListResource> | ErrorApiResponse> {
-    const queryParams = this.toQueryParams(params)
     return this.get<InteractiveFlowSessionListResource>({
       path: '/api/v1/admin/interactive-flow-sessions',
-      params: queryParams,
+      params: this.toQueryParams(params),
       schema: interactiveFlowSessionListResourceSchema
+    })
+  }
+
+  async getSessionCapabilities(): Promise<
+    SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse
+  > {
+    return this.get<CollectionCapabilitiesResource>({
+      path: '/api/v1/admin/interactive-flow-sessions/capabilities',
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 
@@ -60,15 +48,23 @@ export class InteractiveFlowSessionApi extends AbstractApi {
 
   async listSessionSecurityContexts(
     sessionId: string,
-    params: ListInteractiveFlowSessionSecurityContextsParams = {}
+    params: CollectionParams = {}
   ): Promise<
     SuccessApiResponse<InteractiveFlowSessionSecurityContextListResource> | ErrorApiResponse
   > {
-    const queryParams = this.toQueryParams(params)
     return this.get<InteractiveFlowSessionSecurityContextListResource>({
       path: `/api/v1/admin/interactive-flow-sessions/${sessionId}/security-contexts`,
-      params: queryParams,
+      params: this.toQueryParams(params),
       schema: interactiveFlowSessionSecurityContextListResourceSchema
+    })
+  }
+
+  async getSessionSecurityContextCapabilities(
+    sessionId: string
+  ): Promise<SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse> {
+    return this.get<CollectionCapabilitiesResource>({
+      path: `/api/v1/admin/interactive-flow-sessions/${sessionId}/security-contexts/capabilities`,
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 }

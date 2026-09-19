@@ -1,25 +1,21 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ArrowPathIcon, EyeIcon } from '@heroicons/vue/20/solid'
 import {
   useInteractiveFlowSessionStore,
-  interactiveFlowPurposes,
   purposeLabel,
-  purposeValueLabel,
-  interactiveFlowSessionStatuses,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/entities/session'
 import {
-  ListPage,
-  SortableHeader,
+  CollectionPage,
+  CollectionSortHeader,
   Tag,
   CommonButton,
   primaryColoredButton,
-  secondaryColoredButton,
-  type FilterConfig
+  secondaryColoredButton
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
@@ -28,82 +24,23 @@ const { t } = useI18n()
 const router = useRouter()
 const sessionStore = useInteractiveFlowSessionStore()
 
-// Status and purpose are the two criteria that are closed sets small enough to enumerate. The
-// client is deliberately not one: the endpoint answers 400 on an id naming nothing it holds, and
-// the search already spans the client id.
-const filters = computed<FilterConfig[]>(() => [
-  {
-    key: 'status',
-    label: t('pages.sessions.statusFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.sessions.allStatuses'), value: '' },
-      ...interactiveFlowSessionStatuses.map((status) => ({
-        label: interactiveFlowSessionStatusLabel(status),
-        value: status
-      }))
-    ]
-  },
-  {
-    key: 'purpose',
-    label: t('pages.sessions.purposeFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.sessions.allPurposes'), value: '' },
-      ...interactiveFlowPurposes.map((purpose) => ({
-        label: purposeValueLabel(purpose),
-        value: purpose
-      }))
-    ]
-  }
-])
-
-function onFilterChange(key: string, value: string) {
-  if (key === 'status') {
-    sessionStore.setStatusFilter(value)
-  } else if (key === 'purpose') {
-    sessionStore.setPurposeFilter(value)
-  }
-}
-
-function onFilterRemove(key: string) {
-  if (key === 'status') {
-    sessionStore.clearStatusFilter()
-  } else if (key === 'purpose') {
-    sessionStore.clearPurposeFilter()
-  }
-}
-
 onMounted(async () => {
-  sessionStore.$reset()
-  await sessionStore.fetchSessions()
+  sessionStore.sessions.reset()
+  await sessionStore.sessions.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="sessionStore.loading"
-    :error="sessionStore.error"
-    :empty="sessionStore.sessions.length === 0"
-    :page="sessionStore.page"
-    :size="sessionStore.size"
-    :total="sessionStore.total"
-    :total-pages="sessionStore.totalPages"
-    searchable
+  <CollectionPage
+    :collection="sessionStore.sessions"
     :search-placeholder="t('pages.sessions.search')"
-    :filters="filters"
-    @search="sessionStore.setSearch"
-    @filter-change="onFilterChange"
-    @filter-remove="onFilterRemove"
-    @page-change="sessionStore.fetchSessions"
-    @page-size-change="sessionStore.setSize"
   >
     <!-- The set changes while the operator is looking at it, so it is theirs to re-read. -->
     <template #actions>
       <CommonButton
         :button-style="secondaryColoredButton"
-        :disabled="sessionStore.loading"
-        @click="sessionStore.fetchSessions(sessionStore.page)"
+        :disabled="sessionStore.sessions.loading"
+        @click="sessionStore.sessions.fetch(sessionStore.sessions.page)"
       >
         <span class="inline-flex items-center gap-1.5">
           <ArrowPathIcon class="size-4 shrink-0" />
@@ -113,11 +50,12 @@ onMounted(async () => {
     </template>
 
     <template #header>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.sessions.status') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="sessionStore.sessions"
+        :label="t('pages.sessions.status')"
+        field="status"
+      />
       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
         {{ t('pages.sessions.user') }}
       </th>
@@ -126,24 +64,26 @@ onMounted(async () => {
       >
         {{ t('pages.sessions.ip') }}
       </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.sessions.client') }}
-      </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.sessions.startedFor') }}
-      </th>
+      <CollectionSortHeader
+        :collection="sessionStore.sessions"
+        :label="t('pages.sessions.client')"
+        field="client"
+      />
+      <CollectionSortHeader
+        :collection="sessionStore.sessions"
+        :label="t('pages.sessions.startedFor')"
+        field="purpose"
+      />
       <th
         class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
       >
         {{ t('pages.sessions.stoppedAt') }}
       </th>
-      <SortableHeader
+      <CollectionSortHeader
         class="w-0 whitespace-nowrap hidden sm:table-cell"
+        :collection="sessionStore.sessions"
         :label="t('pages.sessions.started')"
         field="session_date"
-        current-sort="session_date"
-        :current-order="sessionStore.order"
-        @sort="sessionStore.toggleOrder"
       />
       <th
         class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -153,7 +93,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="session in sessionStore.sessions" :key="session.id">
+      <tr v-for="session in sessionStore.sessions.items" :key="session.id">
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <Tag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
@@ -211,5 +151,5 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600 max-w-prose text-center">{{ t('pages.sessions.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 </template>

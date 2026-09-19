@@ -20,16 +20,18 @@ to reach for, by need.
 | --- | --- |
 | `CommonButton` | every button, with a [style](#buttons) |
 | `CommonSpinner` | a request in flight |
-| `CommonAlert` | a failure the screen keeps showing |
+| `CommonAlert` | a failure a screen keeps showing, or a `warning` for what is missing from one |
 | `Tag` | a short status or label |
 | `OriginTag` | the origin of a claim or a scope |
 | `CopyToClipboard` | an identifier an operator has to paste elsewhere |
 | `HelpTooltip` | an explanation of a domain term |
-| `DetailSection` | a titled section of a detail page |
-| `ListPage` | the root of a list page |
+| `DetailSection` | a titled section of a record page |
+| `CollectionPage` | the root of a page showing a collection |
+| `CollectionToolbar` | the search field and the filters of a collection |
+| `CollectionFilterChip` | one criterion: its field, its operator and its value |
+| `CollectionSortHeader` | any column of a collection, sortable or not |
 | `PaginatedTable` | any table of records |
-| `SortableHeader` | a column the list endpoint can sort on |
-| `FilterBar` | the search field and the filters of a list page |
+| `RecordTabs` | the views one record is read through |
 | `ActionsDropdown` | the actions of one record or one page |
 | `DropdownButton` | a choice among options |
 | `BaseDialog` | the shell of any dialog |
@@ -84,7 +86,7 @@ pagination bar.
 **Everything else comes from Tailwind's palette**, and the same role keeps the same shade: `gray-50`
 behind a table header, `gray-200` for a border, `gray-500` for a label, `gray-900` for a value,
 `red-50`/`red-700` for an inline error box, `amber-50`/`amber-800` for a warning an operator must
-read before closing a dialog.
+read before closing a dialog or for what a screen could not draw.
 
 **A `Tag` picks its colour from the meaning, not the palette.** Green for what is enabled, red for
 what is not, yellow for what needs attention, purple and blue for a classification, gray for the

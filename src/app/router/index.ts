@@ -8,7 +8,13 @@ import { ScopesPage } from '@/pages/scopes'
 import { UsersPage } from '@/pages/users'
 import { SessionsPage } from '@/pages/sessions'
 import { UserDetailPage } from '@/pages/user-detail'
+import { UserClaimsPage } from '@/pages/user-claims'
+import { UserConsentsPage } from '@/pages/user-consents'
+import { UserMfaPage } from '@/pages/user-mfa'
+import { UserProvidersPage } from '@/pages/user-providers'
 import { SessionDetailPage } from '@/pages/session-detail'
+import { SessionPurposesPage } from '@/pages/session-purposes'
+import { SessionSecurityContextsPage } from '@/pages/session-security-contexts'
 import { CallbackPage } from '@/pages/callback'
 import { RegisterPage } from '@/pages/register'
 import { useAuthStore } from '@/shared/auth'
@@ -52,13 +58,43 @@ export function makeRouter() {
         meta: { requiresAuth: true, breadcrumb: { label: 'nav.users' } }
       },
       {
+        // The record's shell. Each of its collections is a tab, and each tab is a route, so the
+        // view an operator is on is addressable. Landing on the record itself opens the first of
+        // them, which keeps `router.push({ name: 'userDetail' })` working from the list.
         path: '/users/:userId',
         name: 'userDetail',
         component: UserDetailPage,
+        redirect: { name: 'userClaims' },
         meta: {
           requiresAuth: true,
           breadcrumb: { label: 'pages.userDetail.title', parent: 'users' }
-        }
+        },
+        children: [
+          {
+            path: 'claims',
+            name: 'userClaims',
+            component: UserClaimsPage,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'consents',
+            name: 'userConsents',
+            component: UserConsentsPage,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'mfa',
+            name: 'userMfa',
+            component: UserMfaPage,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'providers',
+            name: 'userProviders',
+            component: UserProvidersPage,
+            meta: { requiresAuth: true }
+          }
+        ]
       },
       {
         path: '/clients',
@@ -109,10 +145,25 @@ export function makeRouter() {
         path: '/sessions/:sessionId',
         name: 'sessionDetail',
         component: SessionDetailPage,
+        redirect: { name: 'sessionPurposes' },
         meta: {
           requiresAuth: true,
           breadcrumb: { label: 'pages.sessionDetail.title', parent: 'sessions' }
-        }
+        },
+        children: [
+          {
+            path: 'purposes',
+            name: 'sessionPurposes',
+            component: SessionPurposesPage,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'security-contexts',
+            name: 'sessionSecurityContexts',
+            component: SessionSecurityContextsPage,
+            meta: { requiresAuth: true }
+          }
+        ]
       }
     ]
   })

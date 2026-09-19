@@ -2,49 +2,43 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClaimStore, ClaimTags } from '@/entities/claim'
-import { ListPage, Tag, OriginTag } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, Tag, OriginTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()
 
 onMounted(async () => {
-  await claimStore.fetchClaims()
+  await claimStore.claims.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="claimStore.loading"
-    :error="claimStore.error"
-    :empty="claimStore.claims.length === 0"
-    :page="claimStore.page"
-    :size="claimStore.size"
-    :total="claimStore.total"
-    :total-pages="claimStore.totalPages"
-    @page-change="claimStore.fetchClaims"
-    @page-size-change="claimStore.setSize"
-  >
+  <CollectionPage :collection="claimStore.claims" :search-placeholder="t('pages.claims.search')">
     <template #header>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.claims.status') }}
-      </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.claims.id') }}
-      </th>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('common.origin.label') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="claimStore.claims"
+        :label="t('pages.claims.status')"
+        field="enabled"
+      />
+      <CollectionSortHeader
+        :collection="claimStore.claims"
+        :label="t('pages.claims.id')"
+        field="id"
+      />
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="claimStore.claims"
+        :label="t('common.origin.label')"
+        field="origin"
+      />
       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
         {{ t('pages.claims.tags') }}
       </th>
     </template>
 
     <template #rows>
-      <tr v-for="claim in claimStore.claims" :key="claim.id">
+      <tr v-for="claim in claimStore.claims.items" :key="claim.id">
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <Tag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
@@ -68,5 +62,5 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.claims.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 </template>

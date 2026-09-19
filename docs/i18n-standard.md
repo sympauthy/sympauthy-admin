@@ -22,6 +22,10 @@ the English string, and a key missing everywhere resolves to itself.
 **The locale comes from the browser**, with `en` behind it. Nothing lets an operator pick another
 one.
 
+**`currentLocale()` is what a request asks the server to answer in**, and it answers the locale a
+bundle exists for rather than the one the browser asked for. A screen rendered from `en.json`
+through the fallback must not carry field names the server wrote in another language.
+
 ## Keys
 
 **A screen's strings live under `pages.<route name>`.** The segment is the route's name, so
@@ -33,6 +37,14 @@ furniture. A label written twice under two pages is one translation that will dr
 **A value the server publishes is translated under `common.<set>.<value>`.** The origin of a claim,
 the status of a session, the purpose of an interactive flow: the key is the value the API sent, so a
 component translates without a mapping of its own.
+
+**A name the server sends in the reader's language is rendered as it arrived.** A capability
+document names every field it publishes and every value a closed set holds, and those sets are the
+deployment's own — the bundle could not hold them and must not try.
+
+**A word the protocol fixes is the panel's to name.** The ten collection operators are closed and
+deliberately unlocalized on the wire, so `common.operators.<operator>` holds their labels, with
+`common.operators.date.<operator>` overriding the comparisons that read differently over a moment.
 
 **A term belonging to one entity lives under `<entity>.<term>`,** beside the component explaining
 it: `claim.identifier`, `client.type`.

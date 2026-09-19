@@ -15,7 +15,7 @@ with itself is a standard per subject:
 | --- | --- |
 | [Components](component-code-standard.md) | how a `.vue` file is written |
 | [Design system](design-system-standard.md) | which shared component to reach for, and the tokens |
-| [Page layout](page-layout-standard.md) | list pages, detail pages, and how each adapts to width |
+| [Page layout](page-layout-standard.md) | collection pages, record pages, adapting to width |
 | [API](api-standard.md) | clients, resources, schemas, and what a call resolves to |
 | [Stores](store-standard.md) | what a Pinia store holds and exposes |
 | [Internationalization](i18n-standard.md) | the bundle, and how a key is named |
@@ -41,7 +41,7 @@ no `ui/`, and a page with no state of its own has no `model/`.
 **Another slice is imported through its public API, by the `@` alias.** `@` resolves to `src/`, and
 the path stops at the slice: `@/entities/user`, `@/shared/ui`, `@/features/logout-user`.
 
-**A file inside a slice is imported by relative path.** `./UserClaimsPanel.vue`, `../api/UserApi`.
+**A file inside a slice is imported by relative path.** `./UserSummaryPanel.vue`, `../api/UserApi`.
 
 **A slice's `index.ts` re-exports what other slices may use, and nothing else.** An entity publishes
 its clients, its resources, its schemas and its stores; a page publishes only its route component.

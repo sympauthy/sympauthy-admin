@@ -65,6 +65,40 @@
       "cancelled": "cancelled",
       "failed": "failed",
       "expired": "expired"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "collection": {
+      "search": "Search",
+      "operator": "Condition",
+      "selectValue": "Choose…",
+      "removeFilter": "Remove this filter",
+      "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
+      "valueList": "a, b, c"
+    },
+    "operators": {
+      "eq": "is",
+      "ne": "is not",
+      "lt": "is less than",
+      "lte": "is at most",
+      "gt": "is more than",
+      "gte": "is at least",
+      "in": "is one of",
+      "contains": "contains",
+      "starts_with": "starts with",
+      "is_null": "is empty",
+      "date": {
+        "eq": "is on",
+        "ne": "is not on",
+        "lt": "is before",
+        "lte": "is on or before",
+        "gt": "is after",
+        "gte": "is on or after",
+        "in": "is one of",
+        "contains": "contains",
+        "starts_with": "starts with",
+        "is_null": "is empty"
+      }
     }
   },
   "nav": {
@@ -113,7 +147,8 @@
       "redirectUris": "Redirect URIs",
       "actions": "Actions",
       "view": "View",
-      "empty": "No clients found."
+      "empty": "No clients found.",
+      "search": "Search clients..."
     },
     "clientDetail": {
       "title": "Client",
@@ -141,11 +176,10 @@
       "disabled": "disabled",
       "empty": "No users found.",
       "search": "Search users...",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
       "actions": "Actions",
       "view": "View",
-      "logout": "Logout"
+      "logout": "Logout",
+      "identifierClaimsFailed": "The configured claims could not be read, so the columns naming each account are missing. The accounts below are complete."
     },
     "userDetail": {
       "title": "User",
@@ -154,35 +188,6 @@
       "status": "Status",
       "createdAt": "Created at",
       "forceLogout": "Force Logout",
-      "claims": "Claims",
-      "claimsHelp": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
-      "claimsHelpLinkText": "claims documentation",
-      "claimsHelpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
-      "claim": "Claim",
-      "value": "Value",
-      "claimTags": "Tags",
-      "collectedAt": "Collected at",
-      "verifiedAt": "Verified at",
-      "noClaims": "No claims found.",
-      "consents": "Consents",
-      "consentsHelp": "Audiences this user has granted access to. Revoking a consent will require the user to re-authorize. See {link} for details.",
-      "consentsHelpLinkText": "consents documentation",
-      "consentsHelpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
-      "audience": "Audience",
-      "client": "Client",
-      "scopes": "Scopes",
-      "actions": "Actions",
-      "revoke": "Revoke",
-      "noConsents": "No active consents.",
-      "mfaMethods": "MFA Methods",
-      "mfaMethodsHelp": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
-      "mfaMethodsHelpLinkText": "authentication documentation",
-      "mfaMethodsHelpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
-      "mfaType": "Type",
-      "registeredAt": "Registered at",
-      "noMfaMethods": "No MFA methods registered.",
-      "revokeMfaTitle": "Revoke MFA Method",
-      "revokeMfaDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
       "enrollMfa": "Enroll MFA",
       "enrollMfaDescription": "Generate a link that lets this user enroll a multi-factor authentication method. Once they complete enrollment they are returned to the selected client's URL.",
       "enrollMfaClient": "Client",
@@ -216,18 +221,7 @@
       "linkProviderGenerate": "Generate Link",
       "linkProviderGenerated": "Provider Link",
       "linkProviderLinkWarning": "Hand or send this link to the user. Following it lets them confirm, re-authenticate, and authorize the provider to link it to their account, then returns them to the selected return URL.",
-      "linkProviderDone": "Done",
-      "providerLinks": "Provider Links",
-      "providerLinksHelp": "External identity providers linked to this user's account. Unlinking a provider will prevent the user from signing in with it. See {link} for details.",
-      "providerLinksHelpLinkText": "providers documentation",
-      "providerLinksHelpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",
-      "provider": "Provider",
-      "subject": "Subject",
-      "linkedAt": "Linked at",
-      "unlink": "Unlink",
-      "noProviderLinks": "No provider links found.",
-      "unlinkProviderTitle": "Unlink Provider",
-      "unlinkProviderDescription": "This will remove the link between this user and the identity provider. The user will no longer be able to sign in with this provider."
+      "linkProviderDone": "Done"
     },
     "scopes": {
       "title": "Scopes",
@@ -240,17 +234,15 @@
       "consentable": "consentable",
       "grantable": "grantable",
       "client": "client",
-      "typeFilter": "type",
-      "allTypes": "all types",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
-      "empty": "No scopes found."
+      "empty": "No scopes found.",
+      "search": "Search scopes..."
     },
     "audiences": {
       "title": "Audiences",
       "audienceId": "Audience ID",
       "clientsCount": "Clients",
-      "empty": "No audiences found."
+      "empty": "No audiences found.",
+      "search": "Search audiences..."
     },
     "invitations": {
       "title": "Invitations",
@@ -262,16 +254,11 @@
       "expiresAt": "Expires at",
       "actions": "Actions",
       "pending": "pending",
-      "used": "used",
       "consumed": "consumed",
       "revoked": "revoked",
       "expired": "expired",
       "empty": "No invitations found.",
       "create": "Create Invitation",
-      "statusFilter": "status",
-      "audienceFilter": "audience",
-      "allStatuses": "all statuses",
-      "allAudiences": "all audiences",
       "revoke": "Revoke",
       "revokeTitle": "Revoke Invitation",
       "revokeDescription": "This invitation will no longer be usable. This action cannot be undone.",
@@ -285,7 +272,8 @@
       "audienceRequired": "Please select an audience.",
       "tokenWarning": "Copy this token now. It will not be shown again.",
       "invitationCreated": "Invitation Created",
-      "done": "Done"
+      "done": "Done",
+      "search": "Search by token prefix or note"
     },
     "claims": {
       "title": "Claims",
@@ -296,7 +284,8 @@
       "required": "required",
       "identifier": "identifier",
       "empty": "No claims found.",
-      "tags": "Tags"
+      "tags": "Tags",
+      "search": "Search claims..."
     },
     "sessions": {
       "title": "Sessions",
@@ -312,10 +301,6 @@
       "refresh": "Refresh",
       "signingUp": "Signing up",
       "search": "Search by IP, user agent or client",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
-      "purposeFilter": "purpose",
-      "allPurposes": "all purposes",
       "empty": "No interactive flow session is in flight. This is a live view rather than a history — expired sessions are collected every fifteen minutes, so a session that has finished may already be gone."
     },
     "sessionDetail": {
@@ -334,9 +319,66 @@
       "failureAlert": "This session failed. The identifiers below are the messages it failed with.",
       "failureHelp": "These are message identifiers rather than sentences. The API publishes them unrendered on purpose: an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
       "errorDetailsId": "Details ID",
-      "errorDescriptionId": "Description ID",
-      "securityContexts": "Security contexts",
-      "securityContextsHelp": "One entry per distinct address and user agent the session was driven from, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go.",
+      "errorDescriptionId": "Description ID"
+    },
+    "userClaims": {
+      "title": "Claims",
+      "help": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
+      "helpLinkText": "claims documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
+      "claim": "Claim",
+      "value": "Value",
+      "tags": "Tags",
+      "collectedAt": "Collected at",
+      "verifiedAt": "Verified at",
+      "empty": "No claims found.",
+      "search": "Search by claim or value"
+    },
+    "userConsents": {
+      "title": "Consents",
+      "help": "Audiences this user has granted access to. Revoking a consent will require the user to re-authorize. See {link} for details.",
+      "helpLinkText": "consents documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
+      "audience": "Audience",
+      "client": "Client",
+      "scopes": "Scopes",
+      "empty": "No active consents.",
+      "consentedAt": "Consented at",
+      "actions": "Actions",
+      "revoke": "Revoke",
+      "search": "Search by scope"
+    },
+    "userMfa": {
+      "title": "MFA Methods",
+      "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
+      "helpLinkText": "authentication documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
+      "type": "Type",
+      "registeredAt": "Registered at",
+      "empty": "No MFA methods registered.",
+      "revokeTitle": "Revoke MFA Method",
+      "revokeDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
+      "actions": "Actions",
+      "revoke": "Revoke"
+    },
+    "userProviders": {
+      "title": "Provider Links",
+      "help": "External identity providers linked to this user's account. Unlinking a provider will prevent the user from signing in with it. See {link} for details.",
+      "helpLinkText": "providers documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",
+      "provider": "Provider",
+      "subject": "Subject",
+      "linkedAt": "Linked at",
+      "unlink": "Unlink",
+      "empty": "No provider links found.",
+      "unlinkTitle": "Unlink Provider",
+      "unlinkDescription": "This will remove the link between this user and the identity provider. The user will no longer be able to sign in with this provider.",
+      "actions": "Actions",
+      "search": "Search by provider or subject"
+    },
+    "sessionSecurityContexts": {
+      "title": "Security contexts",
+      "help": "One entry per distinct address and user agent the session was driven from, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go.",
       "ip": "IP",
       "userAgent": "User agent",
       "location": "Location",
@@ -344,9 +386,12 @@
       "firstSeen": "First seen",
       "lastSeen": "Last seen",
       "proven": "Proven",
-      "noSecurityContexts": "Nothing was recorded against this session. Recording is best-effort and never fails a flow, so a session may hold no place at all.",
-      "purposes": "Purposes",
-      "purposesHelp": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
+      "empty": "Nothing was recorded against this session. Recording is best-effort and never fails a flow, so a session may hold no place at all.",
+      "search": "Search by address, user agent or place"
+    },
+    "sessionPurposes": {
+      "title": "Purposes",
+      "help": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
       "noDebugInformation": "This purpose has nothing to say about the session."
     }
   }

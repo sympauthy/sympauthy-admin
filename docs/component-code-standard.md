@@ -58,12 +58,12 @@ the parent decides the consequence.
 
 ## Slots
 
-**A wrapper forwards the slots it wraps, by name.** `ListPage` forwards `header`, `rows` and
+**A wrapper forwards the slots it wraps, by name.** `CollectionPage` forwards `header`, `rows` and
 `empty`, so a page fills a table it never renders itself.
 
-**A slot that changes the layout when it is filled is read through `useSlots()`.** The toolbar of a
-list page exists because `slots.actions` is defined, and the title of a dialog because `slots.title`
-is.
+**A slot that changes the layout when it is filled is read through `useSlots()`.** A collection
+page's actions row exists because `slots.actions` is defined, and a dialog's title because
+`slots.title` is.
 
 ## State
 
@@ -72,7 +72,7 @@ for what neither can express — resetting a dialog's fields when it opens, redi
 session is lost.
 
 **A panel reads the store it displays; a shared or entity component takes what it displays as
-props.** `UserClaimsPanel` calls `useUserDetailStore()` itself; `UserSummaryPanel` receives the user
+props.** `UserClaimsPage` calls `useUserClaimStore()` itself; `UserSummaryPanel` receives the user
 it renders.
 
 **The parent owns whether a dialog is open.** It holds the flag, passes it as `:open` and clears it

@@ -1,65 +1,37 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useCollection } from '@/shared/collection'
 import { InteractiveFlowSessionApi } from '../api/InteractiveFlowSessionApi'
+import type { InteractiveFlowSessionSecurityContextListResource } from './InteractiveFlowSessionSecurityContextListResource'
 import type { InteractiveFlowSessionSecurityContextResource } from './InteractiveFlowSessionSecurityContextResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useInteractiveFlowSessionSecurityContextStore = defineStore(
   'interactiveFlowSessionSecurityContexts',
   () => {
     const api = new InteractiveFlowSessionApi()
 
-    const securityContexts = ref<InteractiveFlowSessionSecurityContextResource[]>([])
-    const loading = ref(false)
-    const error = ref<string | null>(null)
-    const page = ref(0)
-    const size = ref(20)
-    const total = ref(0)
+    // The session whose places are read. The collection reads it at the moment it calls, so paging
+    // and filtering stay on the record the page last asked for.
+    const sessionId = ref('')
 
-    const totalPages = computed(() => Math.ceil(total.value / size.value))
+    const securityContexts = useCollection<
+      InteractiveFlowSessionSecurityContextResource,
+      InteractiveFlowSessionSecurityContextListResource
+    >({
+      capabilities: () => api.getSessionSecurityContextCapabilities(sessionId.value),
+      page: (params) => api.listSessionSecurityContexts(sessionId.value, params),
+      items: (content) => content.security_contexts
+    })
 
-    async function fetchSecurityContexts(
-      sessionId: string,
-      requestedPage: number = 0
-    ): Promise<void> {
-      loading.value = true
-      error.value = null
-
-      const response = await api.listSessionSecurityContexts(sessionId, {
-        page: requestedPage,
-        size: size.value
-      })
-
-      if (isSuccess(response)) {
-        securityContexts.value = response.content.security_contexts
-        page.value = response.content.page
-        total.value = response.content.total
-      } else {
-        error.value = getErrorMessage(response as ErrorApiResponse)
-        securityContexts.value = []
-      }
-
-      loading.value = false
+    async function fetchSecurityContexts(id: string): Promise<void> {
+      sessionId.value = id
+      await securityContexts.fetch(0)
     }
 
     function $reset() {
-      securityContexts.value = []
-      loading.value = false
-      error.value = null
-      page.value = 0
-      total.value = 0
+      securityContexts.reset()
     }
 
-    return {
-      securityContexts,
-      loading,
-      error,
-      page,
-      size,
-      total,
-      totalPages,
-      fetchSecurityContexts,
-      $reset
-    }
+    return { securityContexts, fetchSecurityContexts, $reset }
   }
 )

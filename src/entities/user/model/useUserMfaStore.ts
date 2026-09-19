@@ -1,67 +1,42 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { UserMfaApi } from '../api/UserMfaApi'
-import type { UserMfaMethodResource } from './UserMfaMethodResource'
+import { ref } from 'vue'
+import { useCollection } from '@/shared/collection'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { UserMfaApi } from '../api/UserMfaApi'
+import type { UserMfaMethodListResource } from './UserMfaMethodListResource'
+import type { UserMfaMethodResource } from './UserMfaMethodResource'
 
 export const useUserMfaStore = defineStore('userMfa', () => {
-  const userMfaApi = new UserMfaApi()
+  const api = new UserMfaApi()
 
-  const mfaMethods = ref<UserMfaMethodResource[]>([])
-  const mfaLoading = ref(false)
-  const mfaError = ref<string | null>(null)
-  const mfaPage = ref(0)
-  const mfaSize = ref(20)
-  const mfaTotal = ref(0)
+  // The account whose enrolments are read. The collection reads it at the moment it calls, so
+  // paging and filtering stay on the record the page last asked for.
+  const userId = ref('')
 
-  const mfaTotalPages = computed(() => Math.ceil(mfaTotal.value / mfaSize.value))
+  const mfaMethods = useCollection<UserMfaMethodResource, UserMfaMethodListResource>({
+    capabilities: () => api.getMfaCapabilities(userId.value),
+    page: (params) => api.listMfaMethods(userId.value, params),
+    items: (content) => content.mfa_methods
+  })
 
-  async function fetchMfaMethods(userId: string, requestedPage: number = 0): Promise<void> {
-    mfaLoading.value = true
-    mfaError.value = null
-
-    const response = await userMfaApi.listMfaMethods(userId, requestedPage, mfaSize.value)
-
-    if (isSuccess(response)) {
-      mfaMethods.value = response.content.mfa_methods
-      mfaPage.value = response.content.page
-      mfaTotal.value = response.content.total
-    } else {
-      mfaError.value = getErrorMessage(response as ErrorApiResponse)
-      mfaMethods.value = []
-    }
-
-    mfaLoading.value = false
+  async function fetchMfaMethods(id: string): Promise<void> {
+    userId.value = id
+    await mfaMethods.fetch(0)
   }
 
-  async function revokeMfaMethod(userId: string, mfaId: string): Promise<void> {
-    const response = await userMfaApi.revokeMfaMethod(userId, mfaId)
+  async function revokeMfaMethod(mfaId: string): Promise<void> {
+    const response = await api.revokeMfaMethod(userId.value, mfaId)
 
     if (isSuccess(response)) {
-      await fetchMfaMethods(userId, mfaPage.value)
+      await mfaMethods.fetch(mfaMethods.page)
     } else {
-      mfaError.value = getErrorMessage(response as ErrorApiResponse)
+      mfaMethods.error = getErrorMessage(response as ErrorApiResponse)
     }
   }
 
   function $reset() {
-    mfaMethods.value = []
-    mfaLoading.value = false
-    mfaError.value = null
-    mfaPage.value = 0
-    mfaTotal.value = 0
+    mfaMethods.reset()
   }
 
-  return {
-    mfaMethods,
-    mfaLoading,
-    mfaError,
-    mfaPage,
-    mfaSize,
-    mfaTotal,
-    mfaTotalPages,
-    fetchMfaMethods,
-    revokeMfaMethod,
-    $reset
-  }
+  return { mfaMethods, fetchMfaMethods, revokeMfaMethod, $reset }
 })

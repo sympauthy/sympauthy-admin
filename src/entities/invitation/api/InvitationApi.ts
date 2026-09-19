@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type InvitationListResource,
   invitationListResourceSchema
 } from '@/entities/invitation/model/InvitationListResource'
@@ -17,25 +22,21 @@ export interface CreateInvitationInput {
 
 export class InvitationApi extends AbstractApi {
   async listInvitations(
-    page: number = 0,
-    size: number = 20,
-    status?: string,
-    audience?: string
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<InvitationListResource> | ErrorApiResponse> {
-    const params: Record<string, string> = {
-      page: page.toString(),
-      size: size.toString()
-    }
-    if (status) {
-      params.status = status
-    }
-    if (audience) {
-      params.audience_id = audience
-    }
     return this.get<InvitationListResource>({
       path: '/api/v1/admin/invitations',
-      params,
+      params: this.toQueryParams(params),
       schema: invitationListResourceSchema
+    })
+  }
+
+  async getInvitationCapabilities(): Promise<
+    SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse
+  > {
+    return this.get<CollectionCapabilitiesResource>({
+      path: '/api/v1/admin/invitations/capabilities',
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 

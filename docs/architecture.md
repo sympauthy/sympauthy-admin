@@ -20,7 +20,7 @@ A layer imports from the layers strictly below it, and never sideways or upward.
 | `pages/` | one slice per route: the route component and what only it uses |
 | `features/` | a user action reused by more than one page |
 | `entities/` | one slice per domain noun: its API client, its resources and schemas, its stores |
-| `shared/` | the design system, the HTTP plumbing, auth, i18n and utilities — no domain knowledge |
+| `shared/` | the design system, the HTTP and collection plumbing, auth, i18n, utilities |
 
 `src/main.ts` is Vite's entry point and sits outside the layers: it creates the app, the router, the
 i18n instance and the Pinia instance, and mounts the result.
@@ -35,8 +35,8 @@ A slice is one folder, and its files are split into the segments it needs:
 | `model/` | resources and their schemas, the stores, and the domain helpers over them |
 | `ui/` | the Vue components |
 
-`shared/` is segmented the same way, by concern rather than by slice: `shared/api`, `shared/auth`,
-`shared/i18n`, `shared/lib`, `shared/ui`.
+`shared/` is segmented the same way, by concern rather than by slice: `shared/api`,
+`shared/auth`, `shared/collection`, `shared/i18n`, `shared/lib`, `shared/ui`.
 
 The slices that exist are the folders under each layer. Today the entities are the nouns the admin
 API publishes — `user`, `client`, `claim`, `scope`, `audience`, `consent`, `invitation`, `session` —
@@ -53,8 +53,8 @@ import { useUserStore } from '@/entities/user'   // yes
 import { useUserStore } from '@/entities/user/model/useUserStore'   // no
 ```
 
-Inside a slice, files import each other by relative path (`./UserClaimsPanel.vue`). A page publishes
-only its route component; its panels and dialogs stay internal.
+Inside a slice, files import each other by relative path (`./UserSummaryPanel.vue`). A page
+publishes only its route component; its panels and dialogs stay internal.
 
 ## Cross-imports
 
@@ -92,7 +92,7 @@ src/app/                 App.vue, router, layout shell, global stylesheet
 src/pages/<route>/       one slice per route
 src/features/<action>/   an action reused by more than one page
 src/entities/<noun>/     api/, model/, ui/ for one domain noun
-src/shared/              api, auth, i18n, lib, ui
+src/shared/              api, auth, collection, i18n, lib, ui
 ```
 
 Everything outside `src/` configures the build or the tooling: `vite.config.ts` (the dev server, its

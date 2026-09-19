@@ -1,73 +1,42 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { UserProviderLinkApi } from '../api/UserProviderLinkApi'
-import type { UserProviderLinkResource } from './UserProviderLinkResource'
+import { ref } from 'vue'
+import { useCollection } from '@/shared/collection'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { UserProviderLinkApi } from '../api/UserProviderLinkApi'
+import type { UserProviderLinkListResource } from './UserProviderLinkListResource'
+import type { UserProviderLinkResource } from './UserProviderLinkResource'
 
 export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
-  const providerLinkApi = new UserProviderLinkApi()
+  const api = new UserProviderLinkApi()
 
-  const providerLinks = ref<UserProviderLinkResource[]>([])
-  const providerLinksLoading = ref(false)
-  const providerLinksError = ref<string | null>(null)
-  const providerLinksPage = ref(0)
-  const providerLinksSize = ref(20)
-  const providerLinksTotal = ref(0)
+  // The account whose linked providers are read. The collection reads it at the moment it calls, so
+  // paging and filtering stay on the record the page last asked for.
+  const userId = ref('')
 
-  const providerLinksTotalPages = computed(() =>
-    Math.ceil(providerLinksTotal.value / providerLinksSize.value)
-  )
+  const providerLinks = useCollection<UserProviderLinkResource, UserProviderLinkListResource>({
+    capabilities: () => api.getProviderLinkCapabilities(userId.value),
+    page: (params) => api.listProviderLinks(userId.value, params),
+    items: (content) => content.providers
+  })
 
-  async function fetchProviderLinks(userId: string, requestedPage: number = 0): Promise<void> {
-    providerLinksLoading.value = true
-    providerLinksError.value = null
-
-    const response = await providerLinkApi.listProviderLinks(
-      userId,
-      requestedPage,
-      providerLinksSize.value
-    )
-
-    if (isSuccess(response)) {
-      providerLinks.value = response.content.providers
-      providerLinksPage.value = response.content.page
-      providerLinksTotal.value = response.content.total
-    } else {
-      providerLinksError.value = getErrorMessage(response as ErrorApiResponse)
-      providerLinks.value = []
-    }
-
-    providerLinksLoading.value = false
+  async function fetchProviderLinks(id: string): Promise<void> {
+    userId.value = id
+    await providerLinks.fetch(0)
   }
 
-  async function unlinkProvider(userId: string, providerId: string): Promise<void> {
-    const response = await providerLinkApi.unlinkProvider(userId, providerId)
+  async function unlinkProvider(providerId: string): Promise<void> {
+    const response = await api.unlinkProvider(userId.value, providerId)
 
     if (isSuccess(response)) {
-      await fetchProviderLinks(userId, providerLinksPage.value)
+      await providerLinks.fetch(providerLinks.page)
     } else {
-      providerLinksError.value = getErrorMessage(response as ErrorApiResponse)
+      providerLinks.error = getErrorMessage(response as ErrorApiResponse)
     }
   }
 
   function $reset() {
-    providerLinks.value = []
-    providerLinksLoading.value = false
-    providerLinksError.value = null
-    providerLinksPage.value = 0
-    providerLinksTotal.value = 0
+    providerLinks.reset()
   }
 
-  return {
-    providerLinks,
-    providerLinksLoading,
-    providerLinksError,
-    providerLinksPage,
-    providerLinksSize,
-    providerLinksTotal,
-    providerLinksTotalPages,
-    fetchProviderLinks,
-    unlinkProvider,
-    $reset
-  }
+  return { providerLinks, fetchProviderLinks, unlinkProvider, $reset }
 })

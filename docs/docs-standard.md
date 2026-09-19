@@ -20,8 +20,9 @@ that owns a neighbouring rule.
 directive — what to write, what to name, what to do next.
 
 ```markdown
-**A list page is built from `ListPage`, and `ListPage` is the page's root element.** Nothing wraps
-it, so the toolbar and the table fill the height the layout gives them.
+**A page showing a collection is built from `CollectionPage`, and `CollectionPage` is the page's
+root element.** Nothing wraps it, so the toolbar and the table fill the height the layout gives
+them.
 ```
 
 **A rule is written as what to do.** State the form the reader has to produce.
