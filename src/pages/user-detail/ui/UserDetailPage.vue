@@ -27,14 +27,18 @@ const logoutOpen = ref(false)
 const enrollMfaOpen = ref(false)
 const linkProviderOpen = ref(false)
 
+// A tab names its own view and carries that view's explanation, both read under the route it opens.
 const tabs = computed<RecordTab[]>(() => {
   const params = { userId: userId.value }
-  return [
-    { label: t('pages.userDetail.claims'), to: { name: 'userClaims', params } },
-    { label: t('pages.userDetail.consents'), to: { name: 'userConsents', params } },
-    { label: t('pages.userDetail.mfaMethods'), to: { name: 'userMfa', params } },
-    { label: t('pages.userDetail.providerLinks'), to: { name: 'userProviders', params } }
-  ]
+  return (['userClaims', 'userConsents', 'userMfa', 'userProviders'] as const).map((name) => ({
+    label: t(`pages.${name}.title`),
+    to: { name, params },
+    help: {
+      keypath: `pages.${name}.help`,
+      linkText: t(`pages.${name}.helpLinkText`),
+      linkUrl: t(`pages.${name}.helpLinkUrl`)
+    }
+  }))
 })
 
 async function load(id: string) {

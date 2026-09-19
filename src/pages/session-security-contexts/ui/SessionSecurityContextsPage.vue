@@ -6,7 +6,7 @@ import {
   useInteractiveFlowSessionSecurityContextStore,
   securityContextLocation
 } from '@/entities/session'
-import { CollectionPage, CollectionSortHeader, HelpTooltip } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()
@@ -28,10 +28,6 @@ onMounted(async () => {
     :collection="store.securityContexts"
     :search-placeholder="t('pages.sessionSecurityContexts.search')"
   >
-    <template #actions>
-      <HelpTooltip>{{ t('pages.sessionSecurityContexts.help') }}</HelpTooltip>
-    </template>
-
     <template #header>
       <th
         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"

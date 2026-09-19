@@ -8,7 +8,6 @@ import {
   CollectionPage,
   CollectionSortHeader,
   CommonButton,
-  HelpTooltip,
   Tag,
   dangerColoredButton
 } from '@/shared/ui'
@@ -29,23 +28,6 @@ onMounted(async () => {
 
 <template>
   <CollectionPage :collection="store.consents" :search-placeholder="t('pages.userConsents.search')">
-    <template #actions>
-      <HelpTooltip>
-        <i18n-t keypath="pages.userConsents.help" tag="p">
-          <template #link>
-            <a
-              :href="t('pages.userConsents.helpLinkUrl')"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
-            >
-              {{ t('pages.userConsents.helpLinkText') }}
-            </a>
-          </template>
-        </i18n-t>
-      </HelpTooltip>
-    </template>
-
     <template #header>
       <CollectionSortHeader
         class="w-0 whitespace-nowrap"

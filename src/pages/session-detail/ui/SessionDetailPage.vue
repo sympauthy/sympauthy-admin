@@ -20,15 +20,15 @@ const { setLabel } = useBreadcrumb()
 
 const sessionId = computed(() => route.params.sessionId as string)
 
+// A tab names its own view and carries that view's explanation, both read under the route it opens.
+// Neither sentence carries a link, so neither declares one.
 const tabs = computed<RecordTab[]>(() => {
   const params = { sessionId: sessionId.value }
-  return [
-    { label: t('pages.sessionDetail.purposes'), to: { name: 'sessionPurposes', params } },
-    {
-      label: t('pages.sessionDetail.securityContexts'),
-      to: { name: 'sessionSecurityContexts', params }
-    }
-  ]
+  return (['sessionPurposes', 'sessionSecurityContexts'] as const).map((name) => ({
+    label: t(`pages.${name}.title`),
+    to: { name, params },
+    help: { keypath: `pages.${name}.help` }
+  }))
 })
 
 async function load(id: string) {

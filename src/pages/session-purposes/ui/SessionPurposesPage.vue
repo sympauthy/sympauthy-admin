@@ -6,7 +6,7 @@ import {
   purposeProgressColor,
   purposeProgressLabel
 } from '@/entities/session'
-import { HelpTooltip, Tag } from '@/shared/ui'
+import { Tag } from '@/shared/ui'
 
 /**
  * The purposes one session carries, and how far each of them got.
@@ -24,10 +24,6 @@ const store = useInteractiveFlowSessionDetailStore()
        has not run yet is itself the answer to how far the session got. The labels are written by
        the handler that owns each purpose, are rendered as they arrive and are never translated. -->
   <div v-if="store.session" class="space-y-4">
-    <div class="flex justify-end">
-      <HelpTooltip>{{ t('pages.sessionPurposes.help') }}</HelpTooltip>
-    </div>
-
     <div
       v-for="(progress, progressIndex) in store.session.purposes"
       :key="progressIndex"

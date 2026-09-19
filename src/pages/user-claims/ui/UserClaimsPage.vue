@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserClaimStore } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader, HelpTooltip, OriginTag } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, OriginTag } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -30,23 +30,6 @@ onMounted(async () => {
 
 <template>
   <CollectionPage :collection="store.claims" :search-placeholder="t('pages.userClaims.search')">
-    <template #actions>
-      <HelpTooltip>
-        <i18n-t keypath="pages.userClaims.help" tag="p">
-          <template #link>
-            <a
-              :href="t('pages.userClaims.helpLinkUrl')"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
-            >
-              {{ t('pages.userClaims.helpLinkText') }}
-            </a>
-          </template>
-        </i18n-t>
-      </HelpTooltip>
-    </template>
-
     <template #header>
       <CollectionSortHeader
         class="w-0 whitespace-nowrap"

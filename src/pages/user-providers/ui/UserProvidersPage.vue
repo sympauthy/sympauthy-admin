@@ -8,7 +8,6 @@ import {
   CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
-  HelpTooltip,
   dangerColoredButton
 } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -41,23 +40,6 @@ onMounted(async () => {
     :collection="store.providerLinks"
     :search-placeholder="t('pages.userProviders.search')"
   >
-    <template #actions>
-      <HelpTooltip>
-        <i18n-t keypath="pages.userProviders.help" tag="p">
-          <template #link>
-            <a
-              :href="t('pages.userProviders.helpLinkUrl')"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
-            >
-              {{ t('pages.userProviders.helpLinkText') }}
-            </a>
-          </template>
-        </i18n-t>
-      </HelpTooltip>
-    </template>
-
     <template #header>
       <CollectionSortHeader
         class="w-0 whitespace-nowrap"

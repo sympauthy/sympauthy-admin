@@ -186,9 +186,6 @@
       "status": "Status",
       "createdAt": "Created at",
       "forceLogout": "Force Logout",
-      "claims": "Claims",
-      "consents": "Consents",
-      "mfaMethods": "MFA Methods",
       "enrollMfa": "Enroll MFA",
       "enrollMfaDescription": "Generate a link that lets this user enroll a multi-factor authentication method. Once they complete enrollment they are returned to the selected client's URL.",
       "enrollMfaClient": "Client",
@@ -222,8 +219,7 @@
       "linkProviderGenerate": "Generate Link",
       "linkProviderGenerated": "Provider Link",
       "linkProviderLinkWarning": "Hand or send this link to the user. Following it lets them confirm, re-authenticate, and authorize the provider to link it to their account, then returns them to the selected return URL.",
-      "linkProviderDone": "Done",
-      "providerLinks": "Provider Links"
+      "linkProviderDone": "Done"
     },
     "scopes": {
       "title": "Scopes",
@@ -321,11 +317,10 @@
       "failureAlert": "This session failed. The identifiers below are the messages it failed with.",
       "failureHelp": "These are message identifiers rather than sentences. The API publishes them unrendered on purpose: an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
       "errorDetailsId": "Details ID",
-      "errorDescriptionId": "Description ID",
-      "securityContexts": "Security contexts",
-      "purposes": "Purposes"
+      "errorDescriptionId": "Description ID"
     },
     "userClaims": {
+      "title": "Claims",
       "help": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
       "helpLinkText": "claims documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
@@ -338,6 +333,7 @@
       "search": "Search by claim or value"
     },
     "userConsents": {
+      "title": "Consents",
       "help": "Audiences this user has granted access to. Revoking a consent will require the user to re-authorize. See {link} for details.",
       "helpLinkText": "consents documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
@@ -351,6 +347,7 @@
       "search": "Search by scope"
     },
     "userMfa": {
+      "title": "MFA Methods",
       "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
       "helpLinkText": "authentication documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
@@ -363,6 +360,7 @@
       "revoke": "Revoke"
     },
     "userProviders": {
+      "title": "Provider Links",
       "help": "External identity providers linked to this user's account. Unlinking a provider will prevent the user from signing in with it. See {link} for details.",
       "helpLinkText": "providers documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",
@@ -377,6 +375,7 @@
       "search": "Search by provider or subject"
     },
     "sessionSecurityContexts": {
+      "title": "Security contexts",
       "help": "One entry per distinct address and user agent the session was driven from, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go.",
       "ip": "IP",
       "userAgent": "User agent",
@@ -389,6 +388,7 @@
       "search": "Search by address, user agent or place"
     },
     "sessionPurposes": {
+      "title": "Purposes",
       "help": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
       "noDebugInformation": "This purpose has nothing to say about the session."
     }

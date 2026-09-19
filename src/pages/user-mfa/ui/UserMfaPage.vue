@@ -8,7 +8,6 @@ import {
   CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
-  HelpTooltip,
   dangerColoredButton
 } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -38,23 +37,6 @@ onMounted(async () => {
 
 <template>
   <CollectionPage :collection="store.mfaMethods">
-    <template #actions>
-      <HelpTooltip>
-        <i18n-t keypath="pages.userMfa.help" tag="p">
-          <template #link>
-            <a
-              :href="t('pages.userMfa.helpLinkUrl')"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
-            >
-              {{ t('pages.userMfa.helpLinkText') }}
-            </a>
-          </template>
-        </i18n-t>
-      </HelpTooltip>
-    </template>
-
     <template #header>
       <th
         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
