@@ -1,0 +1,1 @@
+../../docs/component-code-standard.md
