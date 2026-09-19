@@ -39,7 +39,7 @@ const computedClasses = computed(() => {
     <template v-if="loading">
       <div class="w-full flex flex-row justify-center items-center">
         <div class="me-2">
-          <common-spinner class="h-4 w-4 border-2" />
+          <CommonSpinner class="h-4 w-4 border-2" />
         </div>
         <slot name="loading" />
       </div>
@@ -47,7 +47,7 @@ const computedClasses = computed(() => {
     <template v-else-if="submitting">
       <div class="w-full flex flex-row justify-center items-center">
         <div class="me-2">
-          <common-spinner class="h-4 w-4 border-2" />
+          <CommonSpinner class="h-4 w-4 border-2" />
         </div>
         <slot name="submitting" />
       </div>
