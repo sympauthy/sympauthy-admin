@@ -1,9 +1,5 @@
-import type { CollectionCapabilitiesResource } from './CollectionCapabilitiesResource'
-import {
-  isMultiValuedOperator,
-  isValuelessOperator,
-  type CollectionOperator
-} from './CollectionOperator'
+import type { CollectionCapabilitiesResource, CollectionOperator } from '@/shared/api'
+import { isMultiValuedOperator, isValuelessOperator } from './CollectionOperatorUtils'
 
 /**
  * One criterion narrowing a collection: a field it publishes, an operator that field admits, and
@@ -145,20 +141,4 @@ export function effectiveSortKeys(
     return criteria.sort
   }
   return collectionSortKeys(capabilities?.default_sort)
-}
-
-/**
- * What a collection reads off a request beside its criteria.
- *
- * A criterion is not a parameter anything declares: it is named by the field it filters on, so it
- * arrives through the index signature and is resolved against what the collection published. A
- * collection reading a parameter of its own — `/admin/users`'s `claims` — extends this and names
- * it.
- */
-export interface CollectionParams {
-  page?: number
-  size?: number
-  sort?: string
-  q?: string
-  [key: string]: string | number | undefined
 }

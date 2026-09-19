@@ -1,4 +1,6 @@
-import { isSuccess, type ErrorApiResponse, type SuccessApiResponse } from '@/shared/api'
+import type { CollectionPageResource } from './CollectionPageResource'
+import type { ErrorApiResponse } from './ErrorApiResponse'
+import { isSuccess, type SuccessApiResponse } from './SuccessApiResponse'
 
 /**
  * The page size a complete read walks a collection in. It is not the one a page displays: nothing
@@ -6,12 +8,6 @@ import { isSuccess, type ErrorApiResponse, type SuccessApiResponse } from '@/sha
  * allows.
  */
 const COMPLETE_READ_PAGE_SIZE = 100
-
-interface CollectionPageResource {
-  page: number
-  size: number
-  total: number
-}
 
 /**
  * Every record of a collection, for a picker that has to offer all of them.

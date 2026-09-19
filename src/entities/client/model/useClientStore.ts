@@ -1,21 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchAllPages, useCollection } from '@/shared/collection'
-import { getErrorMessage } from '@/shared/api'
+import { fetchAllPages, getErrorMessage } from '@/shared/api'
 import { ClientApi } from '../api/ClientApi'
-import type { ClientListResource } from './ClientListResource'
 import type { ClientSummaryResource } from './ClientSummaryResource'
 
 export const useClientStore = defineStore('clients', () => {
   const api = new ClientApi()
 
-  const clients = useCollection<ClientSummaryResource, ClientListResource>({
-    capabilities: () => api.getClientCapabilities(),
-    page: (params) => api.listClients(params),
-    items: (content) => content.clients
-  })
-
-  // Every client there is, for a picker that has to offer all of them.
+  // Every client there is, for a picker that has to offer all of them. A screen listing clients
+  // holds its own page of them, and the two are never the same question.
   const allClients = ref<ClientSummaryResource[]>([])
   const allClientsLoading = ref(false)
   const allClientsError = ref<string | null>(null)
@@ -40,7 +33,6 @@ export const useClientStore = defineStore('clients', () => {
   }
 
   return {
-    clients,
     allClients,
     allClientsLoading,
     allClientsError,

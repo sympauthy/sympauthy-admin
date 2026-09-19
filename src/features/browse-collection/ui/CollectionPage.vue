@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useSlots } from 'vue'
 import { PaginatedTable } from '@/shared/ui'
-import type { Collection } from './useCollection'
+import type { Collection } from '../model/useCollection'
 import CollectionToolbar from './CollectionToolbar.vue'
 
 /**

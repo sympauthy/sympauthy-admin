@@ -1,9 +1,11 @@
-import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  AbstractApi,
+  type SuccessApiResponse,
+  type ErrorApiResponse,
   collectionCapabilitiesResourceSchema,
   type CollectionCapabilitiesResource,
   type CollectionParams
-} from '@/shared/collection'
+} from '@/shared/api'
 import { type ScopeListResource, scopeListResourceSchema } from '../model/ScopeListResource'
 
 export class ScopeApi extends AbstractApi {

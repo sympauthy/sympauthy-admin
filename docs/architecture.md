@@ -36,9 +36,8 @@ A slice is one folder, and its files are split into the segments it needs:
 | `ui/` | the Vue components |
 
 `shared/` has no slices: it is divided into segments directly, and each of them is flat — Steiger
-reserves the segment names, so a segment holding components keeps them beside its model rather than
-under a `ui/` of its own. They are `shared/api`, `shared/auth`, `shared/collection`, `shared/i18n`,
-`shared/lib` and `shared/ui`.
+reserves the segment names, so nothing inside a segment is called `ui/` or `model/`. They are
+`shared/api`, `shared/auth`, `shared/i18n`, `shared/lib` and `shared/ui`.
 
 The slices that exist are the folders under each layer. Today the entities are the nouns the admin
 API publishes — `user`, `client`, `claim`, `scope`, `audience`, `consent`, `invitation`, `session` —
@@ -85,26 +84,22 @@ a store is correct even when a single page
 reads it today; folding it into that page would put HTTP and model code inside a route folder. The
 rule stays on for pages and features, where it does catch a premature slice.
 
-## A named segment in `shared/`
+## The collection block
 
-FSD divides `shared/` by technical purpose — `api`, `ui`, `lib`, `i18n` — because a segment named
-after a concern is how business logic gets in. `auth` and `collection` are named after what they
-hold instead, and that is deliberate: each holds one contract of the authorization server rather
-than one of its nouns. `collection` is the paging and filtering grammar the admin API answers in,
-entity-free by construction — its state is a `Collection<unknown>`, and the fields it filters on are
-read from [the capability document](collection-standard.md#the-capability-document) at runtime, so
-no build of this panel knows them.
+Every list screen is built from the same block: the state one collection is read with, the criteria
+a caller builds against it, and the toolbar, the chips and the table that draw them. It is
+[`features/browse-collection`](../src/features/browse-collection) — an action reused by more than
+one page, which is what `features/` is for, and a layer a page may reach and an entity may not.
 
-**A segment is named after what it holds only where no domain vocabulary reaches it, and where what
-it holds is a contract rather than a noun.** A component that is such a segment's own surface lives
-in it rather than in `shared/ui`: `CollectionPage` is not a piece of the kit a screen reaches for,
-it is what the segment is used through.
+What an entity does need sits below it in `shared/api`: the parameters a list call takes, the
+capability document with its schema, the closed sets of operators and field types that document is
+written in, and `fetchAllPages`. That is the wire the server answers on and every entity's client
+speaks, and it is the line [the collection standard](collection-standard.md) already drew — the
+server owns the grammar, the panel owns what it makes of it.
 
-FSD's `widgets/` layer is the other place that block could live, and it is not taken. That layer
-composes entities and features, and `CollectionPage` composes neither. `useCollection` could not
-follow it up there in any case: every entity store owns its collection, so that a mutation can
-refetch it at the page displayed and the dialog acting on a record reads the same rows the list
-does. The block would end up split across a layer boundary rather than held in one folder.
+A collection is held by the screen listing it rather than by a store, which is what lets it be a
+feature at all: an entity store calling `useCollection` would be importing the layer above it. It
+is also why two screens over the same records no longer share a page number.
 
 ## On disk
 

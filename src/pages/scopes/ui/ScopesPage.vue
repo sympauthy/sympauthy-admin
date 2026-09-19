@@ -1,12 +1,18 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useScopeStore } from '@/entities/scope'
-import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { ScopeApi, type ScopeListResource, type ScopeResource } from '@/entities/scope'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { EmptyValue, OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
-const scopeStore = useScopeStore()
+const api = new ScopeApi()
+
+const scopes = useCollection<ScopeResource, ScopeListResource>({
+  capabilities: () => api.getScopeCapabilities(),
+  page: (params) => api.listScopes(params),
+  items: (content) => content.scopes
+})
 
 function typeColor(type: string): 'blue' | 'purple' | 'gray' {
   switch (type) {
@@ -20,36 +26,27 @@ function typeColor(type: string): 'blue' | 'purple' | 'gray' {
 }
 
 onMounted(async () => {
-  await scopeStore.scopes.fetch()
+  await scopes.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage :collection="scopeStore.scopes" :search-placeholder="t('pages.scopes.search')">
+  <CollectionPage :collection="scopes" :search-placeholder="t('pages.scopes.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="scopeStore.scopes"
+        :collection="scopes"
         :label="t('pages.scopes.status')"
         field="enabled"
       />
-      <CollectionSortHeader
-        :collection="scopeStore.scopes"
-        :label="t('pages.scopes.id')"
-        field="scope"
-      />
-      <CollectionSortHeader
-        fit
-        :collection="scopeStore.scopes"
-        :label="t('pages.scopes.type')"
-        field="type"
-      />
+      <CollectionSortHeader :collection="scopes" :label="t('pages.scopes.id')" field="scope" />
+      <CollectionSortHeader fit :collection="scopes" :label="t('pages.scopes.type')" field="type" />
       <TableHeader fit>{{ t('common.origin.label') }}</TableHeader>
       <TableHeader>{{ t('pages.scopes.claims') }}</TableHeader>
     </template>
 
     <template #rows>
-      <tr v-for="scope in scopeStore.scopes.items" :key="scope.id">
+      <tr v-for="scope in scopes.items" :key="scope.id">
         <TableCell :label="t('pages.scopes.status')" fit>
           <Tag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}

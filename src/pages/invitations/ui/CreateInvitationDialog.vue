@@ -14,7 +14,7 @@ import {
   secondaryColoredButton
 } from '@/shared/ui'
 import { useAudienceStore } from '@/entities/audience'
-import { useInvitationStore } from '@/entities/invitation'
+import { InvitationApi } from '@/entities/invitation'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 interface Props {
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()
-const invitationStore = useInvitationStore()
+const api = new InvitationApi()
 
 const phase = ref<'form' | 'success'>('form')
 const audience = ref('')
@@ -110,7 +110,7 @@ async function onSubmit() {
     input.note = note.value.trim()
   }
 
-  const response = await invitationStore.createInvitation(input)
+  const response = await api.createInvitation(input)
 
   if (isSuccess(response)) {
     createdToken.value = response.content.token

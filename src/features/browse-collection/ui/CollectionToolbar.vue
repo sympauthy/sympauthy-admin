@@ -9,7 +9,7 @@ import {
   FormInput,
   secondaryColoredButton
 } from '@/shared/ui'
-import type { Collection } from './useCollection'
+import type { Collection } from '../model/useCollection'
 import CollectionFilterChip from './CollectionFilterChip.vue'
 
 /**

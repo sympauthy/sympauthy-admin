@@ -2,14 +2,12 @@ import { computed, reactive, ref, type Ref } from 'vue'
 import {
   getErrorMessage,
   isSuccess,
+  type CollectionCapabilitiesResource,
+  type CollectionPageResource,
   type ErrorApiResponse,
   type SuccessApiResponse
 } from '@/shared/api'
-import {
-  knownCollectionFilters,
-  type CollectionCapabilitiesResource,
-  type CollectionFilter
-} from './CollectionCapabilitiesResource'
+import { knownCollectionFilters, type CollectionFilter } from './CollectionFilter'
 import {
   collectionQueryParams,
   effectiveSortKeys,
@@ -18,7 +16,7 @@ import {
   type CollectionCriterion,
   type CollectionSortKey
 } from './CollectionCriteria'
-import { defaultCollectionOperator } from './CollectionOperator'
+import { defaultCollectionOperator } from './CollectionOperatorUtils'
 
 /**
  * A criteria change waits this long before it is asked of the server, so that the letters of a word
@@ -31,20 +29,11 @@ const CRITERIA_DELAY_IN_MS = 250
 type ApiResponse<T> = Promise<SuccessApiResponse<T> | ErrorApiResponse>
 
 /**
- * A body holding a page of records, which is the shape every collection answers with.
- */
-interface CollectionPageResource {
-  page: number
-  size: number
-  total: number
-}
-
-/**
  * Where one collection is read from: the document saying what it accepts, the call answering a page
  * of it, and where the records sit in that answer.
  *
  * Each function is called at the moment it is needed rather than bound once, so a collection under
- * a parent path reads whichever record its store currently holds.
+ * a parent path reads whichever record the page it belongs to is showing.
  */
 export interface CollectionSource<T, R extends CollectionPageResource> {
   capabilities: () => ApiResponse<CollectionCapabilitiesResource>
@@ -61,8 +50,9 @@ export interface CollectionSource<T, R extends CollectionPageResource> {
  * One collection: the records a page holds, what the caller asked of it, and what it says it
  * accepts.
  *
- * A store exposes one of these under the plural of what it holds, and a `CollectionPage` is handed
- * it whole. Nothing outside here builds a query parameter.
+ * A page holds one per collection it lists and hands it to `CollectionPage` whole, so what one
+ * screen asked of a collection is never what another screen reads. Nothing outside here builds a
+ * query parameter.
  */
 export interface Collection<T> {
   items: T[]
@@ -89,11 +79,14 @@ export interface Collection<T> {
   updateFilter: (id: number, patch: Partial<Omit<CollectionCriterion, 'id'>>) => void
   removeFilter: (id: number) => void
   toggleSort: (field: string) => void
-  reset: () => void
 }
 
 /**
  * The state of one collection, fetched from [source].
+ *
+ * It is held by the screen listing that collection and dies with it: the page an operator is on,
+ * the filters they typed and the order they asked for belong to that screen, and a second screen
+ * over the same records starts where its own caller left it.
  *
  * The capability document is requested beside the first page rather than before it: the first page
  * carries no criteria, so nothing about it waits on the document, and the toolbar appears when the
@@ -172,8 +165,8 @@ export function useCollection<T, R extends CollectionPageResource>(
       ...collectionQueryParams(criteria.value, requestedPage, size.value)
     })
 
-    // A later request went out while this one was travelling — or the collection was reset onto
-    // another record. Either way this answer is to a question nobody is asking any more.
+    // A later request went out while this one was travelling, so this answer is to a question
+    // nobody is asking any more.
     if (request !== currentRequest) {
       return
     }
@@ -267,29 +260,6 @@ export function useCollection<T, R extends CollectionPageResource>(
     }
   }
 
-  /**
-   * Everything the caller asked for, back to its initial value. The capability document is kept: it
-   * describes the collection and not the record, so it reads the same under the next parent.
-   *
-   * A request still travelling is disowned rather than awaited, so the record being left cannot
-   * paint its rows, its failure or its spinner over the one being opened.
-   */
-  function reset() {
-    currentRequest++
-    items.value = []
-    loading.value = false
-    error.value = null
-    capabilitiesError.value = null
-    page.value = 0
-    total.value = 0
-    loaded.value = false
-    criteria.value = emptyCollectionCriteria()
-    if (criteriaTimeout) {
-      clearTimeout(criteriaTimeout)
-      criteriaTimeout = undefined
-    }
-  }
-
   return reactive({
     items,
     loading,
@@ -311,7 +281,6 @@ export function useCollection<T, R extends CollectionPageResource>(
     addFilter,
     updateFilter,
     removeFilter,
-    toggleSort,
-    reset
+    toggleSort
   }) as Collection<T>
 }

@@ -2,9 +2,9 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/entities/user'
+import { UserApi, type UserListResource, type UserResource } from '@/entities/user'
 import { useClaimStore } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonAlert,
   CommonButton,
@@ -21,24 +21,37 @@ import { formatDate } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
-const userStore = useUserStore()
+const api = new UserApi()
 // The claims an account is identified by are this table's columns and what `claims=` asks the
 // server to embed in each row. They are read rather than taken from the capability document: that
 // document says which claims the collection can be *filtered* on, which is every configured one,
 // and a column is a different question.
 const claimStore = useClaimStore()
 
+// Which claims each user comes back with. It picks the columns this table draws rather than the
+// rows the server keeps, so it is not a criterion and travels beside them.
+const selectedClaimIds = ref<string[]>([])
+
+const users = useCollection<UserResource, UserListResource>({
+  capabilities: () => api.getUserCapabilities(),
+  page: (params) => api.listUsers(params),
+  items: (content) => content.users,
+  selection: () => ({
+    claims: selectedClaimIds.value.length > 0 ? selectedClaimIds.value.join(',') : undefined
+  })
+})
+
 const logoutUserId = ref<string | null>(null)
 
 onMounted(async () => {
   await claimStore.fetchIdentifierClaims()
-  userStore.setSelectedClaimIds(claimStore.identifierClaims.map((c) => c.id))
-  await userStore.users.fetch()
+  selectedClaimIds.value = claimStore.identifierClaims.map((c) => c.id)
+  await users.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage :collection="userStore.users" :search-placeholder="t('pages.users.search')">
+  <CollectionPage :collection="users" :search-placeholder="t('pages.users.search')">
     <template v-if="claimStore.identifierClaimsError" #notice>
       <CommonAlert color="warning">
         {{ t('pages.users.identifierClaimsFailed') }}
@@ -48,21 +61,21 @@ onMounted(async () => {
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="userStore.users"
+        :collection="users"
         :label="t('pages.users.status')"
         field="status"
       />
       <CollectionSortHeader
         v-for="claim in claimStore.identifierClaims"
         :key="claim.id"
-        :collection="userStore.users"
+        :collection="users"
         :label="claim.id"
         :field="claim.id"
       />
       <CollectionSortHeader
         fit
         hidden-below="sm"
-        :collection="userStore.users"
+        :collection="users"
         :label="t('pages.users.createdAt')"
         field="created_at"
       />
@@ -70,7 +83,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="user in userStore.users.items" :key="user.user_id">
+      <tr v-for="user in users.items" :key="user.user_id">
         <TableCell :label="t('pages.users.status')" fit>
           <Tag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}

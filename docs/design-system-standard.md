@@ -4,7 +4,7 @@ description: The shared interface kit — which component to reach for, the scal
   styles they are built from.
 paths:
   - "src/**/ui/**"
-  - "src/shared/collection/*.vue"
+  - "src/features/*/ui/**"
   - "src/app/styles/**"
 ---
 
@@ -53,11 +53,11 @@ to reach for, by need.
 that entity's `ui/` segment — `ClaimTags`, `ClientTypeHelpTooltip` — so every page explains the term
 the same way.
 
-**A component that is one shared segment's own surface stays in that segment**, and this table does
-not list it. `CollectionPage` and the toolbar, the chips and the sort headers under it sit in
-[`shared/collection`](../src/shared/collection/index.ts) beside the state they draw, governed by
-[the collection standard](collection-standard.md). The scale, the colours and the primitives below
-are still what they are built from.
+**A component belonging to one action stays with that action**, and this table does not list it.
+`CollectionPage` and the toolbar, the chips and the sort headers under it sit in
+[`features/browse-collection`](../src/features/browse-collection) beside the state they draw,
+governed by [the collection standard](collection-standard.md). The scale, the colours and the
+primitives below are still what they are built from.
 
 ## The scale
 

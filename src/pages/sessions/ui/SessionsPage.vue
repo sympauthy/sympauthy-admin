@@ -4,11 +4,13 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
-  useInteractiveFlowSessionStore,
+  InteractiveFlowSessionApi,
   interactiveFlowSessionStatusColor,
-  interactiveFlowSessionStatusLabel
+  interactiveFlowSessionStatusLabel,
+  type InteractiveFlowSessionListResource,
+  type InteractiveFlowSessionSummaryResource
 } from '@/entities/session'
-import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
   EmptyValue,
@@ -22,36 +24,41 @@ import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
-const sessionStore = useInteractiveFlowSessionStore()
+const api = new InteractiveFlowSessionApi()
+
+const sessions = useCollection<
+  InteractiveFlowSessionSummaryResource,
+  InteractiveFlowSessionListResource
+>({
+  capabilities: () => api.getSessionCapabilities(),
+  page: (params) => api.listSessions(params),
+  items: (content) => content.sessions
+})
 
 onMounted(async () => {
-  sessionStore.sessions.reset()
-  await sessionStore.sessions.fetch()
+  await sessions.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage
-    :collection="sessionStore.sessions"
-    :search-placeholder="t('pages.sessions.search')"
-  >
+  <CollectionPage :collection="sessions" :search-placeholder="t('pages.sessions.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.status')"
         field="status"
       />
       <TableHeader>{{ t('pages.sessions.user') }}</TableHeader>
       <CollectionSortHeader
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.client')"
         field="client"
       />
       <CollectionSortHeader
         fit
         hidden-below="lg"
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.started')"
         field="session_date"
       />
@@ -59,7 +66,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="session in sessionStore.sessions.items" :key="session.id">
+      <tr v-for="session in sessions.items" :key="session.id">
         <TableCell :label="t('pages.sessions.status')" fit>
           <Tag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}

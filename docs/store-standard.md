@@ -1,6 +1,6 @@
 ---
-description: What a Pinia store holds, how it fetches and reports failure, and the contract a list
-  store and a detail store each answer.
+description: What a Pinia store holds now that a screen holds its own collection, how it fetches
+  and reports failure, and the contract a detail store answers.
 paths:
   - "src/**/model/use*.ts"
   - "src/shared/auth/use*.ts"
@@ -8,9 +8,13 @@ paths:
 
 # Store standard
 
-A store holds what a screen displays, so a panel and the dialog acting on it read the same state.
-It calls [an API client](api-standard.md) and exposes the result; it renders nothing and knows
-nothing about the route.
+A store holds what more than one screen reads, so a panel and the dialog acting on it read the same
+state. It calls [an API client](api-standard.md) and exposes the result; it renders nothing and
+knows nothing about the route.
+
+**What one screen reads, that screen holds.** A collection is the case: the page an operator is on
+and the filters they typed belong to the screen showing them, and [the collection
+standard](collection-standard.md#a-page-holds-a-collection) owns what it does with them.
 
 ## Shape
 
@@ -58,31 +62,30 @@ if (isSuccess(response)) {
 ```
 
 **A page never builds a query parameter.** It calls a method the store exposes, or one of the
-collection the store holds.
+collection it holds.
 
-## A collection
+## A complete list
 
-**A store holding a paged collection exposes one `useCollection` under the plural of what it
-holds.** `useUserStore` returns `{ users }`, and everything a page is wired to — the rows, the
-paging, the criteria, the capability document — is on it.
-[The collection standard](collection-standard.md#a-store-holds-a-collection) owns the rest.
+**Every record of a collection, for a picker, is a store's.** `allClients`, `allAudiences`: a dialog
+offering all of them is not the screen listing a page of them, more than one screen opens that
+dialog, and what it reads must not replace what the list behind it is displaying.
 
-**A store holding a collection and something else names each.** `clients` is the collection the page
-lists; `allClients` is every client there is, for a picker — one is not the other, and a dialog
-filling the second must not replace what the first is displaying.
+**It is named for the whole set**, `all…`, beside the `…Loading` and `…Error` it carries — a store
+holding one names what it is, because the collection it is not is elsewhere.
 
 ## A detail store
 
 **A detail store exposes `$reset()`, and the page calls it in `onMounted` before fetching.** Every
 ref goes back to its initial value, so a second record never renders under the first one's data.
 
-**A second concern is a second store, not a prefix.** A user's detail, their claims, their second
-factors, their linked providers and their consents are five stores, each owning its own `loading`,
-`error` and page — which is what a `…Loading` prefix used to stand in for.
+**A second concern is a second store, not a prefix.** Each owns its own `loading` and `error`,
+which is what a `…Loading` prefix used to stand in for, and a panel then waits on its own request
+rather than on another panel's.
 
 ## Mutating
 
-**A mutation refetches what it changed, at the page currently displayed.**
+**A mutation refetches what it changed, at the page currently displayed.** One over the rows a
+screen lists is that screen's, beside the collection it refetches.
 
 **A mutation records its own failure in the `error` of what it changed**, except where the caller
 needs the message beside a field.
@@ -106,8 +109,8 @@ in; a component asks `formatDate` for the string it draws.
 **Persistence and hydration.** Nothing survives a reload except what `shared/auth` keeps for the
 OIDC client.
 
-**Invalidating another store.** An action refetches its own collection, and a screen showing the
-same record elsewhere keeps what it last read.
+**Invalidating another screen.** An action refetches what it changed where it changed it, and a
+screen showing the same records elsewhere keeps what it last read.
 
 **Subscriptions and plugins.** No store is subscribed to, and Pinia runs with none.
 

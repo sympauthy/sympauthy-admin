@@ -1,21 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchAllPages, useCollection } from '@/shared/collection'
-import { getErrorMessage } from '@/shared/api'
+import { fetchAllPages, getErrorMessage } from '@/shared/api'
 import { AudienceApi } from '../api/AudienceApi'
-import type { AudienceListResource } from './AudienceListResource'
 import type { AudienceResource } from './AudienceResource'
 
 export const useAudienceStore = defineStore('audiences', () => {
   const api = new AudienceApi()
 
-  const audiences = useCollection<AudienceResource, AudienceListResource>({
-    capabilities: () => api.getAudienceCapabilities(),
-    page: (params) => api.listAudiences(params),
-    items: (content) => content.audiences
-  })
-
-  // Every audience there is, for a picker that has to offer all of them.
+  // Every audience there is, for a picker that has to offer all of them. A screen listing audiences
+  // holds its own page of them, and the two are never the same question.
   const allAudiences = ref<AudienceResource[]>([])
   const allAudiencesLoading = ref(false)
   const allAudiencesError = ref<string | null>(null)
@@ -40,7 +33,6 @@ export const useAudienceStore = defineStore('audiences', () => {
   }
 
   return {
-    audiences,
     allAudiences,
     allAudiencesLoading,
     allAudiencesError,

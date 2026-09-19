@@ -44,6 +44,12 @@ what the collection published.
 `CollectionCapabilitiesResource` that [the collection
 standard](collection-standard.md#the-capability-document) describes.
 
+**The collection wire is `shared/api`'s, and a client reaches no further for it.**
+`CollectionParams`, the `CollectionPageResource` every list answers with, that document with its
+schema, the closed sets of operators and field types it is written in, and `fetchAllPages` are all
+here. What a screen makes of them is
+[`features/browse-collection`](../src/features/browse-collection), which a client may not import.
+
 **Query parameters go through `toQueryParams`.** It drops what the caller left unset, because an
 absent criterion and an empty one mean the same thing to every collection.
 
@@ -68,8 +74,9 @@ that publishes one more must not blank a screen.
 array named after what it holds.** The item resource is spread into it — `items: {
 ...userResourceSchema }` — so one declaration validates both.
 
-**A response body every surface shares lives in `shared/collection`.** The capability document is
-the one, because it describes a collection rather than any entity.
+**A response body every surface shares lives in `shared/api`.** The capability document and the
+page every list answers with are those, because each describes a collection rather than any
+entity.
 
 **A resource is named for the entity it belongs to, not for the concept it shares with another.**
 The claims the server is configured with are `ClaimResource`; the values held for a person are

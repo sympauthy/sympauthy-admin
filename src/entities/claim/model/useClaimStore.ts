@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useCollection } from '@/shared/collection'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage, type ErrorApiResponse } from '@/shared/api'
 import { ClaimApi } from '../api/ClaimApi'
-import type { ClaimListResource } from './ClaimListResource'
 import type { ClaimResource } from './ClaimResource'
 
 /**
@@ -15,15 +13,9 @@ const CONFIGURED_CLAIMS_PAGE_SIZE = 100
 export const useClaimStore = defineStore('claims', () => {
   const api = new ClaimApi()
 
-  const claims = useCollection<ClaimResource, ClaimListResource>({
-    capabilities: () => api.getClaimCapabilities(),
-    page: (params) => api.listClaims(params),
-    items: (content) => content.claims
-  })
-
   // The claims an account is identified by, which are the columns of the accounts table and what it
-  // asks the server to embed in each row. It is its own state rather than the collection's rows: a
-  // screen reading it is not the one listing claims.
+  // asks the server to embed in each row. It is read by the accounts screen rather than by the one
+  // listing claims, which is why it is here and not in either of them.
   const identifierClaims = ref<ClaimResource[]>([])
   const identifierClaimsError = ref<string | null>(null)
 
@@ -40,5 +32,5 @@ export const useClaimStore = defineStore('claims', () => {
     }
   }
 
-  return { claims, identifierClaims, identifierClaimsError, fetchIdentifierClaims }
+  return { identifierClaims, identifierClaimsError, fetchIdentifierClaims }
 })
