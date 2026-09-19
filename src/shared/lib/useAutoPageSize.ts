@@ -7,7 +7,7 @@ import { onBeforeUnmount, onMounted, onUpdated, type Ref } from 'vue'
 const FALLBACK_HEADER_HEIGHT = 40
 const FALLBACK_ROW_HEIGHT = 72
 
-// A viewport height change smaller than this is ignored: a horizontal scrollbar appearing or
+// A viewport change smaller than this is ignored, in either direction: a scrollbar appearing or
 // disappearing resizes the viewport by ~15px and would otherwise feed back into the page size.
 const RESIZE_THRESHOLD = 24
 
@@ -26,17 +26,18 @@ export interface AutoPageSizeOptions {
  * its content), otherwise the rows it receives would change the height it is measured from.
  */
 export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: AutoPageSizeOptions) {
-  const { enabled = () => true, minSize = 5, maxSize = 100, onChange } = options
+  const { enabled = () => true, minSize = 1, maxSize = 100, onChange } = options
 
   let currentSize = 0
-  // 0 until measured from real rows. Reset whenever the viewport is resized, since a breakpoint
-  // change alters the cell padding.
+  // 0 until measured from real rows, and the last known height whenever there are none to measure
+  // — the loading, error and empty states render no row.
   let rowHeight = 0
   // Set once the table has been rendered, and never cleared: it says the metrics of the state the
   // rows are displayed in have been seen at least once, which `rowHeight` cannot say on its own
   // since a resize clears it.
   let tableRendered = false
   let observedHeight = 0
+  let observedWidth = 0
   let observer: ResizeObserver | undefined
 
   function measureRowHeight(element: HTMLElement): number {
@@ -77,10 +78,16 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
       return
     }
 
-    // Measured once per viewport size: rows rendered after a size change were themselves sized by
-    // the previous measurement, so measuring them again could make the page size oscillate.
-    if (rowHeight === 0) {
-      rowHeight = measureRowHeight(element)
+    // Re-measured whenever there are rows to measure, rather than kept from the first reading. A
+    // measurement taken as a breakpoint lands reads a layout half-left — a header that has not
+    // reappeared, a padding that has not stepped — and a reading kept from then on would never be
+    // corrected, since nothing clears it but another resize. What makes that safe is that a row's
+    // height does not depend on how many rows were asked for, so a measurement cannot chase the
+    // size it produced; `onUpdated` runs this again once the rows it asked for are on the screen,
+    // and the second pass settles it.
+    const measured = measureRowHeight(element)
+    if (measured > 0) {
+      rowHeight = measured
     }
 
     const fitting = Math.floor(available / (rowHeight || FALLBACK_ROW_HEIGHT))
@@ -99,19 +106,34 @@ export function useAutoPageSize(viewport: Ref<HTMLElement | null>, options: Auto
     // Measured synchronously: child components are mounted before their parent, so the page size is
     // known before the page requests its first batch of items.
     observedHeight = viewport.value?.clientHeight ?? 0
+    observedWidth = viewport.value?.clientWidth ?? 0
     measure()
 
     if (!viewport.value) {
       return
     }
+    // Width is watched beside height because it decides how tall a row is: below `sm:` a row is
+    // drawn as a card, so a window narrowed across that breakpoint at one height leaves the
+    // measured row height describing a layout that is no longer on the screen.
     observer = new ResizeObserver(() => {
-      const height = viewport.value?.clientHeight ?? 0
-      if (Math.abs(height - observedHeight) < RESIZE_THRESHOLD) {
+      const element = viewport.value
+      if (!element) {
+        return
+      }
+      const height = element.clientHeight
+      const width = element.clientWidth
+      if (
+        Math.abs(height - observedHeight) < RESIZE_THRESHOLD &&
+        Math.abs(width - observedWidth) < RESIZE_THRESHOLD
+      ) {
         return
       }
       observedHeight = height
+      observedWidth = width
       rowHeight = 0
-      requestAnimationFrame(measure)
+      // Two frames, not one: the first is where the breakpoint's own layout lands, and measuring a
+      // row in it reads the height of the arrangement being left rather than the one arriving.
+      requestAnimationFrame(() => requestAnimationFrame(measure))
     })
     observer.observe(viewport.value)
   })

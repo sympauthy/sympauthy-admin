@@ -79,7 +79,9 @@ and what it draws; this section owns where it sits.
 **The page never scrolls.** Rows scroll inside the table, under a pinned header row and above a
 pinned pagination bar.
 
-**The number of rows per page is derived from the height available.** `PaginatedTable` measures it
+**The number of rows per page is derived from the height available**, down to one where one is
+all that fits — a card below `sm:` is several times the height of the row it replaces, so a floor
+written for rows would put the list back into a scroll. `PaginatedTable` measures it
 and emits `page-size-change`; the collection answers by refetching at the new size.
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.

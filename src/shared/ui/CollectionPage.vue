@@ -23,7 +23,7 @@ const props = withDefaults(
   }>(),
   {
     searchPlaceholder: '',
-    minPageSize: 5
+    minPageSize: 1
   }
 )
 

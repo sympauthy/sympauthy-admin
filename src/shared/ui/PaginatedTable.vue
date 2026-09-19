@@ -45,7 +45,7 @@ const props = withDefaults(
     tableLayout: 'auto',
     fill: false,
     autoPageSize: false,
-    minPageSize: 5
+    minPageSize: 1
   }
 )
 
