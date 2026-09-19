@@ -8,9 +8,8 @@ import {
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/entities/session'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonButton,
   EmptyValue,
   TableCell,

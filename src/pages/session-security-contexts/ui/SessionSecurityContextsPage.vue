@@ -6,13 +6,8 @@ import {
   useInteractiveFlowSessionSecurityContextStore,
   securityContextLocation
 } from '@/entities/session'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  EmptyValue,
-  TableCell,
-  TableHeader
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { EmptyValue, TableCell, TableHeader } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()

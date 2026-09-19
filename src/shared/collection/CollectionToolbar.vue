@@ -2,13 +2,15 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowPathIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/20/solid'
-import type { Collection } from '@/shared/collection'
+import {
+  CommonAlert,
+  CommonButton,
+  DropdownButton,
+  FormInput,
+  secondaryColoredButton
+} from '@/shared/ui'
+import type { Collection } from './useCollection'
 import CollectionFilterChip from './CollectionFilterChip.vue'
-import CommonAlert from './CommonAlert.vue'
-import CommonButton from './CommonButton.vue'
-import DropdownButton from './DropdownButton.vue'
-import FormInput from './FormInput.vue'
-import { secondaryColoredButton } from './ButtonStyle'
 
 /**
  * What a collection is narrowed by: the free text field where it searches on something, the menu of

@@ -3,15 +3,8 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useClientStore, ClientTypeHelpTooltip } from '@/entities/client'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  CommonButton,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  primaryColoredButton
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { CommonButton, EmptyValue, TableCell, TableHeader, primaryColoredButton } from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()

@@ -4,9 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/entities/user'
 import { useClaimStore } from '@/entities/claim'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonAlert,
   CommonButton,
   EmptyValue,

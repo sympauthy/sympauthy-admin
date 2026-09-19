@@ -2,14 +2,14 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { XMarkIcon } from '@heroicons/vue/20/solid'
+import type { CollectionFilter } from './CollectionCapabilitiesResource'
+import type { CollectionCriterion } from './CollectionCriteria'
 import {
   collectionOperatorLabelKey,
   isMultiValuedOperator,
   isValuelessOperator,
-  type CollectionCriterion,
-  type CollectionFilter,
   type CollectionOperator
-} from '@/shared/collection'
+} from './CollectionOperator'
 
 /**
  * One criterion of a collection: the field it names, the operator it asks under, and the value the

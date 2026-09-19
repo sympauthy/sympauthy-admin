@@ -2,14 +2,8 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClaimStore, ClaimTags } from '@/entities/claim'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  OriginTag,
-  TableCell,
-  TableHeader,
-  Tag
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()

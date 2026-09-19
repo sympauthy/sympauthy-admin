@@ -4,6 +4,7 @@ description: The shared interface kit — which component to reach for, the scal
   styles they are built from.
 paths:
   - "src/**/ui/**"
+  - "src/shared/collection/*.vue"
   - "src/app/styles/**"
 ---
 
@@ -39,11 +40,7 @@ to reach for, by need.
 | `SummaryCard`, `SummaryField` | the panel identifying the record above its sections |
 | `PageActions` | what the screen lets an operator do, drawn in its header |
 | `DefinitionList`, `DefinitionRow` | the fields of a record, inside a section |
-| `CollectionPage` | the root of a page showing a collection |
-| `CollectionToolbar` | the search field and the filters of a collection |
-| `CollectionFilterChip` | one criterion: its field, its operator and its value |
-| `CollectionSortHeader` | a column of a collection the server may order on |
-| `TableHeader`, `TableCell` | any other column, and every cell under one |
+| `TableHeader`, `TableCell` | a column of a table, and every cell under one |
 | `PaginatedTable` | any table of records |
 | `RecordTabs` | the views one record is read through |
 | `ActionsDropdown` | the actions of one record or one page |
@@ -55,6 +52,12 @@ to reach for, by need.
 [its `index.ts`](../src/shared/ui/index.ts) in the same commit. One that names an entity belongs in
 that entity's `ui/` segment — `ClaimTags`, `ClientTypeHelpTooltip` — so every page explains the term
 the same way.
+
+**A component that is one shared segment's own surface stays in that segment**, and this table does
+not list it. `CollectionPage` and the toolbar, the chips and the sort headers under it sit in
+[`shared/collection`](../src/shared/collection/index.ts) beside the state they draw, governed by
+[the collection standard](collection-standard.md). The scale, the colours and the primitives below
+are still what they are built from.
 
 ## The scale
 

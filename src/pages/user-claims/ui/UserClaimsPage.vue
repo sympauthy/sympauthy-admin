@@ -4,14 +4,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserClaimStore } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  EmptyValue,
-  OriginTag,
-  TableCell,
-  TableHeader
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { EmptyValue, OriginTag, TableCell, TableHeader } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()

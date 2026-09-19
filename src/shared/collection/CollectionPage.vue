@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useSlots } from 'vue'
-import type { Collection } from '@/shared/collection'
+import { PaginatedTable } from '@/shared/ui'
+import type { Collection } from './useCollection'
 import CollectionToolbar from './CollectionToolbar.vue'
-import PaginatedTable from './PaginatedTable.vue'
 
 /**
  * The root of a page showing one collection: a toolbar holding the search field, the filters and

@@ -3,9 +3,8 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import { useInvitationStore } from '@/entities/invitation'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
   EmptyValue,

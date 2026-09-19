@@ -6,7 +6,8 @@ import {
   audienceRegistrationModeKey,
   audienceRegistrationModeColor
 } from '@/entities/audience'
-import { CollectionPage, CollectionSortHeader, TableCell, TableHeader, Tag } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { TableCell, TableHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()

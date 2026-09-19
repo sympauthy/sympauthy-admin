@@ -3,7 +3,6 @@ description: How the panel reads a paged collection — the document each one pu
   built against it, the state a store holds, and the page it is drawn as.
 paths:
   - "src/shared/collection/**"
-  - "src/shared/ui/Collection*.vue"
   - "src/entities/*/api/**"
   - "src/entities/*/model/use*Store.ts"
 ---
@@ -120,6 +119,11 @@ the collection whole:
 ```html
 <CollectionPage :collection="store.users" :search-placeholder="t('pages.users.search')">
 ```
+
+**The components sit in `shared/collection`, beside the state they draw**, and its `index.ts`
+publishes what a page names — `CollectionPage`, `CollectionSortHeader`. The toolbar, the chips and
+the value controls are parts of that page rather than pieces of the kit, so nothing outside the
+segment reaches them.
 
 **A page writes its columns and its rows, and nothing else.** The toolbar, the operators, the value
 controls, the sort arrows and the query string all come from the collection.

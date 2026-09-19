@@ -4,15 +4,8 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserConsentStore } from '@/entities/consent'
 import { formatDateTime } from '@/shared/lib'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  CommonButton,
-  TableCell,
-  TableHeader,
-  Tag,
-  dangerColoredButton
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { CommonButton, TableCell, TableHeader, Tag, dangerColoredButton } from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()

@@ -3,9 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserProviderLinkStore } from '@/entities/user'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
   TableCell,

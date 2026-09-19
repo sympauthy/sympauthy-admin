@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
-import type { Collection } from '@/shared/collection'
-import TableHeader from './TableHeader.vue'
+import { TableHeader } from '@/shared/ui'
+import type { Collection } from './useCollection'
 
 /**
  * A column header, which the caller can order the collection on where the collection says it orders

@@ -2,15 +2,8 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useScopeStore } from '@/entities/scope'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  EmptyValue,
-  OriginTag,
-  TableCell,
-  TableHeader,
-  Tag
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader } from '@/shared/collection'
+import { EmptyValue, OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
 const scopeStore = useScopeStore()
