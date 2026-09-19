@@ -191,6 +191,10 @@ whole scale.
 **A toolbar is one row at every width.** Its controls give up their labels rather than their
 place — a second row costs the list below it a record, and the field beside them still reads.
 
+**A pagination bar is one row too.** Below `sm:` it drops the range it reads and centres the pager,
+which already says which page of how many; a phone is not told the same thing twice at the price of
+a record.
+
 ## What this standard does not cover
 
 **A `md:` layout.** No screen has a third arrangement.

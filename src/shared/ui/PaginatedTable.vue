@@ -141,10 +141,12 @@ const pageButtonClasses = `${pageControlClasses} min-w-8 data-[selected]:border-
       :total="totalItems"
       :sibling-count="1"
       show-edges
-      class="mt-4 flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      class="mt-4 flex shrink-0 items-center justify-center gap-2 sm:justify-between"
       @update:page="(value: number) => emit('pageChange', value - 1)"
     >
-      <span class="text-sm text-gray-600">
+      <!-- A phone is told which page of how many by the indicator inside the pager, so the range
+           it also reads would cost the list a record to say the same thing twice. -->
+      <span class="hidden text-sm text-gray-600 sm:inline">
         <template v-if="range">
           {{ t('common.paginationRange', range) }}
         </template>
