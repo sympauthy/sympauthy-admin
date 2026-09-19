@@ -188,8 +188,8 @@ sized by its parent (`h-full w-full`), never by itself.
 `p-4` to `sm:p-6`. [The design system standard](design-system-standard.md#the-scale) holds the
 whole scale.
 
-**A toolbar or a pagination bar stacks on a phone and goes side by side from `sm:`.** Stacked, the
-field takes the width and the control beside it takes its own.
+**A toolbar is one row at every width.** Its controls give up their labels rather than their
+place — a second row costs the list below it a record, and the field beside them still reads.
 
 ## What this standard does not cover
 

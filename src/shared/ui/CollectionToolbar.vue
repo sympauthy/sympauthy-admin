@@ -39,12 +39,14 @@ function filterOf(field: string) {
 
 <template>
   <div>
-    <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+    <!-- One row at every width. The controls give up their labels rather than their place, since
+         a second row costs the list below a record and the field beside them still reads. -->
+    <div class="flex items-center gap-2 sm:gap-4">
       <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
            query still narrowing the collection would otherwise come back to an empty field. -->
       <FormInput
         v-if="props.collection.searchable"
-        class="w-full sm:flex-1"
+        class="min-w-0 flex-1"
         :icon="MagnifyingGlassIcon"
         :model-value="props.collection.criteria.query"
         :placeholder="props.searchPlaceholder"
@@ -53,9 +55,9 @@ function filterOf(field: string) {
       />
       <!-- Holds the place the field would take, so the controls stay at the end of the row on a
            collection the server searches nothing on. -->
-      <div v-else class="hidden sm:block sm:flex-1" />
+      <div v-else class="flex-1" />
 
-      <div class="flex items-center gap-2">
+      <div class="flex shrink-0 items-center gap-2">
         <!-- A phone gives the row the width of one control, so both of them keep their icon and
              give up their label. -->
         <DropdownButton
