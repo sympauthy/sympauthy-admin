@@ -1,50 +1,24 @@
-# sympauthy-admin
+# SympAuthy Admin
 
-Admin UI for the open-source authorization server [SympAuthy](https://github.com/sympauthy/sympauthy).
+The operator's panel of [SympAuthy](https://github.com/sympauthy/sympauthy), an open-source,
+self-hosted OAuth2 and OpenID Connect authorization server. It inspects the accounts, clients,
+claims, scopes, audiences, invitations and interactive flow sessions the server owns, and performs
+the actions an operator takes on them.
 
-This project is built with Vue 3 + Vite and is served directly by the SympAuthy backend.
+Vue 3 and Vite, built into static assets the authorization server serves itself.
 
-## Recommended IDE Setup
+## Using SympAuthy Admin
 
-[VSCode](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+The panel ships with the server. How to configure and run one is the
+[public documentation](https://sympauthy.github.io).
 
-## Project Setup
+## Working on SympAuthy Admin
 
-```sh
-nvm use
-npm install
-```
+**[`docs/`](docs/index.md) is the authority on how this panel is built** — the architecture, the
+standards every layer holds to, and the decisions behind them. Read the document governing a change
+before the code it governs.
 
-### Compile and Hot-Reload for Development
+To set the project up and run it, see [Running locally](docs/running-locally.md).
 
-```sh
-npm run dev
-```
-
-The dev server proxies `/api` requests to `http://localhost:8080` (the SympAuthy backend).
-
-The OIDC authority and redirect URIs are derived from `window.location.origin` by default. To override them during development, create a `.env.local` file:
-
-```sh
-VITE_OIDC_AUTHORITY=http://localhost:8080
-VITE_OIDC_REDIRECT_URI=http://localhost:5174/callback
-VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
-
-### Format with [Prettier](https://prettier.io/)
-
-```sh
-npm run format
-```
+The recommended IDE setup is [VS Code](https://code.visualstudio.com/) with
+[Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar), Vetur disabled.
