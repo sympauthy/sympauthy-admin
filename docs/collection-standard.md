@@ -225,6 +225,10 @@ anything else.
 **Choosing which columns a page draws.** The columns are written by the page; nothing lets an
 operator add or hide one.
 
+**Continuous scrolling.** The list is paged because the server pages by offset: appending windows of
+a set that moves under the reader duplicates and skips records, and the error grows with the
+scroll. Keyset pagination on the server is what would reopen this.
+
 ---
 
 ← [Design documentation](index.md)
