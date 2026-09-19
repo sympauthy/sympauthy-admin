@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
   useInteractiveFlowSessionStore,
-  purposeLabel,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/entities/session'
@@ -45,21 +44,14 @@ onMounted(async () => {
         field="status"
       />
       <TableHeader>{{ t('pages.sessions.user') }}</TableHeader>
-      <TableHeader fit hidden-below="lg">{{ t('pages.sessions.ip') }}</TableHeader>
       <CollectionSortHeader
         :collection="sessionStore.sessions"
         :label="t('pages.sessions.client')"
         field="client"
       />
       <CollectionSortHeader
-        :collection="sessionStore.sessions"
-        :label="t('pages.sessions.startedFor')"
-        field="purpose"
-      />
-      <TableHeader hidden-below="sm">{{ t('pages.sessions.stoppedAt') }}</TableHeader>
-      <CollectionSortHeader
         fit
-        hidden-below="sm"
+        hidden-below="lg"
         :collection="sessionStore.sessions"
         :label="t('pages.sessions.started')"
         field="session_date"
@@ -87,24 +79,13 @@ onMounted(async () => {
           </Tag>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell :label="t('pages.sessions.ip')" fit mono hidden-below="lg">
-          <span v-if="session.ip">{{ session.ip }}</span>
-          <EmptyValue v-else />
-        </TableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no
              longer declares, and a link landing on an error page is worse than no link. -->
         <TableCell :label="t('pages.sessions.client')" truncate>
           <span v-if="session.client_id">{{ session.client_id }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell :label="t('pages.sessions.startedFor')" truncate>
-          {{ purposeLabel(session.initiating_purpose) }}
-        </TableCell>
-        <TableCell :label="t('pages.sessions.stoppedAt')" truncate hidden-below="sm">
-          <span v-if="session.current_purpose">{{ purposeLabel(session.current_purpose) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.sessions.started')" fit hidden-below="sm">
+        <TableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
           {{ formatDateTime(session.session_date) }}
         </TableCell>
         <TableCell fit>
