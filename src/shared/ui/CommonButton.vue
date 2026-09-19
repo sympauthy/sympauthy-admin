@@ -15,6 +15,13 @@ interface Props {
   icon?: Component
   /** Drawn after the label, for a button that opens something rather than doing it. */
   trailingIcon?: Component
+  /**
+   * Drops the label below `sm:`, leaving the icon alone and keeping the label as the title. For a
+   * control of a toolbar, which is one row of them at every width; a button inside a table row
+   * keeps its label, since below `sm:` that row is a card with the width to spare. Pass an [icon]
+   * with it, or there is nothing left to press.
+   */
+  collapseLabel?: boolean
   loading?: boolean
   submitting?: boolean
   disabled?: boolean
@@ -25,6 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   icon: undefined,
   trailingIcon: undefined,
+  collapseLabel: false,
   loading: false,
   submitting: false,
   disabled: false
@@ -58,13 +66,13 @@ const stateSlot = computed(() => {
     :class="computedClasses"
     :disabled="computedDisabled"
     :title="props.label"
-    class="control font-medium transition-colors"
+    class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
   >
-    <span class="inline-flex w-full items-center justify-center gap-1.5">
-      <CommonSpinner v-if="loading || submitting" size="sm" />
-      <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
+    <CommonSpinner v-if="loading || submitting" size="sm" />
+    <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
+    <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
       <slot :name="stateSlot">{{ props.label }}</slot>
-      <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
     </span>
+    <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
   </button>
 </template>

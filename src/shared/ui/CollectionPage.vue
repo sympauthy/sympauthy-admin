@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, useSlots } from 'vue'
+import { useSlots } from 'vue'
 import type { Collection } from '@/shared/collection'
 import CollectionToolbar from './CollectionToolbar.vue'
 import PaginatedTable from './PaginatedTable.vue'
@@ -28,22 +28,11 @@ const props = withDefaults(
 )
 
 const slots = useSlots()
-
-// The toolbar is kept once the collection has said it filters or searches on something. It stays
-// even while a criterion narrows the collection to nothing, which is what the caller needs to widen
-// it again.
-const hasToolbar = computed(
-  () =>
-    props.collection.searchable ||
-    props.collection.filters.length > 0 ||
-    props.collection.capabilitiesError !== null
-)
 </script>
 
 <template>
   <div class="flex h-full min-h-0 flex-col">
     <CollectionToolbar
-      v-if="hasToolbar"
       class="mb-4 shrink-0"
       :collection="props.collection"
       :search-placeholder="props.searchPlaceholder"

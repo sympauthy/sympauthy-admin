@@ -104,6 +104,11 @@ the panel is built for.
 input, a select, a textarea, a button and a dropdown trigger share that rule, so a row of them is
 one height whatever each is made of.
 
+**That height is stated, not inherited from the content.** `.control` carries a `min-h`, because a
+button laying its label out as a line box is a descender taller than one laying it out as a flex
+row, and an icon with the label collapsed is shorter than either. **A control holding more than
+text centres it** — `flex items-center` — so what the height gains does not sit at the top of it.
+
 **A control that takes focus adds `.control-focus`**, which is the panel's one focus ring.
 
 **A field of a form is a `FormField` wrapping a `FormInput`, `FormSelect` or `FormTextarea`.** The
@@ -124,8 +129,13 @@ showing and what its `title` carries, so the same string is never written twice.
 **An icon on a button is its `icon` prop, and one that opens something its `trailingIcon`.** Both
 are drawn `size-4 shrink-0` by the button.
 
-**A button keeps its label at every supported width.** Below `sm:` a row is a card rather than a
-cell of a table, so the width that would have been saved by hiding the label is not needed.
+**A button inside a table row keeps its label at every supported width.** Below `sm:` that row is
+a card, which has the width the label needs.
+
+**A control of a toolbar is passed `collapseLabel`**, which leaves its icon alone below `sm:` and
+keeps the label as a title. A toolbar is one row of controls whatever the width, and two labelled
+ones do not fit a phone beside each other. Pass an `icon` with it, or there is nothing left to
+press.
 
 **A button in flight is passed `submitting`, and one waiting on its screen `loading`.** Both disable
 it and draw a spinner; the label stays unless a `#submitting` or `#loading` slot overrides it.

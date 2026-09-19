@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { ArrowPathIcon, EyeIcon } from '@heroicons/vue/20/solid'
+import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
   useInteractiveFlowSessionStore,
   purposeLabel,
@@ -14,12 +14,10 @@ import {
   CollectionSortHeader,
   CommonButton,
   EmptyValue,
-  PageActions,
   TableCell,
   TableHeader,
   Tag,
-  primaryColoredButton,
-  secondaryColoredButton
+  primaryColoredButton
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
@@ -35,17 +33,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- The set changes while the operator is looking at it, so it is theirs to re-read. -->
-  <PageActions>
-    <CommonButton
-      :button-style="secondaryColoredButton"
-      :label="t('pages.sessions.refresh')"
-      :icon="ArrowPathIcon"
-      :disabled="sessionStore.sessions.loading"
-      @click="sessionStore.sessions.fetch(sessionStore.sessions.page)"
-    />
-  </PageActions>
-
   <CollectionPage
     :collection="sessionStore.sessions"
     :search-placeholder="t('pages.sessions.search')"
