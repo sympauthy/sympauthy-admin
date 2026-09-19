@@ -39,9 +39,11 @@ function filterOf(field: string) {
 
 <template>
   <div>
-    <!-- One row at every width. The controls give up their labels rather than their place, since
-         a second row costs the list below a record and the field beside them still reads. -->
-    <div class="flex items-center gap-2 sm:gap-4">
+    <!-- One row at every width, and one gap down it: the field and the two controls beside it are
+         all controls in a row, so nothing groups two of them more tightly than the third. They
+         give up their labels rather than their place, since a second row costs the list below a
+         record and the field beside them still reads. -->
+    <div class="flex items-center gap-2">
       <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
            query still narrowing the collection would otherwise come back to an empty field. -->
       <FormInput
@@ -57,28 +59,27 @@ function filterOf(field: string) {
            collection the server searches nothing on. -->
       <div v-else class="flex-1" />
 
-      <div class="flex shrink-0 items-center gap-2">
-        <!-- A phone gives the row the width of one control, so both of them keep their icon and
-             give up their label. -->
-        <DropdownButton
-          v-if="filterOptions.length > 0"
-          collapse-label
-          :label="t('common.addFilter')"
-          :icon="PlusIcon"
-          :options="filterOptions"
-          @select="props.collection.addFilter"
-        />
-        <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is
-             the caller's without any page saying so. -->
-        <CommonButton
-          collapse-label
-          :button-style="secondaryColoredButton"
-          :label="t('common.collection.refresh')"
-          :icon="ArrowPathIcon"
-          :disabled="props.collection.loading"
-          @click="props.collection.fetch(props.collection.page)"
-        />
-      </div>
+      <!-- A phone gives the row the width of one control, so both of them keep their icon and
+           give up their label. -->
+      <DropdownButton
+        v-if="filterOptions.length > 0"
+        collapse-label
+        :label="t('common.addFilter')"
+        :icon="PlusIcon"
+        :options="filterOptions"
+        @select="props.collection.addFilter"
+      />
+      <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is the
+           caller's without any page saying so. -->
+      <CommonButton
+        collapse-label
+        class="shrink-0"
+        :button-style="secondaryColoredButton"
+        :label="t('common.collection.refresh')"
+        :icon="ArrowPathIcon"
+        :disabled="props.collection.loading"
+        @click="props.collection.fetch(props.collection.page)"
+      />
     </div>
 
     <!-- The records list without the document; what is missing is the toolbar above them. -->
