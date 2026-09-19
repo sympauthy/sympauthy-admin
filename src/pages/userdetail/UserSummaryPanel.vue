@@ -6,6 +6,7 @@ import CopyToClipboard from '@/components/CopyToClipboard.vue'
 import ActionsDropdown, { type ActionItem } from '@/components/ActionsDropdown.vue'
 import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 import type { UserDetailResource } from '@/client/model/UserDetailResource'
+import { formatDate } from '@/utils/DateUtils'
 
 defineProps<{
   user: UserDetailResource
@@ -46,10 +47,6 @@ function onAction(key: string) {
   } else if (key === 'logout') {
     emit('logout')
   }
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString()
 }
 </script>
 

@@ -8,6 +8,7 @@ import PaginatedTable from '@/components/PaginatedTable.vue'
 import CommonButton from '@/components/CommonButton.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { dangerColoredButton } from '@/styles/ButtonStyle'
+import { formatDate } from '@/utils/DateUtils'
 
 const props = defineProps<{
   userId: string
@@ -15,10 +16,6 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const store = useUserProviderLinkStore()
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString()
-}
 
 const unlinkDialogOpen = ref(false)
 const unlinkTargetProviderId = ref<string | null>(null)
