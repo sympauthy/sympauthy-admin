@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
-import CommonAlert from '@/shared/ui/CommonAlert.vue'
+import CommonSpinner from './CommonSpinner.vue'
+import CommonAlert from './CommonAlert.vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import {
   PaginationRoot,
@@ -12,7 +12,7 @@ import {
   PaginationNext,
   PaginationEllipsis
 } from 'reka-ui'
-import { useAutoPageSize } from '@/shared/lib/useAutoPageSize'
+import { useAutoPageSize } from '@/shared/lib'
 
 const { t } = useI18n()
 

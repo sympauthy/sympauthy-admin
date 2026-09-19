@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { InvitationApi, type CreateInvitationInput } from '@/entities/invitation/api/InvitationApi'
-import type { InvitationResource } from '@/entities/invitation/model/InvitationResource'
-import type { CreatedInvitationResource } from '@/entities/invitation/model/CreatedInvitationResource'
-import { isSuccess, type SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { InvitationApi, type CreateInvitationInput } from '../api/InvitationApi'
+import type { InvitationResource } from './InvitationResource'
+import type { CreatedInvitationResource } from './CreatedInvitationResource'
+import {
+  isSuccess,
+  type SuccessApiResponse,
+  type ErrorApiResponse,
+  getErrorMessage
+} from '@/shared/api'
 
 export const useInvitationStore = defineStore('invitations', () => {
   const api = new InvitationApi()

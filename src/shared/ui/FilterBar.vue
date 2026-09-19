@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, computed } from 'vue'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/20/solid'
-import DropdownButton from '@/shared/ui/DropdownButton.vue'
+import DropdownButton from './DropdownButton.vue'
 
 export type FilterConfig = {
   key: string

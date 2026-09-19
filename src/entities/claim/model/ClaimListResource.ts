@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { type ClaimResource, claimResourceSchema } from '@/entities/claim/model/ClaimResource'
+import { type ClaimResource, claimResourceSchema } from './ClaimResource'
 
 export type ClaimListResource = {
   claims: ClaimResource[]

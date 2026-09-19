@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-import { useBreadcrumb } from '@/shared/lib/useBreadcrumb'
+import { useBreadcrumb } from '@/shared/lib'
 
 const route = useRoute()
 const router = useRouter()

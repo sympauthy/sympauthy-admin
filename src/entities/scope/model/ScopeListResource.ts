@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { type ScopeResource, scopeResourceSchema } from '@/entities/scope/model/ScopeResource'
+import { type ScopeResource, scopeResourceSchema } from './ScopeResource'
 
 export type ScopeListResource = {
   scopes: ScopeResource[]

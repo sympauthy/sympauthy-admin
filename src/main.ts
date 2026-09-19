@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from '@/app/App.vue'
-import { i18n } from '@/app/i18n'
+import { i18n } from '@/shared/i18n/i18n'
 import { makeRouter } from '@/app/router'
 import { createPinia } from 'pinia'
 

@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { InteractiveFlowSessionApi } from '@/entities/session/api/InteractiveFlowSessionApi'
-import type { ListInteractiveFlowSessionsParams } from '@/entities/session/api/InteractiveFlowSessionApi'
-import type { InteractiveFlowSessionSummaryResource } from '@/entities/session/model/InteractiveFlowSessionSummaryResource'
-import { isSuccess } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { InteractiveFlowSessionApi } from '../api/InteractiveFlowSessionApi'
+import type { ListInteractiveFlowSessionsParams } from '../api/InteractiveFlowSessionApi'
+import type { InteractiveFlowSessionSummaryResource } from './InteractiveFlowSessionSummaryResource'
+import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useInteractiveFlowSessionStore = defineStore('interactiveFlowSessions', () => {
   const api = new InteractiveFlowSessionApi()

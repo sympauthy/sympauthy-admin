@@ -1,4 +1,4 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
   type UserMfaMethodListResource,
   userMfaMethodListResourceSchema
@@ -7,8 +7,6 @@ import {
   type UserMfaEnrollmentResource,
   userMfaEnrollmentResourceSchema
 } from '@/entities/user/model/UserMfaEnrollmentResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export interface MfaEnrollmentInput {
   client_id: string

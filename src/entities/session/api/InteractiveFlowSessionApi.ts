@@ -1,4 +1,4 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
   type InteractiveFlowSessionListResource,
   interactiveFlowSessionListResourceSchema
@@ -11,8 +11,6 @@ import {
   type InteractiveFlowSessionSecurityContextListResource,
   interactiveFlowSessionSecurityContextListResourceSchema
 } from '@/entities/session/model/InteractiveFlowSessionSecurityContextListResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export interface ListInteractiveFlowSessionSecurityContextsParams {
   page?: number

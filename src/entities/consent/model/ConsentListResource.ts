@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { type ConsentResource, consentResourceSchema } from '@/entities/consent/model/ConsentResource'
+import { type ConsentResource, consentResourceSchema } from './ConsentResource'
 
 export type ConsentListResource = {
   consents: ConsentResource[]

@@ -1,4 +1,4 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
   type ClientListResource,
   clientListResourceSchema
@@ -7,8 +7,6 @@ import {
   type ClientDetailResource,
   clientDetailResourceSchema
 } from '@/entities/client/model/ClientDetailResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export class ClientApi extends AbstractApi {
   async listClients(

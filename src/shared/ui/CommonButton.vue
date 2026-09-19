@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { type ButtonStyle, primaryColoredButton } from '@/shared/ui/ButtonStyle'
-import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
+import { type ButtonStyle, primaryColoredButton } from './ButtonStyle'
+import CommonSpinner from './CommonSpinner.vue'
 
 interface Props {
   buttonStyle?: ButtonStyle

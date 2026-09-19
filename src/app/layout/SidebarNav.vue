@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from '@/shared/auth/useAuthStore'
+import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
-import { useSidebar } from '@/shared/lib/useSidebar'
+import { useSidebar } from '@/shared/lib'
 
 const { t } = useI18n()
 const route = useRoute()

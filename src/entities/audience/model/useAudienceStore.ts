@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { AudienceApi } from '@/entities/audience/api/AudienceApi'
-import type { AudienceResource } from '@/entities/audience/model/AudienceResource'
-import { isSuccess } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { AudienceApi } from '../api/AudienceApi'
+import type { AudienceResource } from './AudienceResource'
+import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useAudienceStore = defineStore('audiences', () => {
   const api = new AudienceApi()

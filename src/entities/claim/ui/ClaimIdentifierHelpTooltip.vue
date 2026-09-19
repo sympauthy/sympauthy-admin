@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import { HelpTooltip } from '@/shared/ui'
 
 const { t } = useI18n()
 </script>

@@ -1,7 +1,5 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
-import { type ScopeListResource, scopeListResourceSchema } from '@/entities/scope/model/ScopeListResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
+import { type ScopeListResource, scopeListResourceSchema } from '../model/ScopeListResource'
 
 export class ScopeApi extends AbstractApi {
   async listScopes(

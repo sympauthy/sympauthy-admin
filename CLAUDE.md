@@ -10,6 +10,7 @@ Always run `nvm use` before any npm/node command.
 - **Build:** `npm run build` (type-check + production build)
 - **Type-check:** `npm run type-check` (vue-tsc)
 - **Lint:** `npm run lint` (ESLint with auto-fix)
+- **Architecture lint:** `npm run lint:arch` (Steiger — enforces the layer rules below)
 - **Format:** `npm run format` (Prettier)
 
 No test framework is configured.
@@ -20,14 +21,48 @@ Vue 3 (Composition API, `<script setup>`) admin panel for a Sympauthy OAuth/OIDC
 
 **Stack:** Vite 7 · Vue Router 5 · Pinia 3 · Tailwind CSS 4 · reka-ui (headless UI primitives) · vue-i18n · oidc-client-ts · vee-validate + yup
 
-**Key directories:**
-- `src/pages/` — Page-level components (routed views)
-- `src/components/` — Reusable UI components. Presentational elements are custom Tailwind; interactive/overlay primitives (dialogs, dropdown menus, popovers) wrap **reka-ui** headless components for accessibility (see UI Conventions)
-- `src/stores/` — Pinia composition-style stores (handle API calls + reactive state)
-- `src/client/` — HTTP layer: `AbstractApi` base class, per-resource API classes, model interfaces + AJV schemas
-- `src/auth/` — OIDC `AuthService` wrapper around `oidc-client-ts` UserManager
-- `src/composables/` — Vue composables
-- `src/locales/` — i18n JSON translation files
+The codebase follows [Feature-Sliced Design](https://feature-sliced.design). `npm run lint:arch`
+(Steiger) enforces it, and CI fails on a violation — so the rules below are checked, not aspirational.
+
+**Layers** (`src/`), each importing only from layers strictly below it:
+
+| Layer | Holds |
+| --- | --- |
+| `app/` | `App.vue`, router, global styles, the layout shell (`AdminLayout`, `SidebarNav`, `BreadcrumbNav`) |
+| `pages/` | One slice per route. The page component plus anything only that page uses |
+| `features/` | A user action reused by more than one page |
+| `entities/` | One slice per domain noun: its API client, resources + AJV schemas, and Pinia stores |
+| `shared/` | Design system, HTTP plumbing, auth, i18n, utils — no domain knowledge |
+
+`src/main.ts` is the Vite entry point and sits outside the layers.
+
+**Slices and segments.** Each slice is one folder, split into `api/` (HTTP clients), `model/`
+(resources, schemas, stores) and `ui/` (components). Present slices: `entities/{user, client, claim,
+scope, audience, consent, invitation, session}` and `features/logout-user`.
+
+**Where does a new file go?**
+
+1. **No domain vocabulary in `shared/`.** If the props mention a user, client or scope, it isn't shared.
+2. **Used by one page → that page's slice.** Promote it to `features/` only when a second page needs it.
+   `LogoutDialog` earned its place there by being used by both the users list and the user detail page.
+3. **Displays or fetches one entity → that entity's slice.** An API client, its AJV schemas and the
+   store that consumes them always travel together.
+4. **`shared/auth` stays in `shared/`,** not `entities/` — `AbstractApi` depends on `useAuthStore`,
+   and `shared` may not import upward.
+
+**Public API.** Every slice and `shared/` segment has an `index.ts`, and that is the only entry point
+other slices may use: `import { useUserStore } from '@/entities/user'`, never
+`'@/entities/user/model/useUserStore'`. Inside a slice, import files directly by relative path
+(`./UserClaimsPanel.vue`). A page publishes only its route component; its panels stay internal.
+
+**Cross-imports.** Slices on the same layer may not import each other. The one exception is an
+interactive flow session embedding the user it authenticates, handled through FSD's `@x` notation:
+`entities/user/@x/session.ts` publishes exactly what the session slice may use. Add another only
+when two entities genuinely nest.
+
+**One disabled rule.** `fsd/insignificant-slice` is off for `src/entities/**` (see `steiger.config.ts`):
+an entity slice owning an API client, schemas and a store is correct even when a single page reads it
+today. The rule stays on for pages and features, where it does catch premature slicing.
 
 ## API Pattern
 
@@ -48,7 +83,7 @@ Responses are `SuccessApiResponse<T> | ErrorApiResponse`, checked with `isSucces
 ## UI Conventions
 
 - Use `@heroicons/vue/20/solid` (not outline variants)
-- Button styles defined in `src/styles/ButtonStyle.ts` (primary/secondary/danger)
+- Button styles defined in `src/shared/ui/ButtonStyle.ts` (primary/secondary/danger)
 - `PaginatedTable` for data tables (slot-based: `header`, `rows`, `empty`)
 - `ConfirmDialog` for destructive action confirmation
 - `Tag` component for status badges
@@ -90,7 +125,7 @@ Interactive/overlay components wrap [reka-ui](https://reka-ui.com) headless prim
 Detail pages (e.g. `/users/:userId`, `/clients/:clientId`) follow a consistent layout:
 
 - **Route:** `/:resource/:id`, breadcrumb parent is the list route
-- **Page component** in `src/pages/<resource>detail/` — handles loading/error/content states, resets store on mount
+- **Page component** in `src/pages/<resource>-detail/ui/` — handles loading/error/content states, resets store on mount
 - **Summary panel** (top): card wrapper (`bg-white rounded-lg border border-gray-200 p-4 sm:p-6`), grid of key-value pairs, no section heading. Use `CopyToClipboard` on the primary ID field.
 - **Content sections**: use `DetailSection` component (`h2 / text-lg / font-semibold` heading + default slot). Optional `#help` slot for `HelpTooltip`.
   - **Tabular data** (e.g. user claims, consents): `PaginatedTable` directly inside the slot — no card wrapper (the table provides its own styling)
@@ -109,7 +144,7 @@ Key patterns:
 - Sidebar state managed by `useSidebar` composable (shared `ref`, auto-closes on navigation)
 - `AdminLayout` handles the drawer overlay and mobile header bar (`lg:hidden`)
 - `SidebarNav` sizing is controlled by its parent (`h-full w-full`), not by the component itself
-- Table cell padding is reduced on phones via a global CSS rule in `style.css` (avoids per-page changes)
+- Table cell padding is reduced on phones via a global CSS rule in `src/app/styles/style.css` (avoids per-page changes)
 - `PaginatedTable` defaults to `table-layout="auto"` — do not use `fixed`
 - Table column sizing convention:
   - **Shrink-wrap columns** (status, dates, actions): use `w-0 whitespace-nowrap` on `<th>` so they take only the space their content needs

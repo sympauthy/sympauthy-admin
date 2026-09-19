@@ -24,6 +24,9 @@ jobs:
       - name: Lint
         run: npx eslint src
 
+      - name: Architecture (Feature-Sliced Design)
+        run: npx steiger ./src
+
       - name: Format check
         run: npx prettier --check src
 

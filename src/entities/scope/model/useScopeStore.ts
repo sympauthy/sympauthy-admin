@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { ScopeApi } from '@/entities/scope/api/ScopeApi'
-import type { ScopeResource } from '@/entities/scope/model/ScopeResource'
-import { isSuccess } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { ScopeApi } from '../api/ScopeApi'
+import type { ScopeResource } from './ScopeResource'
+import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useScopeStore = defineStore('scopes', () => {
   const api = new ScopeApi()

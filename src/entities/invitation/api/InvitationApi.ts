@@ -1,4 +1,4 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
   type InvitationListResource,
   invitationListResourceSchema
@@ -7,8 +7,6 @@ import {
   type CreatedInvitationResource,
   createdInvitationResourceSchema
 } from '@/entities/invitation/model/CreatedInvitationResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export interface CreateInvitationInput {
   audience_id: string

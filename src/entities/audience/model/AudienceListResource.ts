@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { type AudienceResource, audienceResourceSchema } from '@/entities/audience/model/AudienceResource'
+import { type AudienceResource, audienceResourceSchema } from './AudienceResource'
 
 export type AudienceListResource = {
   audiences: AudienceResource[]

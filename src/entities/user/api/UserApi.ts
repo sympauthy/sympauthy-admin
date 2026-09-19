@@ -1,5 +1,5 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
-import { type UserListResource, userListResourceSchema } from '@/entities/user/model/UserListResource'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
+import { type UserListResource, userListResourceSchema } from '../model/UserListResource'
 import {
   type UserDetailResource,
   userDetailResourceSchema
@@ -8,8 +8,6 @@ import {
   type UserClaimListResource,
   userClaimListResourceSchema
 } from '@/entities/user/model/UserClaimListResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export interface ListUsersParams {
   page?: number

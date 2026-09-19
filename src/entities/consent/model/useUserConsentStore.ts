@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { ConsentApi } from '@/entities/consent/api/ConsentApi'
-import type { ConsentResource } from '@/entities/consent/model/ConsentResource'
-import { isSuccess } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { ConsentApi } from '../api/ConsentApi'
+import type { ConsentResource } from './ConsentResource'
+import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useUserConsentStore = defineStore('userConsent', () => {
   const consentApi = new ConsentApi()

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import AdminLayout from '@/app/layout/AdminLayout.vue'
-import { useAuthStore } from '@/shared/auth/useAuthStore'
-import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
+import AdminLayout from './layout/AdminLayout.vue'
+import { useAuthStore } from '@/shared/auth'
+import { CommonSpinner } from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()

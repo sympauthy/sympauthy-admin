@@ -1,4 +1,4 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
   type UserProviderLinkListResource,
   userProviderLinkListResourceSchema
@@ -7,8 +7,6 @@ import {
   type UserProviderLinkStartResource,
   userProviderLinkStartResourceSchema
 } from '@/entities/user/model/UserProviderLinkStartResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export interface ProviderLinkStartInput {
   client_id: string

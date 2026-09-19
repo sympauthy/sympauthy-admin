@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { UserApi } from '@/entities/user/api/UserApi'
-import type { ListUserClaimsParams } from '@/entities/user/api/UserApi'
-import type { UserDetailResource } from '@/entities/user/model/UserDetailResource'
-import type { UserClaimResource } from '@/entities/user/model/UserClaimResource'
-import { isSuccess } from '@/shared/api/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
+import { UserApi } from '../api/UserApi'
+import type { ListUserClaimsParams } from '../api/UserApi'
+import type { UserDetailResource } from './UserDetailResource'
+import type { UserClaimResource } from './UserClaimResource'
+import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 export const useUserDetailStore = defineStore('userDetail', () => {
   const userApi = new UserApi()

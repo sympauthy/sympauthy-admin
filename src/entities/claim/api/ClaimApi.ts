@@ -1,7 +1,5 @@
-import { AbstractApi } from '@/shared/api/AbstractApi'
-import { type ClaimListResource, claimListResourceSchema } from '@/entities/claim/model/ClaimListResource'
-import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
+import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
+import { type ClaimListResource, claimListResourceSchema } from '../model/ClaimListResource'
 
 export class ClaimApi extends AbstractApi {
   async listClaims(

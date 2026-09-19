@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { translateMessageOr } from '@/app/i18n'
+import { translateMessageOr } from '@/shared/i18n'
 
 export type InteractiveFlowPurposeResource = {
   value: string

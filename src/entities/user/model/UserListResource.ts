@@ -1,5 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import { type UserResource, userResourceSchema } from '@/entities/user/model/UserResource'
+import { type UserResource, userResourceSchema } from './UserResource'
 
 export type UserListResource = {
   users: UserResource[]

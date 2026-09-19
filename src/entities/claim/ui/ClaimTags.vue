@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import Tag from '@/shared/ui/Tag.vue'
-import ClaimIdentifierHelpTooltip from '@/entities/claim/ui/ClaimIdentifierHelpTooltip.vue'
+import { Tag } from '@/shared/ui'
+import ClaimIdentifierHelpTooltip from './ClaimIdentifierHelpTooltip.vue'
 
 defineProps<{
   required: boolean

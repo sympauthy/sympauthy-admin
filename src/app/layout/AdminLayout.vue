@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { Bars3Icon } from '@heroicons/vue/20/solid'
-import SidebarNav from '@/app/layout/SidebarNav.vue'
-import BreadcrumbNav from '@/app/layout/BreadcrumbNav.vue'
-import { useSidebar } from '@/shared/lib/useSidebar'
+import SidebarNav from './SidebarNav.vue'
+import BreadcrumbNav from './BreadcrumbNav.vue'
+import { useSidebar } from '@/shared/lib'
 
 const { t } = useI18n()
 const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
