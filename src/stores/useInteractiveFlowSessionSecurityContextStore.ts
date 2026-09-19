@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { InteractiveFlowSessionApi } from '@/client/api/InteractiveFlowSessionApi'
 import type { InteractiveFlowSessionSecurityContextResource } from '@/client/model/InteractiveFlowSessionSecurityContextResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useInteractiveFlowSessionSecurityContextStore = defineStore(
   'interactiveFlowSessionSecurityContexts',

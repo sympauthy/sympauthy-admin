@@ -1,10 +1,10 @@
-import { AbstractApi } from '@/client/AbstractApi'
+import { AbstractApi } from '@/shared/api/AbstractApi'
 import {
   type ConsentListResource,
   consentListResourceSchema
 } from '@/client/model/ConsentListResource'
-import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
+import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
+import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export class ConsentApi extends AbstractApi {
   async listConsents(

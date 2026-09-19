@@ -1,10 +1,10 @@
-import { AbstractApi } from '@/client/AbstractApi'
+import { AbstractApi } from '@/shared/api/AbstractApi'
 import {
   type AudienceListResource,
   audienceListResourceSchema
 } from '@/client/model/AudienceListResource'
-import type { SuccessApiResponse } from '@/client/SuccessApiResponse'
-import type { ErrorApiResponse } from '@/client/ErrorApiResponse'
+import type { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
+import type { ErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 
 export class AudienceApi extends AbstractApi {
   async listAudiences(

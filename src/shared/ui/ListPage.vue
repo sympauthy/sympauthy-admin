@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
-import FilterBar from '@/components/FilterBar.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
-import type { FilterConfig } from '@/components/FilterBar.vue'
+import FilterBar from '@/shared/ui/FilterBar.vue'
+import PaginatedTable from '@/shared/ui/PaginatedTable.vue'
+import type { FilterConfig } from '@/shared/ui/FilterBar.vue'
 
 /**
  * Layout shared by every resource list page: a toolbar holding the search bar, the filters and the

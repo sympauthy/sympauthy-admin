@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BaseDialog from '@/components/BaseDialog.vue'
-import CommonButton from '@/components/CommonButton.vue'
-import CopyToClipboard from '@/components/CopyToClipboard.vue'
-import { primaryColoredButton, secondaryColoredButton } from '@/styles/ButtonStyle'
+import BaseDialog from '@/shared/ui/BaseDialog.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import CopyToClipboard from '@/shared/ui/CopyToClipboard.vue'
+import { primaryColoredButton, secondaryColoredButton } from '@/shared/ui/ButtonStyle'
 import { useClientStore } from '@/stores/useClientStore'
 import { UserProviderLinkApi, type ProviderLinkStartInput } from '@/client/api/UserProviderLinkApi'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 interface Props {
   open: boolean

@@ -2,10 +2,10 @@
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useScopeStore } from '@/stores/useScopeStore'
-import ListPage from '@/components/ListPage.vue'
-import Tag from '@/components/Tag.vue'
-import OriginTag from '@/components/OriginTag.vue'
-import type { FilterConfig } from '@/components/FilterBar.vue'
+import ListPage from '@/shared/ui/ListPage.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import OriginTag from '@/shared/ui/OriginTag.vue'
+import type { FilterConfig } from '@/shared/ui/FilterBar.vue'
 
 const { t } = useI18n()
 const scopeStore = useScopeStore()

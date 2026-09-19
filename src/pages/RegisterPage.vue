@@ -2,9 +2,9 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/useAuthStore'
-import CommonButton from '@/components/CommonButton.vue'
-import { primaryColoredButton } from '@/styles/ButtonStyle'
+import { useAuthStore } from '@/shared/auth/useAuthStore'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import { primaryColoredButton } from '@/shared/ui/ButtonStyle'
 
 const route = useRoute()
 const authStore = useAuthStore()

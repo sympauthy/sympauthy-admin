@@ -3,8 +3,8 @@ import { ref, computed } from 'vue'
 import { InvitationApi, type CreateInvitationInput } from '@/client/api/InvitationApi'
 import type { InvitationResource } from '@/client/model/InvitationResource'
 import type { CreatedInvitationResource } from '@/client/model/CreatedInvitationResource'
-import { isSuccess, type SuccessApiResponse } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess, type SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useInvitationStore = defineStore('invitations', () => {
   const api = new InvitationApi()

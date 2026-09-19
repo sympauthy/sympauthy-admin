@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import DetailSection from '@/components/DetailSection.vue'
-import HelpTooltip from '@/components/HelpTooltip.vue'
-import Tag from '@/components/Tag.vue'
+import DetailSection from '@/shared/ui/DetailSection.vue'
+import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import Tag from '@/shared/ui/Tag.vue'
 import { purposeLabel } from '@/client/model/InteractiveFlowPurposeResource'
 import {
   purposeProgressColor,

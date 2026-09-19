@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ClaimApi } from '@/client/api/ClaimApi'
 import type { ClaimResource } from '@/client/model/ClaimResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useClaimStore = defineStore('claims', () => {
   const api = new ClaimApi()

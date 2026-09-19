@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserApi } from '@/client/api/UserApi'
 import type { UserResource } from '@/client/model/UserResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useUserStore = defineStore('users', () => {
   const api = new UserApi()

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { AuthService, type AuthUser } from '@/auth/AuthService'
+import { AuthService, type AuthUser } from '@/shared/auth/AuthService'
 import type { User } from 'oidc-client-ts'
 
 export const useAuthStore = defineStore('auth', () => {

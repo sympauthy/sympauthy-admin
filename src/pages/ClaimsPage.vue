@@ -2,9 +2,9 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClaimStore } from '@/stores/useClaimStore'
-import ListPage from '@/components/ListPage.vue'
-import Tag from '@/components/Tag.vue'
-import OriginTag from '@/components/OriginTag.vue'
+import ListPage from '@/shared/ui/ListPage.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import OriginTag from '@/shared/ui/OriginTag.vue'
 import ClaimTags from '@/components/ClaimTags.vue'
 
 const { t } = useI18n()

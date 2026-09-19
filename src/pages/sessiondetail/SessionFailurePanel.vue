@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import DetailSection from '@/components/DetailSection.vue'
-import HelpTooltip from '@/components/HelpTooltip.vue'
-import CommonAlert from '@/components/CommonAlert.vue'
+import DetailSection from '@/shared/ui/DetailSection.vue'
+import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import CommonAlert from '@/shared/ui/CommonAlert.vue'
 import type { InteractiveFlowSessionDetailResource } from '@/client/model/InteractiveFlowSessionDetailResource'
 
 defineProps<{

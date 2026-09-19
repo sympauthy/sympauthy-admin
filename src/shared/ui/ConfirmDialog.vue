@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import BaseDialog from '@/components/BaseDialog.vue'
-import CommonButton from '@/components/CommonButton.vue'
-import { type ButtonStyle, dangerColoredButton, secondaryColoredButton } from '@/styles/ButtonStyle'
+import BaseDialog from '@/shared/ui/BaseDialog.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import { type ButtonStyle, dangerColoredButton, secondaryColoredButton } from '@/shared/ui/ButtonStyle'
 import { useI18n } from 'vue-i18n'
 
 interface Props {

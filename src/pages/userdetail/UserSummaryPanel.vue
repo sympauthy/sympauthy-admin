@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Tag from '@/components/Tag.vue'
-import CopyToClipboard from '@/components/CopyToClipboard.vue'
-import ActionsDropdown, { type ActionItem } from '@/components/ActionsDropdown.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import CopyToClipboard from '@/shared/ui/CopyToClipboard.vue'
+import ActionsDropdown, { type ActionItem } from '@/shared/ui/ActionsDropdown.vue'
 import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 import type { UserDetailResource } from '@/client/model/UserDetailResource'
-import { formatDate } from '@/utils/DateUtils'
+import { formatDate } from '@/shared/lib/DateUtils'
 
 defineProps<{
   user: UserDetailResource

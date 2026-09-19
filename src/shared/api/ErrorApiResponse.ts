@@ -1,5 +1,5 @@
 import { translateMessage } from '@/i18n'
-import type { ErrorResource } from '@/client/model/ErrorResource'
+import type { ErrorResource } from '@/shared/api/ErrorResource'
 
 /**
  *

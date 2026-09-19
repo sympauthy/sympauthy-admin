@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import DetailSection from '@/components/DetailSection.vue'
+import DetailSection from '@/shared/ui/DetailSection.vue'
 import type { ClientDetailResource } from '@/client/model/ClientDetailResource'
 
 defineProps<{

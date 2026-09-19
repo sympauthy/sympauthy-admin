@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/useAuthStore'
+import { useAuthStore } from '@/shared/auth/useAuthStore'
 import { useI18n } from 'vue-i18n'
-import CommonSpinner from '@/components/CommonSpinner.vue'
-import CommonAlert from '@/components/CommonAlert.vue'
+import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
+import CommonAlert from '@/shared/ui/CommonAlert.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

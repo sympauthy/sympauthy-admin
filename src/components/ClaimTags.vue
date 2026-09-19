@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import Tag from '@/components/Tag.vue'
+import Tag from '@/shared/ui/Tag.vue'
 import IdentifierHelpTooltip from '@/components/IdentifierHelpTooltip.vue'
 
 defineProps<{

@@ -2,8 +2,8 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAudienceStore } from '@/stores/useAudienceStore'
-import ListPage from '@/components/ListPage.vue'
-import Tag from '@/components/Tag.vue'
+import ListPage from '@/shared/ui/ListPage.vue'
+import Tag from '@/shared/ui/Tag.vue'
 import {
   audienceRegistrationModeKey,
   audienceRegistrationModeColor

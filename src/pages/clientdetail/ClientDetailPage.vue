@@ -3,13 +3,13 @@ import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useClientDetailStore } from '@/stores/useClientDetailStore'
-import { useBreadcrumb } from '@/composables/useBreadcrumb'
+import { useBreadcrumb } from '@/shared/lib/useBreadcrumb'
 import ClientSummaryPanel from '@/pages/clientdetail/ClientSummaryPanel.vue'
 import ClientScopesPanel from '@/pages/clientdetail/ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from '@/pages/clientdetail/ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from '@/pages/clientdetail/ClientAuthorizationPanel.vue'
-import CommonSpinner from '@/components/CommonSpinner.vue'
-import CommonAlert from '@/components/CommonAlert.vue'
+import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
+import CommonAlert from '@/shared/ui/CommonAlert.vue'
 
 const route = useRoute()
 const { t } = useI18n()

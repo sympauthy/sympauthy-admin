@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useInteractiveFlowSessionSecurityContextStore } from '@/stores/useInteractiveFlowSessionSecurityContextStore'
-import DetailSection from '@/components/DetailSection.vue'
-import HelpTooltip from '@/components/HelpTooltip.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
+import DetailSection from '@/shared/ui/DetailSection.vue'
+import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import PaginatedTable from '@/shared/ui/PaginatedTable.vue'
 import { securityContextLocation } from '@/client/model/InteractiveFlowSessionSecurityContextResource'
-import { formatDateTime } from '@/utils/DateUtils'
+import { formatDateTime } from '@/shared/lib/DateUtils'
 
 defineProps<{
   sessionId: string

@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserProviderLinkApi } from '@/client/api/UserProviderLinkApi'
 import type { UserProviderLinkResource } from '@/client/model/UserProviderLinkResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
   const providerLinkApi = new UserProviderLinkApi()

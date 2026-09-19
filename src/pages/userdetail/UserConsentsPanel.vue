@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { useUserConsentStore } from '@/stores/useUserConsentStore'
-import DetailSection from '@/components/DetailSection.vue'
-import HelpTooltip from '@/components/HelpTooltip.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
-import CommonButton from '@/components/CommonButton.vue'
-import Tag from '@/components/Tag.vue'
-import { dangerColoredButton } from '@/styles/ButtonStyle'
+import DetailSection from '@/shared/ui/DetailSection.vue'
+import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import PaginatedTable from '@/shared/ui/PaginatedTable.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import { dangerColoredButton } from '@/shared/ui/ButtonStyle'
 
 defineProps<{
   userId: string

@@ -11,7 +11,7 @@ import UserDetailPage from '@/pages/userdetail/UserDetailPage.vue'
 import SessionDetailPage from '@/pages/sessiondetail/SessionDetailPage.vue'
 import CallbackPage from '@/pages/CallbackPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
-import { useAuthStore } from '@/stores/useAuthStore'
+import { useAuthStore } from '@/shared/auth/useAuthStore'
 
 declare module 'vue-router' {
   interface RouteMeta {

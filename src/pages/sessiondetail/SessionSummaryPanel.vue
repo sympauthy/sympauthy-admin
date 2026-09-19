@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import Tag from '@/components/Tag.vue'
-import CopyToClipboard from '@/components/CopyToClipboard.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import CopyToClipboard from '@/shared/ui/CopyToClipboard.vue'
 import { purposeLabel } from '@/client/model/InteractiveFlowPurposeResource'
 import {
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/client/model/InteractiveFlowSessionSummaryResource'
 import { userIdentifierLabel } from '@/client/model/UserResource'
-import { formatDateTime } from '@/utils/DateUtils'
+import { formatDateTime } from '@/shared/lib/DateUtils'
 import type { InteractiveFlowSessionDetailResource } from '@/client/model/InteractiveFlowSessionDetailResource'
 
 defineProps<{

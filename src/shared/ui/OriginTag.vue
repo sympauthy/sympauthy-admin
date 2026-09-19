@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Tag from '@/components/Tag.vue'
+import Tag from '@/shared/ui/Tag.vue'
 
 const props = defineProps<{
   origin: string

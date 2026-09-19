@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import ConfirmDialog from '@/shared/ui/ConfirmDialog.vue'
 import { UserApi } from '@/client/api/UserApi'
 import { useClientStore } from '@/stores/useClientStore'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 interface Props {
   userId: string | null

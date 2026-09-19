@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserMfaApi } from '@/client/api/UserMfaApi'
 import type { UserMfaMethodResource } from '@/client/model/UserMfaMethodResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useUserMfaStore = defineStore('userMfa', () => {
   const userMfaApi = new UserMfaApi()

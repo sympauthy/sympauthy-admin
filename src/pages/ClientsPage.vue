@@ -3,11 +3,11 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useClientStore } from '@/stores/useClientStore'
-import ListPage from '@/components/ListPage.vue'
+import ListPage from '@/shared/ui/ListPage.vue'
 import ClientTypeHelpTooltip from '@/components/ClientTypeHelpTooltip.vue'
-import CommonButton from '@/components/CommonButton.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
 import { EyeIcon } from '@heroicons/vue/20/solid'
-import { primaryColoredButton } from '@/styles/ButtonStyle'
+import { primaryColoredButton } from '@/shared/ui/ButtonStyle'
 
 const { t } = useI18n()
 const router = useRouter()

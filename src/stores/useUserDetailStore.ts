@@ -4,8 +4,8 @@ import { UserApi } from '@/client/api/UserApi'
 import type { ListUserClaimsParams } from '@/client/api/UserApi'
 import type { UserDetailResource } from '@/client/model/UserDetailResource'
 import type { UserClaimResource } from '@/client/model/UserClaimResource'
-import { isSuccess } from '@/client/SuccessApiResponse'
-import { type ErrorApiResponse, getErrorMessage } from '@/client/ErrorApiResponse'
+import { isSuccess } from '@/shared/api/SuccessApiResponse'
+import { type ErrorApiResponse, getErrorMessage } from '@/shared/api/ErrorApiResponse'
 
 export const useUserDetailStore = defineStore('userDetail', () => {
   const userApi = new UserApi()

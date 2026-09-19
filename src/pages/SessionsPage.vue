@@ -4,11 +4,11 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ArrowPathIcon, EyeIcon } from '@heroicons/vue/20/solid'
 import { useInteractiveFlowSessionStore } from '@/stores/useInteractiveFlowSessionStore'
-import ListPage from '@/components/ListPage.vue'
-import SortableHeader from '@/components/SortableHeader.vue'
-import Tag from '@/components/Tag.vue'
-import CommonButton from '@/components/CommonButton.vue'
-import { primaryColoredButton, secondaryColoredButton } from '@/styles/ButtonStyle'
+import ListPage from '@/shared/ui/ListPage.vue'
+import SortableHeader from '@/shared/ui/SortableHeader.vue'
+import Tag from '@/shared/ui/Tag.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import { primaryColoredButton, secondaryColoredButton } from '@/shared/ui/ButtonStyle'
 import {
   interactiveFlowPurposes,
   purposeLabel,
@@ -20,8 +20,8 @@ import {
   interactiveFlowSessionStatusLabel
 } from '@/client/model/InteractiveFlowSessionSummaryResource'
 import { userIdentifierLabel } from '@/client/model/UserResource'
-import { formatDateTime } from '@/utils/DateUtils'
-import type { FilterConfig } from '@/components/FilterBar.vue'
+import { formatDateTime } from '@/shared/lib/DateUtils'
+import type { FilterConfig } from '@/shared/ui/FilterBar.vue'
 
 const { t } = useI18n()
 const router = useRouter()

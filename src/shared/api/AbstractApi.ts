@@ -1,9 +1,9 @@
 import Ajv, { type JSONSchemaType } from 'ajv'
-import { type ErrorResource, errorResourceSchema } from '@/client/model/ErrorResource'
-import { ErrorApiResponse, makeErrorApiResponse } from '@/client/ErrorApiResponse'
+import { type ErrorResource, errorResourceSchema } from '@/shared/api/ErrorResource'
+import { ErrorApiResponse, makeErrorApiResponse } from '@/shared/api/ErrorApiResponse'
 import { translateMessage } from '@/i18n'
-import { SuccessApiResponse } from '@/client/SuccessApiResponse'
-import { useAuthStore } from '@/stores/useAuthStore'
+import { SuccessApiResponse } from '@/shared/api/SuccessApiResponse'
+import { useAuthStore } from '@/shared/auth/useAuthStore'
 
 export interface QueryOptions {
   path: string

@@ -2,13 +2,13 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserMfaStore } from '@/stores/useUserMfaStore'
-import DetailSection from '@/components/DetailSection.vue'
-import HelpTooltip from '@/components/HelpTooltip.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
-import CommonButton from '@/components/CommonButton.vue'
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
-import { dangerColoredButton } from '@/styles/ButtonStyle'
-import { formatDate } from '@/utils/DateUtils'
+import DetailSection from '@/shared/ui/DetailSection.vue'
+import HelpTooltip from '@/shared/ui/HelpTooltip.vue'
+import PaginatedTable from '@/shared/ui/PaginatedTable.vue'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import ConfirmDialog from '@/shared/ui/ConfirmDialog.vue'
+import { dangerColoredButton } from '@/shared/ui/ButtonStyle'
+import { formatDate } from '@/shared/lib/DateUtils'
 
 const props = defineProps<{
   userId: string

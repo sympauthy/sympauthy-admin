@@ -2,8 +2,8 @@
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
-import { useAuthStore } from '@/stores/useAuthStore'
-import CommonSpinner from '@/components/CommonSpinner.vue'
+import { useAuthStore } from '@/shared/auth/useAuthStore'
+import CommonSpinner from '@/shared/ui/CommonSpinner.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()

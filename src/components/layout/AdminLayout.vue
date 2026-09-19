@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { Bars3Icon } from '@heroicons/vue/20/solid'
 import SidebarNav from '@/components/layout/SidebarNav.vue'
 import BreadcrumbNav from '@/components/layout/BreadcrumbNav.vue'
-import { useSidebar } from '@/composables/useSidebar'
+import { useSidebar } from '@/shared/lib/useSidebar'
 
 const { t } = useI18n()
 const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()

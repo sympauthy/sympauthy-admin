@@ -9,8 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem
 } from 'reka-ui'
-import CommonButton from '@/components/CommonButton.vue'
-import { type ButtonStyle, secondaryColoredButton } from '@/styles/ButtonStyle'
+import CommonButton from '@/shared/ui/CommonButton.vue'
+import { type ButtonStyle, secondaryColoredButton } from '@/shared/ui/ButtonStyle'
 
 export interface ActionItem {
   key: string
