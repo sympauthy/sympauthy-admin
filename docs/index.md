@@ -26,7 +26,7 @@ is the [public documentation](https://sympauthy.github.io).
 - **[Authentication](authentication.md)** — how an operator signs in, how the token reaches a
   request, and what happens when it expires.
 - **[Running locally](running-locally.md)** — setting the project up, running it against a server,
-  and the four checks a change passes.
+  and the checks a change passes.
 
 ### How the code is written
 

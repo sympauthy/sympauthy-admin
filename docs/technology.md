@@ -58,8 +58,8 @@ build time. Every string an operator reads comes from a bundle;
 | Steiger | the Feature-Sliced Design rules, as `npm run lint:arch` |
 | `npm-run-all2` | runs the type-check and the build together behind `npm run build` |
 
-[Running locally](running-locally.md) is what to type; CI runs the same four checks on every push
-and pull request.
+[Running locally](running-locally.md) is what to type; CI runs ESLint, Steiger, the format check and
+the build on every push to `main` and every pull request targeting it.
 
 ## What is not used
 
@@ -71,6 +71,10 @@ and pull request.
 **No HTTP client library.** `AbstractApi` wraps `fetch` directly, because what it adds — the bearer
 token, the schema validation, the renewal retry and the error mapping — is this panel's own and not
 an interceptor stack.
+
+**Five dependencies nothing imports.** `vee-validate`, `yup`, `rambda`, `ts-deepmerge` and
+`@js-temporal/polyfill` are declared and unused: a form is local state, and a date goes through
+`shared/lib`. Removing them is #124.
 
 **No state persistence, no client-side cache.** A store is filled by a request and emptied by a
 `$reset()`; a screen shows what the last response said.

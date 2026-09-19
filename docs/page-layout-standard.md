@@ -111,6 +111,10 @@ section needs one.
 | fields of one record | a `<dl>` in a card, a row per field |
 | plain values | a card listing them |
 
+**A table outside a list page keeps `PaginatedTable`'s plain flow layout.** `fill` and
+`auto-page-size` are what `ListPage` opts into; setting `fill` inside a `DetailSection`, which has
+no height of its own, collapses the table to nothing.
+
 **A row of a definition list is `px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4`,** its `<dt>`
 the label and its `<dd>` the value.
 

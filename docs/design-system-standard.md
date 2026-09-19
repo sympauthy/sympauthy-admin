@@ -2,7 +2,6 @@
 description: The shared interface kit — which component to reach for, the primitives the
   interactive ones wrap, and the colours, icons and text styles they are built from.
 paths:
-  - "src/shared/ui/**"
   - "src/**/ui/**"
 ---
 
@@ -13,6 +12,9 @@ add to it rather than beside it. [The component code standard](component-code-st
 a component is written; this one says which to use and what it is made of.
 
 ## The kit
+
+**What `shared/ui` publishes is [its `index.ts`](../src/shared/ui/index.ts).** The table says what
+to reach for, by need.
 
 | Component | Use it for |
 | --- | --- |
@@ -109,8 +111,11 @@ summary panel and in a definition list alike.
 ## Help
 
 **A domain term an operator may not know carries a `HelpTooltip`.** Its text lives in the bundle
-with the `help` / `helpLinkText` / `helpLinkUrl` triple, and the link points at the
-[public documentation](https://sympauthy.github.io).
+with the `help` / `helpLinkText` / `helpLinkUrl` triple.
+
+**The link points at the page of the [public documentation](https://sympauthy.github.io) covering
+the term**, anchored at its section where it has one — not at the site root, which leaves the
+operator to search for what they were already reading about.
 
 **A term explained on more than one screen becomes a component in its entity's `ui/` segment**, so
 the explanation cannot drift between two screens.

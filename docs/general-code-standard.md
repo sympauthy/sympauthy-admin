@@ -112,8 +112,9 @@ spaces, 100 columns, no trailing comma — none of which is worth hand-holding, 
 **A component name is multi-word.** ESLint enforces it, and its `ignores` list is what the exception
 looks like.
 
-**A change passes `npm run type-check`, `npm run lint`, `npm run lint:arch` and `npm run build`.**
-CI runs the same four.
+**A change passes `npm run lint`, `npm run lint:arch`, `npm run format` and `npm run build`.** CI
+runs ESLint, Steiger, `prettier --check` and the build, which type-checks as it goes — so the
+formatter is the one easily skipped and the one that fails a pull request.
 
 ## What this standard does not cover
 

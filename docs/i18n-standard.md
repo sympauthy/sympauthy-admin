@@ -3,6 +3,7 @@ description: Where a string an operator reads comes from — the bundle, how a k
   it reaches the screen.
 paths:
   - "src/shared/i18n/**"
+  - "src/**/ui/**"
 ---
 
 # Internationalization standard

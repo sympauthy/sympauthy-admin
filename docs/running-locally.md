@@ -53,14 +53,15 @@ npm run type-check    # vue-tsc over the sources and the templates
 npm run lint          # ESLint, with --fix
 npm run lint:arch     # Steiger: the Feature-Sliced Design rules
 npm run format        # Prettier, writing
-npm run build         # type-check, then the production build
+npm run build         # the type-check and the production build, in parallel
 ```
 
-CI runs ESLint, Steiger, `prettier --check` and the build on every push and pull request, so a
-formatting run that was skipped fails the pull request rather than the review.
+CI runs ESLint, Steiger, `prettier --check` and the build on every push to `main` and every pull
+request targeting it, so a formatting run that was skipped fails the pull request rather than the
+review. A feature branch gets no CI of its own until a pull request is opened.
 
 There is no test framework: nothing in the repository runs a test, and a change is checked by the
-four commands above and by running it.
+commands above and by running it.
 
 ---
 

@@ -93,8 +93,8 @@ worth branching is a function in the script block.
 
 ## Forms
 
-**A form is local state: a `ref` per field, a `submitting` ref and an `error` ref.** There is no
-form library, and a dialog reset happens in the `watch` on its `open` prop.
+**A form is local state: a `ref` per field, a `submitting` ref and an `error` ref.** Nothing in the
+panel reaches for a form library, and a dialog resets its fields in the `watch` on its `open` prop.
 
 **A field is validated in the submit handler, and the first failure sets `error` and returns.** The
 message comes from the bundle, like every other string.

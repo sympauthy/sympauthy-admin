@@ -33,11 +33,12 @@ npm run type-check   # vue-tsc over the sources and the templates
 npm run lint         # ESLint, with --fix
 npm run lint:arch    # Steiger: the Feature-Sliced Design rules
 npm run format       # Prettier, writing
-npm run build        # type-check, then the production build
+npm run build        # the type-check and the production build, in parallel
 ```
 
-CI runs ESLint, Steiger, `prettier --check` and the build on every push and pull request. There is
-no test framework: a change is checked by those four and by running it.
+CI runs ESLint, Steiger, `prettier --check` and the build on every push to `main` and every pull
+request targeting it — a feature branch gets none of its own. There is no test framework: a change
+is checked by those and by running it.
 
 The dev server needs a SympAuthy on `localhost:8080`, started with the `admin` environment. Full
 setup is `docs/running-locally.md`.

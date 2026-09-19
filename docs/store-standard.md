@@ -51,7 +51,7 @@ if (isSuccess(response)) {
   page.value = response.content.page
   total.value = response.content.total
 } else {
-  error.value = getErrorMessage(response as ErrorApiResponse)
+  error.value = getErrorMessage(response)
   users.value = []
 }
 ```
