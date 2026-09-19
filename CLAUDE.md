@@ -56,9 +56,11 @@ The source follows [Feature-Sliced Design](https://feature-sliced.design), and S
 - **`app/`** — `App.vue`, the router, the global stylesheet, the layout shell.
 - **`pages/`** — one slice per route, holding the route component and what only it uses.
 - **`features/`** — an action reused by more than one page.
-- **`entities/`** — one slice per domain noun: its API client, resources, schemas and stores.
-- **`shared/`** — design system, HTTP and collection plumbing, auth, i18n, utilities. No domain
-  knowledge.
+- **`entities/`** — one slice per domain noun more than one slice reads: its API client,
+  resources, schemas and stores. A noun one route reads lives in that route's slice until a second
+  reader appears; `fsd/insignificant-slice` is on, so this is checked.
+- **`shared/`** — design system, HTTP plumbing and the collection wire, auth, i18n, utilities. No
+  domain knowledge.
 
 A layer imports only from the layers below it, a slice only through another slice's `index.ts`, and
 two slices on the same layer never import each other — except through an `@x/` cross-import, which

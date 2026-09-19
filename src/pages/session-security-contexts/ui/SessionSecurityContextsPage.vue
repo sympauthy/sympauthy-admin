@@ -3,35 +3,41 @@ import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
-  useInteractiveFlowSessionSecurityContextStore,
-  securityContextLocation
+  InteractiveFlowSessionApi,
+  securityContextLocation,
+  type InteractiveFlowSessionSecurityContextListResource,
+  type InteractiveFlowSessionSecurityContextResource
 } from '@/entities/session'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  EmptyValue,
-  TableCell,
-  TableHeader
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { EmptyValue, TableCell, TableHeader } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()
 const { t } = useI18n()
-const store = useInteractiveFlowSessionSecurityContextStore()
+const api = new InteractiveFlowSessionApi()
 
 const sessionId = computed(() => route.params.sessionId as string)
 
+const securityContexts = useCollection<
+  InteractiveFlowSessionSecurityContextResource,
+  InteractiveFlowSessionSecurityContextListResource
+>({
+  capabilities: () => api.getSessionSecurityContextCapabilities(sessionId.value),
+  page: (params) => api.listSessionSecurityContexts(sessionId.value, params),
+  items: (content) => content.security_contexts
+})
+
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
-// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
+// mounts it again — so this collection is the mount's own, and follows the record without a watcher
+// and with nothing to disown.
 onMounted(async () => {
-  store.$reset()
-  await store.fetchSecurityContexts(sessionId.value)
+  await securityContexts.fetch()
 })
 </script>
 
 <template>
   <CollectionPage
-    :collection="store.securityContexts"
+    :collection="securityContexts"
     :search-placeholder="t('pages.sessionSecurityContexts.search')"
   >
     <template #header>
@@ -39,33 +45,33 @@ onMounted(async () => {
       <TableHeader>{{ t('pages.sessionSecurityContexts.userAgent') }}</TableHeader>
       <CollectionSortHeader
         hidden-below="lg"
-        :collection="store.securityContexts"
+        :collection="securityContexts"
         :label="t('pages.sessionSecurityContexts.location')"
         field="country_code"
       />
       <CollectionSortHeader
         fit
-        :collection="store.securityContexts"
+        :collection="securityContexts"
         :label="t('pages.sessionSecurityContexts.requests')"
         field="observation_count"
       />
       <CollectionSortHeader
         fit
         hidden-below="lg"
-        :collection="store.securityContexts"
+        :collection="securityContexts"
         :label="t('pages.sessionSecurityContexts.firstSeen')"
         field="first_seen_date"
       />
       <CollectionSortHeader
         fit
         hidden-below="sm"
-        :collection="store.securityContexts"
+        :collection="securityContexts"
         :label="t('pages.sessionSecurityContexts.lastSeen')"
         field="last_seen_date"
       />
       <CollectionSortHeader
         fit
-        :collection="store.securityContexts"
+        :collection="securityContexts"
         :label="t('pages.sessionSecurityContexts.proven')"
         field="proven_date"
       />
@@ -73,7 +79,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr
-        v-for="context in store.securityContexts.items"
+        v-for="context in securityContexts.items"
         :key="`${context.ip}|${context.user_agent ?? ''}`"
       >
         <TableCell primary fit mono>

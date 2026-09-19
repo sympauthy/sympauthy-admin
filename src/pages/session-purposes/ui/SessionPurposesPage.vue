@@ -6,7 +6,7 @@ import {
   purposeProgressColor,
   purposeProgressLabel
 } from '@/entities/session'
-import { CommonCard, DefinitionRow, EmptyValue, Tag } from '@/shared/ui'
+import { CommonCard, DefinitionRow, EmptyValue, CommonTag } from '@/shared/ui'
 
 /**
  * The purposes one session carries, and how far each of them got.
@@ -35,9 +35,9 @@ const store = useInteractiveFlowSessionDetailStore()
         <h3 class="text-sm font-semibold text-gray-900">
           {{ purposeLabel(progress.purpose) }}
         </h3>
-        <Tag :color="purposeProgressColor(progress.status)">
+        <CommonTag :color="purposeProgressColor(progress.status)">
           {{ purposeProgressLabel(progress.status) }}
-        </Tag>
+        </CommonTag>
       </div>
 
       <dl v-if="progress.debug.length > 0" class="divide-y divide-gray-200">

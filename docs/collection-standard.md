@@ -1,20 +1,26 @@
 ---
 description: How the panel reads a paged collection — the document each one publishes, the criteria
-  built against it, the state a store holds, and the page it is drawn as.
+  built against it, the state the screen listing it holds, and the page it is drawn as.
 paths:
-  - "src/shared/collection/**"
-  - "src/shared/ui/Collection*.vue"
+  - "src/features/browse-collection/**"
+  - "src/shared/api/Collection*.ts"
   - "src/entities/*/api/**"
-  - "src/entities/*/model/use*Store.ts"
+  - "src/pages/*/api/**"
+  - "src/pages/*/ui/*Page.vue"
 ---
 
 # Collection standard
 
 A collection is a paged resource of the admin surface and everything the panel does with one: the
-document it publishes about itself, the criteria a caller builds against that document, the state a
-store holds, and the page it is drawn as. [The server's collection
+document it publishes about itself, the criteria a caller builds against that document, the state
+the screen listing it holds, and the page it is drawn as. [The server's collection
 standard](https://github.com/sympauthy/sympauthy/blob/main/docs/collection-standard.md) owns the
 grammar; this one owns what the panel makes of it.
+
+**A collection is browsed by [`features/browse-collection`](../src/features/browse-collection),
+over the wire [`shared/api`](../src/shared/api) declares.** The parameters a list call takes and the
+document it publishes are what every entity's client speaks; the state, the criteria and the
+components a caller browses with are the action every list page is built from.
 
 **The panel holds no list of filters.** Every field a collection can be narrowed by is read from
 that collection at runtime, because the set is the deployment's — its claims, its clients, its
@@ -29,9 +35,9 @@ the fields it orders on, the fields a free text `q` matches, and its default sor
 **The document is requested beside the first page, never before it.** The first page carries no
 criteria, so nothing about it waits; the toolbar appears when the document lands.
 
-**It is requested once per collection, not once per record.** It describes the collection rather
-than a row, so the one under a parent path reads the same for every parent —
-[`reset()`](#a-store-holds-a-collection) keeps it.
+**It is requested beside the first page of the screen asking for it.** It describes the collection
+rather than a row, so it reads the same under every parent — but the state that would keep it across
+records is the state that dies with the screen, and a tab opened on the next record asks again.
 
 **A read that failed is asked for again by the next page request.** There is nothing to keep, and a
 transient failure must not leave a collection without a toolbar until the tab is reloaded.
@@ -68,16 +74,27 @@ the one being read is never the one to come back to.
 **Only the last request asked for is painted.** A debounced criteria change and a page click can be
 in flight together, and the one that answers last is not the one the caller is waiting for.
 
-## A store holds a collection
+## A page holds a collection
 
-**A store exposes one `useCollection` per collection, under the plural of what it holds.**
-`useUserStore` returns `{ users }`, and a page reads `store.users.items`.
+**The screen listing a collection holds it, and holds it alone.** The page an operator is on, the
+chips they opened and the order they asked for belong to that screen: another screen over the same
+records starts where its own caller left it, and a dialog listing them cannot move the list behind
+it.
 
-**A collection under a parent holds that parent's identifier and reads it at call time.** The store
-sets it in its `fetch…`, so paging and filtering stay on the record the page last asked for.
+**A page calls one `useCollection` per collection it lists, under the plural of what it holds**, and
+hands it to `CollectionPage` whole.
+
+**It constructs the entity's client itself.** `const api = new UserApi()` at the top of the setup:
+the entity publishes the client, the resources and the schemas, and the page is where they meet the
+action that browses them.
+
+**A collection under a record reads that record's identifier at call time**, from the route rather
+than from state of its own:
 
 ```ts
-const userId = ref('')
+const api = new UserApi()
+const userId = computed(() => route.params.userId as string)
+
 const claims = useCollection<UserClaimResource, UserClaimListResource>({
   capabilities: () => api.getUserClaimCapabilities(userId.value),
   page: (params) => api.listUserClaims(userId.value, params),
@@ -89,18 +106,19 @@ const claims = useCollection<UserClaimResource, UserClaimListResource>({
 `/admin/users`'s `claims` picks what is published rather than what is kept, so it travels beside the
 criteria and is not resolved against the document.
 
-**`$reset()` is `<collection>.reset()`**, and a record's page calls it in `onMounted` before
-fetching. It disowns a request still travelling, so the record being left cannot paint its rows, its
-failure or its spinner over the one being opened.
+**Nothing resets a collection.** A record's shell unmounts the tab before re-reading the record, so
+the rows, the failure and the spinner of the record being left go with the screen that asked for
+them.
 
-**A mutation refetches its collection at the page displayed, and records its failure in
-`<collection>.error`.**
+**A mutation over the rows a page lists belongs to that page**, refetches the collection at the page
+displayed, and records its failure in `<collection>.error`.
 
-**A complete list for a picker is its own state, never the collection's rows.** `allClients`,
-`allAudiences` — a dialog walking every page into the collection replaces what the page behind it is
-displaying.
+**A store holds what more than one screen reads**, and a collection is never that. `allClients` and
+`allAudiences` are every record there is, for a picker in a dialog; the accounts screen reads the
+claims an account is identified by from the claim entity's store. A complete list is its own state
+and never a collection's rows.
 
-**`fetchAllPages` is what walks it.** One copy of the loop, one place where a server capping the
+**`fetchAllPages` is what walks one.** One copy of the loop, one place where a server capping the
 page size below the one asked for stops it rather than re-reading the same window.
 
 ## The client
@@ -108,6 +126,11 @@ page size below the one asked for stops it rather than re-reading the same windo
 **A collection's list call takes `CollectionParams`,** and a collection reading a parameter of its
 own extends it and names that one. A criterion is not a parameter anything declares: it arrives
 through the index signature.
+
+**The wire lives in `shared/api` and nothing above it reaches an entity.** `CollectionParams`, the
+`CollectionPageResource` every list answers with, `CollectionCapabilitiesResource` with its schema,
+the closed sets of operators and field types it is written in, and `fetchAllPages`: a client and a
+store read those, and what the panel makes of them is the feature's.
 
 **A collection's client publishes a `get…Capabilities` beside its `list…`,** with the path written
 in full as [the API standard](api-standard.md#clients) requires.
@@ -118,8 +141,13 @@ in full as [the API standard](api-standard.md#clients) requires.
 the collection whole:
 
 ```html
-<CollectionPage :collection="store.users" :search-placeholder="t('pages.users.search')">
+<CollectionPage :collection="users" :search-placeholder="t('pages.users.search')">
 ```
+
+**The components are the feature's**, and its `index.ts` publishes what a page names —
+`useCollection`, `CollectionPage`, `CollectionSortHeader`. The toolbar, the chips and the value
+controls are parts of that page rather than pieces of the kit, so nothing outside the slice reaches
+them.
 
 **A page writes its columns and its rows, and nothing else.** The toolbar, the operators, the value
 controls, the sort arrows and the query string all come from the collection.
@@ -136,9 +164,9 @@ renders an unsortable column, so it is read off the capability document rather t
 **The search field appears where the collection searches on something**, and nowhere else — which
 is the document's answer, not a prop.
 
-**Every control is bound to the criteria, never left to the DOM.** A store outlives the page that
-read it, so a query it still holds would otherwise narrow the collection from a field that looks
-empty.
+**Every control is bound to the criteria, never left to the DOM.** The criteria are what the
+request is built from, so a value the DOM holds and they do not is a filter the collection is never
+narrowed by.
 
 **What the page could not draw goes in the `notice` slot**, above the table. The toolbar says the
 same of a capability document it failed to read.
@@ -210,7 +238,8 @@ refetch it.
 
 ## What this standard does not cover
 
-**Criteria in the URL.** They live in their store and a reload clears them, tracked by
+**Criteria in the URL.** They live with the screen that asked for them and a reload clears them,
+tracked by
 [#133](https://github.com/sympauthy/sympauthy-admin/issues/133).
 
 **Ordering on more than one key.** The grammar takes a list and the criteria hold one; a header

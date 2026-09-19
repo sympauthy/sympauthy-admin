@@ -2,10 +2,14 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useUserProviderLinkStore } from '@/entities/user'
 import {
-  CollectionPage,
-  CollectionSortHeader,
+  UserProviderLinkApi,
+  type UserProviderLinkListResource,
+  type UserProviderLinkResource
+} from '@/entities/user'
+import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import {
   CommonButton,
   ConfirmDialog,
   TableCell,
@@ -16,36 +20,47 @@ import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
 const { t } = useI18n()
-const store = useUserProviderLinkStore()
+const api = new UserProviderLinkApi()
 
 const userId = computed(() => route.params.userId as string)
 
+const providerLinks = useCollection<UserProviderLinkResource, UserProviderLinkListResource>({
+  capabilities: () => api.getProviderLinkCapabilities(userId.value),
+  page: (params) => api.listProviderLinks(userId.value, params),
+  items: (content) => content.providers
+})
+
 const unlinkTargetProviderId = ref<string | null>(null)
 
+// The list is read again at the page it is displaying rather than from the first, so unlinking the
+// last provider of a page does not send the operator back to the top of the list.
 async function confirmUnlink() {
   if (unlinkTargetProviderId.value) {
-    await store.unlinkProvider(unlinkTargetProviderId.value)
+    const response = await api.unlinkProvider(userId.value, unlinkTargetProviderId.value)
+
+    if (isSuccess(response)) {
+      await providerLinks.fetch(providerLinks.page)
+    } else {
+      providerLinks.error = getErrorMessage(response as ErrorApiResponse)
+    }
   }
   unlinkTargetProviderId.value = null
 }
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
-// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
+// mounts it again — so this collection is the mount's own, and follows the record without a watcher
+// and with nothing to disown.
 onMounted(async () => {
-  store.$reset()
-  await store.fetchProviderLinks(userId.value)
+  await providerLinks.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage
-    :collection="store.providerLinks"
-    :search-placeholder="t('pages.userProviders.search')"
-  >
+  <CollectionPage :collection="providerLinks" :search-placeholder="t('pages.userProviders.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="store.providerLinks"
+        :collection="providerLinks"
         :label="t('pages.userProviders.provider')"
         field="provider_id"
       />
@@ -53,7 +68,7 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         hidden-below="sm"
-        :collection="store.providerLinks"
+        :collection="providerLinks"
         :label="t('pages.userProviders.linkedAt')"
         field="link_date"
       />
@@ -61,7 +76,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="link in store.providerLinks.items" :key="link.provider_id">
+      <tr v-for="link in providerLinks.items" :key="link.provider_id">
         <TableCell primary fit>
           {{ link.provider_id }}
         </TableCell>

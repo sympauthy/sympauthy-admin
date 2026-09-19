@@ -2,69 +2,69 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useUserClaimStore } from '@/entities/user'
+import { UserApi, type UserClaimListResource, type UserClaimResource } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
-import {
-  CollectionPage,
-  CollectionSortHeader,
-  EmptyValue,
-  OriginTag,
-  TableCell,
-  TableHeader
-} from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { EmptyValue, OriginTag, TableCell, TableHeader } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
 const { t } = useI18n()
-const store = useUserClaimStore()
+const api = new UserApi()
 
 const userId = computed(() => route.params.userId as string)
 
+const claims = useCollection<UserClaimResource, UserClaimListResource>({
+  capabilities: () => api.getUserClaimCapabilities(userId.value),
+  page: (params) => api.listUserClaims(userId.value, params),
+  items: (content) => content.claims
+})
+
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
-// mounts it again — so the account is read once, here, and no watcher is needed to follow it.
+// mounts it again — so this collection is the mount's own, and follows the record without a watcher
+// and with nothing to disown.
 onMounted(async () => {
-  store.$reset()
-  await store.fetchClaims(userId.value)
+  await claims.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage :collection="store.claims" :search-placeholder="t('pages.userClaims.search')">
+  <CollectionPage :collection="claims" :search-placeholder="t('pages.userClaims.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="store.claims"
+        :collection="claims"
         :label="t('pages.userClaims.claim')"
         field="claim_id"
       />
       <CollectionSortHeader
-        :collection="store.claims"
+        :collection="claims"
         :label="t('pages.userClaims.value')"
         field="value"
       />
       <CollectionSortHeader
         fit
-        :collection="store.claims"
+        :collection="claims"
         :label="t('common.origin.label')"
         field="origin"
       />
       <TableHeader fit>{{ t('pages.userClaims.tags') }}</TableHeader>
       <CollectionSortHeader
         fit
-        :collection="store.claims"
+        :collection="claims"
         :label="t('pages.userClaims.collectedAt')"
         field="collected"
       />
       <CollectionSortHeader
         fit
-        :collection="store.claims"
+        :collection="claims"
         :label="t('pages.userClaims.verifiedAt')"
         field="verified"
       />
     </template>
 
     <template #rows>
-      <tr v-for="claim in store.claims.items" :key="claim.claim_id">
+      <tr v-for="claim in claims.items" :key="claim.claim_id">
         <TableCell primary fit>
           {{ claim.claim_id }}
         </TableCell>

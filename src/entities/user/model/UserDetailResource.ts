@@ -7,6 +7,18 @@ export type UserDetailResource = {
   created_at: string
 }
 
+/**
+ * A claim value an account is identified by, as a schema.
+ *
+ * AJV's `JSONSchemaType` cannot type a union that includes null, so this one is written plainly and
+ * declared past it. The looseness is the schema's type and not the schema: what it validates is
+ * every case the field holds and nothing else.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const identifierClaimValueSchema: any = {
+  oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'null' }]
+}
+
 export const userDetailResourceSchema: JSONSchemaType<UserDetailResource> = {
   type: 'object',
   properties: {
@@ -15,9 +27,7 @@ export const userDetailResourceSchema: JSONSchemaType<UserDetailResource> = {
     },
     identifier_claims: {
       type: 'object',
-      additionalProperties: {
-        oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'null' }]
-      } as any,
+      additionalProperties: identifierClaimValueSchema,
       required: [],
       nullable: true
     },

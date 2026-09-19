@@ -13,8 +13,9 @@ import {
   primaryColoredButton,
   secondaryColoredButton
 } from '@/shared/ui'
-import { useAudienceStore } from '@/entities/audience'
-import { useInvitationStore } from '@/entities/invitation'
+import { AudienceApi, type AudienceResource } from '@/entities/audience'
+import { fetchAllPages } from '@/shared/api'
+import { InvitationApi } from '../api/InvitationApi'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 interface Props {
@@ -29,8 +30,19 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const audienceStore = useAudienceStore()
-const invitationStore = useInvitationStore()
+const api = new InvitationApi()
+const audienceApi = new AudienceApi()
+
+// Every audience there is, because the caller picks one — not the page of them a screen lists.
+const allAudiences = ref<AudienceResource[]>([])
+
+async function fetchAllAudiences(): Promise<void> {
+  const result = await fetchAllPages(
+    (params) => audienceApi.listAudiences(params),
+    (content) => content.audiences
+  )
+  allAudiences.value = result.items ?? []
+}
 
 const phase = ref<'form' | 'success'>('form')
 const audience = ref('')
@@ -53,7 +65,7 @@ watch(
     if (isOpen) {
       // The audiences are read when the dialog opens rather than with the page behind it: the list
       // page takes its own filters from the capability document and needs none of them.
-      audienceStore.fetchAllAudiences()
+      fetchAllAudiences()
       phase.value = 'form'
       audience.value = ''
       expiresAt.value = ''
@@ -110,7 +122,7 @@ async function onSubmit() {
     input.note = note.value.trim()
   }
 
-  const response = await invitationStore.createInvitation(input)
+  const response = await api.createInvitation(input)
 
   if (isSuccess(response)) {
     createdToken.value = response.content.token
@@ -144,11 +156,7 @@ async function onSubmit() {
               <option value="" disabled>
                 {{ t('pages.invitations.selectAudience') }}
               </option>
-              <option
-                v-for="a in audienceStore.allAudiences"
-                :key="a.audience_id"
-                :value="a.audience_id"
-              >
+              <option v-for="a in allAudiences" :key="a.audience_id" :value="a.audience_id">
                 {{ a.audience_id }}
               </option>
             </FormSelect>

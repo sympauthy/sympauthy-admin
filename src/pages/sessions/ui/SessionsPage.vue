@@ -4,18 +4,19 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
-  useInteractiveFlowSessionStore,
+  InteractiveFlowSessionApi,
   interactiveFlowSessionStatusColor,
-  interactiveFlowSessionStatusLabel
+  interactiveFlowSessionStatusLabel,
+  type InteractiveFlowSessionListResource,
+  type InteractiveFlowSessionSummaryResource
 } from '@/entities/session'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonButton,
   EmptyValue,
   TableCell,
   TableHeader,
-  Tag,
+  CommonTag,
   primaryColoredButton
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
@@ -23,36 +24,41 @@ import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
-const sessionStore = useInteractiveFlowSessionStore()
+const api = new InteractiveFlowSessionApi()
+
+const sessions = useCollection<
+  InteractiveFlowSessionSummaryResource,
+  InteractiveFlowSessionListResource
+>({
+  capabilities: () => api.getSessionCapabilities(),
+  page: (params) => api.listSessions(params),
+  items: (content) => content.sessions
+})
 
 onMounted(async () => {
-  sessionStore.sessions.reset()
-  await sessionStore.sessions.fetch()
+  await sessions.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage
-    :collection="sessionStore.sessions"
-    :search-placeholder="t('pages.sessions.search')"
-  >
+  <CollectionPage :collection="sessions" :search-placeholder="t('pages.sessions.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.status')"
         field="status"
       />
       <TableHeader>{{ t('pages.sessions.user') }}</TableHeader>
       <CollectionSortHeader
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.client')"
         field="client"
       />
       <CollectionSortHeader
         fit
         hidden-below="lg"
-        :collection="sessionStore.sessions"
+        :collection="sessions"
         :label="t('pages.sessions.started')"
         field="session_date"
       />
@@ -60,11 +66,11 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="session in sessionStore.sessions.items" :key="session.id">
+      <tr v-for="session in sessions.items" :key="session.id">
         <TableCell :label="t('pages.sessions.status')" fit>
-          <Tag :color="interactiveFlowSessionStatusColor(session.status)">
+          <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary truncate>
           <router-link
@@ -74,9 +80,9 @@ onMounted(async () => {
           >
             {{ userIdentifierLabel(session.user) }}
           </router-link>
-          <Tag v-else-if="session.signed_up" color="gray">
+          <CommonTag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
-          </Tag>
+          </CommonTag>
           <EmptyValue v-else />
         </TableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no

@@ -9,6 +9,6 @@ export class SuccessApiResponse<T> {
   constructor(readonly content: T) {}
 }
 
-export function isSuccess<T>(o: any): o is SuccessApiResponse<T> {
+export function isSuccess<T>(o: unknown): o is SuccessApiResponse<T> {
   return o instanceof SuccessApiResponse
 }

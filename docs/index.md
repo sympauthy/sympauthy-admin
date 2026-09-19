@@ -46,8 +46,8 @@ an agent when a file it governs is read.
   and what a call resolves to.
 - **[Collection standard](collection-standard.md)** — the document a paged collection publishes
   about itself, the criteria built against it, and the page it is drawn as.
-- **[Store standard](store-standard.md)** — what a Pinia store holds, how it fetches and reports
-  failure, and the contract a collection store and a detail store each answer.
+- **[Store standard](store-standard.md)** — what a Pinia store holds now that a screen holds its
+  own collection, how it fetches and reports failure, and the contract a detail store answers.
 - **[Internationalization standard](i18n-standard.md)** — the bundle, how a key is named, and how it
   reaches the screen.
 - **[Documentation standard](docs-standard.md)** — how a standard here is written, and what it

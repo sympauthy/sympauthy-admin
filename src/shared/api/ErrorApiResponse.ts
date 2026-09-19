@@ -47,7 +47,7 @@ export function getErrorMessage(e: ErrorApiResponse): string {
   return e.description ?? e.details ?? e.errorCode
 }
 
-export function getErrorMessageForProperties(e: any): Record<string, string> | undefined {
+export function getErrorMessageForProperties(e: unknown): Record<string, string> | undefined {
   if (e instanceof ErrorApiResponse && e.error?.properties !== undefined) {
     const errorMessages: Record<string, string> = {}
     for (const property of e.error.properties) {

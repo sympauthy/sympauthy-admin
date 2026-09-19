@@ -2,17 +2,19 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PlusIcon } from '@heroicons/vue/20/solid'
-import { useInvitationStore } from '@/entities/invitation'
+import { InvitationApi } from '../api/InvitationApi'
+import type { InvitationListResource } from '../model/InvitationListResource'
+import type { InvitationResource } from '../model/InvitationResource'
+import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
-  CollectionPage,
-  CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
   EmptyValue,
   PageActions,
   TableCell,
   TableHeader,
-  Tag,
+  CommonTag,
   dangerColoredButton,
   primaryColoredButton
 } from '@/shared/ui'
@@ -20,7 +22,13 @@ import CreateInvitationDialog from './CreateInvitationDialog.vue'
 import { formatDate } from '@/shared/lib'
 
 const { t } = useI18n()
-const invitationStore = useInvitationStore()
+const api = new InvitationApi()
+
+const invitations = useCollection<InvitationResource, InvitationListResource>({
+  capabilities: () => api.getInvitationCapabilities(),
+  page: (params) => api.listInvitations(params),
+  items: (content) => content.invitations
+})
 
 const showCreateDialog = ref(false)
 const revokeInvitationId = ref<string | null>(null)
@@ -46,18 +54,21 @@ function onRevoke(invitationId: string) {
   revokeError.value = null
 }
 
+// The list is read again at the page it is displaying rather than from the first, so revoking the
+// last invitation of a page does not send the operator back to the top of the list.
 async function onConfirmRevoke() {
   if (!revokeInvitationId.value) return
 
   revokeLoading.value = true
   revokeError.value = null
 
-  const success = await invitationStore.revokeInvitation(revokeInvitationId.value)
+  const response = await api.revokeInvitation(revokeInvitationId.value)
 
-  if (success) {
+  if (isSuccess(response)) {
     revokeInvitationId.value = null
+    await invitations.fetch(invitations.page)
   } else {
-    revokeError.value = invitationStore.invitations.error
+    revokeError.value = getErrorMessage(response as ErrorApiResponse)
   }
 
   revokeLoading.value = false
@@ -67,12 +78,13 @@ function onCancelRevoke() {
   revokeInvitationId.value = null
 }
 
+// A new invitation is the newest record of the collection, which is the first page of it.
 function onInvitationCreated() {
-  invitationStore.invitations.fetch(0)
+  invitations.fetch(0)
 }
 
 onMounted(async () => {
-  await invitationStore.invitations.fetch()
+  await invitations.fetch()
 })
 </script>
 
@@ -86,20 +98,17 @@ onMounted(async () => {
     />
   </PageActions>
 
-  <CollectionPage
-    :collection="invitationStore.invitations"
-    :search-placeholder="t('pages.invitations.search')"
-  >
+  <CollectionPage :collection="invitations" :search-placeholder="t('pages.invitations.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="invitationStore.invitations"
+        :collection="invitations"
         :label="t('pages.invitations.status')"
         field="status"
       />
       <TableHeader>{{ t('pages.invitations.tokenPrefix') }}</TableHeader>
       <CollectionSortHeader
-        :collection="invitationStore.invitations"
+        :collection="invitations"
         :label="t('pages.invitations.audience')"
         field="audience_id"
       />
@@ -107,7 +116,7 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         hidden-below="sm"
-        :collection="invitationStore.invitations"
+        :collection="invitations"
         :label="t('pages.invitations.expiresAt')"
         field="expires_at"
       />
@@ -115,11 +124,11 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="invitation in invitationStore.invitations.items" :key="invitation.invitation_id">
+      <tr v-for="invitation in invitations.items" :key="invitation.invitation_id">
         <TableCell :label="t('pages.invitations.status')" fit>
-          <Tag :color="statusColor(invitation.status)">
+          <CommonTag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
-          </Tag>
+          </CommonTag>
         </TableCell>
         <TableCell primary mono>
           {{ invitation.token_prefix }}

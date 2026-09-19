@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useClientDetailStore } from '@/entities/client'
+import { ClientApi, type ClientDetailResource } from '@/entities/client'
+import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
 import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
@@ -10,36 +11,47 @@ import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
 import { CommonAlert, LoadingState } from '@/shared/ui'
 
 const route = useRoute()
-const store = useClientDetailStore()
+const api = new ClientApi()
 const { setLabel } = useBreadcrumb()
 
 const clientId = computed(() => route.params.clientId as string)
 
+const client = ref<ClientDetailResource | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
+
 onMounted(async () => {
-  store.$reset()
-  await store.fetchClient(clientId.value)
-  if (store.client) {
-    setLabel(store.client.client_id)
+  loading.value = true
+
+  const response = await api.getClient(clientId.value)
+
+  if (isSuccess(response)) {
+    client.value = response.content
+    setLabel(client.value.client_id)
+  } else {
+    error.value = getErrorMessage(response as ErrorApiResponse)
   }
+
+  loading.value = false
 })
 </script>
 
 <template>
   <div>
     <!-- Loading state -->
-    <LoadingState v-if="store.loading" />
+    <LoadingState v-if="loading" />
 
     <!-- Error state -->
-    <CommonAlert v-else-if="store.error" color="danger">
-      {{ store.error }}
+    <CommonAlert v-else-if="error" color="danger">
+      {{ error }}
     </CommonAlert>
 
     <!-- Content -->
-    <div v-else-if="store.client" class="space-y-6">
-      <ClientSummaryPanel :client="store.client" />
-      <ClientAuthorizationPanel :client="store.client" />
-      <ClientScopesPanel :client="store.client" />
-      <ClientRedirectUrisPanel :client="store.client" />
+    <div v-else-if="client" class="space-y-6">
+      <ClientSummaryPanel :client="client" />
+      <ClientAuthorizationPanel :client="client" />
+      <ClientScopesPanel :client="client" />
+      <ClientRedirectUrisPanel :client="client" />
     </div>
   </div>
 </template>

@@ -12,7 +12,7 @@ export interface QueryOptions {
 }
 
 export interface PostQueryOptions {
-  body: any
+  body: unknown
 }
 
 export interface JsonQueryOptions<T> {
@@ -92,7 +92,7 @@ export class AbstractApi {
 
     try {
       return await fetch(url, requestInit)
-    } catch (error: any) {
+    } catch (error) {
       console.error(`Failed to fetch ${url}.`, error)
       return makeErrorApiResponse('api.unknown')
     }
@@ -233,7 +233,7 @@ export class AbstractApi {
     return this.convertResponseToError(content, response)
   }
 
-  private convertResponseToError(content: any, response: Response): ErrorApiResponse {
+  private convertResponseToError(content: unknown, response: Response): ErrorApiResponse {
     if (this.ajv.validate(errorResourceSchema, content)) {
       const error = content as ErrorResource
       return new ErrorApiResponse(

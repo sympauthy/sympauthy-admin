@@ -2,33 +2,37 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useClientStore, ClientTypeHelpTooltip } from '@/entities/client'
 import {
-  CollectionPage,
-  CollectionSortHeader,
-  CommonButton,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  primaryColoredButton
-} from '@/shared/ui'
+  ClientApi,
+  ClientTypeHelpTooltip,
+  type ClientListResource,
+  type ClientSummaryResource
+} from '@/entities/client'
+import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CommonButton, EmptyValue, TableCell, TableHeader, primaryColoredButton } from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()
 const router = useRouter()
-const clientStore = useClientStore()
+const api = new ClientApi()
+
+const clients = useCollection<ClientSummaryResource, ClientListResource>({
+  capabilities: () => api.getClientCapabilities(),
+  page: (params) => api.listClients(params),
+  items: (content) => content.clients
+})
 
 onMounted(async () => {
-  await clientStore.clients.fetch()
+  await clients.fetch()
 })
 </script>
 
 <template>
-  <CollectionPage :collection="clientStore.clients" :search-placeholder="t('pages.clients.search')">
+  <CollectionPage :collection="clients" :search-placeholder="t('pages.clients.search')">
     <template #header>
       <CollectionSortHeader
         fit
-        :collection="clientStore.clients"
+        :collection="clients"
         :label="t('pages.clients.clientId')"
         field="id"
       />
@@ -39,7 +43,7 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         hidden-below="sm"
-        :collection="clientStore.clients"
+        :collection="clients"
         :label="t('pages.clients.audience')"
         field="audience_id"
       />
@@ -48,7 +52,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="client in clientStore.clients.items" :key="client.client_id">
+      <tr v-for="client in clients.items" :key="client.client_id">
         <TableCell primary fit>
           {{ client.client_id }}
         </TableCell>

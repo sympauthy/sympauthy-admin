@@ -79,7 +79,7 @@ export const interactiveFlowSessionDetailResourceSchema: JSONSchemaType<Interact
         type: 'object',
         additionalProperties: {
           type: 'string'
-        } as any,
+        },
         required: [],
         nullable: true
       },
