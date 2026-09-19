@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { AudienceApi } from '../api/AudienceApi'
 import type { AudienceResource } from './AudienceResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useAudienceStore = defineStore('audiences', () => {
   const api = new AudienceApi()
@@ -30,7 +30,7 @@ export const useAudienceStore = defineStore('audiences', () => {
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       audiences.value = []
     }
 

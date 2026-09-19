@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { InteractiveFlowSessionApi } from '../api/InteractiveFlowSessionApi'
 import type { ListInteractiveFlowSessionsParams } from '../api/InteractiveFlowSessionApi'
 import type { InteractiveFlowSessionSummaryResource } from './InteractiveFlowSessionSummaryResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useInteractiveFlowSessionStore = defineStore('interactiveFlowSessions', () => {
   const api = new InteractiveFlowSessionApi()
@@ -54,7 +54,7 @@ export const useInteractiveFlowSessionStore = defineStore('interactiveFlowSessio
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       sessions.value = []
     }
 

@@ -4,7 +4,7 @@ import { UserApi } from '../api/UserApi'
 import type { ListUserClaimsParams } from '../api/UserApi'
 import type { UserDetailResource } from './UserDetailResource'
 import type { UserClaimResource } from './UserClaimResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useUserDetailStore = defineStore('userDetail', () => {
   const userApi = new UserApi()
@@ -31,7 +31,7 @@ export const useUserDetailStore = defineStore('userDetail', () => {
     if (isSuccess(response)) {
       user.value = response.content
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       user.value = null
     }
 
@@ -57,7 +57,7 @@ export const useUserDetailStore = defineStore('userDetail', () => {
       claimsPage.value = response.content.page
       claimsTotal.value = response.content.total
     } else {
-      claimsError.value = getErrorMessage(response as ErrorApiResponse)
+      claimsError.value = getErrorMessage(response)
       claims.value = []
     }
 

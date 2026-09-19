@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ConfirmDialog } from '@/shared/ui'
 import { UserApi } from '@/entities/user'
 import { useClientStore } from '@/entities/client'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 interface Props {
   userId: string | null
@@ -54,7 +54,7 @@ async function onConfirm() {
     loading.value = false
     emit('close')
   } else {
-    error.value = getErrorMessage(response as ErrorApiResponse)
+    error.value = getErrorMessage(response)
     loading.value = false
   }
 }

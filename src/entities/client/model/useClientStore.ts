@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ClientApi } from '../api/ClientApi'
 import type { ClientSummaryResource } from './ClientSummaryResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useClientStore = defineStore('clients', () => {
   const api = new ClientApi()
@@ -30,7 +30,7 @@ export const useClientStore = defineStore('clients', () => {
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       clients.value = []
     }
 
@@ -51,7 +51,7 @@ export const useClientStore = defineStore('clients', () => {
       const response = await api.listClients(currentPage, size.value)
 
       if (!isSuccess(response)) {
-        error.value = getErrorMessage(response as ErrorApiResponse)
+        error.value = getErrorMessage(response)
         clients.value = []
         loading.value = false
         return

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ClaimApi } from '../api/ClaimApi'
 import type { ClaimResource } from './ClaimResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useClaimStore = defineStore('claims', () => {
   const api = new ClaimApi()
@@ -30,7 +30,7 @@ export const useClaimStore = defineStore('claims', () => {
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       claims.value = []
     }
 

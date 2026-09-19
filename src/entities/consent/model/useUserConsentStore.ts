@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { ConsentApi } from '../api/ConsentApi'
 import type { ConsentResource } from './ConsentResource'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 export const useUserConsentStore = defineStore('userConsent', () => {
   const consentApi = new ConsentApi()
@@ -27,7 +27,7 @@ export const useUserConsentStore = defineStore('userConsent', () => {
       consentsPage.value = response.content.page
       consentsTotal.value = response.content.total
     } else {
-      consentsError.value = getErrorMessage(response as ErrorApiResponse)
+      consentsError.value = getErrorMessage(response)
       consents.value = []
     }
 
@@ -40,7 +40,7 @@ export const useUserConsentStore = defineStore('userConsent', () => {
     if (isSuccess(response)) {
       await fetchConsents(userId, consentsPage.value)
     } else {
-      consentsError.value = getErrorMessage(response as ErrorApiResponse)
+      consentsError.value = getErrorMessage(response)
     }
   }
 
