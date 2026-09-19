@@ -323,10 +323,7 @@
       "errorDetailsId": "Details ID",
       "errorDescriptionId": "Description ID",
       "securityContexts": "Security contexts",
-      "purposes": "Purposes",
-      "purposesHelp": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
-      "noDebugInformation": "This purpose has nothing to say about the session.",
-      "overview": "Overview"
+      "purposes": "Purposes"
     },
     "userClaims": {
       "help": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
@@ -390,6 +387,10 @@
       "proven": "Proven",
       "empty": "Nothing was recorded against this session. Recording is best-effort and never fails a flow, so a session may hold no place at all.",
       "search": "Search by address, user agent or place"
+    },
+    "sessionPurposes": {
+      "help": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
+      "noDebugInformation": "This purpose has nothing to say about the session."
     }
   }
 }

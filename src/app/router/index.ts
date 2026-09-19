@@ -13,7 +13,7 @@ import { UserConsentsPage } from '@/pages/user-consents'
 import { UserMfaPage } from '@/pages/user-mfa'
 import { UserProvidersPage } from '@/pages/user-providers'
 import { SessionDetailPage } from '@/pages/session-detail'
-import { SessionOverviewPage } from '@/pages/session-overview'
+import { SessionPurposesPage } from '@/pages/session-purposes'
 import { SessionSecurityContextsPage } from '@/pages/session-security-contexts'
 import { CallbackPage } from '@/pages/callback'
 import { RegisterPage } from '@/pages/register'
@@ -145,16 +145,16 @@ export function makeRouter() {
         path: '/sessions/:sessionId',
         name: 'sessionDetail',
         component: SessionDetailPage,
-        redirect: { name: 'sessionOverview' },
+        redirect: { name: 'sessionPurposes' },
         meta: {
           requiresAuth: true,
           breadcrumb: { label: 'pages.sessionDetail.title', parent: 'sessions' }
         },
         children: [
           {
-            path: 'overview',
-            name: 'sessionOverview',
-            component: SessionOverviewPage,
+            path: 'purposes',
+            name: 'sessionPurposes',
+            component: SessionPurposesPage,
             meta: { requiresAuth: true }
           },
           {

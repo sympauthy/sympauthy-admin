@@ -173,9 +173,15 @@ is left.** Each tab is a route, so the view an operator is on is addressable and
 **A record's route redirects to its first tab** and keeps its own name, so a `router.push` naming
 the record still works and the URL always names a view.
 
-**A tab exists for each of the record's collections, and one more where the record holds something
-that is neither its summary nor a collection.** A user has four and no overview; a session has an
-overview holding its failure and its purposes.
+**A tab exists for each of the record's collections, and one more per view the record holds that is
+neither a collection nor part of the record itself.** A user's four tabs are its four collections; a
+session adds its purposes to its places.
+
+**What identifies or qualifies the record sits in the shell, not in a tab.** A session's failure
+explains the status beside it, so it stays in sight whichever tab is open.
+
+**A tab names its view, so the page behind it repeats no heading.** Nothing renders a
+`DetailSection` titled the way the tab that opened it already is.
 
 **A shell re-reads its record only when the identifier changes.** Moving between tabs must not
 refetch it.
