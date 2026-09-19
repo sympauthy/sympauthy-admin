@@ -1,21 +1,31 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type AudienceListResource,
   audienceListResourceSchema
 } from '@/entities/audience/model/AudienceListResource'
 
 export class AudienceApi extends AbstractApi {
   async listAudiences(
-    page: number = 0,
-    size: number = 20
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<AudienceListResource> | ErrorApiResponse> {
     return this.get<AudienceListResource>({
       path: '/api/v1/admin/audiences',
-      params: {
-        page: page.toString(),
-        size: size.toString()
-      },
+      params: this.toQueryParams(params),
       schema: audienceListResourceSchema
+    })
+  }
+
+  async getAudienceCapabilities(): Promise<
+    SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse
+  > {
+    return this.get<CollectionCapabilitiesResource>({
+      path: '/api/v1/admin/audiences/capabilities',
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 }

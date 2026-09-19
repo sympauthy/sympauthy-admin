@@ -20,7 +20,10 @@ export const useUserConsentStore = defineStore('userConsent', () => {
     consentsLoading.value = true
     consentsError.value = null
 
-    const response = await consentApi.listConsents(userId, requestedPage, consentsSize.value)
+    const response = await consentApi.listConsents(userId, {
+      page: requestedPage,
+      size: consentsSize.value
+    })
 
     if (isSuccess(response)) {
       consents.value = response.content.consents

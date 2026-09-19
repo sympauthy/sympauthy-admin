@@ -22,11 +22,10 @@ export const useUserProviderLinkStore = defineStore('userProviderLink', () => {
     providerLinksLoading.value = true
     providerLinksError.value = null
 
-    const response = await providerLinkApi.listProviderLinks(
-      userId,
-      requestedPage,
-      providerLinksSize.value
-    )
+    const response = await providerLinkApi.listProviderLinks(userId, {
+      page: requestedPage,
+      size: providerLinksSize.value
+    })
 
     if (isSuccess(response)) {
       providerLinks.value = response.content.providers

@@ -3,7 +3,12 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useClientStore, ClientTypeHelpTooltip } from '@/entities/client'
-import { ListPage, CommonButton, primaryColoredButton } from '@/shared/ui'
+import {
+  CollectionPage,
+  CollectionSortHeader,
+  CommonButton,
+  primaryColoredButton
+} from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()
@@ -11,39 +16,31 @@ const router = useRouter()
 const clientStore = useClientStore()
 
 onMounted(async () => {
-  await clientStore.fetchClients()
+  await clientStore.clients.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="clientStore.loading"
-    :error="clientStore.error"
-    :empty="clientStore.clients.length === 0"
-    :page="clientStore.page"
-    :size="clientStore.size"
-    :total="clientStore.total"
-    :total-pages="clientStore.totalPages"
-    @page-change="clientStore.fetchClients"
-    @page-size-change="clientStore.setSize"
-  >
+  <CollectionPage :collection="clientStore.clients" :search-placeholder="t('pages.clients.search')">
     <template #header>
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.clients.clientId') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="clientStore.clients"
+        :label="t('pages.clients.clientId')"
+        field="id"
+      />
       <th
         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
       >
         {{ t('pages.clients.type') }}
         <ClientTypeHelpTooltip />
       </th>
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap hidden sm:table-cell"
-      >
-        {{ t('pages.clients.audience') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        :collection="clientStore.clients"
+        :label="t('pages.clients.audience')"
+        field="audience_id"
+      />
       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
         {{ t('pages.clients.redirectUris') }}
       </th>
@@ -55,7 +52,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="client in clientStore.clients" :key="client.client_id">
+      <tr v-for="client in clientStore.clients.items" :key="client.client_id">
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
           {{ client.client_id }}
         </td>
@@ -87,5 +84,5 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.clients.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 </template>

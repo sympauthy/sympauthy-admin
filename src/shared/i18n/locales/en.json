@@ -146,7 +146,8 @@
       "redirectUris": "Redirect URIs",
       "actions": "Actions",
       "view": "View",
-      "empty": "No clients found."
+      "empty": "No clients found.",
+      "search": "Search clients..."
     },
     "clientDetail": {
       "title": "Client",
@@ -174,8 +175,6 @@
       "disabled": "disabled",
       "empty": "No users found.",
       "search": "Search users...",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
       "actions": "Actions",
       "view": "View",
       "logout": "Logout"
@@ -273,17 +272,15 @@
       "consentable": "consentable",
       "grantable": "grantable",
       "client": "client",
-      "typeFilter": "type",
-      "allTypes": "all types",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
-      "empty": "No scopes found."
+      "empty": "No scopes found.",
+      "search": "Search scopes..."
     },
     "audiences": {
       "title": "Audiences",
       "audienceId": "Audience ID",
       "clientsCount": "Clients",
-      "empty": "No audiences found."
+      "empty": "No audiences found.",
+      "search": "Search audiences..."
     },
     "invitations": {
       "title": "Invitations",
@@ -295,16 +292,11 @@
       "expiresAt": "Expires at",
       "actions": "Actions",
       "pending": "pending",
-      "used": "used",
       "consumed": "consumed",
       "revoked": "revoked",
       "expired": "expired",
       "empty": "No invitations found.",
       "create": "Create Invitation",
-      "statusFilter": "status",
-      "audienceFilter": "audience",
-      "allStatuses": "all statuses",
-      "allAudiences": "all audiences",
       "revoke": "Revoke",
       "revokeTitle": "Revoke Invitation",
       "revokeDescription": "This invitation will no longer be usable. This action cannot be undone.",
@@ -318,7 +310,8 @@
       "audienceRequired": "Please select an audience.",
       "tokenWarning": "Copy this token now. It will not be shown again.",
       "invitationCreated": "Invitation Created",
-      "done": "Done"
+      "done": "Done",
+      "search": "Search by token prefix or note"
     },
     "claims": {
       "title": "Claims",
@@ -329,7 +322,8 @@
       "required": "required",
       "identifier": "identifier",
       "empty": "No claims found.",
-      "tags": "Tags"
+      "tags": "Tags",
+      "search": "Search claims..."
     },
     "sessions": {
       "title": "Sessions",
@@ -345,10 +339,6 @@
       "refresh": "Refresh",
       "signingUp": "Signing up",
       "search": "Search by IP, user agent or client",
-      "statusFilter": "status",
-      "allStatuses": "all statuses",
-      "purposeFilter": "purpose",
-      "allPurposes": "all purposes",
       "empty": "No interactive flow session is in flight. This is a live view rather than a history — expired sessions are collected every fifteen minutes, so a session that has finished may already be gone."
     },
     "sessionDetail": {

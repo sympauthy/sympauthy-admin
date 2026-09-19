@@ -34,7 +34,7 @@ watch(
       selectedClientId.value = ''
       loading.value = false
       error.value = null
-      clientStore.fetchClients()
+      clientStore.fetchAllClients()
     }
   }
 )
@@ -107,7 +107,7 @@ async function onConfirm() {
           {{ t('logoutDialog.selectClient') }}
         </option>
         <option
-          v-for="client in clientStore.clients"
+          v-for="client in clientStore.allClients"
           :key="client.client_id"
           :value="client.client_id"
         >

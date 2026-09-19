@@ -1,115 +1,70 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/entities/user'
-import { useClaimStore, type ClaimResource } from '@/entities/claim'
+import { ClaimApi, type ClaimResource } from '@/entities/claim'
 import {
-  ListPage,
-  SortableHeader,
+  CollectionPage,
+  CollectionSortHeader,
   Tag,
   CommonButton,
   primaryColoredButton,
-  dangerColoredButton,
-  type FilterConfig
+  dangerColoredButton
 } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
+import { isSuccess } from '@/shared/api'
 import { formatDate } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
-const claimStore = useClaimStore()
+const claimApi = new ClaimApi()
 
-const enabledClaims = ref<ClaimResource[]>([])
+// The claims a user is identified by are the columns of this table, and what `claims=` asks the
+// server to embed in each row. They are read here rather than taken from the capability document:
+// that document says which claims the collection can be *filtered* on, which is every configured
+// one, and a column is a different question.
+const identifierClaims = ref<ClaimResource[]>([])
+
+// One request, sized past any plausible number of configured claims, so the columns are known
+// before the first page of users is asked for.
+const CONFIGURED_CLAIMS_PAGE_SIZE = 100
+
 const logoutUserId = ref<string | null>(null)
 
-const filters = computed<FilterConfig[]>(() => [
-  {
-    key: 'status',
-    label: t('pages.users.statusFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.users.allStatuses'), value: '' },
-      { label: t('pages.users.enabled'), value: 'enabled' },
-      { label: t('pages.users.disabled'), value: 'disabled' }
-    ]
-  },
-  ...enabledClaims.value.map((claim) => ({
-    key: claim.id,
-    label: claim.id,
-    type: 'text' as const
-  }))
-])
-
-function onFilterChange(key: string, value: string) {
-  if (key === 'status') {
-    userStore.setStatusFilter(value)
-  } else {
-    userStore.setClaimFilter(key, value)
-  }
-}
-
-function onFilterRemove(key: string) {
-  if (key === 'status') {
-    userStore.clearStatusFilter()
-  } else {
-    userStore.clearClaimFilter(key)
-  }
-}
-
 onMounted(async () => {
-  await claimStore.fetchClaims()
-  enabledClaims.value = claimStore.claims.filter((c) => c.enabled && c.identifier)
-  userStore.setSelectedClaimIds(enabledClaims.value.map((c) => c.id))
-  await userStore.fetchUsers()
+  const response = await claimApi.listClaims({ page: 0, size: CONFIGURED_CLAIMS_PAGE_SIZE })
+  if (isSuccess(response)) {
+    identifierClaims.value = response.content.claims.filter((c) => c.enabled && c.identifier)
+  }
+  userStore.setSelectedClaimIds(identifierClaims.value.map((c) => c.id))
+  await userStore.users.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="userStore.loading"
-    :error="userStore.error"
-    :empty="userStore.users.length === 0"
-    :page="userStore.page"
-    :size="userStore.size"
-    :total="userStore.total"
-    :total-pages="userStore.totalPages"
-    searchable
-    :search-placeholder="t('pages.users.search')"
-    :filters="filters"
-    @search="userStore.setSearch"
-    @filter-change="onFilterChange"
-    @filter-remove="onFilterRemove"
-    @page-change="userStore.fetchUsers"
-    @page-size-change="userStore.setSize"
-  >
+  <CollectionPage :collection="userStore.users" :search-placeholder="t('pages.users.search')">
     <template #header>
-      <SortableHeader
+      <CollectionSortHeader
         class="w-0 whitespace-nowrap"
+        :collection="userStore.users"
         :label="t('pages.users.status')"
         field="status"
-        :current-sort="userStore.sortField"
-        :current-order="userStore.sortOrder"
-        @sort="userStore.toggleSort"
       />
-      <SortableHeader
-        v-for="claim in enabledClaims"
+      <CollectionSortHeader
+        v-for="claim in identifierClaims"
         :key="claim.id"
+        :collection="userStore.users"
         :label="claim.id"
         :field="claim.id"
-        :current-sort="userStore.sortField"
-        :current-order="userStore.sortOrder"
-        @sort="userStore.toggleSort"
       />
-      <SortableHeader
+      <CollectionSortHeader
         class="w-0 whitespace-nowrap hidden sm:table-cell"
+        :collection="userStore.users"
         :label="t('pages.users.createdAt')"
         field="created_at"
-        :current-sort="userStore.sortField"
-        :current-order="userStore.sortOrder"
-        @sort="userStore.toggleSort"
       />
       <th
         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
@@ -119,7 +74,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="user in userStore.users" :key="user.user_id">
+      <tr v-for="user in userStore.users.items" :key="user.user_id">
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <Tag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
@@ -129,7 +84,7 @@ onMounted(async () => {
           </Tag>
         </td>
         <td
-          v-for="claim in enabledClaims"
+          v-for="claim in identifierClaims"
           :key="claim.id"
           class="px-6 py-4 text-sm text-gray-500 truncate"
         >
@@ -163,7 +118,7 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 
   <LogoutDialog
     :user-id="logoutUserId"

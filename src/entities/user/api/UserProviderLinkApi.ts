@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type UserProviderLinkListResource,
   userProviderLinkListResourceSchema
 } from '@/entities/user/model/UserProviderLinkListResource'
@@ -17,16 +22,21 @@ export interface ProviderLinkStartInput {
 export class UserProviderLinkApi extends AbstractApi {
   async listProviderLinks(
     userId: string,
-    page: number = 0,
-    size: number = 20
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<UserProviderLinkListResource> | ErrorApiResponse> {
     return this.get<UserProviderLinkListResource>({
       path: `/api/v1/admin/users/${userId}/providers`,
-      params: {
-        page: page.toString(),
-        size: size.toString()
-      },
+      params: this.toQueryParams(params),
       schema: userProviderLinkListResourceSchema
+    })
+  }
+
+  async getProviderLinkCapabilities(
+    userId: string
+  ): Promise<SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse> {
+    return this.get<CollectionCapabilitiesResource>({
+      path: `/api/v1/admin/users/${userId}/providers/capabilities`,
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 

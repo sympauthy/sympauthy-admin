@@ -46,6 +46,9 @@ watch(
   () => props.open,
   (isOpen) => {
     if (isOpen) {
+      // The audiences are read when the dialog opens rather than with the page behind it: the list
+      // page takes its own filters from the capability document and needs none of them.
+      audienceStore.fetchAllAudiences()
       phase.value = 'form'
       audience.value = ''
       expiresAt.value = ''
@@ -142,7 +145,7 @@ async function onSubmit() {
               {{ t('pages.invitations.selectAudience') }}
             </option>
             <option
-              v-for="a in audienceStore.audiences"
+              v-for="a in audienceStore.allAudiences"
               :key="a.audience_id"
               :value="a.audience_id"
             >

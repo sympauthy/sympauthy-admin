@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type ClientListResource,
   clientListResourceSchema
 } from '@/entities/client/model/ClientListResource'
@@ -10,16 +15,21 @@ import {
 
 export class ClientApi extends AbstractApi {
   async listClients(
-    page: number = 0,
-    size: number = 20
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<ClientListResource> | ErrorApiResponse> {
     return this.get<ClientListResource>({
       path: '/api/v1/admin/clients',
-      params: {
-        page: page.toString(),
-        size: size.toString()
-      },
+      params: this.toQueryParams(params),
       schema: clientListResourceSchema
+    })
+  }
+
+  async getClientCapabilities(): Promise<
+    SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse
+  > {
+    return this.get<CollectionCapabilitiesResource>({
+      path: '/api/v1/admin/clients/capabilities',
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 

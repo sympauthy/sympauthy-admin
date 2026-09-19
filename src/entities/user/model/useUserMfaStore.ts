@@ -20,7 +20,10 @@ export const useUserMfaStore = defineStore('userMfa', () => {
     mfaLoading.value = true
     mfaError.value = null
 
-    const response = await userMfaApi.listMfaMethods(userId, requestedPage, mfaSize.value)
+    const response = await userMfaApi.listMfaMethods(userId, {
+      page: requestedPage,
+      size: mfaSize.value
+    })
 
     if (isSuccess(response)) {
       mfaMethods.value = response.content.mfa_methods

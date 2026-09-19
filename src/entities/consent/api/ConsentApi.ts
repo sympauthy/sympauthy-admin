@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type ConsentListResource,
   consentListResourceSchema
 } from '@/entities/consent/model/ConsentListResource'
@@ -7,16 +12,21 @@ import {
 export class ConsentApi extends AbstractApi {
   async listConsents(
     userId: string,
-    page: number = 0,
-    size: number = 20
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<ConsentListResource> | ErrorApiResponse> {
     return this.get<ConsentListResource>({
       path: `/api/v1/admin/users/${userId}/consents`,
-      params: {
-        page: page.toString(),
-        size: size.toString()
-      },
+      params: this.toQueryParams(params),
       schema: consentListResourceSchema
+    })
+  }
+
+  async getConsentCapabilities(
+    userId: string
+  ): Promise<SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse> {
+    return this.get<CollectionCapabilitiesResource>({
+      path: `/api/v1/admin/users/${userId}/consents/capabilities`,
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 

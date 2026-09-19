@@ -1,51 +1,11 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useScopeStore } from '@/entities/scope'
-import { ListPage, Tag, OriginTag, type FilterConfig } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, Tag, OriginTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const scopeStore = useScopeStore()
-
-const filters = computed<FilterConfig[]>(() => [
-  {
-    key: 'type',
-    label: t('pages.scopes.typeFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.scopes.allTypes'), value: '' },
-      { label: t('pages.scopes.consentable'), value: 'consentable' },
-      { label: t('pages.scopes.grantable'), value: 'grantable' },
-      { label: t('pages.scopes.client'), value: 'client' }
-    ]
-  },
-  {
-    key: 'enabled',
-    label: t('pages.scopes.statusFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.scopes.allStatuses'), value: '' },
-      { label: t('pages.scopes.enabled'), value: 'true' },
-      { label: t('pages.scopes.disabled'), value: 'false' }
-    ]
-  }
-])
-
-function onFilterChange(key: string, value: string) {
-  if (key === 'type') {
-    scopeStore.setTypeFilter(value)
-  } else if (key === 'enabled') {
-    scopeStore.setEnabledFilter(value)
-  }
-}
-
-function onFilterRemove(key: string) {
-  if (key === 'type') {
-    scopeStore.clearTypeFilter()
-  } else if (key === 'enabled') {
-    scopeStore.clearEnabledFilter()
-  }
-}
 
 function typeColor(type: string): 'blue' | 'purple' | 'gray' {
   switch (type) {
@@ -59,39 +19,30 @@ function typeColor(type: string): 'blue' | 'purple' | 'gray' {
 }
 
 onMounted(async () => {
-  await scopeStore.fetchScopes()
+  await scopeStore.scopes.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="scopeStore.loading"
-    :error="scopeStore.error"
-    :empty="scopeStore.scopes.length === 0"
-    :page="scopeStore.page"
-    :size="scopeStore.size"
-    :total="scopeStore.total"
-    :total-pages="scopeStore.totalPages"
-    :filters="filters"
-    @filter-change="onFilterChange"
-    @filter-remove="onFilterRemove"
-    @page-change="scopeStore.fetchScopes"
-    @page-size-change="scopeStore.setSize"
-  >
+  <CollectionPage :collection="scopeStore.scopes" :search-placeholder="t('pages.scopes.search')">
     <template #header>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.scopes.status') }}
-      </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.scopes.id') }}
-      </th>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.scopes.type') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="scopeStore.scopes"
+        :label="t('pages.scopes.status')"
+        field="enabled"
+      />
+      <CollectionSortHeader
+        :collection="scopeStore.scopes"
+        :label="t('pages.scopes.id')"
+        field="scope"
+      />
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="scopeStore.scopes"
+        :label="t('pages.scopes.type')"
+        field="type"
+      />
       <th
         class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
       >
@@ -103,7 +54,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="scope in scopeStore.scopes" :key="scope.id">
+      <tr v-for="scope in scopeStore.scopes.items" :key="scope.id">
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <Tag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}
@@ -135,5 +86,5 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.scopes.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 </template>

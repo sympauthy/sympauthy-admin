@@ -1,4 +1,9 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
+import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
 import { type UserListResource, userListResourceSchema } from '../model/UserListResource'
 import {
   type UserDetailResource,
@@ -9,27 +14,12 @@ import {
   userClaimListResourceSchema
 } from '@/entities/user/model/UserClaimListResource'
 
-export interface ListUsersParams {
-  page?: number
-  size?: number
+export interface ListUsersParams extends CollectionParams {
+  /**
+   * The claims embedded in each user, comma separated. It selects what is published rather than
+   * what is kept, so it is not a criterion and is not resolved against the capability document.
+   */
   claims?: string
-  q?: string
-  status?: string
-  sort?: string
-  order?: string
-  [key: string]: string | number | undefined
-}
-
-export interface ListUserClaimsParams {
-  page?: number
-  size?: number
-  claim_id?: string
-  identifier?: string
-  required?: string
-  collected?: string
-  verified?: string
-  origin?: string
-  [key: string]: string | number | undefined
 }
 
 export class UserApi extends AbstractApi {
@@ -60,23 +50,39 @@ export class UserApi extends AbstractApi {
   async listUsers(
     params: ListUsersParams = {}
   ): Promise<SuccessApiResponse<UserListResource> | ErrorApiResponse> {
-    const queryParams = this.toQueryParams(params)
     return this.get<UserListResource>({
       path: '/api/v1/admin/users',
-      params: queryParams,
+      params: this.toQueryParams(params),
       schema: userListResourceSchema
+    })
+  }
+
+  async getUserCapabilities(): Promise<
+    SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse
+  > {
+    return this.get<CollectionCapabilitiesResource>({
+      path: '/api/v1/admin/users/capabilities',
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 
   async listUserClaims(
     userId: string,
-    params: ListUserClaimsParams = {}
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<UserClaimListResource> | ErrorApiResponse> {
-    const queryParams = this.toQueryParams(params)
     return this.get<UserClaimListResource>({
       path: `/api/v1/admin/users/${userId}/claims`,
-      params: queryParams,
+      params: this.toQueryParams(params),
       schema: userClaimListResourceSchema
+    })
+  }
+
+  async getUserClaimCapabilities(
+    userId: string
+  ): Promise<SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse> {
+    return this.get<CollectionCapabilitiesResource>({
+      path: `/api/v1/admin/users/${userId}/claims/capabilities`,
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 }

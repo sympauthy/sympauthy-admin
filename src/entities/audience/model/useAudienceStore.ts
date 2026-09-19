@@ -1,65 +1,71 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { AudienceApi } from '../api/AudienceApi'
-import type { AudienceResource } from './AudienceResource'
+import { ref } from 'vue'
+import { useCollection } from '@/shared/collection'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { AudienceApi } from '../api/AudienceApi'
+import type { AudienceListResource } from './AudienceListResource'
+import type { AudienceResource } from './AudienceResource'
+
+/**
+ * The page size a complete read walks the collection in. It is not the one the list page displays:
+ * nothing is rendered from it, so it is set to reach the end in as few requests as the server's
+ * ceiling allows.
+ */
+const PICKER_PAGE_SIZE = 100
 
 export const useAudienceStore = defineStore('audiences', () => {
   const api = new AudienceApi()
 
-  const audiences = ref<AudienceResource[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-  const page = ref(0)
-  const size = ref(20)
-  const total = ref(0)
-  // Set once a first response arrived. A page size change before that would request a page the
-  // component is about to request anyway.
-  const loaded = ref(false)
+  const audiences = useCollection<AudienceResource, AudienceListResource>({
+    capabilities: () => api.getAudienceCapabilities(),
+    page: (params) => api.listAudiences(params),
+    items: (content) => content.audiences
+  })
 
-  const totalPages = computed(() => Math.ceil(total.value / size.value))
+  // Every audience there is, for a picker that has to offer all of them. It is its own state rather
+  // than the collection's rows: a dialog filling it would otherwise replace what the list page is
+  // displaying.
+  const allAudiences = ref<AudienceResource[]>([])
+  const allAudiencesLoading = ref(false)
+  const allAudiencesError = ref<string | null>(null)
 
-  async function fetchAudiences(requestedPage: number = 0): Promise<void> {
-    loading.value = true
-    error.value = null
+  async function fetchAllAudiences(): Promise<void> {
+    allAudiencesLoading.value = true
+    allAudiencesError.value = null
 
-    const response = await api.listAudiences(requestedPage, size.value)
+    const accumulated: AudienceResource[] = []
+    let currentPage = 0
+    let total = 0
 
-    if (isSuccess(response)) {
-      audiences.value = response.content.audiences
-      page.value = response.content.page
-      total.value = response.content.total
-    } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
-      audiences.value = []
-    }
+    do {
+      const response = await api.listAudiences({ page: currentPage, size: PICKER_PAGE_SIZE })
 
-    loaded.value = true
-    loading.value = false
-  }
+      if (!isSuccess(response)) {
+        allAudiencesError.value = getErrorMessage(response as ErrorApiResponse)
+        allAudiences.value = []
+        allAudiencesLoading.value = false
+        return
+      }
 
-  // Adjusts the number of items per page. The page holding the first item currently displayed is
-  // requested again, so resizing the viewport keeps the user roughly in place.
-  function setSize(newSize: number) {
-    if (newSize < 1 || newSize === size.value) {
-      return
-    }
-    const firstItem = page.value * size.value
-    size.value = newSize
-    if (loaded.value) {
-      fetchAudiences(Math.floor(firstItem / newSize))
-    }
+      accumulated.push(...response.content.audiences)
+      total = response.content.total
+      currentPage++
+
+      // Guard against an infinite loop if a page comes back empty while `total` is still higher.
+      if (response.content.audiences.length === 0) {
+        break
+      }
+    } while (accumulated.length < total)
+
+    allAudiences.value = accumulated
+    allAudiencesLoading.value = false
   }
 
   return {
     audiences,
-    loading,
-    error,
-    page,
-    size,
-    total,
-    totalPages,
-    fetchAudiences,
-    setSize
+    allAudiences,
+    allAudiencesLoading,
+    allAudiencesError,
+    fetchAllAudiences
   }
 })

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { UserApi } from '../api/UserApi'
-import type { ListUserClaimsParams } from '../api/UserApi'
+import type { CollectionParams } from '@/shared/collection'
 import type { UserDetailResource } from './UserDetailResource'
 import type { UserClaimResource } from './UserClaimResource'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
@@ -41,7 +41,7 @@ export const useUserDetailStore = defineStore('userDetail', () => {
   async function fetchClaims(
     userId: string,
     requestedPage: number = 0,
-    filters: ListUserClaimsParams = {}
+    filters: CollectionParams = {}
   ): Promise<void> {
     claimsLoading.value = true
     claimsError.value = null

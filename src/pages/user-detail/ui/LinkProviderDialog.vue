@@ -37,12 +37,12 @@ const error = ref<string | null>(null)
 const redirectUrl = ref('')
 
 const selectedClient = computed(() =>
-  clientStore.clients.find((client) => client.client_id === clientId.value)
+  clientStore.allClients.find((client) => client.client_id === clientId.value)
 )
 const redirectUris = computed(() => selectedClient.value?.allowed_redirect_uris ?? [])
 const hasRedirectUris = computed(() => redirectUris.value.length > 0)
 
-const displayError = computed(() => error.value ?? clientStore.error)
+const displayError = computed(() => error.value ?? clientStore.allClientsError)
 
 const dialogTitle = computed(() =>
   phase.value === 'form'
@@ -155,18 +155,18 @@ async function onSubmit() {
           </label>
           <select
             v-model="clientId"
-            :disabled="clientStore.loading"
+            :disabled="clientStore.allClientsLoading"
             class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) disabled:cursor-not-allowed disabled:bg-gray-50"
           >
             <option value="" disabled>
               {{
-                clientStore.loading
+                clientStore.allClientsLoading
                   ? t('common.loading')
                   : t('pages.userDetail.linkProviderSelectClient')
               }}
             </option>
             <option
-              v-for="client in clientStore.clients"
+              v-for="client in clientStore.allClients"
               :key="client.client_id"
               :value="client.client_id"
             >

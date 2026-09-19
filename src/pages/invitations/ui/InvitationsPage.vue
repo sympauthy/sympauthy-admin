@@ -1,79 +1,32 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import { useInvitationStore } from '@/entities/invitation'
-import { useAudienceStore } from '@/entities/audience'
 import {
-  ListPage,
+  CollectionPage,
+  CollectionSortHeader,
   Tag,
   CommonButton,
   ConfirmDialog,
   dangerColoredButton,
-  primaryColoredButton,
-  type FilterConfig
+  primaryColoredButton
 } from '@/shared/ui'
 import CreateInvitationDialog from './CreateInvitationDialog.vue'
 import { formatDate } from '@/shared/lib'
 
 const { t } = useI18n()
 const invitationStore = useInvitationStore()
-const audienceStore = useAudienceStore()
 
 const showCreateDialog = ref(false)
 const revokeInvitationId = ref<string | null>(null)
 const revokeLoading = ref(false)
 const revokeError = ref<string | null>(null)
 
-const filters = computed<FilterConfig[]>(() => [
-  {
-    key: 'status',
-    label: t('pages.invitations.statusFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.invitations.allStatuses'), value: '' },
-      { label: t('pages.invitations.pending'), value: 'pending' },
-      { label: t('pages.invitations.used'), value: 'used' },
-      { label: t('pages.invitations.consumed'), value: 'consumed' },
-      { label: t('pages.invitations.revoked'), value: 'revoked' },
-      { label: t('pages.invitations.expired'), value: 'expired' }
-    ]
-  },
-  {
-    key: 'audience',
-    label: t('pages.invitations.audienceFilter'),
-    type: 'select',
-    options: [
-      { label: t('pages.invitations.allAudiences'), value: '' },
-      ...audienceStore.audiences.map((a) => ({
-        label: a.audience_id,
-        value: a.audience_id
-      }))
-    ]
-  }
-])
-
-function onFilterChange(key: string, value: string) {
-  if (key === 'status') {
-    invitationStore.setStatusFilter(value)
-  } else if (key === 'audience') {
-    invitationStore.setAudienceFilter(value)
-  }
-}
-
-function onFilterRemove(key: string) {
-  if (key === 'status') {
-    invitationStore.clearStatusFilter()
-  } else if (key === 'audience') {
-    invitationStore.clearAudienceFilter()
-  }
-}
-
 function statusColor(status: string): 'yellow' | 'green' | 'red' | 'gray' {
   switch (status) {
     case 'pending':
       return 'yellow'
-    case 'used':
     case 'consumed':
       return 'green'
     case 'revoked':
@@ -100,7 +53,7 @@ async function onConfirmRevoke() {
   if (success) {
     revokeInvitationId.value = null
   } else {
-    revokeError.value = invitationStore.error
+    revokeError.value = invitationStore.invitations.error
   }
 
   revokeLoading.value = false
@@ -111,28 +64,18 @@ function onCancelRevoke() {
 }
 
 function onInvitationCreated() {
-  invitationStore.fetchInvitations(0)
+  invitationStore.invitations.fetch(0)
 }
 
 onMounted(async () => {
-  await Promise.all([audienceStore.fetchAudiences(), invitationStore.fetchInvitations()])
+  await invitationStore.invitations.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="invitationStore.loading"
-    :error="invitationStore.error"
-    :empty="invitationStore.invitations.length === 0"
-    :page="invitationStore.page"
-    :size="invitationStore.size"
-    :total="invitationStore.total"
-    :total-pages="invitationStore.totalPages"
-    :filters="filters"
-    @filter-change="onFilterChange"
-    @filter-remove="onFilterRemove"
-    @page-change="invitationStore.fetchInvitations"
-    @page-size-change="invitationStore.setSize"
+  <CollectionPage
+    :collection="invitationStore.invitations"
+    :search-placeholder="t('pages.invitations.search')"
   >
     <template #actions>
       <CommonButton :button-style="primaryColoredButton" @click="showCreateDialog = true">
@@ -144,27 +87,31 @@ onMounted(async () => {
     </template>
 
     <template #header>
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.invitations.status') }}
-      </th>
+      <CollectionSortHeader
+        class="w-0 whitespace-nowrap"
+        :collection="invitationStore.invitations"
+        :label="t('pages.invitations.status')"
+        field="status"
+      />
       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
         {{ t('pages.invitations.tokenPrefix') }}
       </th>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.invitations.audience') }}
-      </th>
+      <CollectionSortHeader
+        :collection="invitationStore.invitations"
+        :label="t('pages.invitations.audience')"
+        field="audience_id"
+      />
       <th
         class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
       >
         {{ t('pages.invitations.note') }}
       </th>
-      <th
-        class="hidden sm:table-cell w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.invitations.expiresAt') }}
-      </th>
+      <CollectionSortHeader
+        class="hidden sm:table-cell w-0 whitespace-nowrap"
+        :collection="invitationStore.invitations"
+        :label="t('pages.invitations.expiresAt')"
+        field="expires_at"
+      />
       <th
         class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
       >
@@ -173,7 +120,7 @@ onMounted(async () => {
     </template>
 
     <template #rows>
-      <tr v-for="invitation in invitationStore.invitations" :key="invitation.invitation_id">
+      <tr v-for="invitation in invitationStore.invitations.items" :key="invitation.invitation_id">
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <Tag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
@@ -208,7 +155,7 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.invitations.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 
   <ConfirmDialog
     :open="revokeInvitationId !== null"

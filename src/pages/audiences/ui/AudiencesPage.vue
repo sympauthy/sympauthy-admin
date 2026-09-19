@@ -6,46 +6,42 @@ import {
   audienceRegistrationModeKey,
   audienceRegistrationModeColor
 } from '@/entities/audience'
-import { ListPage, Tag } from '@/shared/ui'
+import { CollectionPage, CollectionSortHeader, Tag } from '@/shared/ui'
 
 const { t } = useI18n()
 const audienceStore = useAudienceStore()
 
 onMounted(async () => {
-  await audienceStore.fetchAudiences()
+  await audienceStore.audiences.fetch()
 })
 </script>
 
 <template>
-  <ListPage
-    :loading="audienceStore.loading"
-    :error="audienceStore.error"
-    :empty="audienceStore.audiences.length === 0"
-    :page="audienceStore.page"
-    :size="audienceStore.size"
-    :total="audienceStore.total"
-    :total-pages="audienceStore.totalPages"
-    @page-change="audienceStore.fetchAudiences"
-    @page-size-change="audienceStore.setSize"
+  <CollectionPage
+    :collection="audienceStore.audiences"
+    :search-placeholder="t('pages.audiences.search')"
   >
     <template #header>
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.audiences.audienceId') }}
-      </th>
+      <CollectionSortHeader
+        :collection="audienceStore.audiences"
+        :label="t('pages.audiences.audienceId')"
+        field="id"
+      />
       <th
         class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
       >
         {{ t('common.audience.registrationMode.label') }}
       </th>
-      <th
-        class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.audiences.clientsCount') }}
-      </th>
+      <CollectionSortHeader
+        class="hidden sm:table-cell w-0 whitespace-nowrap"
+        :collection="audienceStore.audiences"
+        :label="t('pages.audiences.clientsCount')"
+        field="client_count"
+      />
     </template>
 
     <template #rows>
-      <tr v-for="audience in audienceStore.audiences" :key="audience.audience_id">
+      <tr v-for="audience in audienceStore.audiences.items" :key="audience.audience_id">
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
           {{ audience.audience_id }}
         </td>
@@ -63,5 +59,5 @@ onMounted(async () => {
     <template #empty>
       <p class="text-gray-600">{{ t('pages.audiences.empty') }}</p>
     </template>
-  </ListPage>
+  </CollectionPage>
 </template>

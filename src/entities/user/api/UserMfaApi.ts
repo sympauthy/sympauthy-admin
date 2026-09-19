@@ -1,5 +1,10 @@
 import { AbstractApi, type SuccessApiResponse, type ErrorApiResponse } from '@/shared/api'
 import {
+  collectionCapabilitiesResourceSchema,
+  type CollectionCapabilitiesResource,
+  type CollectionParams
+} from '@/shared/collection'
+import {
   type UserMfaMethodListResource,
   userMfaMethodListResourceSchema
 } from '@/entities/user/model/UserMfaMethodListResource'
@@ -17,16 +22,21 @@ export interface MfaEnrollmentInput {
 export class UserMfaApi extends AbstractApi {
   async listMfaMethods(
     userId: string,
-    page: number = 0,
-    size: number = 20
+    params: CollectionParams = {}
   ): Promise<SuccessApiResponse<UserMfaMethodListResource> | ErrorApiResponse> {
     return this.get<UserMfaMethodListResource>({
       path: `/api/v1/admin/users/${userId}/mfa`,
-      params: {
-        page: page.toString(),
-        size: size.toString()
-      },
+      params: this.toQueryParams(params),
       schema: userMfaMethodListResourceSchema
+    })
+  }
+
+  async getMfaCapabilities(
+    userId: string
+  ): Promise<SuccessApiResponse<CollectionCapabilitiesResource> | ErrorApiResponse> {
+    return this.get<CollectionCapabilitiesResource>({
+      path: `/api/v1/admin/users/${userId}/mfa/capabilities`,
+      schema: collectionCapabilitiesResourceSchema
     })
   }
 
