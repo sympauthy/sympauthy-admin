@@ -4,7 +4,7 @@ import {
   type InteractiveFlowPurposeResource,
   interactiveFlowPurposeResourceSchema
 } from '@/entities/session/model/InteractiveFlowPurposeResource'
-import { translateMessageOr } from '@/i18n'
+import { translateMessageOr } from '@/app/i18n'
 
 /**
  * One interactive flow session, as the listing shows it.

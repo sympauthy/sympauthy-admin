@@ -1,4 +1,4 @@
-import { translateMessage } from '@/i18n'
+import { translateMessage } from '@/app/i18n'
 import type { ErrorResource } from '@/shared/api/ErrorResource'
 
 /**

@@ -23,7 +23,7 @@ export default defineConfig({
     tailwindcss(),
     vue(),
     vueI18nPlugin({
-      include: [path.resolve(__dirname, './src/locales/**')]
+      include: [path.resolve(__dirname, './src/app/locales/**')]
     })
   ],
   resolve: {

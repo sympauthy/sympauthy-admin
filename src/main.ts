@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
-import App from '@/App.vue'
-import { i18n } from '@/i18n'
-import { makeRouter } from '@/router'
+import App from '@/app/App.vue'
+import { i18n } from '@/app/i18n'
+import { makeRouter } from '@/app/router'
 import { createPinia } from 'pinia'
 
 const pinia = createPinia()

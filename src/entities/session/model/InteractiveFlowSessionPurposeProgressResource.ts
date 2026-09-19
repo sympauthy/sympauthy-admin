@@ -7,7 +7,7 @@ import {
   type InteractiveFlowSessionDebugInformationResource,
   interactiveFlowSessionDebugInformationResourceSchema
 } from '@/entities/session/model/InteractiveFlowSessionDebugInformationResource'
-import { translateMessageOr } from '@/i18n'
+import { translateMessageOr } from '@/app/i18n'
 
 export type InteractiveFlowSessionPurposeProgressResource = {
   purpose: InteractiveFlowPurposeResource
