@@ -7,6 +7,9 @@ import {
   CollectionPage,
   CollectionSortHeader,
   CommonButton,
+  EmptyValue,
+  TableCell,
+  TableHeader,
   primaryColoredButton
 } from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
@@ -24,65 +27,58 @@ onMounted(async () => {
   <CollectionPage :collection="clientStore.clients" :search-placeholder="t('pages.clients.search')">
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="clientStore.clients"
         :label="t('pages.clients.clientId')"
         field="id"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
+      <TableHeader fit>
         {{ t('pages.clients.type') }}
         <ClientTypeHelpTooltip />
-      </th>
+      </TableHeader>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="clientStore.clients"
         :label="t('pages.clients.audience')"
         field="audience_id"
       />
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.clients.redirectUris') }}
-      </th>
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.clients.actions') }}
-      </th>
+      <TableHeader>{{ t('pages.clients.redirectUris') }}</TableHeader>
+      <TableHeader fit>{{ t('pages.clients.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="client in clientStore.clients.items" :key="client.client_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ client.client_id }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        </TableCell>
+        <TableCell :label="t('pages.clients.type')" fit>
           {{ client.type }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+        </TableCell>
+        <TableCell :label="t('pages.clients.audience')" fit hidden-below="sm">
           {{ client.audience_id }}
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500">
-          <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
-            {{ uri }}
-          </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell :label="t('pages.clients.redirectUris')">
+          <template v-if="client.allowed_redirect_uris?.length">
+            <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
+              {{ uri }}
+            </div>
+          </template>
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             :button-style="primaryColoredButton"
+            :label="t('pages.clients.view')"
+            :icon="EyeIcon"
             @click="router.push({ name: 'clientDetail', params: { clientId: client.client_id } })"
-          >
-            <span class="inline-flex items-center gap-1.5">
-              <EyeIcon class="size-4 shrink-0" />
-              <span class="hidden sm:inline">{{ t('pages.clients.view') }}</span>
-            </span>
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.clients.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.clients.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

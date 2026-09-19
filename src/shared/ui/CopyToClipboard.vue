@@ -21,7 +21,7 @@ async function copy(value: string) {
 <template>
   <button
     type="button"
-    class="shrink-0 text-gray-400 hover:text-gray-600 cursor-pointer"
+    class="shrink-0 cursor-pointer text-gray-400 hover:text-gray-600"
     :title="title"
     @click="copy(value)"
   >

@@ -1,17 +1,15 @@
 <script lang="ts" setup>
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useClientDetailStore } from '@/entities/client'
 import { useBreadcrumb } from '@/shared/lib'
 import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
-import { CommonSpinner, CommonAlert } from '@/shared/ui'
+import { CommonAlert, LoadingState } from '@/shared/ui'
 
 const route = useRoute()
-const { t } = useI18n()
 const store = useClientDetailStore()
 const { setLabel } = useBreadcrumb()
 
@@ -29,10 +27,7 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="store.loading" class="flex items-center gap-2">
-      <CommonSpinner class="h-6 w-6 border-4" />
-      <span class="text-gray-600">{{ t('common.loading') }}</span>
-    </div>
+    <LoadingState v-if="store.loading" />
 
     <!-- Error state -->
     <CommonAlert v-else-if="store.error" color="danger">

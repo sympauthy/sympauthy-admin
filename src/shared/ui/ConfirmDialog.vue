@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import BaseDialog from './BaseDialog.vue'
+import CommonAlert from './CommonAlert.vue'
 import CommonButton from './CommonButton.vue'
 import { type ButtonStyle, dangerColoredButton, secondaryColoredButton } from './ButtonStyle'
 import { useI18n } from 'vue-i18n'
@@ -35,28 +36,25 @@ const { t } = useI18n()
       <slot name="title" />
     </template>
 
-    <div class="mb-6">
-      <slot />
-    </div>
+    <slot />
 
-    <div v-if="error" class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+    <CommonAlert v-if="error" color="danger" class="mt-4">
       {{ error }}
-    </div>
+    </CommonAlert>
 
-    <div class="flex justify-end gap-3">
+    <template #actions>
       <CommonButton
         :button-style="secondaryColoredButton"
+        :label="cancelLabel ?? t('common.cancel')"
         :disabled="loading"
         @click="emit('cancel')"
-      >
-        {{ cancelLabel ?? t('common.cancel') }}
-      </CommonButton>
-      <CommonButton :button-style="confirmStyle" :submitting="loading" @click="emit('confirm')">
-        <template #submitting>
-          {{ confirmLabel ?? t('common.confirm') }}
-        </template>
-        {{ confirmLabel ?? t('common.confirm') }}
-      </CommonButton>
-    </div>
+      />
+      <CommonButton
+        :button-style="confirmStyle"
+        :label="confirmLabel ?? t('common.confirm')"
+        :submitting="loading"
+        @click="emit('confirm')"
+      />
+    </template>
   </BaseDialog>
 </template>

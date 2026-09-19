@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, useSlots } from 'vue'
+import { useSlots } from 'vue'
 import type { Collection } from '@/shared/collection'
 import CollectionToolbar from './CollectionToolbar.vue'
 import PaginatedTable from './PaginatedTable.vue'
@@ -11,7 +11,8 @@ import PaginatedTable from './PaginatedTable.vue'
  *
  * Everything but the columns comes from the collection it is handed — the toolbar from the
  * capability document, the paging and the order from what the caller asked. The page writes its
- * `header` and `rows` slots and nothing else.
+ * `header` and `rows` slots and nothing else; what the page lets an operator do is a `PageActions`,
+ * which puts it in the bar naming the screen rather than in the row narrowing the list.
  */
 const props = withDefaults(
   defineProps<{
@@ -22,39 +23,20 @@ const props = withDefaults(
   }>(),
   {
     searchPlaceholder: '',
-    minPageSize: 5
+    minPageSize: 1
   }
 )
 
 const slots = useSlots()
-
-// The toolbar is kept once the collection has said it filters or searches on something. It stays
-// even while a criterion narrows the collection to nothing, which is what the caller needs to widen
-// it again.
-const hasToolbar = computed(
-  () =>
-    props.collection.searchable ||
-    props.collection.filters.length > 0 ||
-    props.collection.capabilitiesError !== null
-)
 </script>
 
 <template>
   <div class="flex h-full min-h-0 flex-col">
-    <div
-      v-if="hasToolbar || slots.actions"
-      class="mb-4 flex shrink-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
-    >
-      <CollectionToolbar
-        v-if="hasToolbar"
-        class="min-w-0 flex-1"
-        :collection="props.collection"
-        :search-placeholder="props.searchPlaceholder"
-      />
-      <div v-if="slots.actions" class="flex shrink-0 items-center gap-2">
-        <slot name="actions" />
-      </div>
-    </div>
+    <CollectionToolbar
+      class="mb-4 shrink-0"
+      :collection="props.collection"
+      :search-placeholder="props.searchPlaceholder"
+    />
 
     <!-- What the page could not draw, above what it could. The toolbar says the same of a capability
          document it failed to read; this is for whatever else the page needed and did not get. -->

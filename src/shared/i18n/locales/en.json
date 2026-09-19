@@ -74,7 +74,8 @@
       "selectValue": "Choose…",
       "removeFilter": "Remove this filter",
       "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
-      "valueList": "a, b, c"
+      "valueList": "a, b, c",
+      "refresh": "Refresh"
     },
     "operators": {
       "eq": "is",
@@ -291,14 +292,10 @@
       "title": "Sessions",
       "status": "Status",
       "user": "User",
-      "ip": "IP",
       "client": "Client",
-      "startedFor": "Started for",
-      "stoppedAt": "Stopped at",
       "started": "Started",
       "actions": "Actions",
       "view": "View",
-      "refresh": "Refresh",
       "signingUp": "Signing up",
       "search": "Search by IP, user agent or client",
       "empty": "No interactive flow session is in flight. This is a live view rather than a history — expired sessions are collected every fifteen minutes, so a session that has finished may already be gone."

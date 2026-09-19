@@ -8,10 +8,13 @@ import {
   CollectionPage,
   CollectionSortHeader,
   CommonAlert,
-  Tag,
   CommonButton,
-  primaryColoredButton,
-  dangerColoredButton
+  EmptyValue,
+  TableCell,
+  TableHeader,
+  Tag,
+  dangerColoredButton,
+  primaryColoredButton
 } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
@@ -45,7 +48,7 @@ onMounted(async () => {
 
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="userStore.users"
         :label="t('pages.users.status')"
         field="status"
@@ -58,62 +61,61 @@ onMounted(async () => {
         :field="claim.id"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="sm"
         :collection="userStore.users"
         :label="t('pages.users.createdAt')"
         field="created_at"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.users.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.users.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="user in userStore.users.items" :key="user.user_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        <TableCell :label="t('pages.users.status')" fit>
           <Tag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
           </Tag>
           <Tag v-else color="red">
             {{ t('pages.users.disabled') }}
           </Tag>
-        </td>
-        <td
-          v-for="claim in claimStore.identifierClaims"
+        </TableCell>
+        <!-- The first identifier is what names the account, so it titles the card rather than
+             being another labelled line of it. -->
+        <TableCell
+          v-for="(claim, index) in claimStore.identifierClaims"
           :key="claim.id"
-          class="px-6 py-4 text-sm text-gray-500 truncate"
+          truncate
+          :primary="index === 0"
+          :label="index === 0 ? undefined : claim.id"
         >
-          {{ user.claims?.[claim.id] ?? '' }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+          <span v-if="user.claims?.[claim.id]">{{ user.claims[claim.id] }}</span>
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
           {{ formatDate(user.created_at) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit>
           <div class="flex gap-2">
             <CommonButton
               :button-style="primaryColoredButton"
+              :label="t('pages.users.view')"
+              :icon="EyeIcon"
               @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
-            >
-              <span class="inline-flex items-center gap-1.5">
-                <EyeIcon class="size-4 shrink-0" />
-                <span class="hidden sm:inline">{{ t('pages.users.view') }}</span>
-              </span>
-            </CommonButton>
-            <CommonButton :button-style="dangerColoredButton" @click="logoutUserId = user.user_id">
-              <span class="inline-flex items-center gap-1.5">
-                <ArrowRightStartOnRectangleIcon class="size-4 shrink-0" />
-                <span class="hidden sm:inline">{{ t('pages.users.logout') }}</span>
-              </span>
-            </CommonButton>
+            />
+            <CommonButton
+              :button-style="dangerColoredButton"
+              :label="t('pages.users.logout')"
+              :icon="ArrowRightStartOnRectangleIcon"
+              @click="logoutUserId = user.user_id"
+            />
           </div>
-        </td>
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.users.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.users.empty') }}</p>
     </template>
   </CollectionPage>
 

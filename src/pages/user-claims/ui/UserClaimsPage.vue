@@ -4,7 +4,14 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserClaimStore } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader, OriginTag } from '@/shared/ui'
+import {
+  CollectionPage,
+  CollectionSortHeader,
+  EmptyValue,
+  OriginTag,
+  TableCell,
+  TableHeader
+} from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -12,11 +19,6 @@ const { t } = useI18n()
 const store = useUserClaimStore()
 
 const userId = computed(() => route.params.userId as string)
-
-function formatOptionalDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return '—'
-  return formatDate(dateStr)
-}
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
 // mounts it again — so the account is read once, here, and no watcher is needed to follow it.
@@ -30,7 +32,7 @@ onMounted(async () => {
   <CollectionPage :collection="store.claims" :search-placeholder="t('pages.userClaims.search')">
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.claims"
         :label="t('pages.userClaims.claim')"
         field="claim_id"
@@ -41,24 +43,20 @@ onMounted(async () => {
         field="value"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.claims"
         :label="t('common.origin.label')"
         field="origin"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.userClaims.tags') }}
-      </th>
+      <TableHeader fit>{{ t('pages.userClaims.tags') }}</TableHeader>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.claims"
         :label="t('pages.userClaims.collectedAt')"
         field="collected"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.claims"
         :label="t('pages.userClaims.verifiedAt')"
         field="verified"
@@ -67,29 +65,31 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in store.claims.items" :key="claim.claim_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ claim.claim_id }}
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-900 truncate">
+        </TableCell>
+        <TableCell :label="t('pages.userClaims.value')" truncate>
           {{ claim.value }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell :label="t('pages.userClaims.tags')" fit>
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {{ formatOptionalDate(claim.collected_at) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {{ formatOptionalDate(claim.verified_at) }}
-        </td>
+        </TableCell>
+        <TableCell :label="t('pages.userClaims.collectedAt')" fit>
+          <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell :label="t('pages.userClaims.verifiedAt')" fit>
+          <span v-if="claim.verified_at">{{ formatDate(claim.verified_at) }}</span>
+          <EmptyValue v-else />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.userClaims.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.userClaims.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { type Component } from 'vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import {
   DropdownMenuRoot,
@@ -11,10 +12,19 @@ import {
 withDefaults(
   defineProps<{
     label: string
+    /** Drawn before the label, naming what the menu offers a second way. */
+    icon?: Component
+    /**
+     * Drops the label below `sm:`, leaving the icons alone and keeping the label as the title.
+     * The chevron stays: with nothing written on the control, it is what says a menu opens.
+     */
+    collapseLabel?: boolean
     disabled?: boolean
     options: { label: string; value: string }[]
   }>(),
   {
+    icon: undefined,
+    collapseLabel: false,
     disabled: false
   }
 )
@@ -28,21 +38,23 @@ const emit = defineEmits<{
   <DropdownMenuRoot>
     <DropdownMenuTrigger
       :disabled="disabled"
-      class="flex items-center gap-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+      :title="label"
+      class="control control-focus flex shrink-0 items-center gap-1.5 border-gray-300 bg-white disabled:cursor-not-allowed disabled:opacity-50"
     >
-      {{ label }}
-      <ChevronDownIcon class="h-4 w-4 text-gray-500" />
+      <component :is="icon" v-if="icon" class="size-4 shrink-0" />
+      <span :class="collapseLabel ? 'hidden sm:inline' : ''">{{ label }}</span>
+      <ChevronDownIcon class="size-4 shrink-0 text-gray-500" />
     </DropdownMenuTrigger>
     <DropdownMenuPortal>
       <DropdownMenuContent
         align="end"
         :side-offset="4"
-        class="dropdown-content z-10 w-max min-w-[var(--reka-dropdown-menu-trigger-width)] rounded border border-gray-200 bg-white shadow-lg"
+        class="menu overlay-animated w-max min-w-[var(--reka-dropdown-menu-trigger-width)]"
       >
         <DropdownMenuItem
           v-for="option in options"
           :key="option.value"
-          class="block w-full cursor-pointer px-4 py-2 text-left text-sm text-gray-700 outline-none first:rounded-t last:rounded-b data-[highlighted]:bg-gray-100"
+          class="menu-item text-gray-700 data-[highlighted]:bg-gray-100"
           @select="emit('select', option.value)"
         >
           {{ option.label }}
@@ -51,31 +63,3 @@ const emit = defineEmits<{
     </DropdownMenuPortal>
   </DropdownMenuRoot>
 </template>
-
-<style scoped>
-.dropdown-content[data-state='open'] {
-  animation: dropdown-in 120ms ease-out;
-}
-.dropdown-content[data-state='closed'] {
-  animation: dropdown-out 100ms ease-in;
-}
-
-@keyframes dropdown-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes dropdown-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-</style>

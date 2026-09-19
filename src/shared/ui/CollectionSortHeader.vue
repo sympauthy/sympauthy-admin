@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import type { Collection } from '@/shared/collection'
+import TableHeader from './TableHeader.vue'
 
 /**
  * A column header, which the caller can order the collection on where the collection says it orders
@@ -12,11 +13,21 @@ import type { Collection } from '@/shared/collection'
  * respond to a click. The label stays the page's own string: the document names a filter and a sort
  * key, not a column.
  */
-const props = defineProps<{
-  collection: Collection<unknown>
-  label: string
-  field: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    collection: Collection<unknown>
+    label: string
+    field: string
+    /** Takes only the width its content needs. Forwarded to the header it draws. */
+    fit?: boolean
+    /** Dropped below this width. Forwarded to the header it draws. */
+    hiddenBelow?: 'sm' | 'lg'
+  }>(),
+  {
+    fit: false,
+    hiddenBelow: undefined
+  }
+)
 
 const sortable = computed(() => props.collection.sortsOn(props.field))
 
@@ -33,16 +44,19 @@ function onClick() {
 </script>
 
 <template>
-  <th
-    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+  <TableHeader
+    :fit="props.fit"
+    :hidden-below="props.hiddenBelow"
     :class="sortable ? 'cursor-pointer select-none hover:bg-gray-100' : ''"
     :aria-sort="key ? (key.descending ? 'descending' : 'ascending') : undefined"
     @click="onClick"
   >
     <span class="inline-flex items-center gap-1">
       {{ props.label }}
-      <ChevronUpIcon v-if="key && !key.descending" class="h-3 w-3" />
-      <ChevronDownIcon v-else-if="key" class="h-3 w-3" />
+      <!-- An icon matches the text it sits in, and a column's label is the one `text-xs` on a
+           screen. -->
+      <ChevronUpIcon v-if="key && !key.descending" class="size-3" />
+      <ChevronDownIcon v-else-if="key" class="size-3" />
     </span>
-  </th>
+  </TableHeader>
 </template>

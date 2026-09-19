@@ -8,7 +8,16 @@ import UserSummaryPanel from './UserSummaryPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
 import LinkProviderDialog from './LinkProviderDialog.vue'
-import { CommonSpinner, CommonAlert, RecordTabs, type RecordTab } from '@/shared/ui'
+import {
+  ActionsDropdown,
+  CommonAlert,
+  LoadingState,
+  PageActions,
+  RecordTabs,
+  type ActionItem,
+  type RecordTab
+} from '@/shared/ui'
+import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 
 /**
  * One account: its summary, and a tab per collection hanging off it. Each tab is a route of its
@@ -26,6 +35,30 @@ const userId = computed(() => route.params.userId as string)
 const logoutOpen = ref(false)
 const enrollMfaOpen = ref(false)
 const linkProviderOpen = ref(false)
+
+// Enrolling a factor and linking a provider each fill a tab under this record, and are listed
+// here beside forcing a logout all the same: they are what an operator does to the account, and a
+// menu they have to open a tab to find is one they have to know about first.
+const actions = computed<ActionItem[]>(() => [
+  { key: 'enrollMfa', label: t('pages.userDetail.enrollMfa'), icon: ShieldCheckIcon },
+  { key: 'linkProvider', label: t('pages.userDetail.linkProvider'), icon: LinkIcon },
+  {
+    key: 'logout',
+    label: t('pages.userDetail.forceLogout'),
+    icon: ArrowRightStartOnRectangleIcon,
+    danger: true
+  }
+])
+
+function onAction(key: string) {
+  if (key === 'enrollMfa') {
+    enrollMfaOpen.value = true
+  } else if (key === 'linkProvider') {
+    linkProviderOpen.value = true
+  } else if (key === 'logout') {
+    logoutOpen.value = true
+  }
+}
 
 // A tab names its own view and carries that view's explanation, both read under the route it opens.
 const tabs = computed<RecordTab[]>(() => {
@@ -62,10 +95,7 @@ onMounted(() => load(userId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <div v-if="store.loading" class="flex items-center gap-2">
-      <CommonSpinner class="h-6 w-6 border-4" />
-      <span class="text-gray-600">{{ t('common.loading') }}</span>
-    </div>
+    <LoadingState v-if="store.loading" />
 
     <!-- Error state -->
     <CommonAlert v-else-if="store.error" color="danger">
@@ -74,13 +104,10 @@ onMounted(() => load(userId.value))
 
     <!-- Content -->
     <template v-else-if="store.user">
-      <UserSummaryPanel
-        class="shrink-0"
-        :user="store.user"
-        @logout="logoutOpen = true"
-        @enroll-mfa="enrollMfaOpen = true"
-        @link-provider="linkProviderOpen = true"
-      />
+      <PageActions>
+        <ActionsDropdown :actions="actions" @action="onAction" />
+      </PageActions>
+      <UserSummaryPanel class="shrink-0" :user="store.user" />
       <RecordTabs :tabs="tabs" />
       <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
            page. -->

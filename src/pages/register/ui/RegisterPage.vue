@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
-import { CommonButton, primaryColoredButton } from '@/shared/ui'
+import { CommonButton, CommonCard, FormField, FormInput, primaryColoredButton } from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -32,37 +32,31 @@ async function onSubmit() {
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
     <div class="w-full max-w-sm">
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-2">
+      <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('register.title') }}
       </h1>
-      <p class="text-sm text-gray-600 text-center mb-6">
+      <p class="mb-6 text-center text-sm text-gray-600">
         {{ t('register.description') }}
       </p>
 
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          {{ t('register.tokenLabel') }}
-        </label>
-        <input
-          v-model="token"
-          type="text"
-          :placeholder="t('register.tokenPlaceholder')"
-          class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono shadow-sm focus:border-(--color-primary) focus:outline-none focus:ring-1 focus:ring-(--color-primary) mb-4"
-          @keydown.enter="onSubmit"
-        />
+      <CommonCard>
+        <FormField :label="t('register.tokenLabel')">
+          <FormInput
+            v-model="token"
+            mono
+            :placeholder="t('register.tokenPlaceholder')"
+            @keydown.enter="onSubmit"
+          />
+        </FormField>
         <CommonButton
+          class="mt-4 w-full"
           :button-style="primaryColoredButton"
+          :label="t('register.submit')"
           :submitting="loading"
           :disabled="!token.trim()"
-          class="w-full"
           @click="onSubmit"
-        >
-          <template #submitting>
-            {{ t('register.submit') }}
-          </template>
-          {{ t('register.submit') }}
-        </CommonButton>
-      </div>
+        />
+      </CommonCard>
     </div>
   </div>
 </template>

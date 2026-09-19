@@ -6,7 +6,7 @@ import {
   purposeProgressColor,
   purposeProgressLabel
 } from '@/entities/session'
-import { Tag } from '@/shared/ui'
+import { CommonCard, DefinitionRow, EmptyValue, Tag } from '@/shared/ui'
 
 /**
  * The purposes one session carries, and how far each of them got.
@@ -24,10 +24,10 @@ const store = useInteractiveFlowSessionDetailStore()
        has not run yet is itself the answer to how far the session got. The labels are written by
        the handler that owns each purpose, are rendered as they arrive and are never translated. -->
   <div v-if="store.session" class="space-y-4">
-    <div
+    <CommonCard
       v-for="(progress, progressIndex) in store.session.purposes"
       :key="progressIndex"
-      class="bg-white rounded-lg border border-gray-200"
+      :padded="false"
     >
       <div
         class="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-3 sm:px-6"
@@ -41,25 +41,21 @@ const store = useInteractiveFlowSessionDetailStore()
       </div>
 
       <dl v-if="progress.debug.length > 0" class="divide-y divide-gray-200">
-        <div
+        <!-- An entry is never dropped: a field that holds nothing keeps its label, since a field
+             that has gone missing and a field that is empty are different things. -->
+        <DefinitionRow
           v-for="(information, informationIndex) in progress.debug"
           :key="informationIndex"
-          class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center"
+          mono
+          :label="information.display_name"
         >
-          <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-            {{ information.display_name }}
-          </dt>
-          <!-- An entry is never dropped: a field that holds nothing keeps its label, since a
-               field that has gone missing and a field that is empty are different things. -->
-          <dd class="mt-1 sm:mt-0 sm:col-span-2 text-sm text-gray-900 font-mono break-words">
-            <span v-if="information.value">{{ information.value }}</span>
-            <span v-else class="text-gray-300 font-sans">&mdash;</span>
-          </dd>
-        </div>
+          <span v-if="information.value">{{ information.value }}</span>
+          <EmptyValue v-else />
+        </DefinitionRow>
       </dl>
-      <p v-else class="px-4 py-3 sm:px-6 text-sm text-gray-500">
+      <p v-else class="px-4 py-3 text-sm text-gray-500 sm:px-6">
         {{ t('pages.sessionPurposes.noDebugInformation') }}
       </p>
-    </div>
+    </CommonCard>
   </div>
 </template>

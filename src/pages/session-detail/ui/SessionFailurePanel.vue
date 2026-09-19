@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DetailSection, HelpTooltip, CommonAlert } from '@/shared/ui'
+import {
+  CommonAlert,
+  DefinitionList,
+  DefinitionRow,
+  DetailSection,
+  EmptyValue,
+  HelpTooltip
+} from '@/shared/ui'
 import type { InteractiveFlowSessionDetailResource } from '@/entities/session'
 
 defineProps<{
@@ -24,36 +31,22 @@ const { t } = useI18n()
         {{ t('pages.sessionDetail.failureAlert') }}
       </CommonAlert>
 
-      <dl class="bg-white rounded-lg border border-gray-200 divide-y divide-gray-200">
-        <div class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center">
-          <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-            {{ t('pages.sessionDetail.errorDetailsId') }}
-          </dt>
-          <dd class="mt-1 sm:mt-0 sm:col-span-2 text-sm text-gray-900 font-mono break-all">
-            <span v-if="session.error_details_id">{{ session.error_details_id }}</span>
-            <span v-else class="text-gray-300 font-sans">&mdash;</span>
-          </dd>
-        </div>
-        <div class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center">
-          <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">
-            {{ t('pages.sessionDetail.errorDescriptionId') }}
-          </dt>
-          <dd class="mt-1 sm:mt-0 sm:col-span-2 text-sm text-gray-900 font-mono break-all">
-            <span v-if="session.error_description_id">{{ session.error_description_id }}</span>
-            <span v-else class="text-gray-300 font-sans">&mdash;</span>
-          </dd>
-        </div>
-        <div
-          v-for="(value, key) in session.error_values ?? {}"
-          :key="key"
-          class="px-4 py-3 sm:px-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center"
-        >
-          <dt class="text-xs font-medium text-gray-500 font-mono break-all">{{ key }}</dt>
-          <dd class="mt-1 sm:mt-0 sm:col-span-2 text-sm text-gray-900 font-mono break-all">
-            {{ value }}
-          </dd>
-        </div>
-      </dl>
+      <DefinitionList>
+        <DefinitionRow mono :label="t('pages.sessionDetail.errorDetailsId')">
+          <span v-if="session.error_details_id">{{ session.error_details_id }}</span>
+          <EmptyValue v-else />
+        </DefinitionRow>
+        <DefinitionRow mono :label="t('pages.sessionDetail.errorDescriptionId')">
+          <span v-if="session.error_description_id">{{ session.error_description_id }}</span>
+          <EmptyValue v-else />
+        </DefinitionRow>
+        <DefinitionRow v-for="(value, key) in session.error_values ?? {}" :key="key" mono>
+          <template #label>
+            <span class="font-mono break-all normal-case">{{ key }}</span>
+          </template>
+          {{ value }}
+        </DefinitionRow>
+      </DefinitionList>
     </div>
   </DetailSection>
 </template>

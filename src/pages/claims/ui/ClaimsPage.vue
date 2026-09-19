@@ -2,7 +2,14 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useClaimStore, ClaimTags } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader, Tag, OriginTag } from '@/shared/ui'
+import {
+  CollectionPage,
+  CollectionSortHeader,
+  OriginTag,
+  TableCell,
+  TableHeader,
+  Tag
+} from '@/shared/ui'
 
 const { t } = useI18n()
 const claimStore = useClaimStore()
@@ -16,7 +23,7 @@ onMounted(async () => {
   <CollectionPage :collection="claimStore.claims" :search-placeholder="t('pages.claims.search')">
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="claimStore.claims"
         :label="t('pages.claims.status')"
         field="enabled"
@@ -27,40 +34,38 @@ onMounted(async () => {
         field="id"
       />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="claimStore.claims"
         :label="t('common.origin.label')"
         field="origin"
       />
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.claims.tags') }}
-      </th>
+      <TableHeader>{{ t('pages.claims.tags') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="claim in claimStore.claims.items" :key="claim.id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        <TableCell :label="t('pages.claims.status')" fit>
           <Tag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
           </Tag>
           <Tag v-else color="red">
             {{ t('pages.claims.disabled') }}
           </Tag>
-        </td>
-        <td class="px-6 py-4 text-sm font-medium text-gray-900 truncate">
+        </TableCell>
+        <TableCell primary truncate>
           {{ claim.id }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500">
+        </TableCell>
+        <TableCell :label="t('pages.claims.tags')">
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
-        </td>
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.claims.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.claims.empty') }}</p>
     </template>
   </CollectionPage>
 </template>

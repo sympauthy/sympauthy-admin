@@ -1,15 +1,20 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { ArrowPathIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import type { Collection } from '@/shared/collection'
 import CollectionFilterChip from './CollectionFilterChip.vue'
 import CommonAlert from './CommonAlert.vue'
+import CommonButton from './CommonButton.vue'
 import DropdownButton from './DropdownButton.vue'
+import FormInput from './FormInput.vue'
+import { secondaryColoredButton } from './ButtonStyle'
 
 /**
  * What a collection is narrowed by: the free text field where it searches on something, the menu of
- * the fields it filters on, and a chip per criterion the caller has added.
+ * the fields it filters on, and a chip per criterion the caller has added — and, at the end of the
+ * row, the control that reads the collection again. Every collection answers that last one, so no
+ * page asks for it.
  *
  * Everything it offers comes from the capability document the collection published, so a deployment
  * that configured one more claim gets one more filter without this file knowing what a claim is.
@@ -30,35 +35,50 @@ const filterOptions = computed(() =>
 function filterOf(field: string) {
   return props.collection.filters.find((filter) => filter.field === field)
 }
-
-function onSearchInput(event: Event) {
-  props.collection.setSearch((event.target as HTMLInputElement).value)
-}
 </script>
 
 <template>
   <div>
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-      <div v-if="props.collection.searchable" class="relative flex-1">
-        <MagnifyingGlassIcon
-          class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-        />
-        <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
-             query still narrowing the collection would otherwise come back to an empty field. -->
-        <input
-          type="text"
-          :value="props.collection.criteria.query"
-          :placeholder="props.searchPlaceholder"
-          :aria-label="props.searchPlaceholder || t('common.collection.search')"
-          class="w-full rounded border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          @input="onSearchInput"
-        />
-      </div>
+    <!-- One row at every width, and one gap down it: the field and the two controls beside it are
+         all controls in a row, so nothing groups two of them more tightly than the third. They
+         give up their labels rather than their place, since a second row costs the list below a
+         record and the field beside them still reads. -->
+    <div class="flex items-center gap-2">
+      <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
+           query still narrowing the collection would otherwise come back to an empty field. -->
+      <FormInput
+        v-if="props.collection.searchable"
+        class="min-w-0 flex-1"
+        :icon="MagnifyingGlassIcon"
+        :model-value="props.collection.criteria.query"
+        :placeholder="props.searchPlaceholder"
+        :aria-label="props.searchPlaceholder || t('common.collection.search')"
+        @update:model-value="props.collection.setSearch"
+      />
+      <!-- Holds the place the field would take, so the controls stay at the end of the row on a
+           collection the server searches nothing on. -->
+      <div v-else class="flex-1" />
+
+      <!-- A phone gives the row the width of one control, so both of them keep their icon and
+           give up their label. -->
       <DropdownButton
         v-if="filterOptions.length > 0"
+        collapse-label
         :label="t('common.addFilter')"
+        :icon="PlusIcon"
         :options="filterOptions"
         @select="props.collection.addFilter"
+      />
+      <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is the
+           caller's without any page saying so. -->
+      <CommonButton
+        collapse-label
+        class="shrink-0"
+        :button-style="secondaryColoredButton"
+        :label="t('common.collection.refresh')"
+        :icon="ArrowPathIcon"
+        :disabled="props.collection.loading"
+        @click="props.collection.fetch(props.collection.page)"
       />
     </div>
 

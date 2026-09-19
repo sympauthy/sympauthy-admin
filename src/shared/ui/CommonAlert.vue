@@ -1,4 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+/**
+ * What a screen has to keep saying: a call it could not make, or something missing from what it
+ * drew. Every one of them is this box — a dialog reporting a rejected submission says it the same
+ * way a page reporting a failed fetch does.
+ */
 const props = withDefaults(
   defineProps<{
     /**
@@ -11,26 +18,17 @@ const props = withDefaults(
     color: 'danger'
   }
 )
+
+const colorClasses: Record<string, string> = {
+  danger: 'border-red-200 bg-red-50 text-red-700',
+  warning: 'border-amber-200 bg-amber-50 text-amber-800'
+}
+
+const classes = computed(() => ['w-full rounded-md border p-3 text-sm', colorClasses[props.color]])
 </script>
 
 <template>
-  <div class="border rounded w-full p-3" :class="props.color" role="alert">
-    <slot></slot>
+  <div :class="classes" role="alert">
+    <slot />
   </div>
 </template>
-
-<style scoped>
-/*noinspection CssUnusedSymbol*/
-.danger {
-  border-color: var(--color-red-50);
-  color: var(--color-red-700);
-  background-color: var(--color-red-100);
-}
-
-/*noinspection CssUnusedSymbol*/
-.warning {
-  border-color: var(--color-amber-50);
-  color: var(--color-amber-800);
-  background-color: var(--color-amber-100);
-}
-</style>

@@ -18,23 +18,24 @@ export type ButtonStyle = {
 }
 
 export const primaryColoredButton: ButtonStyle = Object.freeze({
-  activeClasses:
-    'bg-(--color-primary) text-(--color-on-primary) hover:bg-(--color-hover-primary) transition-colors',
-  loadingClasses: 'bg-(--color-primary) text-(--color-on-primary) cursor-wait',
-  submittingClasses: 'bg-(--color-primary) text-(--color-on-primary) cursor-wait',
-  disabledClasses: 'bg-(--color-disabled) text-(--color-on-disabled) pointer-events-none'
+  activeClasses: 'border-transparent bg-primary text-on-primary hover:bg-primary-hover',
+  loadingClasses: 'border-transparent bg-primary text-on-primary cursor-wait',
+  submittingClasses: 'border-transparent bg-primary text-on-primary cursor-wait',
+  disabledClasses: 'border-transparent bg-disabled text-on-disabled pointer-events-none'
 })
 
 export const secondaryColoredButton: ButtonStyle = Object.freeze({
-  activeClasses: 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 transition-colors',
-  loadingClasses: 'bg-gray-100 text-gray-700 border-gray-200 cursor-wait',
-  submittingClasses: 'bg-gray-100 text-gray-700 border-gray-200 cursor-wait',
-  disabledClasses: 'bg-(--color-disabled) text-(--color-on-disabled) pointer-events-none'
+  activeClasses: 'border-gray-200 bg-gray-100 text-gray-700 hover:bg-gray-200',
+  loadingClasses: 'border-gray-200 bg-gray-100 text-gray-700 cursor-wait',
+  submittingClasses: 'border-gray-200 bg-gray-100 text-gray-700 cursor-wait',
+  // Paler than its active state, not darker: this is the style the toolbar's refresh control
+  // wears, and it is disabled on every fetch.
+  disabledClasses: 'border-gray-200 bg-gray-50 text-gray-400 pointer-events-none'
 })
 
 export const dangerColoredButton: ButtonStyle = Object.freeze({
-  activeClasses: 'bg-red-600 text-white hover:bg-red-700 transition-colors',
-  loadingClasses: 'bg-red-600 text-white cursor-wait',
-  submittingClasses: 'bg-red-600 text-white cursor-wait',
-  disabledClasses: 'bg-(--color-disabled) text-(--color-on-disabled) pointer-events-none'
+  activeClasses: 'border-transparent bg-red-600 text-white hover:bg-red-700',
+  loadingClasses: 'border-transparent bg-red-600 text-white cursor-wait',
+  submittingClasses: 'border-transparent bg-red-600 text-white cursor-wait',
+  disabledClasses: 'border-transparent bg-disabled text-on-disabled pointer-events-none'
 })

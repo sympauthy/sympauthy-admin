@@ -8,6 +8,8 @@ import {
   CollectionSortHeader,
   CommonButton,
   ConfirmDialog,
+  TableCell,
+  TableHeader,
   dangerColoredButton
 } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -38,47 +40,40 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="store.mfaMethods">
     <template #header>
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.userMfa.type') }}
-      </th>
-      <th class="px-6 py-3"></th>
+      <TableHeader fit>{{ t('pages.userMfa.type') }}</TableHeader>
+      <!-- The set has nothing else to say about a method, and a table of nothing but shrink-wrapped
+           columns would bunch them against the left edge. This one takes what is left. -->
+      <TableHeader />
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="store.mfaMethods"
         :label="t('pages.userMfa.registeredAt')"
         field="confirmed_date"
       />
-      <th
-        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0 whitespace-nowrap"
-      >
-        {{ t('pages.userMfa.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.userMfa.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="method in store.mfaMethods.items" :key="method.mfa_id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <TableCell primary fit>
           {{ method.type }}
-        </td>
-        <td></td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        </TableCell>
+        <TableCell />
+        <TableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             :button-style="dangerColoredButton"
+            :label="t('pages.userMfa.revoke')"
             @click="revokeTargetMfaId = method.mfa_id"
-          >
-            {{ t('pages.userMfa.revoke') }}
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600">{{ t('pages.userMfa.empty') }}</p>
+      <p class="text-sm text-gray-600">{{ t('pages.userMfa.empty') }}</p>
     </template>
   </CollectionPage>
 

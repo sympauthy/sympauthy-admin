@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CommonSpinner from './CommonSpinner.vue'
 import CommonAlert from './CommonAlert.vue'
+import LoadingState from './LoadingState.vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import {
   PaginationRoot,
@@ -15,7 +15,6 @@ import {
 import { useAutoPageSize } from '@/shared/lib'
 
 const { t } = useI18n()
-
 const props = withDefaults(
   defineProps<{
     loading?: boolean
@@ -46,7 +45,7 @@ const props = withDefaults(
     tableLayout: 'auto',
     fill: false,
     autoPageSize: false,
-    minPageSize: 5
+    minPageSize: 1
   }
 )
 
@@ -84,27 +83,22 @@ const range = computed(() => {
 const itemsPerPage = computed(() => (props.size > 0 ? props.size : 1))
 const totalItems = computed(() => (props.size > 0 ? props.total : props.totalPages))
 
-const navButtonClasses =
-  'inline-flex items-center rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
-const pageButtonClasses =
-  'inline-flex h-8 min-w-8 items-center justify-center rounded border border-gray-300 px-2 text-sm text-gray-700 hover:bg-gray-50 data-[selected]:border-transparent data-[selected]:bg-(--color-primary) data-[selected]:text-(--color-on-primary)'
+// The bar under a table is its own scale: every control on it is one row of `text-sm` tall, which
+// is a step under the controls above the table rather than the same height as them.
+const pageControlClasses =
+  'inline-flex h-8 items-center justify-center rounded-md border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50'
+const navButtonClasses = `${pageControlClasses} disabled:cursor-not-allowed disabled:opacity-50`
+const pageButtonClasses = `${pageControlClasses} min-w-8 data-[selected]:border-transparent data-[selected]:bg-primary data-[selected]:text-on-primary`
 </script>
 
 <template>
   <div :class="props.fill ? 'flex h-full min-h-0 flex-col' : ''">
     <div
       ref="viewport"
-      :class="props.fill ? 'flex-1 min-h-0 overflow-x-auto overflow-y-auto' : 'overflow-x-auto'"
+      :class="props.fill ? 'min-h-0 flex-1 overflow-x-auto overflow-y-auto' : 'overflow-x-auto'"
     >
       <!-- Loading state -->
-      <div
-        v-if="props.loading"
-        class="flex items-center gap-2"
-        :class="props.fill ? 'h-full justify-center' : ''"
-      >
-        <CommonSpinner class="h-6 w-6 border-4" />
-        <span class="text-gray-600">{{ t('common.loading') }}</span>
-      </div>
+      <LoadingState v-if="props.loading" :centered="props.fill" />
 
       <!-- Error state -->
       <CommonAlert v-else-if="props.error" color="danger">
@@ -122,7 +116,7 @@ const pageButtonClasses =
       <!-- Table -->
       <table
         v-else
-        class="w-full divide-y divide-gray-200"
+        class="table-as-cards w-full divide-y divide-gray-200"
         :class="[
           props.tableLayout === 'auto' ? 'table-auto' : 'table-fixed',
           props.fill ? 'table-pinned-header' : ''
@@ -133,7 +127,7 @@ const pageButtonClasses =
             <slot name="header" />
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="divide-y divide-gray-200 bg-white">
           <slot name="rows" />
         </tbody>
       </table>
@@ -147,10 +141,12 @@ const pageButtonClasses =
       :total="totalItems"
       :sibling-count="1"
       show-edges
-      class="mt-4 flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      class="mt-4 flex shrink-0 items-center justify-center gap-2 sm:justify-between"
       @update:page="(value: number) => emit('pageChange', value - 1)"
     >
-      <span class="text-sm text-gray-600">
+      <!-- A phone is told which page of how many by the indicator inside the pager, so the range
+           it also reads would cost the list a record to say the same thing twice. -->
+      <span class="hidden text-sm text-gray-600 sm:inline">
         <template v-if="range">
           {{ t('common.paginationRange', range) }}
         </template>
@@ -158,7 +154,7 @@ const pageButtonClasses =
 
       <PaginationList v-slot="{ items }" class="flex items-center gap-1">
         <PaginationPrev :class="navButtonClasses">
-          <ChevronLeftIcon class="h-4 w-4 sm:mr-1" />
+          <ChevronLeftIcon class="size-4 sm:mr-1" />
           <span class="hidden sm:inline">{{ t('common.previous') }}</span>
         </PaginationPrev>
 
@@ -187,7 +183,7 @@ const pageButtonClasses =
 
         <PaginationNext :class="navButtonClasses">
           <span class="hidden sm:inline">{{ t('common.next') }}</span>
-          <ChevronRightIcon class="h-4 w-4 sm:ml-1" />
+          <ChevronRightIcon class="size-4 sm:ml-1" />
         </PaginationNext>
       </PaginationList>
     </PaginationRoot>

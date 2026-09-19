@@ -37,8 +37,9 @@ an agent when a file it governs is read.
   what, and the naming, typing and comment rules that hold everywhere.
 - **[Component code standard](component-code-standard.md)** — the shape of a `.vue` file, its props,
   emits and slots, where its state lives, and how a form is handled.
-- **[Design system standard](design-system-standard.md)** — the shared kit, the reka-ui primitives
-  the interactive components wrap, and the colours, icons and text styles they are built from.
+- **[Design system standard](design-system-standard.md)** — the shared kit, the scale its sizes and
+  spaces come from, the reka-ui primitives the interactive components wrap, and the colours, icons
+  and text styles they are built from.
 - **[Page layout standard](page-layout-standard.md)** — what a route, a collection page and a record
   are made of, how a table's columns are sized, and how each adapts to width.
 - **[API standard](api-standard.md)** — one client per surface, a validated resource per response,
@@ -62,8 +63,9 @@ an agent when a file it governs is read.
 - **Read what the server accepts, do not encode it.** A collection publishes the fields it filters,
   orders and searches on, and the panel draws its filter bar from that answer — so a deployment's
   own claims, clients and audiences are filterable without a release.
-- **Fit the viewport.** A list fills the height it is given and never scrolls the page, on a phone
-  as on a desktop.
+- **Fit the viewport, from 360px up.** A list fills the height it is given and never scrolls — not
+  the page and not the table — on a phone as on a desktop. Below `sm:` a table of records is drawn
+  as a card of each, from the same description the wider screen reads.
 - **Say what went wrong.** Every call resolves — a failed fetch, a rejected status and a body that
   did not match its schema all end up as a message on the screen that asked for it.
 - **Keep the structure checked, not agreed.** Steiger, ESLint, Prettier and the type-checker run in

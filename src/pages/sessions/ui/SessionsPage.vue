@@ -2,20 +2,21 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { ArrowPathIcon, EyeIcon } from '@heroicons/vue/20/solid'
+import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
   useInteractiveFlowSessionStore,
-  purposeLabel,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel
 } from '@/entities/session'
 import {
   CollectionPage,
   CollectionSortHeader,
-  Tag,
   CommonButton,
-  primaryColoredButton,
-  secondaryColoredButton
+  EmptyValue,
+  TableCell,
+  TableHeader,
+  Tag,
+  primaryColoredButton
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
@@ -35,71 +36,37 @@ onMounted(async () => {
     :collection="sessionStore.sessions"
     :search-placeholder="t('pages.sessions.search')"
   >
-    <!-- The set changes while the operator is looking at it, so it is theirs to re-read. -->
-    <template #actions>
-      <CommonButton
-        :button-style="secondaryColoredButton"
-        :disabled="sessionStore.sessions.loading"
-        @click="sessionStore.sessions.fetch(sessionStore.sessions.page)"
-      >
-        <span class="inline-flex items-center gap-1.5">
-          <ArrowPathIcon class="size-4 shrink-0" />
-          {{ t('pages.sessions.refresh') }}
-        </span>
-      </CommonButton>
-    </template>
-
     <template #header>
       <CollectionSortHeader
-        class="w-0 whitespace-nowrap"
+        fit
         :collection="sessionStore.sessions"
         :label="t('pages.sessions.status')"
         field="status"
       />
-      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {{ t('pages.sessions.user') }}
-      </th>
-      <th
-        class="hidden lg:table-cell w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.sessions.ip') }}
-      </th>
+      <TableHeader>{{ t('pages.sessions.user') }}</TableHeader>
       <CollectionSortHeader
         :collection="sessionStore.sessions"
         :label="t('pages.sessions.client')"
         field="client"
       />
       <CollectionSortHeader
-        :collection="sessionStore.sessions"
-        :label="t('pages.sessions.startedFor')"
-        field="purpose"
-      />
-      <th
-        class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.sessions.stoppedAt') }}
-      </th>
-      <CollectionSortHeader
-        class="w-0 whitespace-nowrap hidden sm:table-cell"
+        fit
+        hidden-below="lg"
         :collection="sessionStore.sessions"
         :label="t('pages.sessions.started')"
         field="session_date"
       />
-      <th
-        class="w-0 whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      >
-        {{ t('pages.sessions.actions') }}
-      </th>
+      <TableHeader fit>{{ t('pages.sessions.actions') }}</TableHeader>
     </template>
 
     <template #rows>
       <tr v-for="session in sessionStore.sessions.items" :key="session.id">
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        <TableCell :label="t('pages.sessions.status')" fit>
           <Tag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </Tag>
-        </td>
-        <td class="px-6 py-4 text-sm truncate">
+        </TableCell>
+        <TableCell primary truncate>
           <router-link
             v-if="session.user"
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
@@ -110,46 +77,30 @@ onMounted(async () => {
           <Tag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
           </Tag>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td
-          class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono"
-        >
-          <span v-if="session.ip">{{ session.ip }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
+          <EmptyValue v-else />
+        </TableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no
              longer declares, and a link landing on an error page is worse than no link. -->
-        <td class="px-6 py-4 text-sm text-gray-500 truncate">
+        <TableCell :label="t('pages.sessions.client')" truncate>
           <span v-if="session.client_id">{{ session.client_id }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td class="px-6 py-4 text-sm text-gray-500 truncate">
-          {{ purposeLabel(session.initiating_purpose) }}
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-500 truncate">
-          <span v-if="session.current_purpose">{{ purposeLabel(session.current_purpose) }}</span>
-          <span v-else class="text-gray-300">&mdash;</span>
-        </td>
-        <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <EmptyValue v-else />
+        </TableCell>
+        <TableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
           {{ formatDateTime(session.session_date) }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
+        </TableCell>
+        <TableCell fit>
           <CommonButton
             :button-style="primaryColoredButton"
+            :label="t('pages.sessions.view')"
+            :icon="EyeIcon"
             @click="router.push({ name: 'sessionDetail', params: { sessionId: session.id } })"
-          >
-            <span class="inline-flex items-center gap-1.5">
-              <EyeIcon class="size-4 shrink-0" />
-              <span class="hidden sm:inline">{{ t('pages.sessions.view') }}</span>
-            </span>
-          </CommonButton>
-        </td>
+          />
+        </TableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-gray-600 max-w-prose text-center">{{ t('pages.sessions.empty') }}</p>
+      <p class="max-w-prose text-center text-sm text-gray-600">{{ t('pages.sessions.empty') }}</p>
     </template>
   </CollectionPage>
 </template>
