@@ -14,7 +14,7 @@ import {
   secondaryColoredButton
 } from '@/shared/ui'
 import { useAudienceStore } from '@/entities/audience'
-import { InvitationApi } from '@/entities/invitation'
+import { InvitationApi } from '../api/InvitationApi'
 import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
 
 interface Props {

@@ -2,11 +2,9 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PlusIcon } from '@heroicons/vue/20/solid'
-import {
-  InvitationApi,
-  type InvitationListResource,
-  type InvitationResource
-} from '@/entities/invitation'
+import { InvitationApi } from '../api/InvitationApi'
+import type { InvitationListResource } from '../model/InvitationListResource'
+import type { InvitationResource } from '../model/InvitationResource'
 import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {

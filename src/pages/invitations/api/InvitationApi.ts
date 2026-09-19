@@ -9,11 +9,11 @@ import {
 import {
   type InvitationListResource,
   invitationListResourceSchema
-} from '@/entities/invitation/model/InvitationListResource'
+} from '../model/InvitationListResource'
 import {
   type CreatedInvitationResource,
   createdInvitationResourceSchema
-} from '@/entities/invitation/model/CreatedInvitationResource'
+} from '../model/CreatedInvitationResource'
 
 export interface CreateInvitationInput {
   audience_id: string

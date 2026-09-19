@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ScopeApi, type ScopeListResource, type ScopeResource } from '@/entities/scope'
+import { ScopeApi } from '../api/ScopeApi'
+import type { ScopeListResource } from '../model/ScopeListResource'
+import type { ScopeResource } from '../model/ScopeResource'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { EmptyValue, OriginTag, TableCell, TableHeader, Tag } from '@/shared/ui'
 

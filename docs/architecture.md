@@ -19,8 +19,8 @@ A layer imports from the layers strictly below it, and never sideways or upward.
 | `app/` | `App.vue`, the router, the global stylesheet, the layout shell |
 | `pages/` | one slice per route: the route component and what only it uses |
 | `features/` | a user action reused by more than one page |
-| `entities/` | one slice per domain noun: its API client, its resources and schemas, its stores |
-| `shared/` | the design system, the HTTP and collection plumbing, auth, i18n, utilities |
+| `entities/` | a domain noun more than one slice reads: its client, its schemas, its stores |
+| `shared/` | the design system, the HTTP plumbing and the collection wire, auth, i18n, utilities |
 
 `src/main.ts` is Vite's entry point and sits outside the layers: it creates the app, the router, the
 i18n instance and the Pinia instance, and mounts the result.
@@ -39,10 +39,11 @@ A slice is one folder, and its files are split into the segments it needs:
 reserves the segment names, so nothing inside a segment is called `ui/` or `model/`. They are
 `shared/api`, `shared/auth`, `shared/i18n`, `shared/lib` and `shared/ui`.
 
-The slices that exist are the folders under each layer. Today the entities are the nouns the admin
-API publishes — `user`, `client`, `claim`, `scope`, `audience`, `consent`, `invitation`, `session` —
-`features/` holds `logout-user`, and `pages/` holds one slice per route in
-[the router](../src/app/router/index.ts).
+The slices that exist are the folders under each layer. The entities are the nouns read by more
+than one slice — `user`, `client`, `claim`, `audience`, `session`; `features/` holds the actions
+reused by more than one page — `browse-collection`, `logout-user`; and `pages/` holds one slice per
+route in [the router](../src/app/router/index.ts), some of them owning the client and the resources
+only that route reads.
 
 ## The public API of a slice
 
@@ -71,18 +72,22 @@ and nothing else reaches across.
 2. **Used by one page → that page's slice.** It moves to `features/` when a second page needs it.
    `LogoutDialog` earned its place there by being used by both the users list and the user detail
    page.
-3. **Displays or fetches one entity → that entity's slice.** An API client, its schemas and the
-   store that consumes them always travel together.
+3. **Fetches a noun a second slice also reads → that entity's slice.** An API client, its schemas
+   and the store that consumes them always travel together, wherever they live: a noun only one
+   route reads keeps them in that route's slice, and they move up to `entities/` on the day a
+   second reader appears.
 4. **`shared/auth` stays in `shared/`,** not in `entities/`: `AbstractApi` depends on
    `useAuthStore`, and `shared` may not import upward.
 
-## The one disabled rule
+## No rule is disabled
 
-`fsd/insignificant-slice` is off for `src/entities/**`, in
-[`steiger.config.ts`](../steiger.config.ts). An entity slice owning an API client, its schemas and
-a store is correct even when a single page
-reads it today; folding it into that page would put HTTP and model code inside a route folder. The
-rule stays on for pages and features, where it does catch a premature slice.
+[`steiger.config.ts`](../steiger.config.ts) is `fsd.configs.recommended` and nothing else, so what
+the structure claims and what is checked are the same thing.
+
+`fsd/insignificant-slice` is what keeps `entities/` to the nouns that earn a slice: one read by a
+single route is that route's, held in its own `api/` and `model/`, and reaches `entities/` when a
+second slice reads it. A move in that direction is a `git mv` and an `index.ts`, because the
+segments are the same on either layer.
 
 ## The collection block
 
@@ -107,10 +112,10 @@ is also why two screens over the same records no longer share a page number.
 index.html               the document Vite builds around
 src/main.ts              the entry point: app, router, i18n, Pinia
 src/app/                 App.vue, router, layout shell, global stylesheet
-src/pages/<route>/       one slice per route
+src/pages/<route>/       one slice per route, with the api/ and model/ only it reads
 src/features/<action>/   an action reused by more than one page
-src/entities/<noun>/     api/, model/, ui/ for one domain noun
-src/shared/              api, auth, collection, i18n, lib, ui
+src/entities/<noun>/     api/, model/, ui/ for one noun more than one slice reads
+src/shared/              api, auth, i18n, lib, ui
 ```
 
 Everything outside `src/` configures the build or the tooling: `vite.config.ts` (the dev server, its

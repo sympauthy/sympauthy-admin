@@ -5,6 +5,7 @@ paths:
   - "src/features/browse-collection/**"
   - "src/shared/api/Collection*.ts"
   - "src/entities/*/api/**"
+  - "src/pages/*/api/**"
   - "src/pages/*/ui/*Page.vue"
 ---
 

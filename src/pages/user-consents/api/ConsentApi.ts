@@ -6,10 +6,7 @@ import {
   type CollectionCapabilitiesResource,
   type CollectionParams
 } from '@/shared/api'
-import {
-  type ConsentListResource,
-  consentListResourceSchema
-} from '@/entities/consent/model/ConsentListResource'
+import { type ConsentListResource, consentListResourceSchema } from '../model/ConsentListResource'
 
 export class ConsentApi extends AbstractApi {
   async listConsents(

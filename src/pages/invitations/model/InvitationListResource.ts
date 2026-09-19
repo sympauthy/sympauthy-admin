@@ -1,8 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
-import {
-  type InvitationResource,
-  invitationResourceSchema
-} from '@/entities/invitation/model/InvitationResource'
+import { type InvitationResource, invitationResourceSchema } from './InvitationResource'
 
 export type InvitationListResource = {
   invitations: InvitationResource[]

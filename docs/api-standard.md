@@ -5,6 +5,8 @@ paths:
   - "src/shared/api/**"
   - "src/entities/*/api/**"
   - "src/entities/*/model/*Resource.ts"
+  - "src/pages/*/api/**"
+  - "src/pages/*/model/*Resource.ts"
 ---
 
 # API standard
