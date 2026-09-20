@@ -15,6 +15,7 @@ import { UserProvidersPage } from '@/pages/user-providers'
 import { SessionDetailPage } from '@/pages/session-detail'
 import { SessionPurposesPage } from '@/pages/session-purposes'
 import { SessionSecurityContextsPage } from '@/pages/session-security-contexts'
+import { SessionFailurePage } from '@/pages/session-failure'
 import { CallbackPage } from '@/pages/callback'
 import { NoAccessPage } from '@/pages/no-access'
 import { RegisterPage } from '@/pages/register'
@@ -211,6 +212,12 @@ export function makeRouter() {
             path: 'security-contexts',
             name: 'sessionSecurityContexts',
             component: SessionSecurityContextsPage,
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'failure',
+            name: 'sessionFailure',
+            component: SessionFailurePage,
             meta: { requiresAuth: true }
           }
         ]
