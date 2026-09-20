@@ -15,7 +15,7 @@ each one falls back to a value derived from where the panel is served:
 | --- | --- | --- |
 | `authority` | `VITE_OIDC_AUTHORITY` | `window.location.origin` |
 | `client_id` | `VITE_OIDC_CLIENT_ID` | — |
-| `scope` | `VITE_OIDC_SCOPE` | — |
+| `scope` | `VITE_OIDC_SCOPE` | `openid`, which is never sent |
 | `redirect_uri` | `VITE_OIDC_REDIRECT_URI` | `<origin><base path>/callback` |
 | `post_logout_redirect_uri` | `VITE_OIDC_POST_LOGOUT_REDIRECT_URI` | `<origin><base path>` |
 
@@ -25,6 +25,31 @@ root either way, since that is what publishes the discovery document.
 
 The flow is authorization code with PKCE and a DPoP-bound code. The user and the tokens are kept in
 `localStorage`, the DPoP key pair in IndexedDB, and silent renewal is left on.
+
+## What the panel asks for
+
+**The panel asks for no scope, and takes the admin client's defaults.** `VITE_OIDC_SCOPE` is unset
+in [`.env`](../.env), which turns on `omitScopeWhenRequesting`: neither the sign-in redirect nor the
+silent renew iframe carries a `scope` parameter, and
+[RFC 6749 §3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3) has the server apply the
+client's own `default-scopes` instead. What the console may reach is then the deployment's to
+configure, and a screen added under a new scope cannot lock an operator out of the whole panel by
+asking for one its client is not allowed.
+
+**Setting `VITE_OIDC_SCOPE` requests exactly its value**, which is the escape hatch for a console
+deliberately narrower than its client's defaults.
+
+**The placeholder in the settings is never sent.** `SigninRequest.create` rejects a falsy `scope`
+before it reads the flag, so `openid` stays there to satisfy it and the flag keeps it off the wire.
+
+**A renewal never narrows what was granted.** `OidcClient.useRefreshToken` sends the scope the
+stored user carries whatever the flag says, and the server refreshes on what the refresh token
+holds rather than on the form field. `refreshTokenAllowedScope` is the lever if that ever stops
+being true.
+
+**The admin client's `default-scopes` must hold `openid` beside its admin scopes.** Without it the
+server issues no ID token, and the panel has no `sub`, `name` or `email` to render the signed-in
+operator from. [The README](../README.md#configuring-the-panel) says so where a deployment reads it.
 
 ## Signing in
 
@@ -65,11 +90,6 @@ failed in the background, or a sign-out elsewhere.
 
 The store exposes the profile the server issued: `userName`, `userEmail`, `userRoles` and the
 `accessToken`. `hasRole` and `hasAnyRole` answer the route guard.
-
-What the panel may call is decided by the scopes it asks for — the `VITE_OIDC_SCOPE` list in
-[`.env`](../.env), one scope per admin capability the screens use. Adding a screen that calls a new
-admin endpoint means adding its scope there, and the server refusing a scope is what an operator
-sees rather than a hidden failure.
 
 ## What this document does not cover
 

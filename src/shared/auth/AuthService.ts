@@ -33,7 +33,12 @@ function makeUserManagerSettings(): UserManagerSettings {
     client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
     redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI || `${baseUrl}/callback`,
     post_logout_redirect_uri: import.meta.env.VITE_OIDC_POST_LOGOUT_REDIRECT_URI || baseUrl,
-    scope: import.meta.env.VITE_OIDC_SCOPE,
+    // With `VITE_OIDC_SCOPE` unset the authorization request carries no `scope` at all, and the
+    // server applies the admin client's own `default-scopes`. `SigninRequest.create` rejects a
+    // falsy `scope` before it reads the flag, so the placeholder below stays and never reaches the
+    // wire.
+    scope: import.meta.env.VITE_OIDC_SCOPE || 'openid',
+    omitScopeWhenRequesting: !import.meta.env.VITE_OIDC_SCOPE,
     response_type: 'code',
     automaticSilentRenew: true,
     userStore: new WebStorageStateStore({ store: window.localStorage }),

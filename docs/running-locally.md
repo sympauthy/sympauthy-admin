@@ -19,7 +19,8 @@ The dev server listens on `http://localhost:5174` and proxies `/api` and `/.well
 `http://localhost:8080`, so it needs a SympAuthy running there — see the server's own
 [running locally](https://github.com/sympauthy/sympauthy/blob/main/docs/running-locally.md).
 Start it with the `admin` environment enabled, which is what registers the `admin` client the panel
-signs in as.
+signs in as. The panel requests no scope of its own, so what it can reach is that client's
+`default-scopes`.
 
 Because the API is proxied onto the same origin, the panel runs against a real server with no CORS
 configuration of its own.
@@ -33,8 +34,9 @@ authorization server as part of the sign-in redirect.
 
 ## Configuration
 
-[`.env`](../.env) holds what every developer needs: the OIDC client id and the scopes the panel asks
-for. Anything machine-specific goes in `.env.local`, which is not committed:
+[`.env`](../.env) holds what every developer needs: the OIDC client id, and the commented-out scope
+list a console narrower than its client's defaults would set. Anything machine-specific goes in
+`.env.local`, which is not committed:
 
 ```sh
 VITE_OIDC_AUTHORITY=http://localhost:8080
@@ -44,7 +46,8 @@ VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
 
 Without them the panel derives its URLs from `window.location.origin`, which is right in production
 and wrong in development, where the authorization server is on another port.
-[Authentication](authentication.md) has the full list.
+[The README](../README.md#configuring-the-panel) lists every variable, and
+[Authentication](authentication.md) says what the client is built from.
 
 ## Checking a change
 
