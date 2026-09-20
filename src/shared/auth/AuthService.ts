@@ -10,7 +10,8 @@ export type AuthUser = {
   sub: string
   name: string
   email: string
-  roles: string[]
+  /** The scopes the server granted, parsed from the `scope` of the token response. */
+  scopes: string[]
   accessToken: string
 }
 
@@ -123,7 +124,7 @@ export class AuthService {
       sub: profile.sub,
       name: (profile.name ?? profile.preferred_username ?? profile.sub) as string,
       email: (profile.email ?? '') as string,
-      roles: Array.isArray(profile.roles) ? (profile.roles as string[]) : [],
+      scopes: user.scopes,
       accessToken: user.access_token
     }
   }

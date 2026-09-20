@@ -6,8 +6,7 @@
   "auth": {
     "signingIn": "Signing in...",
     "callbackError": "An error occurred while completing the sign-in. Please try again.",
-    "logout": "Sign out",
-    "forbidden": "You do not have permission to access this page."
+    "logout": "Sign out"
   },
   "register": {
     "title": "Register",
@@ -112,7 +111,6 @@
     "scopes": "Scopes",
     "audiences": "Audiences",
     "invitations": "Invitations",
-    "configuration": "Configuration",
     "sessions": "Sessions",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -140,6 +138,11 @@
     "confirm": "Force Logout"
   },
   "pages": {
+    "noAccess": {
+      "title": "No access",
+      "description": "You are signed in as {account}, but the token this console was issued carries none of the scopes its pages are read under.",
+      "scopes": "Ask an administrator to grant one of these:"
+    },
     "clients": {
       "title": "Clients",
       "clientId": "Client ID",

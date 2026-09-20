@@ -3,8 +3,8 @@
 The panel is an ordinary public client of the server it administers. It holds no credential of its
 own: an operator signs in through the server's own interactive flow, and what comes back is an
 access token carrying the admin scopes. [`shared/auth`](../src/shared/auth) is the whole of it —
-`AuthService` wraps [oidc-client-ts](https://github.com/authts/oidc-client-ts), and `useAuthStore`
-is what the rest of the panel reads.
+`AuthService` wraps [oidc-client-ts](https://github.com/authts/oidc-client-ts), `useAuthStore` is
+what the rest of the panel reads, and `useRouteAccess` answers whether the token opens a route.
 
 ## The client
 
@@ -60,7 +60,7 @@ A navigation is guarded by `router.beforeEach`:
 3. An unauthenticated navigation tries a silent renew first, and only redirects to the authorization
    server when there is nothing to renew. The route it was heading to is carried in the OIDC `state`
    as `targetUrl`.
-4. A route naming `requiredRoles` that the user has none of redirects to `/users`.
+4. A route naming `requiredScopes` the token does not carry every one of redirects to `/`.
 
 `/callback` is a layout-less route: it exchanges the code, then replaces itself with the
 `targetUrl` the state carried. A failure there is the one place a sign-in error is rendered.
@@ -86,15 +86,39 @@ failed in the background, or a sign-out elsewhere.
 **Signing out is a redirect to the server's end-session endpoint.** The sidebar calls
 `authStore.signout()`, and the server decides where the operator lands.
 
-## What the token says
+## What the token granted
 
-The store exposes the profile the server issued: `userName`, `userEmail`, `userRoles` and the
-`accessToken`. `hasRole` and `hasAnyRole` answer the route guard.
+The store exposes the profile the server issued: `userName`, `userEmail`, `grantedScopes` and the
+`accessToken`.
+
+**`grantedScopes` is what the server granted, not what the panel asked for.** It is `User.scopes`,
+the parsed `scope` of the token response, which SympAuthy fills from the access token's own granted
+scopes — and admin scopes reach an operator through the scope granting rules, so the set can be
+narrower than the client's defaults. `automaticSilentRenew` re-reads it, so a scope revoked
+server-side stops opening its pages within one token lifetime.
+
+**A screen names the scopes it needs once, as `requiredScopes` on its route.**
+[The route table](../src/app/router/index.ts) is what each of them requires, and a route under
+another states the whole set rather than the difference, since a child's `meta` replaces its
+parent's key.
+
+**Three readers answer from that one declaration.** The guard refuses a route whose scopes are not
+all granted; the sidebar draws neither an entry the token cannot open nor a section left without
+one; a record's tab strip drops the tab. Both navigations ask `useRouteAccess().canOpen()`.
+
+**`/` is the panel's root and its no-access page at once.** The guard sends it on to the first entry
+of [the navigation](../src/app/router/navigation.ts) the token can open, and `NoAccessPage` renders
+only when that is none of them — naming the scopes the console reads, off the routes themselves, so
+the operator reading it knows what to ask for.
 
 ## What this document does not cover
 
-**Authorization inside a screen.** No route names `requiredRoles` today, and a call the token is not
-scoped for fails at the server.
+**Write actions.** A screen is shown for what the token can read, and nothing hides or disables the
+buttons behind `admin:users:write`, `admin:consent:write`, `admin:users:delete` and
+`admin:invitations:write`; one the token is not scoped for fails at the server.
+
+**Why a scope is missing.** Whether the admin client is not allowed it or the granting rules did not
+grant it is not in the token, and the panel does not guess.
 
 **The interactive flow itself.** It is served by the authorization server and rendered by the
 [flow application](https://github.com/sympauthy/sympauthy-flow); the panel only leaves and returns.
