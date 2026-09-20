@@ -72,9 +72,14 @@ the build on every push to `main` and every pull request targeting it.
 token, the schema validation, the renewal retry and the error mapping — is this panel's own and not
 an interceptor stack.
 
-**Five dependencies nothing imports.** `vee-validate`, `yup`, `rambda`, `ts-deepmerge` and
-`@js-temporal/polyfill` are declared and unused: a form is local state, and a date goes through
-`shared/lib`. Removing them is #124.
+**No form validation library.** `vee-validate` and `yup` were declared and never imported, and were
+removed in #124. A form here is a handful of fields checked in the submit handler, and
+[the component code standard](component-code-standard.md) states that shape as the rule.
+
+**No functional helper library, no merge helper, no date library.** `rambda`, `ts-deepmerge` and
+`@js-temporal/polyfill` went with them. What the panel does to a collection is a `map` or a
+`filter`, a response is read rather than merged into anything, and a date goes through
+[`shared/lib/DateUtils`](../src/shared/lib/DateUtils.ts) on the platform `Date`.
 
 **No state persistence, no client-side cache.** A store is filled by a request and emptied by a
 `$reset()`; a screen shows what the last response said.
