@@ -140,7 +140,7 @@
   "pages": {
     "noAccess": {
       "title": "No access",
-      "description": "You are signed in as {account}, but the token this console was issued carries none of the scopes its pages are read under.",
+      "description": "You are signed in as {account}, but the token this console was issued opens none of its pages.",
       "scopes": "Ask an administrator to grant one of these:"
     },
     "clients": {

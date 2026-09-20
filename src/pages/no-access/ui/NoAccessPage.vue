@@ -16,10 +16,20 @@ const router = useRouter()
 const { t } = useI18n()
 const authStore = useAuthStore()
 
-// Read off the routes rather than listed here, so a page joining the panel names the scope it
-// needs once, on its own route, and this screen tells an operator to ask for it.
+// The scopes that open a page on their own, read off the routes rather than listed here, so a page
+// joining the panel names what it needs once and this screen tells an operator to ask for it.
+//
+// A route needing a set of them is not one to ask for half of: the consents tab is read under
+// `admin:consent:read` beside the `admin:users:read` its record opens on, so granting that scope
+// alone opens nothing and it is not offered as something to ask for.
 const consoleScopes = [
-  ...new Set(router.getRoutes().flatMap((route) => route.meta.requiredScopes ?? []))
+  ...new Set(
+    router
+      .getRoutes()
+      .map((route) => route.meta.requiredScopes ?? [])
+      .filter((scopes) => scopes.length === 1)
+      .map(([scope]) => scope)
+  )
 ].sort()
 
 async function logout() {

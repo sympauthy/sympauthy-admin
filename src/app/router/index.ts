@@ -18,7 +18,7 @@ import { SessionSecurityContextsPage } from '@/pages/session-security-contexts'
 import { CallbackPage } from '@/pages/callback'
 import { NoAccessPage } from '@/pages/no-access'
 import { RegisterPage } from '@/pages/register'
-import { useAuthStore } from '@/shared/auth'
+import { canOpenRoute, useAuthStore } from '@/shared/auth'
 import { navEntries } from './navigation'
 
 declare module 'vue-router' {
@@ -238,9 +238,7 @@ export function makeRouter() {
     }
 
     if (to.name === 'noAccess') {
-      const landing = navEntries.find((entry) =>
-        authStore.hasAllScopes(router.resolve({ name: entry.name }).meta.requiredScopes ?? [])
-      )
+      const landing = navEntries.find((entry) => canOpenRoute(router, entry.name))
       return landing ? { name: landing.name } : true
     }
 

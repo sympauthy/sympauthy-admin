@@ -94,8 +94,13 @@ The store exposes the profile the server issued: `userName`, `userEmail`, `grant
 **`grantedScopes` is what the server granted, not what the panel asked for.** It is `User.scopes`,
 the parsed `scope` of the token response, which SympAuthy fills from the access token's own granted
 scopes — and admin scopes reach an operator through the scope granting rules, so the set can be
-narrower than the client's defaults. `automaticSilentRenew` re-reads it, so a scope revoked
-server-side stops opening its pages within one token lifetime.
+narrower than the client's defaults.
+
+**A revoked scope stops opening its pages within one token lifetime**, because SympAuthy answers
+every refresh with the `scope` it granted and `automaticSilentRenew` re-reads it. The mechanism is
+the server's, not the library's: oidc-client-ts carries the previous set forward where a token
+response omits `scope`, so a server that stopped answering with it would leave a session opening
+what it no longer holds.
 
 **A screen names the scopes it needs once, as `requiredScopes` on its route.**
 [The route table](../src/app/router/index.ts) is what each of them requires, and a route under
@@ -104,7 +109,10 @@ parent's key.
 
 **Three readers answer from that one declaration.** The guard refuses a route whose scopes are not
 all granted; the sidebar draws neither an entry the token cannot open nor a section left without
-one; a record's tab strip drops the tab. Both navigations ask `useRouteAccess().canOpen()`.
+one; a record's tab strip drops the tab. All three answer through `canOpenRoute`, which
+`useRouteAccess` binds to the router of the component calling it — and which answers `false` for a
+route the router does not know, so a navigation naming a renamed route loses its entry rather than
+throwing out of the render that drew it.
 
 **`/` is the panel's root and its no-access page at once.** The guard sends it on to the first entry
 of [the navigation](../src/app/router/navigation.ts) the token can open, and `NoAccessPage` renders
