@@ -95,7 +95,7 @@ segments are the same on either layer.
 ## The collection block
 
 Every list screen is built from the same block: the state one collection is read with, the criteria
-a caller builds against it, and the toolbar, the chips and the table that draw them. It is
+a caller builds against it, and the toolbar, the filters and the table that draw them. It is
 [`features/browse-collection`](../src/features/browse-collection) — an action reused by more than
 one page, which is what `features/` is for, and a layer a page may reach and an entity may not.
 

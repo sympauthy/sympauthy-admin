@@ -21,7 +21,7 @@ const defaultOperators: Record<CollectionFieldType, CollectionOperator> = {
 }
 
 /**
- * The operator a chip over a field of [type] opens on, taken from [admitted] when the type's own
+ * The operator a filter over a field of [type] opens on, taken from [admitted] when the type's own
  * default is not one of them.
  */
 export function defaultCollectionOperator(

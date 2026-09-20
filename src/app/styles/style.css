@@ -52,6 +52,16 @@ body {
   .control-focus {
     @apply focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none;
   }
+
+  /**
+   * The same ring, for a control made of more than one focusable part — a filter of a collection,
+   * which is the trigger reading it and the control removing it inside one box. The box shows the
+   * focus its children take, so an operator tabbing along the row sees which control they are on
+   * rather than a ring drawn inside one.
+   */
+  .control-focus-within {
+    @apply focus-within:border-primary focus-within:ring-1 focus-within:ring-primary;
+  }
 }
 
 /**
@@ -150,6 +160,15 @@ body {
 
   .menu-item {
     @apply flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm outline-none first:rounded-t-md last:rounded-b-md;
+  }
+
+  /**
+   * The surface an overlay explains or asks something on: the help behind a domain term, the
+   * operator and the value of one filter. A menu is a list and is drawn as one; this is a box with
+   * controls in it, so it takes the radius a card does.
+   */
+  .popover {
+    @apply rounded-lg border border-gray-200 bg-white shadow-lg;
   }
 }
 

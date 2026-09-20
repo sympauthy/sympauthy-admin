@@ -12,6 +12,7 @@ import {
   collectionQueryParams,
   effectiveSortKeys,
   emptyCollectionCriteria,
+  isCriterionComplete,
   type CollectionCriteria,
   type CollectionCriterion,
   type CollectionSortKey
@@ -20,7 +21,7 @@ import { defaultCollectionOperator } from './CollectionOperatorUtils'
 
 /**
  * A criteria change waits this long before it is asked of the server, so that the letters of a word
- * being typed are one request, and so that a chip switching operator does not ask once for the new
+ * being typed are one request, and so that a filter switching operator does not ask once for the new
  * operator against the old value. Paging, sorting and resizing are not delayed: each is one
  * deliberate act.
  */
@@ -75,7 +76,8 @@ export interface Collection<T> {
   fetch: (page?: number) => Promise<void>
   setSize: (size: number) => void
   setSearch: (query: string) => void
-  addFilter: (field: string) => void
+  /** The id of the criterion it opened, which is how the toolbar opens the one it just added. */
+  addFilter: (field: string) => number | undefined
   updateFilter: (id: number, patch: Partial<Omit<CollectionCriterion, 'id'>>) => void
   removeFilter: (id: number) => void
   toggleSort: (field: string) => void
@@ -200,19 +202,27 @@ export function useCollection<T, R extends CollectionPageResource>(
     refetchOnCriteriaChange()
   }
 
-  function addFilter(field: string) {
+  function addFilter(field: string): number | undefined {
     const filter = filters.value.find((candidate) => candidate.field === field)
     if (!filter) {
-      return
+      return undefined
     }
-    criteria.value.filters.push({
+    const criterion: CollectionCriterion = {
       id: nextFilterId++,
       field,
       operator: defaultCollectionOperator(filter.type, filter.operators),
       value: '',
       values: []
-    })
-    // Not refetched: a chip the caller has just opened holds no value yet, so it narrows nothing.
+    }
+    criteria.value.filters.push(criterion)
+    // A filter the caller has just opened holds no value yet and narrows nothing — unless its
+    // operator takes none, which a field admitting `is_null` first opens on: that one is
+    // answerable the moment it is added, and waiting for an edit that may never come would leave
+    // a filter on the row that the list below it does not answer.
+    if (isCriterionComplete(criterion)) {
+      refetchOnCriteriaChange()
+    }
+    return criterion.id
   }
 
   function updateFilter(id: number, patch: Partial<Omit<CollectionCriterion, 'id'>>) {

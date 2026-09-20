@@ -1,22 +1,17 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ArrowPathIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/20/solid'
-import {
-  CommonAlert,
-  CommonButton,
-  DropdownButton,
-  FormInput,
-  secondaryColoredButton
-} from '@/shared/ui'
+import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { CommonAlert, CommonButton, FormInput, secondaryColoredButton } from '@/shared/ui'
 import type { Collection } from '../model/useCollection'
-import CollectionFilterChip from './CollectionFilterChip.vue'
+import CollectionFieldPicker from './CollectionFieldPicker.vue'
+import CollectionFilterControl from './CollectionFilterControl.vue'
 
 /**
- * What a collection is narrowed by: the free text field where it searches on something, the menu of
- * the fields it filters on, and a chip per criterion the caller has added — and, at the end of the
- * row, the control that reads the collection again. Every collection answers that last one, so no
- * page asks for it.
+ * What a collection is narrowed by: the free text field where it searches on something, the list of
+ * the fields it filters on, and a control per criterion the caller has added — and, at the end of
+ * the row, the control that reads the collection again. Every collection answers that last one, so
+ * no page asks for it.
  *
  * Everything it offers comes from the capability document the collection published, so a deployment
  * that configured one more claim gets one more filter without this file knowing what a claim is.
@@ -28,14 +23,18 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-// A field is offered as often as it admits a criterion: two chips over one date is how a range is
-// asked for, so an already-filtered field stays in the menu.
-const filterOptions = computed(() =>
-  props.collection.filters.map((filter) => ({ label: filter.name, value: filter.field }))
-)
+// The criterion the field list just added, which is the one whose value the caller came to write.
+// It is a criterion's own id because a field carries as many criteria as they add.
+const addedFilterId = ref<number | null>(null)
+
+const filters = computed(() => props.collection.filters)
 
 function filterOf(field: string) {
-  return props.collection.filters.find((filter) => filter.field === field)
+  return filters.value.find((filter) => filter.field === field)
+}
+
+function onAddFilter(field: string) {
+  addedFilterId.value = props.collection.addFilter(field) ?? null
 }
 </script>
 
@@ -61,16 +60,8 @@ function filterOf(field: string) {
            collection the server searches nothing on. -->
       <div v-else class="flex-1" />
 
-      <!-- A phone gives the row the width of one control, so both of them keep their icon and
-           give up their label. -->
-      <DropdownButton
-        v-if="filterOptions.length > 0"
-        collapse-label
-        :label="t('common.addFilter')"
-        :icon="PlusIcon"
-        :options="filterOptions"
-        @select="props.collection.addFilter"
-      />
+      <CollectionFieldPicker v-if="filters.length > 0" :filters="filters" @select="onAddFilter" />
+
       <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is the
            caller's without any page saying so. -->
       <CommonButton
@@ -89,12 +80,15 @@ function filterOf(field: string) {
       {{ t('common.collection.capabilitiesFailed') }}
     </CommonAlert>
 
+    <!-- The one row the toolbar may grow: a filter is as wide as the sentence it reads, and a
+         phone fits one of them. -->
     <div v-if="props.collection.criteria.filters.length > 0" class="mt-3 flex flex-wrap gap-2">
       <template v-for="criterion in props.collection.criteria.filters" :key="criterion.id">
-        <CollectionFilterChip
+        <CollectionFilterControl
           v-if="filterOf(criterion.field)"
           :filter="filterOf(criterion.field)!"
           :criterion="criterion"
+          :open-on-mount="criterion.id === addedFilterId"
           @update="(patch) => props.collection.updateFilter(criterion.id, patch)"
           @remove="props.collection.removeFilter(criterion.id)"
         />

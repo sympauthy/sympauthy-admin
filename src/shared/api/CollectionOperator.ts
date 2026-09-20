@@ -22,7 +22,7 @@ export type CollectionOperator = (typeof collectionOperators)[number]
 
 /**
  * What kind of value a field holds, which is what decides the operators it admits and the control a
- * chip offers for it.
+ * filter offers for it.
  */
 export const collectionFieldTypes = [
   'string',

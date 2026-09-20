@@ -61,12 +61,16 @@ under a leading `-`, `q` the free text. Nothing else builds a query parameter.
 **A criterion is addressed by its own id, not by its field.** A field carries as many criteria as
 the caller adds, which is how a range is asked for — `created_at.gte` beside `created_at.lte`.
 
-**An incomplete criterion is left out of the request.** A chip the caller has opened and not filled
+**An incomplete criterion is left out of the request.** A filter the caller has opened and not filled
 narrows nothing, and sending it would be a `400` while they are still typing.
 
 **A criteria change is asked of the server once it has settled**, after
 `CRITERIA_DELAY_IN_MS`. Paging, sorting and resizing are each one deliberate act and are not
 delayed.
+
+**Adding a filter asks the collection again only where that filter is already answerable.** One
+holding no value narrows nothing and waits to be filled in; one whose operator takes none — a field
+opening on `is_null` — is answerable the moment it is added, and the list under it has to say so.
 
 **A criteria change asks for the first page.** A narrowed collection has a different first page, so
 the one being read is never the one to come back to.
@@ -77,7 +81,7 @@ in flight together, and the one that answers last is not the one the caller is w
 ## A page holds a collection
 
 **The screen listing a collection holds it, and holds it alone.** The page an operator is on, the
-chips they opened and the order they asked for belong to that screen: another screen over the same
+filters they opened and the order they asked for belong to that screen: another screen over the same
 records starts where its own caller left it, and a dialog listing them cannot move the list behind
 it.
 
@@ -145,7 +149,7 @@ the collection whole:
 ```
 
 **The components are the feature's**, and its `index.ts` publishes what a page names —
-`useCollection`, `CollectionPage`, `CollectionSortHeader`. The toolbar, the chips and the value
+`useCollection`, `CollectionPage`, `CollectionSortHeader`. The toolbar, the filters and the value
 controls are parts of that page rather than pieces of the kit, so nothing outside the slice reaches
 them.
 
@@ -173,23 +177,61 @@ same of a capability document it failed to read.
 
 ## The filter bar
 
-**A chip opens on the operator its field's type reads best and offers the rest the field admits.**
-`contains` over text, `eq` over a word, `gte` over a number or a moment; a field narrowing its set
-falls back to the first operator it lists.
+**A filter is a control, and never a chip.** It takes the box every other control shares — one
+height, one radius, one border — because the row it sits in is under the row holding the search
+field, and a tag beside a field is two families on one screen.
 
-**The value control is the field's type, or the values where its set is closed:**
+**A filter holds its own box with `.control-focus-within`.** The trigger reading it and the control
+removing it are two focusable parts of one control, so the box shows the focus either of them
+takes and removing a filter stays one press.
+
+**A filter reads its criterion as a sentence** — the field, the operator, the value — and truncates
+it, since a value has no length the panel knows. The value stands in as
+`common.collection.selectValue` until there is one.
+
+**The fields are searched, not read down.** `CollectionFieldPicker` is a popover over a
+`FormListbox`, because the set is the deployment's: an instance publishing a field per claim renders
+a menu taller than the viewport, and a menu has nowhere to type.
+
+**The operator and the value are filled in from the filter's own popover.** Inside the sentence
+neither had room for a box, and a control without one cannot be seen.
+
+**A filter opens on the operator its field's type reads best and offers the rest the field
+admits.** `contains` over text, `eq` over a word, `gte` over a number or a moment; a field narrowing
+its set falls back to the first operator it lists.
+
+**The value control is the set the field publishes, or the field's type where it publishes none:**
 
 | The field | The control |
 | --- | --- |
-| publishes `values` | a `select` of them, a multi-select under `in` |
-| `boolean` | a yes/no `select` |
+| publishes `values` | a `FormListbox` of them, `multiple` under `in` |
+| `boolean` | the same list, over the *Yes* and *No* the panel names |
+| under `in` publishing no values | a `FormTagsInput`, one value entered at a time |
 | `date`, `date_time` | a date or datetime input |
 | `number` | a number input |
 | `string`, `email`, `phone_number`, `uuid`, `timezone` | a text input |
-| under `in` with no published values | a text input, the list typed comma-separated |
 | under `is_null` | none |
 
-**Changing a chip's operator clears its value.** `in` holds a list where the others hold one, so
+**`collectionFilterValues` answers which of the two a field is.** It reads the published values
+whatever the field's type, and gives a boolean the set of two the panel names rather than the
+server.
+
+**The comma stays in `collectionQueryParams`.** A list is entered one value at a time, so no
+operator learns the separator the values travel under.
+
+**A newly added filter opens on its value.** `addFilter` answers the criterion's id and the toolbar
+holds it, so the control it created opens focused on what the caller opened the field list to
+write.
+
+**Enter in a value field closes the popover.** The value is written and the two controls above it
+already say the rest. Neither list reads Enter that way — one adds a value with it and the other
+picks one — and an input method confirming a candidate is not a caller pressing it.
+
+**A criterion still incomplete when its popover closes is dropped.** It narrows nothing, and
+leaving it on the row is a sentence that stops halfway beside an affordance an operator has to
+guess at.
+
+**Changing a filter's operator clears its value.** `in` holds a list where the others hold one, so
 carrying a value across would ask the new operator the old question.
 
 **`is_null` is offered as *is empty* and sends `true`.** The panel does not offer its other half;
@@ -247,6 +289,11 @@ names one key at a time, and nothing offers a second.
 
 **Caching a capability document across screens.** Each collection reads its own, once per session of
 that screen, and nothing revalidates.
+
+**One filter surface.** The free text field and the row of filters are two controls. A single input
+searching fields and values together was weighed against them and left: a value search reaches a
+closed set only, and an open one degrades to a guess per text field — the row can still collapse
+into the field later without touching the grammar.
 
 **`or` and grouping.** The server composes criteria with `and` only, and nothing here could express
 anything else.

@@ -68,13 +68,21 @@
     },
     "yes": "Yes",
     "no": "No",
+    "remove": "Remove",
+    "list": {
+      "search": "Search",
+      "noMatch": "Nothing matches"
+    },
     "collection": {
       "search": "Search",
       "operator": "Condition",
+      "value": "Value",
       "selectValue": "Choose…",
+      "searchFields": "Search fields",
+      "searchValues": "Search values",
+      "addValue": "Add a value",
       "removeFilter": "Remove this filter",
       "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
-      "valueList": "a, b, c",
       "refresh": "Refresh"
     },
     "operators": {

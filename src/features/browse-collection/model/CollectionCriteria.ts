@@ -5,7 +5,7 @@ import { isMultiValuedOperator, isValuelessOperator } from './CollectionOperator
  * One criterion narrowing a collection: a field it publishes, an operator that field admits, and
  * the value the two are asked of.
  *
- * [id] identifies the chip that holds it and never reaches the server. A field may carry more than
+ * [id] identifies the filter that holds it and never reaches the server. A field may carry more than
  * one criterion — `created_at.gte` beside `created_at.lte` is how a range is asked for — so the
  * field is not what addresses one.
  */
@@ -42,7 +42,7 @@ export function emptyCollectionCriteria(): CollectionCriteria {
 }
 
 /**
- * Whether [criterion] is answerable as it stands, which is what keeps a chip a caller has opened
+ * Whether [criterion] is answerable as it stands, which is what keeps a filter a caller has opened
  * and not yet filled from narrowing the collection to nothing.
  */
 export function isCriterionComplete(criterion: CollectionCriterion): boolean {
