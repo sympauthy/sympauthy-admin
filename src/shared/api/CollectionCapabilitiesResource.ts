@@ -36,7 +36,7 @@ export type CollectionFilterResource = {
   operators: string[]
   /**
    * The values the field holds, where its set is closed and belongs to this deployment. Absent
-   * where the set is open, and a chip then offers an input of the field's own type.
+   * where the set is open, and a filter then offers an input of the field's own type.
    */
   values?: CollectionFilterValueResource[] | null
 }

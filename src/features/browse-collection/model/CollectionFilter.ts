@@ -24,7 +24,7 @@ export interface CollectionFilter {
  * which admit at least one operator it knows.
  *
  * A deployment running a server newer than its panel publishes a field the panel has no control
- * for. Dropping that field leaves every other one usable, where trusting it would put a chip on
+ * for. Dropping that field leaves every other one usable, where trusting it would put a filter on
  * screen that cannot be filled, and refusing the whole document would blank the toolbar.
  */
 export function knownCollectionFilters(
@@ -46,4 +46,30 @@ export function knownCollectionFilters(
     filters.push({ ...filter, type, operators })
   }
   return filters
+}
+
+/**
+ * The set a criterion over [filter] picks its value from, or `null` where the field takes any value
+ * it is given.
+ *
+ * A field publishing `values` is answered from those whatever its type: the set is this
+ * deployment's, and a value it does not hold is a `400`. A boolean has a set of two without
+ * publishing one, since [yes] and [no] are words the panel owns rather than values the server
+ * names — which is why they are passed in and not read here.
+ */
+export function collectionFilterValues(
+  filter: CollectionFilter,
+  yes: string,
+  no: string
+): CollectionFilterValueResource[] | null {
+  if (filter.values && filter.values.length > 0) {
+    return filter.values
+  }
+  if (filter.type === 'boolean') {
+    return [
+      { value: 'true', name: yes },
+      { value: 'false', name: no }
+    ]
+  }
+  return null
 }

@@ -53,7 +53,7 @@ so the URL always names a view.
 ## Page actions
 
 **What a screen lets an operator do is a `PageActions`.** It draws the control in the bar naming the
-screen, so it sits in one position on every screen and does not move when a filter chip appears
+screen, so it sits in one position on every screen and does not move when a filter appears
 under it. Nothing else goes in that bar.
 
 **A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has

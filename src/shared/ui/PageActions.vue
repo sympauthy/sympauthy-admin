@@ -6,7 +6,7 @@ import { PAGE_ACTIONS_OUTLET } from './pageActionsOutlet'
  * the page happens to reach first.
  *
  * A page writes it where the action belongs in its own file and it arrives in the header, so the
- * control sits in the same place on every screen and does not move when a filter chip appears
+ * control sits in the same place on every screen and does not move when a filter appears
  * under it. Only a screen inside the panel shell has that bar: the callback and the registration
  * page render outside it and have no actions to put there.
  */

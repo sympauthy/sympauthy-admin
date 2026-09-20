@@ -36,6 +36,8 @@ to reach for, by need.
 | `DocLink` | a link into the public documentation |
 | `FormField` | one labelled field of a form |
 | `FormInput`, `FormSelect`, `FormTextarea` | the control inside it |
+| `FormListbox` | a choice among a list whose length the deployment decides |
+| `FormTagsInput` | several values, entered one at a time |
 | `DetailSection` | a titled section of a record page |
 | `SummaryCard`, `SummaryField` | the panel identifying the record above its sections |
 | `PageActions` | what the screen lets an operator do, drawn in its header |
@@ -44,7 +46,6 @@ to reach for, by need.
 | `PaginatedTable` | any table of records |
 | `RecordTabs` | the views one record is read through |
 | `ActionsDropdown` | the actions of one record or one page |
-| `DropdownButton` | a choice among options |
 | `BaseDialog` | the shell of any dialog |
 | `ConfirmDialog` | a destructive action's confirmation |
 
@@ -54,7 +55,7 @@ that entity's `ui/` segment — `ClaimTags`, `ClientTypeHelpTooltip` — so ever
 the same way.
 
 **A component belonging to one action stays with that action**, and this table does not list it.
-`CollectionPage` and the toolbar, the chips and the sort headers under it sit in
+`CollectionPage` and the toolbar, the filters and the sort headers under it sit in
 [`features/browse-collection`](../src/features/browse-collection) beside the state they draw,
 governed by [the collection standard](collection-standard.md). The scale, the colours and the
 primitives below are still what they are built from.
@@ -90,7 +91,7 @@ one `text-2xl font-bold` is the registration page's title.
 `h-4 w-4`.
 
 **A radius says what the thing is**: `rounded-md` for a control, a button, a menu or an alert,
-`rounded-lg` for a card, a dialog or a popover, `rounded-full` for a chip or a spinner. Never bare
+`rounded-lg` for a card, a dialog or a popover, `rounded-full` for a tag or a spinner. Never bare
 `rounded`.
 
 **A width is never written.** A column is shrink-wrapped or takes what is left
@@ -114,8 +115,17 @@ text centres it** — `flex items-center` — so what the height gains does not 
 
 **A control that takes focus adds `.control-focus`**, which is the panel's one focus ring.
 
+**A control made of more than one focusable part adds `.control-focus-within` instead.** The box
+shows the focus its children take, so a collection's filter — the trigger reading it and the control
+removing it, inside one box — marks itself whichever of the two an operator reached.
+
 **A field of a form is a `FormField` wrapping a `FormInput`, `FormSelect` or `FormTextarea`.** The
 field owns the label and the space under it; the control owns the box.
+
+**A list the build knows the length of is a `FormSelect`, and one the deployment sizes a
+`FormListbox`.** A select renders every option it is handed, which is a menu taller than the screen
+once the set is a deployment's claims; the listbox scrolls and grows a search field past
+`SEARCHED_FROM`.
 
 **A control that reads a value character by character is passed `mono`** — a token, an identifier, a
 JSON document.
@@ -154,8 +164,10 @@ positioning; the styling stays Tailwind, ours.
 | Shared component | Primitive |
 | --- | --- |
 | `BaseDialog` | `Dialog*` |
-| `ActionsDropdown`, `DropdownButton` | `DropdownMenu*` |
-| `HelpTooltip` | `Popover*` |
+| `ActionsDropdown` | `DropdownMenu*` |
+| `HelpTooltip`, a collection's filter and its field list | `Popover*` |
+| `FormListbox` | `Listbox*` |
+| `FormTagsInput` | `TagsInput*` |
 | `PaginatedTable`'s footer | `Pagination*` |
 
 **Never hand-roll a click-outside, an Escape handler or focus management.** Reach for the primitive
@@ -167,7 +179,12 @@ the fade and the `#actions` footer its buttons sit in, and it is controlled by `
 never fires a second one.
 
 **A menu an overlay drops is `.menu`, and a line of it `.menu-item`.** Both are in the global
-stylesheet, so the actions of a record and the fields of a filter are the same list.
+stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
+takes the line and not the box: it is a control, and draws the one every control shares.
+
+**A surface an overlay asks or explains something on is `.popover`.** The help behind a domain term
+and the box a filter's operator and value are filled in from are one box, and it takes a card's
+radius rather than a menu's.
 
 **An overlay animates through `.overlay-animated`**, which is the panel's one motion. A dialog is
 the exception it states itself: its content is centred by a transform an animated one would undo.

@@ -16,7 +16,7 @@ import { PopoverRoot, PopoverTrigger, PopoverPortal, PopoverContent } from 'reka
         align="center"
         :side-offset="4"
         :collision-padding="16"
-        class="overlay-animated z-50 w-72 max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white p-3 text-sm font-normal tracking-normal text-gray-700 normal-case shadow-lg"
+        class="popover overlay-animated z-50 w-72 max-w-[calc(100vw-2rem)] p-3 text-sm font-normal tracking-normal text-gray-700 normal-case"
       >
         <slot />
       </PopoverContent>
