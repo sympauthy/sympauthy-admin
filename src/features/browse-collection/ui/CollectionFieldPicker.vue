@@ -33,6 +33,20 @@ const options = computed(() =>
   props.filters.map((filter) => ({ value: filter.field, label: filter.name }))
 )
 
+/**
+ * Clears the hand-over as the list opens.
+ *
+ * The flag means something only between a pick and the close that follows it. A close that never
+ * delivers its focus event — a pick answering no filter, a teardown mid-animation — would leave it
+ * latched, and the next Escape would find its trigger unfocused.
+ */
+function onOpenChange(opened: boolean) {
+  open.value = opened
+  if (opened) {
+    handedOver.value = false
+  }
+}
+
 // Nothing stays chosen: the list adds a filter and closes, and a field already filtered is offered
 // again because two criteria over one field is how a range is asked for.
 function onSelect(values: string[]) {
@@ -63,7 +77,7 @@ function onCloseAutoFocus(event: Event) {
 </script>
 
 <template>
-  <PopoverRoot v-model:open="open">
+  <PopoverRoot :open="open" @update:open="onOpenChange">
     <!-- A phone gives the toolbar the width of one control, so the label goes and the icon stays.
          The chevron stays with it: with nothing written on the control, it is what says a list
          opens. -->

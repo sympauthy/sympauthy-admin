@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { FormInput, FormListbox, FormTagsInput } from '@/shared/ui'
 import type { CollectionCriterion } from '../model/CollectionCriteria'
@@ -59,8 +59,22 @@ const inputType = computed(() => {
   }
 })
 
+/**
+ * Reads a pick from the option list.
+ *
+ * The list answers a pick whether or not it changed anything, and one value replaces the value it
+ * already holds — so picking what is already picked would ask the collection again for the answer
+ * it is showing, and ask it from the first page.
+ */
 function onSelect(values: string[]) {
-  emit('update', multiValued.value ? { values } : { value: values[0] ?? '' })
+  if (multiValued.value) {
+    emit('update', { values })
+    return
+  }
+  const value = values[0] ?? ''
+  if (value !== props.criterion.value) {
+    emit('update', { value })
+  }
 }
 
 /**
@@ -70,6 +84,19 @@ function onSelect(values: string[]) {
  * being written rather than to the filter around it. The two lists do not go through here at all:
  * one adds a value with Enter and the other picks one with it.
  */
+const tags = ref<InstanceType<typeof FormTagsInput> | null>(null)
+
+/**
+ * Settles what the rendered control holds but has not handed over yet.
+ *
+ * Only a list of values has any: the others write every keystroke straight into the criterion.
+ */
+function flush() {
+  tags.value?.flush()
+}
+
+defineExpose({ flush })
+
 function onValueKeydown(event: KeyboardEvent) {
   if (event.isComposing) {
     return
@@ -85,6 +112,7 @@ function onValueKeydown(event: KeyboardEvent) {
     :selected="selected"
     :multiple="multiValued"
     :search-placeholder="t('common.collection.searchValues')"
+    :aria-label="props.filter.name"
     @select="onSelect"
   />
 
@@ -92,8 +120,10 @@ function onValueKeydown(event: KeyboardEvent) {
        at a time, and never meets the comma the grammar joins them back with. -->
   <FormTagsInput
     v-else-if="multiValued"
+    ref="tags"
     v-model="typedValues"
     :placeholder="t('common.collection.addValue')"
+    :aria-label="props.filter.name"
   />
 
   <FormInput

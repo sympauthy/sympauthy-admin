@@ -180,7 +180,8 @@ the fade and the `#actions` footer its buttons sit in, and it is controlled by `
 never fires a second one.
 
 **A menu an overlay drops is `.menu`, and a line of it `.menu-item`.** Both are in the global
-stylesheet, so the actions of a record and the fields a collection filters on are the same list.
+stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
+takes the line and not the box: it is a control, and draws the one every control shares.
 
 **A surface an overlay asks or explains something on is `.popover`.** The help behind a domain term
 and the box a filter's operator and value are filled in from are one box, and it takes a card's

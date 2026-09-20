@@ -3,6 +3,8 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import { CommonAlert, CommonButton, FormInput, secondaryColoredButton } from '@/shared/ui'
+import type { CollectionCriterion } from '../model/CollectionCriteria'
+import type { CollectionFilter } from '../model/CollectionFilter'
 import type { Collection } from '../model/useCollection'
 import CollectionFieldPicker from './CollectionFieldPicker.vue'
 import CollectionFilterControl from './CollectionFilterControl.vue'
@@ -27,11 +29,28 @@ const { t } = useI18n()
 // It is a criterion's own id because a field carries as many criteria as they add.
 const addedFilterId = ref<number | null>(null)
 
-const filters = computed(() => props.collection.filters)
-
-function filterOf(field: string) {
-  return filters.value.find((filter) => filter.field === field)
-}
+/**
+ * Each criterion beside the field it names, paired once.
+ *
+ * The row is read again on every letter typed into the search field, and the fields are the
+ * deployment's — one per configured claim — so the pairing is done here rather than twice per
+ * criterion in the template, where it also cost a non-null assertion over two lookups assumed to
+ * agree.
+ *
+ * A criterion naming a field the document no longer publishes is dropped from the row: there is
+ * no control to draw it with.
+ */
+const shownFilters = computed(() =>
+  props.collection.criteria.filters
+    .map((criterion) => ({
+      criterion,
+      filter: props.collection.filters.find((filter) => filter.field === criterion.field)
+    }))
+    .filter(
+      (pair): pair is { criterion: CollectionCriterion; filter: CollectionFilter } =>
+        pair.filter !== undefined
+    )
+)
 
 function onAddFilter(field: string) {
   addedFilterId.value = props.collection.addFilter(field) ?? null
@@ -60,7 +79,11 @@ function onAddFilter(field: string) {
            collection the server searches nothing on. -->
       <div v-else class="flex-1" />
 
-      <CollectionFieldPicker v-if="filters.length > 0" :filters="filters" @select="onAddFilter" />
+      <CollectionFieldPicker
+        v-if="props.collection.filters.length > 0"
+        :filters="props.collection.filters"
+        @select="onAddFilter"
+      />
 
       <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is the
            caller's without any page saying so. -->
@@ -82,17 +105,16 @@ function onAddFilter(field: string) {
 
     <!-- The one row the toolbar may grow: a filter is as wide as the sentence it reads, and a
          phone fits one of them. -->
-    <div v-if="props.collection.criteria.filters.length > 0" class="mt-3 flex flex-wrap gap-2">
-      <template v-for="criterion in props.collection.criteria.filters" :key="criterion.id">
-        <CollectionFilterControl
-          v-if="filterOf(criterion.field)"
-          :filter="filterOf(criterion.field)!"
-          :criterion="criterion"
-          :open-on-mount="criterion.id === addedFilterId"
-          @update="(patch) => props.collection.updateFilter(criterion.id, patch)"
-          @remove="props.collection.removeFilter(criterion.id)"
-        />
-      </template>
+    <div v-if="shownFilters.length > 0" class="mt-3 flex flex-wrap gap-2">
+      <CollectionFilterControl
+        v-for="{ criterion, filter } in shownFilters"
+        :key="criterion.id"
+        :filter="filter"
+        :criterion="criterion"
+        :open-on-mount="criterion.id === addedFilterId"
+        @update="(patch) => props.collection.updateFilter(criterion.id, patch)"
+        @remove="props.collection.removeFilter(criterion.id)"
+      />
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { CheckIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import {
@@ -35,10 +35,13 @@ const props = withDefaults(
     multiple?: boolean
     /** Names what is being searched, where the list is long enough to be. */
     searchPlaceholder?: string
+    /** Names the list itself, which the label beside it does not do — it points at nothing. */
+    ariaLabel?: string
   }>(),
   {
     multiple: false,
-    searchPlaceholder: undefined
+    searchPlaceholder: undefined,
+    ariaLabel: undefined
   }
 )
 
@@ -58,6 +61,16 @@ const SEARCHED_FROM = 8
 const search = ref('')
 
 const searchable = computed(() => props.options.length >= SEARCHED_FROM)
+
+// The set can change under the control — a caller switching between one value and several keeps
+// this component and swaps what it offers — and a search written for the old set hides most of the
+// new one without saying why.
+watch(
+  () => props.options,
+  () => {
+    search.value = ''
+  }
+)
 
 const matches = computed(() => {
   const typed = search.value.trim().toLowerCase()
@@ -84,6 +97,7 @@ function onUpdate(value: unknown) {
   <ListboxRoot
     :multiple="props.multiple"
     :model-value="model"
+    :selection-behavior="props.multiple ? 'toggle' : 'replace'"
     highlight-on-hover
     class="rounded-md border border-gray-300 bg-white"
     @update:model-value="onUpdate"
@@ -97,7 +111,7 @@ function onUpdate(value: unknown) {
       />
     </div>
 
-    <ListboxContent class="max-h-56 overflow-y-auto py-1">
+    <ListboxContent class="max-h-56 overflow-y-auto py-1" :aria-label="props.ariaLabel">
       <ListboxItem
         v-for="option in matches"
         :key="option.value"

@@ -58,6 +58,10 @@ body {
    * which is the trigger reading it and the control removing it inside one box. The box shows the
    * focus its children take, so an operator tabbing along the row sees which control they are on
    * rather than a ring drawn inside one.
+   *
+   * Each of those children still carries its own `outline-none`. An outline is painted on the
+   * element that has the focus, so the box around it cannot suppress one — `focus-within` reaches
+   * the wrapper and nothing below it.
    */
   .control-focus-within {
     @apply focus-within:border-primary focus-within:ring-1 focus-within:ring-primary;

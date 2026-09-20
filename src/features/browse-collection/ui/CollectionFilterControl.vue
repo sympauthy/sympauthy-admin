@@ -49,6 +49,7 @@ const open = ref(props.openOnMount)
 // What the popover focuses when it opens, read off the DOM rather than exposed by each of the
 // value controls: which of them is rendered is the field's business and not this component's.
 const valueBox = ref<HTMLElement | null>(null)
+const value = ref<InstanceType<typeof CollectionFilterValue> | null>(null)
 
 const valueless = computed(() => isValuelessOperator(props.criterion.operator))
 
@@ -74,9 +75,15 @@ const valueLabel = computed(() => {
   return props.criterion.value === '' ? '' : named(props.criterion.value)
 })
 
-// The whole sentence, which is what the control says when it is too narrow to show it all.
+// What the trigger reads when it is too narrow to show it all, which has to be the same sentence:
+// a filter still waiting for a value says so on the row, and a title stopping before that part
+// hides the one thing the caller has left to do.
+const shownValue = computed(() =>
+  valueLabel.value === '' ? t('common.collection.selectValue') : valueLabel.value
+)
+
 const title = computed(() =>
-  [props.filter.name, operatorLabel.value, valueless.value ? '' : valueLabel.value]
+  [props.filter.name, operatorLabel.value, valueless.value ? '' : shownValue.value]
     .filter((part) => part !== '')
     .join(' ')
 )
@@ -95,7 +102,14 @@ function onOperatorChange(operator: string) {
  */
 function onOpenChange(opened: boolean) {
   open.value = opened
-  if (!opened && !isCriterionComplete(props.criterion)) {
+  if (opened) {
+    return
+  }
+  // The value settles before it is judged. A list of values holds what was typed into it and not
+  // yet entered, and this popover is dismissed on the pointer going down outside it — before the
+  // field could lose the focus and hand it over on its own.
+  value.value?.flush()
+  if (!isCriterionComplete(props.criterion)) {
     emit('remove')
   }
 }
@@ -140,7 +154,7 @@ function onOpenAutoFocus(event: Event) {
           class="min-w-0 truncate"
           :class="valueLabel === '' ? 'text-gray-400' : 'font-medium text-gray-900'"
         >
-          {{ valueLabel === '' ? t('common.collection.selectValue') : valueLabel }}
+          {{ shownValue }}
         </span>
       </PopoverTrigger>
 
@@ -176,6 +190,7 @@ function onOpenAutoFocus(event: Event) {
         <div v-if="!valueless" ref="valueBox">
           <FormField :label="t('common.collection.value')">
             <CollectionFilterValue
+              ref="value"
               :filter="props.filter"
               :criterion="props.criterion"
               @update="(patch) => emit('update', patch)"

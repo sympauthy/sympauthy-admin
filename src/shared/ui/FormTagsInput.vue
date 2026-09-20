@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import {
@@ -19,20 +20,56 @@ withDefaults(
   defineProps<{
     /** Named in the empty field, since the tags beside it say nothing about what goes in. */
     placeholder?: string
+    /** Names the field, which the label beside it does not do — it points at nothing. */
+    ariaLabel?: string
   }>(),
   {
-    placeholder: undefined
+    placeholder: undefined,
+    ariaLabel: undefined
   }
 )
 
 const model = defineModel<string[]>({ default: () => [] })
 
 const { t } = useI18n()
+
+// What has been typed into the field and not yet entered. The primitive keeps it in the DOM and
+// hands it over on Enter; this is the copy a caller can ask for before that.
+const pending = ref('')
+
+function onPendingInput(event: Event) {
+  pending.value = (event.target as HTMLInputElement).value
+}
+
+// The field is cleared by the primitive itself when it accepts a value, and cleared without an
+// input event, so what is pending goes with the list it just joined.
+watch(model, () => {
+  pending.value = ''
+})
+
+/**
+ * Enters what has been typed but not yet confirmed, and answers whether anything was.
+ *
+ * A caller about to take the control away asks for this: `addOnBlur` covers a focus moving on
+ * within the page, but an overlay dismissed on the pointer going down is torn away before the
+ * field can lose the focus at all, and the value would go with it.
+ */
+function flush() {
+  const value = pending.value.trim()
+  pending.value = ''
+  if (value === '' || model.value.includes(value)) {
+    return
+  }
+  model.value = [...model.value, value]
+}
+
+defineExpose({ flush })
 </script>
 
 <template>
   <TagsInputRoot
     v-model="model"
+    add-on-blur
     class="control control-focus-within flex w-full flex-wrap items-center gap-1 border-gray-300 bg-white"
   >
     <TagsInputItem
@@ -53,6 +90,8 @@ const { t } = useI18n()
     <TagsInputInput
       class="min-w-16 flex-1 bg-transparent text-sm outline-none"
       :placeholder="placeholder"
+      :aria-label="ariaLabel"
+      @input="onPendingInput"
     />
   </TagsInputRoot>
 </template>

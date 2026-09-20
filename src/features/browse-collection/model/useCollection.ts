@@ -230,13 +230,28 @@ export function useCollection<T, R extends CollectionPageResource>(
     if (!criterion) {
       return
     }
+    const wasComplete = isCriterionComplete(criterion)
     Object.assign(criterion, patch)
-    refetchOnCriteriaChange()
+    // A criterion unanswerable on both sides of the patch was left out of the request before and
+    // is left out of it after, so asking again would ask what is already on screen — and would
+    // take the caller back to its first page to do it. Trying two operators before typing a value
+    // is that case, and it is the common one.
+    if (wasComplete || isCriterionComplete(criterion)) {
+      refetchOnCriteriaChange()
+    }
   }
 
   function removeFilter(id: number) {
+    const criterion = criteria.value.filters.find((candidate) => candidate.id === id)
+    if (!criterion) {
+      return
+    }
     criteria.value.filters = criteria.value.filters.filter((candidate) => candidate.id !== id)
-    refetchOnCriteriaChange()
+    // One that was never answerable was never sent, and dropping it widens nothing. A filter the
+    // caller opened and left closes that way, so this is the path most removals take.
+    if (isCriterionComplete(criterion)) {
+      refetchOnCriteriaChange()
+    }
   }
 
   /**
