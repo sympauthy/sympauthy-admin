@@ -21,8 +21,8 @@ export interface ListboxOption {
  * once the list is longer than it shows, so a set the deployment configures can never render past
  * the bottom of the screen.
  *
- * Where a `FormSelect` is a closed list written in the template, this is an open one handed to it,
- * and a caller needing a trigger rather than a list reaches for `DropdownButton`.
+ * Where a `FormSelect` is a closed list written in the template, this is an open one handed to
+ * it, and a caller offering actions rather than a value reaches for `ActionsDropdown`.
  *
  * What is chosen travels as a list whether one may be chosen or several, so the two callers bind
  * the same shape and this is the only place a single value and a list of them meet.

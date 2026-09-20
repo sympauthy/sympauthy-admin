@@ -46,7 +46,6 @@ to reach for, by need.
 | `PaginatedTable` | any table of records |
 | `RecordTabs` | the views one record is read through |
 | `ActionsDropdown` | the actions of one record or one page |
-| `DropdownButton` | a choice among options |
 | `BaseDialog` | the shell of any dialog |
 | `ConfirmDialog` | a destructive action's confirmation |
 
@@ -165,7 +164,7 @@ positioning; the styling stays Tailwind, ours.
 | Shared component | Primitive |
 | --- | --- |
 | `BaseDialog` | `Dialog*` |
-| `ActionsDropdown`, `DropdownButton` | `DropdownMenu*` |
+| `ActionsDropdown` | `DropdownMenu*` |
 | `HelpTooltip`, a collection's filter and its field list | `Popover*` |
 | `FormListbox` | `Listbox*` |
 | `FormTagsInput` | `TagsInput*` |

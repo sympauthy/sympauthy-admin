@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 /**
  * A choice among the values a field admits, written as `option` elements in the default slot. It
- * shares its box with every other control, and a caller that needs a menu rather than a field
- * reaches for `DropdownButton` instead.
+ * shares its box with every other control, and a caller whose list the deployment sizes reaches
+ * for `FormListbox` instead.
  */
 const model = defineModel<string>({ default: '' })
 </script>

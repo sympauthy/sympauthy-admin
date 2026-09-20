@@ -9,7 +9,7 @@ import type { CollectionFilter } from '../model/CollectionFilter'
 /**
  * The fields a collection filters on, searched rather than read down.
  *
- * It is a popover over a `FormListbox` and not a `DropdownButton` because a menu has nowhere to
+ * It is a popover over a `FormListbox` and not a `DropdownMenu` because a menu has nowhere to
  * type: its keystrokes are its own typeahead. The list is the deployment's as well — an instance
  * publishing a field per claim renders a menu taller than the viewport — so it scrolls and it is
  * searched.
