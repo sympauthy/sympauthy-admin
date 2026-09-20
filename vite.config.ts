@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import vueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,7 +22,7 @@ export default defineConfig({
     tailwindcss(),
     vue(),
     vueI18nPlugin({
-      include: [path.resolve(__dirname, './src/shared/i18n/locales/**')]
+      include: [fileURLToPath(new URL('./src/shared/i18n/locales/**', import.meta.url))]
     })
   ],
   resolve: {
