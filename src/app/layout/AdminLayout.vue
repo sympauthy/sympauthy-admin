@@ -33,12 +33,18 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
         </button>
         <span class="ml-3 text-lg font-semibold text-gray-900">SympAuthy Admin</span>
       </div>
-      <BreadcrumbNav />
-      <main class="flex-1 overflow-y-auto">
-        <div class="mx-auto h-full w-full max-w-page p-4 lg:p-6">
+      <!-- The breadcrumb and the page under it scroll in one box, and both centre their column
+           in it. A vertical scrollbar narrows the box it belongs to and not its neighbour, so two
+           boxes capped at the same width would centre half a scrollbar apart and the record's name
+           would stop sitting over the record. The breadcrumb is pinned to the top of that box. -->
+      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <BreadcrumbNav class="sticky top-0 z-20" />
+        <!-- Sized by the box rather than by what it holds, so a collection filling the height
+             scrolls its rows and not the page. -->
+        <main class="mx-auto min-h-0 w-full max-w-page flex-1 p-4 lg:p-6">
           <slot />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   </div>
 </template>
