@@ -322,12 +322,7 @@
       "user": "User",
       "startedAt": "Started at",
       "expiresAt": "Expires at",
-      "notFound": "This session no longer exists. It may have completed and been collected — expired sessions are collected every fifteen minutes.",
-      "failure": "Failure",
-      "failureAlert": "This session failed. The identifiers below are the messages it failed with.",
-      "failureHelp": "These are message identifiers rather than sentences. The API publishes them unrendered on purpose: an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
-      "errorDetailsId": "Details ID",
-      "errorDescriptionId": "Description ID"
+      "notFound": "This session no longer exists. It may have completed and been collected — expired sessions are collected every fifteen minutes."
     },
     "userClaims": {
       "title": "Claims",
@@ -401,6 +396,14 @@
       "title": "Purposes",
       "help": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
       "noDebugInformation": "This purpose has nothing to say about the session."
+    },
+    "sessionFailure": {
+      "title": "Failure",
+      "help": "The messages the session failed with, offered only by a session that failed. They are identifiers rather than sentences: the API publishes them unrendered on purpose, since an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
+      "alert": "This session failed. The identifiers below are the messages it failed with.",
+      "notFailed": "This session has not failed. It carries no failure to read.",
+      "errorDetailsId": "Details ID",
+      "errorDescriptionId": "Description ID"
     }
   }
 }
