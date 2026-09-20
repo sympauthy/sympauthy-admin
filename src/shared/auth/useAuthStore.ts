@@ -12,15 +12,15 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => user.value !== null)
   const userName = computed(() => user.value?.name ?? '')
   const userEmail = computed(() => user.value?.email ?? '')
-  const userRoles = computed(() => user.value?.roles ?? [])
+  const grantedScopes = computed(() => user.value?.scopes ?? [])
   const accessToken = computed(() => user.value?.accessToken ?? '')
 
-  function hasRole(role: string): boolean {
-    return userRoles.value.includes(role)
+  function hasScope(scope: string): boolean {
+    return grantedScopes.value.includes(scope)
   }
 
-  function hasAnyRole(roles: string[]): boolean {
-    return roles.some((role) => userRoles.value.includes(role))
+  function hasAllScopes(scopes: string[]): boolean {
+    return scopes.every(hasScope)
   }
 
   function setUser(oidcUser: User | null): void {
@@ -86,10 +86,10 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     userName,
     userEmail,
-    userRoles,
+    grantedScopes,
     accessToken,
-    hasRole,
-    hasAnyRole,
+    hasScope,
+    hasAllScopes,
     initialize,
     trySilentRenew,
     signinRedirect,

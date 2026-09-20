@@ -27,8 +27,13 @@ breadcrumb and a `router.push` refer to.
 **The page slice is named after the route, in kebab-case**, and publishes its route component only:
 `pages/user-detail` exports `UserDetailPage`.
 
-**A route states `requiresAuth` and its breadcrumb in `meta`.** The breadcrumb carries the i18n key
-of its label, and a record route also the `parent` route name it hangs under.
+**`/` is the panel's root rather than a resource.** The guard resolves it to the first page the
+token can open, and it renders the no-access page when that is none of them —
+[Authentication](authentication.md#what-the-token-granted) owns both.
+
+**A route states `requiresAuth`, the scopes it opens under and its breadcrumb in `meta`.** The
+breadcrumb carries the i18n key of its label, and a record route also the `parent` route name it
+hangs under.
 
 ```ts
 {
@@ -36,13 +41,22 @@ of its label, and a record route also the `parent` route name it hangs under.
   name: 'userDetail',
   component: UserDetailPage,
   redirect: { name: 'userClaims' },
-  meta: { requiresAuth: true, breadcrumb: { label: 'pages.userDetail.title', parent: 'users' } },
+  meta: {
+    requiresAuth: true,
+    requiredScopes: ['admin:users:read'],
+    breadcrumb: { label: 'pages.userDetail.title', parent: 'users' }
+  },
   children: [{ path: 'claims', name: 'userClaims', component: UserClaimsPage, meta: { … } }]
 }
 ```
 
-**A screen rendered outside the panel shell sets `noLayout: true` and `requiresAuth: false`.** The
-callback and the invitation registration are the two.
+**`requiredScopes` names every scope the route's own calls are read under**, and a route under
+another states the whole set rather than the difference. A child's `meta` replaces its parent's key,
+so `userConsents` names `admin:users:read` beside the `admin:consent:read` its collection needs.
+
+**A screen rendered outside the panel shell sets `noLayout: true`.** The callback and the invitation
+registration add `requiresAuth: false`; the no-access page is signed in and stays outside all the
+same, since every entry the shell would draw is one the token cannot open.
 
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.
@@ -67,8 +81,8 @@ know about first. **A tab adds nothing to the bar** — one screen, one set of a
 **The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
 summary panel under it renders the record and nothing else.
 
-**A screen outside the panel shell has no bar, and so no actions.** The callback and the invitation
-registration are the two.
+**A screen outside the panel shell has no bar, and so no actions.** What one of them lets an
+operator do it draws itself, inside its own content — the no-access page's sign-out.
 
 ## Collection pages
 

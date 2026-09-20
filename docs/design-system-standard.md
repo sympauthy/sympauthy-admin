@@ -83,8 +83,9 @@ next.
 | `p-4`, `gap-3` inside | a record's card, below `sm:`, and its lines |
 
 **Text is `text-xs`, `text-sm`, `text-lg` or `text-2xl`.** A label and a tag are `text-xs`;
-everything an operator reads is `text-sm`; `text-lg font-semibold` heads a section or a dialog; the
-one `text-2xl font-bold` is the registration page's title.
+everything an operator reads is `text-sm`; `text-lg font-semibold` heads a section or a dialog; and
+`text-2xl font-bold` the title of a screen drawn outside the panel shell, which has no bar to be
+named in.
 
 **An icon matches the text beside it** — `size-4` in a control, a cell or a menu, `size-3` beside a
 `text-xs` label, `size-5` and `size-6` for the sidebar's own affordances. Write `size-*`, never

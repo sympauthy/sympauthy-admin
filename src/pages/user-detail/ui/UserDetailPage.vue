@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { UserApi, type UserDetailResource } from '@/entities/user'
 import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
+import { useRouteAccess } from '@/shared/auth'
 import UserSummaryPanel from './UserSummaryPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
@@ -31,6 +32,7 @@ const route = useRoute()
 const { t } = useI18n()
 const api = new UserApi()
 const { setLabel } = useBreadcrumb()
+const { canOpen } = useRouteAccess()
 
 const user = ref<UserDetailResource | null>(null)
 const loading = ref(false)
@@ -66,17 +68,23 @@ function onAction(key: string) {
 }
 
 // A tab names its own view and carries that view's explanation, both read under the route it opens.
+//
+// A view the token cannot read is not offered: consents come from the consent surface under a scope
+// of their own, so this record opens on `admin:users:read` alone and drops the one tab that needs
+// more rather than painting a refusal into it.
 const tabs = computed<RecordTab[]>(() => {
   const params = { userId: userId.value }
-  return (['userClaims', 'userConsents', 'userMfa', 'userProviders'] as const).map((name) => ({
-    label: t(`pages.${name}.title`),
-    to: { name, params },
-    help: {
-      keypath: `pages.${name}.help`,
-      linkText: t(`pages.${name}.helpLinkText`),
-      linkUrl: t(`pages.${name}.helpLinkUrl`)
-    }
-  }))
+  return (['userClaims', 'userConsents', 'userMfa', 'userProviders'] as const)
+    .filter((name) => canOpen(name, params))
+    .map((name) => ({
+      label: t(`pages.${name}.title`),
+      to: { name, params },
+      help: {
+        keypath: `pages.${name}.help`,
+        linkText: t(`pages.${name}.helpLinkText`),
+        linkUrl: t(`pages.${name}.helpLinkUrl`)
+      }
+    }))
 })
 
 async function load(id: string) {

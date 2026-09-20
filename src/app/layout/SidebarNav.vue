@@ -1,14 +1,32 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { useAuthStore } from '@/shared/auth'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore, useRouteAccess } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
+import { navSections } from '../router/navigation'
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
+const { canOpen } = useRouteAccess()
 const { closeSidebar } = useSidebar()
+
+// An entry the token cannot open is not drawn, and a section left without one goes with it — an
+// operator is told what the panel holds by what it offers, and a heading over nothing says the
+// opposite.
+const sections = computed(() =>
+  navSections
+    .map((section) => ({
+      label: section.label,
+      entries: section.entries
+        .filter((entry) => canOpen(entry.name))
+        .map((entry) => ({ ...entry, path: router.resolve({ name: entry.name }).path }))
+    }))
+    .filter((section) => section.entries.length > 0)
+)
 
 function isActive(path: string) {
   return route.path === path || route.path.startsWith(path + '/')
@@ -34,99 +52,23 @@ async function logout() {
       </button>
     </div>
     <ul class="mt-2 flex flex-1 flex-col">
-      <li class="px-4 py-2 text-xs font-semibold tracking-wider text-gray-400 uppercase">
-        {{ t('nav.sectionUsers') }}
-      </li>
-      <li>
-        <router-link
-          to="/users"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/users') }
-          ]"
-        >
-          {{ t('nav.users') }}
-        </router-link>
-      </li>
-      <li>
-        <router-link
-          to="/invitations"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/invitations') }
-          ]"
-        >
-          {{ t('nav.invitations') }}
-        </router-link>
-      </li>
-      <li class="my-2 border-t border-gray-700" />
-      <li class="px-4 py-2 text-xs font-semibold tracking-wider text-gray-400 uppercase">
-        {{ t('nav.sectionConfiguration') }}
-      </li>
-      <li>
-        <router-link
-          to="/audiences"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/audiences') }
-          ]"
-        >
-          {{ t('nav.audiences') }}
-        </router-link>
-      </li>
-      <li>
-        <router-link
-          to="/clients"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/clients') }
-          ]"
-        >
-          {{ t('nav.clients') }}
-        </router-link>
-      </li>
-      <li>
-        <router-link
-          to="/claims"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/claims') }
-          ]"
-        >
-          {{ t('nav.claims') }}
-        </router-link>
-      </li>
-      <li>
-        <router-link
-          to="/scopes"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/scopes') }
-          ]"
-        >
-          {{ t('nav.scopes') }}
-        </router-link>
-      </li>
-      <!-- <li>
-        <router-link to='/configuration' class='block px-4 py-2 hover:bg-gray-700 transition-colors' active-class='bg-gray-900'>
-          {{ t('nav.configuration') }}
-        </router-link>
-      </li> -->
-      <li class="my-2 border-t border-gray-700" />
-      <li class="px-4 py-2 text-xs font-semibold tracking-wider text-gray-400 uppercase">
-        {{ t('nav.sectionDiagnostics') }}
-      </li>
-      <li>
-        <router-link
-          to="/sessions"
-          :class="[
-            'block px-4 py-2 transition-colors hover:bg-gray-700',
-            { 'bg-gray-900': isActive('/sessions') }
-          ]"
-        >
-          {{ t('nav.sessions') }}
-        </router-link>
-      </li>
+      <template v-for="(section, index) in sections" :key="section.label">
+        <li v-if="index > 0" class="my-2 border-t border-gray-700" />
+        <li class="px-4 py-2 text-xs font-semibold tracking-wider text-gray-400 uppercase">
+          {{ t(section.label) }}
+        </li>
+        <li v-for="entry in section.entries" :key="entry.name">
+          <router-link
+            :to="entry.path"
+            :class="[
+              'block px-4 py-2 transition-colors hover:bg-gray-700',
+              { 'bg-gray-900': isActive(entry.path) }
+            ]"
+          >
+            {{ t(entry.label) }}
+          </router-link>
+        </li>
+      </template>
     </ul>
     <div class="border-t border-gray-700 p-4">
       <div class="mb-2 truncate text-sm text-gray-300">{{ authStore.userName }}</div>
