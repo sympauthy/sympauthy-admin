@@ -265,8 +265,8 @@ the record still works and the URL always names a view.
 neither a collection nor part of the record itself.** A user's four tabs are its four collections; a
 session adds its purposes to its places.
 
-**What identifies or qualifies the record sits in the shell, not in a tab.** A session's failure
-explains the status beside it, so it stays in sight whichever tab is open.
+**What identifies or qualifies the record sits in the shell, not in a tab.** A session's status sits
+beside its identifier, so what became of it is read whichever tab is open.
 
 **A tab names its view and carries that view's explanation**, both read under the route it opens:
 `pages.<route>.title` and the `help` triple beside it. The tab is the view's title, so the
