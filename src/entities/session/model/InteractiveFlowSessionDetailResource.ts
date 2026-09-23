@@ -12,8 +12,11 @@ import {
 /**
  * One interactive flow session, every purpose it carries and where each one stands.
  *
- * The error identifiers are message keys and are published unrendered on purpose: a key is something
- * an operator can grep the server for, where a sentence in the wrong locale tells them less.
+ * A failure is published twice over: the identifiers are the message keys themselves, which is what
+ * an operator greps the server for and what a caller may branch on, and beside each one is the
+ * sentence it was read under, rendered in the language the request asked for. A sentence is absent
+ * where this deployment holds no message under the identifier beside it — a session outlives a key
+ * that was renamed — so an identifier arriving alone is expected and is not a fetch that went wrong.
  */
 export type InteractiveFlowSessionDetailResource = {
   id: string
@@ -28,9 +31,19 @@ export type InteractiveFlowSessionDetailResource = {
   signed_up: boolean
   session_date: string
   expiration_date: string
-  /** Absent unless the session failed. */
+  /**
+   * Absent unless the session ended in a failure — one it failed with, or the expiry that ended it.
+   */
   error_details_id?: string | null
+  /** The technical message. Absent where this deployment holds nothing under `error_details_id`. */
+  error_details?: string | null
+  /**
+   * Identifier of the message the end-user was shown, which is the failure's own where it names one
+   * and the generic message's otherwise — so it names what the person was actually told.
+   */
   error_description_id?: string | null
+  /** The end-user's message. Absent where this deployment holds nothing under its identifier. */
+  error_description?: string | null
   error_values?: Record<string, string> | null
   purposes: InteractiveFlowSessionPurposeProgressResource[]
 }
@@ -71,7 +84,15 @@ export const interactiveFlowSessionDetailResourceSchema: JSONSchemaType<Interact
         type: 'string',
         nullable: true
       },
+      error_details: {
+        type: 'string',
+        nullable: true
+      },
       error_description_id: {
+        type: 'string',
+        nullable: true
+      },
+      error_description: {
         type: 'string',
         nullable: true
       },
@@ -99,3 +120,26 @@ export const interactiveFlowSessionDetailResourceSchema: JSONSchemaType<Interact
     ],
     additionalProperties: true
   }
+
+/**
+ * Whether the session carries a failure there is something to read of: the code it failed under,
+ * either message, or the values interpolated into them.
+ *
+ * The status says a session ended in a failure; this says the server recorded what that failure
+ * was. The five fields are published from one nullable failure, so a record answering the status
+ * and holding none of them is one written before this server recorded them, or by one that could
+ * not — and a screen asking the status alone draws a row of dashes for it.
+ *
+ * `error_description_id` is deliberately not read: nothing renders it, so a record holding it alone
+ * still has nothing to show.
+ */
+export function interactiveFlowSessionCarriesFailure(
+  session: InteractiveFlowSessionDetailResource
+): boolean {
+  return Boolean(
+    session.error_details_id ||
+    session.error_details ||
+    session.error_description ||
+    Object.keys(session.error_values ?? {}).length
+  )
+}

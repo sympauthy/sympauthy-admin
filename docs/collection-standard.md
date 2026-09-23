@@ -258,15 +258,16 @@ one of those is a panel bug and the server's own sentence is what says so.
 **A record's screen is a shell: its summary, a `RecordTabs` strip, and the tab's page filling what
 is left.** Each tab is a route, so the view an operator is on is addressable and survives a reload.
 
-**A record's route redirects to its first tab** and keeps its own name, so a `router.push` naming
-the record still works and the URL always names a view.
+**A record's route redirects to the first tab every one of its records has** and keeps its own name,
+so a `router.push` naming the record still works and the URL always names a view. A tab some records
+carry and others do not cannot be what a URL falls back to.
 
 **A tab exists for each of the record's collections, and one more per view the record holds that is
 neither a collection nor part of the record itself.** A user's four tabs are its four collections; a
 session adds its purposes to its places.
 
-**What identifies or qualifies the record sits in the shell, not in a tab.** A session's failure
-explains the status beside it, so it stays in sight whichever tab is open.
+**What identifies or qualifies the record sits in the shell, not in a tab.** A session's status sits
+beside its identifier, so what became of it is read whichever tab is open.
 
 **A tab names its view and carries that view's explanation**, both read under the route it opens:
 `pages.<route>.title` and the `help` triple beside it. The tab is the view's title, so the
