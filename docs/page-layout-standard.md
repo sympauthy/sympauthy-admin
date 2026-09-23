@@ -166,8 +166,8 @@ section needs one.
 own — [the collection standard](collection-standard.md#a-collection-under-a-record) says how one
 hangs off a record.
 
-**A view only some records carry is a tab those records get, not a section above the strip.** A
-failed session's failure is one: a section held for the few costs every record the height it takes,
+**A view only some records carry is a tab those records get, not a section above the strip.** How a
+session ended in a failure is one: a section held for some costs every record the height it takes,
 and a phone has the least of it to give. Such a tab takes the place its view is worth — a failure
 comes first, being what an operator opens the record to read — but it is never what the record's
 route redirects to, since a tab that is sometimes absent cannot be what a URL falls back to.

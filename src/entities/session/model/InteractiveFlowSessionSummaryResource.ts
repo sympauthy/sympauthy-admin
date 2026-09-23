@@ -92,6 +92,18 @@ export const interactiveFlowSessionStatuses = [
   'expired'
 ]
 
+/**
+ * Whether the session ended in a failure, which is the set carrying the error fields.
+ *
+ * An expiry is one: nothing refused anything, the person simply stopped, and the flow told them so
+ * with a message of its own — so `expired` names a failure the same way `failed` does. Anything
+ * reading those fields asks this rather than naming a status, since the set is the server's to
+ * widen.
+ */
+export function interactiveFlowSessionEndedInFailure(status: string): boolean {
+  return status === 'failed' || status === 'expired'
+}
+
 export function interactiveFlowSessionStatusColor(
   status: string
 ): 'blue' | 'green' | 'gray' | 'red' | 'yellow' {

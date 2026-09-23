@@ -42,6 +42,11 @@ component translates without a mapping of its own.
 document names every field it publishes and every value a closed set holds, and those sets are the
 deployment's own — the bundle could not hold them and must not try.
 
+**A sentence the server rendered is shown as it arrived, and the identifier beside it stays an
+identifier.** A session's failure carries both, read from the server's own error bundle of hundreds
+of codes: resolving that identifier against `en.json` here would be a second copy of that bundle,
+and the copy that drifts.
+
 **A word the protocol fixes is the panel's to name.** The ten collection operators are closed and
 deliberately unlocalized on the wire, so `common.operators.<operator>` holds their labels, with
 `common.operators.date.<operator>` overriding the comparisons that read differently over a moment.

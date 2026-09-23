@@ -399,11 +399,24 @@
     },
     "sessionFailure": {
       "title": "Failure",
-      "help": "The messages the session failed with, offered only by a session that failed. They are identifiers rather than sentences: the API publishes them unrendered on purpose, since an identifier is something you can search the server for, where a sentence rendered in a locale that may not be yours would tell you less.",
-      "alert": "This session failed. The identifiers below are the messages it failed with.",
-      "notFailed": "This session has not failed. It carries no failure to read.",
-      "errorDetailsId": "Details ID",
-      "errorDescriptionId": "Description ID"
+      "help": "What the session ended with, offered by one that failed and by one its expiry ended — nothing refused an expired session, the person simply stopped, and the flow told them so all the same. Every field below explains itself.",
+      "notFailed": "This session has not ended in a failure. It carries nothing to read here.",
+      "errorDetailsId": {
+        "label": "Internal error code",
+        "help": "The key the server failed this session under. It is the contract and outlives any rewording of the two messages below, so it is what you search the server's error messages for, what you quote in a bug report, and what a console groups failures by."
+      },
+      "errorDetails": {
+        "label": "Internal error message",
+        "help": "What the code means, written for whoever operates this server and read in this panel's language. It may name a row, a claim, a provider or a key, and the person in the flow was never shown it. Empty where this deployment holds no message under the code."
+      },
+      "errorDescription": {
+        "label": "User-facing error message",
+        "help": "The sentence the flow's error page actually put on the person's screen. A failure naming no message of its own falls back to the generic one, so this is what they were told rather than what the failure asked for — which is the sentence to expect them to quote back to you."
+      },
+      "values": {
+        "label": "Additional values",
+        "help": "What the server interpolated into the two messages above, published raw as well so each can be read on its own — the address that was refused, the scope that was not granted. The keys are the server's own and differ from one failure to the next."
+      }
     }
   }
 }
