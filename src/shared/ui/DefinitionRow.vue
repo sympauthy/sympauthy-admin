@@ -19,8 +19,12 @@ const props = withDefaults(
   }
 )
 
+// `wrap-anywhere` rather than `break-words`: a value the server wrote may be one token with nowhere
+// to break — a key, a thumbprint, an address — and only `anywhere` takes that token out of the
+// column's min-content width. `break-word` alone would hyphenate the line and still size the grid
+// column to the whole token, which is the row scrolling the page sideways on a phone.
 const classes = computed(() => [
-  'mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0',
+  'mt-1 text-sm wrap-anywhere text-gray-900 sm:col-span-2 sm:mt-0',
   props.mono ? 'font-mono break-all' : ''
 ])
 </script>

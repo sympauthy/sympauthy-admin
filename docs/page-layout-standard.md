@@ -222,6 +222,13 @@ clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) track
 over each value, so a screen reads one or two records;
 [#136](https://github.com/sympauthy/sympauthy-admin/issues/136) tracks curating and tightening it.
 
+**A view only some of a record's instances carry, and the landing a shell replaces once it has read
+the record.** One record does both — a session's failure is a tab a session that ended in one
+gets, and the shell moves such a session off the fallback its route redirects to — and a shape
+written from the single case that has it states that case rather than a rule. It stays in
+[`SessionDetailPage.vue`](../src/pages/session-detail/ui/SessionDetailPage.vue) until a second
+record needs it.
+
 **Dashboards.** Every screen shows one collection or one record.
 
 **Printing and keyboard shortcuts.** Neither is considered.

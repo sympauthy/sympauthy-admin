@@ -24,9 +24,12 @@ import {
 const { t } = useI18n()
 const store = useInteractiveFlowSessionDetailStore()
 
+// Both branches below are read against a session that is there, so the null the store starts on is
+// answered once here rather than by each of them.
 const endedInFailure = computed(
   () => !!store.session && interactiveFlowSessionEndedInFailure(store.session.status)
 )
+const notEndedInFailure = computed(() => !!store.session && !endedInFailure.value)
 
 // The values interpolated into the two messages are published raw beside them, and a failure
 // carrying none draws no card at all rather than an empty one.
@@ -37,7 +40,7 @@ const hasErrorValues = computed(() => Object.keys(errorValues.value).length > 0)
 <template>
   <!-- The strip above offers this tab to a session that ended in a failure, but the route stays
        reachable by hand — one that has not is told so rather than shown a row of empty fields. -->
-  <CommonCard v-if="store.session && !endedInFailure">
+  <CommonCard v-if="notEndedInFailure">
     <p class="text-sm text-gray-600">{{ t('pages.sessionFailure.notFailed') }}</p>
   </CommonCard>
 

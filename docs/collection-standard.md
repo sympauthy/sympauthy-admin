@@ -258,8 +258,9 @@ one of those is a panel bug and the server's own sentence is what says so.
 **A record's screen is a shell: its summary, a `RecordTabs` strip, and the tab's page filling what
 is left.** Each tab is a route, so the view an operator is on is addressable and survives a reload.
 
-**A record's route redirects to its first tab** and keeps its own name, so a `router.push` naming
-the record still works and the URL always names a view.
+**A record's route redirects to the first tab every one of its records has** and keeps its own name,
+so a `router.push` naming the record still works and the URL always names a view. A tab some records
+carry and others do not cannot be what a URL falls back to.
 
 **A tab exists for each of the record's collections, and one more per view the record holds that is
 neither a collection nor part of the record itself.** A user's four tabs are its four collections; a

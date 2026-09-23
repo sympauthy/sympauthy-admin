@@ -415,7 +415,7 @@
       },
       "values": {
         "label": "Additional values",
-        "help": "What the server interpolated into the two messages above, published raw as well so each can be read on its own — the address that was refused, the scope that was not granted. The keys are the server's own and differ from one failure to the next."
+        "help": "What the server interpolated into the two messages, published raw as well so each can be read on its own — the address that was refused, the scope that was not granted. They arrive whether or not either message did, so these may be all this failure has to say. The keys are the server's own and differ from one failure to the next."
       }
     }
   }
