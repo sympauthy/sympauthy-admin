@@ -401,6 +401,7 @@
       "title": "Failure",
       "help": "What the session ended with, offered by one that failed and by one its expiry ended — nothing refused an expired session, the person simply stopped, and the flow told them so all the same. Every field below explains itself.",
       "notFailed": "This session has not ended in a failure. It carries nothing to read here.",
+      "nothingRecorded": "This session ended in a failure the server recorded nothing about — no code, no message, no values. Its status is all there is to read of it.",
       "errorDetailsId": {
         "label": "Internal error code",
         "help": "The key the server failed this session under. It is the contract and outlives any rewording of the two messages below, so it is what you search the server's error messages for, what you quote in a bug report, and what a console groups failures by."

@@ -120,3 +120,26 @@ export const interactiveFlowSessionDetailResourceSchema: JSONSchemaType<Interact
     ],
     additionalProperties: true
   }
+
+/**
+ * Whether the session carries a failure there is something to read of: the code it failed under,
+ * either message, or the values interpolated into them.
+ *
+ * The status says a session ended in a failure; this says the server recorded what that failure
+ * was. The five fields are published from one nullable failure, so a record answering the status
+ * and holding none of them is one written before this server recorded them, or by one that could
+ * not — and a screen asking the status alone draws a row of dashes for it.
+ *
+ * `error_description_id` is deliberately not read: nothing renders it, so a record holding it alone
+ * still has nothing to show.
+ */
+export function interactiveFlowSessionCarriesFailure(
+  session: InteractiveFlowSessionDetailResource
+): boolean {
+  return Boolean(
+    session.error_details_id ||
+    session.error_details ||
+    session.error_description ||
+    Object.keys(session.error_values ?? {}).length
+  )
+}

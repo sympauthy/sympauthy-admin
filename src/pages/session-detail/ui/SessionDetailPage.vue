@@ -3,6 +3,7 @@ import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
+  interactiveFlowSessionCarriesFailure,
   interactiveFlowSessionEndedInFailure,
   useInteractiveFlowSessionDetailStore
 } from '@/entities/session'
@@ -57,8 +58,12 @@ async function load(id: string) {
   // strip opens with, so the question it was opened with is answered without a click. Only that
   // fallback is replaced — a URL naming a tab is where the operator asked to be, and a reload of
   // one stays there — and only while the session read is still the one on screen.
+  //
+  // A session the status puts in the failure set but that recorded none of it is left on the
+  // purposes: the tab is still offered, but landing on it answers the question with nothing.
   if (
     interactiveFlowSessionEndedInFailure(store.session.status) &&
+    interactiveFlowSessionCarriesFailure(store.session) &&
     route.redirectedFrom?.name === 'sessionDetail' &&
     sessionId.value === id
   ) {
