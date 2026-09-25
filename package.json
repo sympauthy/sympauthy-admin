@@ -25,7 +25,7 @@
     "vue-router": "^5.0.0"
   },
   "devDependencies": {
-    "@feature-sliced/steiger-plugin": "^0.7.0",
+    "@feature-sliced/steiger-plugin": "^0.8.0",
     "@intlify/unplugin-vue-i18n": "^11.0.0",
     "@tsconfig/node24": "^24.0.0",
     "@types/node": "^24.10.0",
