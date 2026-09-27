@@ -2,7 +2,12 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { UserApi, type UserClaimListResource, type UserClaimResource } from '@/entities/user'
+import {
+  UserApi,
+  userClaimValueLabel,
+  type UserClaimListResource,
+  type UserClaimResource
+} from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { EmptyValue, OriginTag, TableCell, TableHeader } from '@/shared/ui'
@@ -69,7 +74,8 @@ onMounted(async () => {
           {{ claim.claim_id }}
         </TableCell>
         <TableCell :label="t('pages.userClaims.value')" truncate>
-          {{ claim.value }}
+          <span v-if="claim.value != null">{{ userClaimValueLabel(claim) }}</span>
+          <EmptyValue v-else />
         </TableCell>
         <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />

@@ -7,8 +7,24 @@ export type ClaimResource = {
   enabled: boolean
   required: boolean
   identifier: boolean
-  allowed_values?: string[]
+  allowed_values?: (string | number | boolean)[]
   group?: string
+}
+
+/**
+ * One value a claim admits, as a schema.
+ *
+ * A value is published with the type its claim is declared under, so the allowed values of a
+ * `number` claim arrive as JSON numbers and those of a `boolean` one as JSON booleans. A schema
+ * naming strings alone would reject the whole response over one such claim.
+ *
+ * AJV's `JSONSchemaType` cannot type a union, so this one is written plainly and declared past it.
+ * The looseness is the schema's type and not the schema: what it validates is every case the field
+ * holds and nothing else.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const allowedValueSchema: any = {
+  oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'boolean' }]
 }
 
 export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
@@ -34,7 +50,7 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
     },
     allowed_values: {
       type: 'array',
-      items: { type: 'string' },
+      items: allowedValueSchema,
       nullable: true
     },
     group: {
