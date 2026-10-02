@@ -306,6 +306,7 @@
       "tags": "Tags",
       "publishedIn": {
         "label": "Published in",
+        "count": "{n} place | {n} places",
         "help": "Where this deployment publishes the claim. The first four carry its value; Discovery advertises the name alone, in claims_supported. A claim published nowhere stays readable through this panel and is carried by no token."
       },
       "search": "Search claims..."

@@ -3,13 +3,13 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ClaimApi,
+  ClaimPublishedInTag,
   ClaimTags,
-  claimPublicationPlaceLabel,
   type ClaimListResource,
   type ClaimResource
 } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonTag, EmptyValue, HelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
+import { CommonTag, HelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()
@@ -42,7 +42,7 @@ onMounted(async () => {
         field="origin"
       />
       <TableHeader>{{ t('pages.claims.tags') }}</TableHeader>
-      <TableHeader>
+      <TableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}
         <HelpTooltip>
           <p>{{ t('pages.claims.publishedIn.help') }}</p>
@@ -69,13 +69,8 @@ onMounted(async () => {
         <TableCell :label="t('pages.claims.tags')">
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
         </TableCell>
-        <TableCell :label="t('pages.claims.publishedIn.label')">
-          <div v-if="claim.published_in.length" class="flex flex-wrap gap-1">
-            <CommonTag v-for="place in claim.published_in" :key="place" color="gray">
-              {{ claimPublicationPlaceLabel(place) }}
-            </CommonTag>
-          </div>
-          <EmptyValue v-else />
+        <TableCell :label="t('pages.claims.publishedIn.label')" fit>
+          <ClaimPublishedInTag :places="claim.published_in" />
         </TableCell>
       </tr>
     </template>
