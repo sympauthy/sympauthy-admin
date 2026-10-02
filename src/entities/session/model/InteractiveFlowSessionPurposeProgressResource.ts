@@ -11,7 +11,6 @@ import { translateMessageOr } from '@/shared/i18n'
 
 export type InteractiveFlowSessionPurposeProgressResource = {
   purpose: InteractiveFlowPurposeResource
-  /** One of `completed`, `current` or `pending`. */
   status: string
   debug: InteractiveFlowSessionDebugInformationResource[]
 }

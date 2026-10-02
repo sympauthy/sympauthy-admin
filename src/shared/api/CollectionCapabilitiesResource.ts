@@ -13,7 +13,6 @@ export type CollectionCapabilitiesResource = {
   search?: CollectionSearchResource | null
   filters: CollectionFilterResource[]
   sorts: CollectionSortResource[]
-  /** Spelled the way `sort` is, leading `-` included. Absent where the collection has none. */
   default_sort?: string | null
 }
 
@@ -21,23 +20,18 @@ export type CollectionSearchResource = {
   fields: string[]
 }
 
+/**
+ * One field a collection filters on.
+ *
+ * `type` is a plain string and not [CollectionFieldType]: a server ahead of this panel may publish
+ * a word it does not know, and `knownCollectionFilters` is where that is decided rather than here,
+ * where it would blank the screen.
+ */
 export type CollectionFilterResource = {
   field: string
-  /**
-   * The name the field is read under, in the language the request asked for. It may be reworded in
-   * any release, so nothing branches on it.
-   */
   name: string
-  /**
-   * One of the words [CollectionFieldType] holds, as a plain string: a server ahead of this panel
-   * may publish one it does not know, and `knownCollectionFilters` is where that is decided.
-   */
   type: string
   operators: string[]
-  /**
-   * The values the field holds, where its set is closed and belongs to this deployment. Absent
-   * where the set is open, and a filter then offers an input of the field's own type.
-   */
   values?: CollectionFilterValueResource[] | null
 }
 

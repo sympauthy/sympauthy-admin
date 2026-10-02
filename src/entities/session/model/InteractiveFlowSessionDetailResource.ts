@@ -20,29 +20,17 @@ import {
  */
 export type InteractiveFlowSessionDetailResource = {
   id: string
-  /** One of `ongoing`, `completed`, `cancelled`, `failed` or `expired`. */
   status: string
   initiating_purpose: InteractiveFlowPurposeResource
-  /** Absent where an administrator started the session and where nothing named a client. */
   client_id?: string | null
   flow_id?: string | null
-  /** Absent where the session identified nobody, and while it is still signing an account up. */
   user?: UserResource | null
   signed_up: boolean
   session_date: string
   expiration_date: string
-  /**
-   * Absent unless the session ended in a failure — one it failed with, or the expiry that ended it.
-   */
   error_details_id?: string | null
-  /** The technical message. Absent where this deployment holds nothing under `error_details_id`. */
   error_details?: string | null
-  /**
-   * Identifier of the message the end-user was shown, which is the failure's own where it names one
-   * and the generic message's otherwise — so it names what the person was actually told.
-   */
   error_description_id?: string | null
-  /** The end-user's message. Absent where this deployment holds nothing under its identifier. */
   error_description?: string | null
   error_values?: Record<string, string> | null
   purposes: InteractiveFlowSessionPurposeProgressResource[]

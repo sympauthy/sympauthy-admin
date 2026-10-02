@@ -14,17 +14,12 @@ import { translateMessageOr } from '@/shared/i18n'
  */
 export type InteractiveFlowSessionSummaryResource = {
   id: string
-  /** One of `ongoing`, `completed`, `cancelled`, `failed` or `expired`. */
   status: string
   initiating_purpose: InteractiveFlowPurposeResource
-  /** Absent on a terminal session, which is stopped at no purpose. */
   current_purpose?: InteractiveFlowPurposeResource | null
-  /** Absent where an administrator started the session and where nothing named a client. */
   client_id?: string | null
   signed_up: boolean
-  /** Absent where the session identified nobody, and while it is still signing an account up. */
   user?: UserResource | null
-  /** Absent where the session holds no observation. */
   ip?: string | null
   user_agent?: string | null
   session_date: string

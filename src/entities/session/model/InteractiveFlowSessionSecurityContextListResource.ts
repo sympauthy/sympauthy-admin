@@ -5,7 +5,6 @@ import {
 } from '@/entities/session/model/InteractiveFlowSessionSecurityContextResource'
 
 export type InteractiveFlowSessionSecurityContextListResource = {
-  /** The place seen most recently first. */
   security_contexts: InteractiveFlowSessionSecurityContextResource[]
   page: number
   size: number

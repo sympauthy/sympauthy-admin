@@ -63,6 +63,14 @@ exported together and travel together; nothing declares one without the other.
 **A field is spelled as the server spells it.** `user_id`, `created_at`, `error_code` — the resource
 is the wire format, and the camelCase name is what a helper over it returns.
 
+**A field carries no comment.** What it holds, what it is absent for and which words it takes are
+stated in the server's own `@Schema` description and published as OpenAPI, so a sentence here is a
+second copy of one this project does not own — and the copy that drifts.
+
+**What a field means that the wire does not say is carried by a type or a function.** The optional
+marker says the server may omit it and the union says which values arrive; a rule worth a sentence
+becomes a function over the resource, and the sentence becomes that function's own TSDoc.
+
 **The schema's name is the type's, with a lowercase initial and `Schema` appended.**
 `UserListResource` is validated by `userListResourceSchema`.
 

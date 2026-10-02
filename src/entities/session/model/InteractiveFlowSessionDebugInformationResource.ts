@@ -8,7 +8,6 @@ import type { JSONSchemaType } from 'ajv'
  */
 export type InteractiveFlowSessionDebugInformationResource = {
   display_name: string
-  /** Absent where the field exists and holds nothing. The entry itself is never omitted. */
   value?: string | null
 }
 
