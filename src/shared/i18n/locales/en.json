@@ -45,6 +45,10 @@
         "closed": "closed"
       }
     },
+    "claimKind": {
+      "personal": "personal",
+      "application": "application"
+    },
     "claimPublicationPlace": {
       "id_token": "ID token",
       "userinfo": "UserInfo",
@@ -303,6 +307,10 @@
       "required": "required",
       "identifier": "identifier",
       "empty": "No claims found.",
+      "kind": {
+        "label": "Belongs to",
+        "help": "Whose the claim's value is. A personal claim is the person's: collected from them, and disclosed to a client once they agreed to a scope. An application claim is a backend's, attached to the person, and never typed by them. A claim this server computes itself is of neither kind and carries none."
+      },
       "tags": "Tags",
       "publishedIn": {
         "label": "Published in",

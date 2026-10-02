@@ -162,6 +162,10 @@ sortable and draws a plain header where it is not, so a page never decides that 
 **A column's label is the page's own string, from `pages.<route>`.** The document names a filter and
 a sort key; a column is a different question, and some columns are not fields at all.
 
+**A column whose term an operator may not know carries its `HelpTooltip` in the sort header's
+`help` slot.** The explanation sits inside the box the column is ordered by, which stops that
+control's click from reaching it — asking what a column means is not asking for another order.
+
 **A header's field is the wire name the collection publishes.** A name no collection knows silently
 renders an unsortable column, so it is read off the capability document rather than guessed.
 

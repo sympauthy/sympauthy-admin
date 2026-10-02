@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ClaimApi,
+  ClaimKindTag,
   ClaimPublishedInTag,
   ClaimTags,
   type ClaimListResource,
@@ -41,6 +42,18 @@ onMounted(async () => {
         :label="t('common.origin.label')"
         field="origin"
       />
+      <CollectionSortHeader
+        fit
+        :collection="claims"
+        :label="t('pages.claims.kind.label')"
+        field="kind"
+      >
+        <template #help>
+          <HelpTooltip>
+            <p>{{ t('pages.claims.kind.help') }}</p>
+          </HelpTooltip>
+        </template>
+      </CollectionSortHeader>
       <TableHeader>{{ t('pages.claims.tags') }}</TableHeader>
       <TableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}
@@ -65,6 +78,9 @@ onMounted(async () => {
         </TableCell>
         <TableCell :label="t('common.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
+        </TableCell>
+        <TableCell :label="t('pages.claims.kind.label')" fit>
+          <ClaimKindTag :kind="claim.kind" />
         </TableCell>
         <TableCell :label="t('pages.claims.tags')">
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
