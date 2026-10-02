@@ -93,8 +93,8 @@ call site gets the narrowed type rather than a boolean it has to act on twice.
 ## Comments
 
 **A comment says why, and the code says what.** The measurement that would oscillate, the request
-that must not be sent twice, the field the server may omit — write the reason a reader would
-otherwise remove.
+that must not be sent twice, the schema written looser than it looks — write the reason a reader
+would otherwise remove.
 
 **An exported function, type or component with a non-obvious use carries a TSDoc block.** State what
 it is for, and what a caller has to hold true.

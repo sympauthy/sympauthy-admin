@@ -2,11 +2,6 @@ import type { JSONSchemaType } from 'ajv'
 
 export type UserResource = {
   user_id: string
-  /**
-   * A claim is published with the type it is declared under, so a `number` claim arrives as a JSON
-   * number and not as a string. A schema accepting strings alone would reject the whole response
-   * over one such claim.
-   */
   claims?: Record<string, string | number | boolean | null> | null
   status: string
   created_at: string
@@ -14,6 +9,10 @@ export type UserResource = {
 
 /**
  * A claim value embedded in an account, as a schema.
+ *
+ * A claim is published with the type it is declared under, so a `number` claim arrives as a JSON
+ * number and not as a string. A schema accepting strings alone would reject the whole response over
+ * one such claim.
  *
  * AJV's `JSONSchemaType` cannot type a union that includes null, so this one is written plainly and
  * declared past it. The looseness is the schema's type and not the schema: what it validates is

@@ -45,6 +45,13 @@
         "closed": "closed"
       }
     },
+    "claimPublicationPlace": {
+      "id_token": "ID token",
+      "userinfo": "UserInfo",
+      "access_token": "Access token",
+      "introspection": "Introspection",
+      "discovery": "Discovery"
+    },
     "interactiveFlowPurpose": {
       "confirm": "Approving an action",
       "oauth2_authorize": "Signing in at a client's request",
@@ -297,6 +304,11 @@
       "identifier": "identifier",
       "empty": "No claims found.",
       "tags": "Tags",
+      "publishedIn": {
+        "label": "Published in",
+        "count": "{n} place | {n} places",
+        "help": "Where this deployment publishes the claim. The first four carry its value; Discovery advertises the name alone, in claims_supported. A claim published nowhere stays readable through this panel and is carried by no token."
+      },
       "search": "Search claims..."
     },
     "sessions": {

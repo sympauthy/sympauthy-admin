@@ -11,7 +11,7 @@ export type InvitationResource = {
   created_at: string
   expires_at?: string | null
   user_id?: string | null
-  used_at?: string | null
+  consumed_at?: string | null
 }
 
 export const invitationResourceSchema: JSONSchemaType<InvitationResource> = {
@@ -56,7 +56,7 @@ export const invitationResourceSchema: JSONSchemaType<InvitationResource> = {
       type: 'string',
       nullable: true
     },
-    used_at: {
+    consumed_at: {
       type: 'string',
       nullable: true
     }

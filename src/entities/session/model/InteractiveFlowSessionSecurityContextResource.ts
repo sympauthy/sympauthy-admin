@@ -17,12 +17,7 @@ export type InteractiveFlowSessionSecurityContextResource = {
   time_zone?: string | null
   first_seen_date: string
   last_seen_date: string
-  /** How many requests of the session came from here. */
   observation_count: number
-  /**
-   * When a credential was last proven from here. Absent for a place only requests were seen from —
-   * which anybody holding the session's state can produce.
-   */
   proven_date?: string | null
 }
 
