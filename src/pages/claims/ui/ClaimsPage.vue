@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ClaimApi, ClaimTags, type ClaimListResource, type ClaimResource } from '@/entities/claim'
+import {
+  ClaimApi,
+  ClaimTags,
+  claimPublicationPlaceLabel,
+  type ClaimListResource,
+  type ClaimResource
+} from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { OriginTag, TableCell, TableHeader, CommonTag } from '@/shared/ui'
+import { CommonTag, EmptyValue, HelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()
@@ -36,6 +42,12 @@ onMounted(async () => {
         field="origin"
       />
       <TableHeader>{{ t('pages.claims.tags') }}</TableHeader>
+      <TableHeader>
+        {{ t('pages.claims.publishedIn.label') }}
+        <HelpTooltip>
+          <p>{{ t('pages.claims.publishedIn.help') }}</p>
+        </HelpTooltip>
+      </TableHeader>
     </template>
 
     <template #rows>
@@ -56,6 +68,14 @@ onMounted(async () => {
         </TableCell>
         <TableCell :label="t('pages.claims.tags')">
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
+        </TableCell>
+        <TableCell :label="t('pages.claims.publishedIn.label')">
+          <div v-if="claim.published_in.length" class="flex flex-wrap gap-1">
+            <CommonTag v-for="place in claim.published_in" :key="place" color="gray">
+              {{ claimPublicationPlaceLabel(place) }}
+            </CommonTag>
+          </div>
+          <EmptyValue v-else />
         </TableCell>
       </tr>
     </template>
