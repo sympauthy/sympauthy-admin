@@ -84,10 +84,14 @@ leaves — the legacy mode is removed there.
 **A string carrying a link is rendered with `<i18n-t>`,** the link supplied as a named slot:
 
 ```html
-<i18n-t keypath="claim.identifier.help" tag="p">
+<i18n-t keypath="claim.identifier.help" tag="p" scope="global">
   <template #link><a :href="t('claim.identifier.helpLinkUrl')">…</a></template>
 </i18n-t>
 ```
+
+**It names `scope="global"`,** since it resolves against its parent's scope otherwise and no
+component here declares one. The bundle it reaches is the global one either way — the attribute is
+what stops it searching a chain of components for a scope that does not exist.
 
 **An explanation and its link are the triple `help`, `helpLinkText`, `helpLinkUrl`,** so the URL is
 translatable with the sentence around it.

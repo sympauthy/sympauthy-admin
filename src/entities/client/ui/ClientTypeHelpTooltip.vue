@@ -7,7 +7,7 @@ const { t } = useI18n()
 
 <template>
   <HelpTooltip>
-    <i18n-t keypath="client.type.help" tag="p">
+    <i18n-t keypath="client.type.help" tag="p" scope="global">
       <template #link>
         <DocLink :href="t('client.type.helpLinkUrl')">
           {{ t('client.type.helpLinkText') }}

@@ -67,8 +67,6 @@ const inactiveTabClasses =
           {{ tab.label }}
         </a>
         <HelpTooltip v-if="tab.help">
-          <!-- The bundle these keys come from is the global one, and saying so is what stops
-               `i18n-t` hunting for a component scope that no component here declares. -->
           <i18n-t :keypath="tab.help.keypath" tag="p" scope="global">
             <template v-if="tab.help.linkUrl" #link>
               <DocLink :href="tab.help.linkUrl">
