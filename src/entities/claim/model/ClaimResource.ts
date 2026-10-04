@@ -5,6 +5,7 @@ export type ClaimResource = {
   id: string
   type: string
   origin: string
+  kind?: string
   enabled: boolean
   required: boolean
   identifier: boolean
@@ -35,6 +36,10 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
     },
     origin: {
       type: 'string'
+    },
+    kind: {
+      type: 'string',
+      nullable: true
     },
     enabled: {
       type: 'boolean'
@@ -73,4 +78,15 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
  */
 export function claimPublicationPlaceLabel(place: string): string {
   return translateMessageOr(`common.claimPublicationPlace.${place}`, place)
+}
+
+/**
+ * Label a kind is read under, by `claimPublicationPlaceLabel`'s rule: the set is the server's, a
+ * release may add a kind to it, and a value this panel holds no translation for renders as itself.
+ *
+ * It takes the value rather than the claim because a claim of neither kind carries none, and a
+ * cell with nothing to name is an `EmptyValue` rather than a label of its own.
+ */
+export function claimKindLabel(kind: string): string {
+  return translateMessageOr(`common.claimKind.${kind}`, kind)
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useSlots } from 'vue'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { TableHeader } from '@/shared/ui'
 import type { Collection } from '../model/useCollection'
@@ -12,6 +12,9 @@ import type { Collection } from '../model/useCollection'
  * page hands every column through here and the ones the server cannot order on simply do not
  * respond to a click. The label stays the page's own string: the document names a filter and a sort
  * key, not a column.
+ *
+ * The term a column is read under is the page's to explain, so a `HelpTooltip` goes in the `help`
+ * slot rather than beside the header, which would put the explanation outside the box that sorts.
  */
 const props = withDefaults(
   defineProps<{
@@ -28,6 +31,8 @@ const props = withDefaults(
     hiddenBelow: undefined
   }
 )
+
+const slots = useSlots()
 
 const sortable = computed(() => props.collection.sortsOn(props.field))
 
@@ -53,6 +58,12 @@ function onClick() {
   >
     <span class="inline-flex items-center gap-1">
       {{ props.label }}
+      <!-- The help is a control of its own inside a header that reorders the list when it is
+           clicked, so its click stops here: asking what a column means is not asking for another
+           order. -->
+      <span v-if="slots.help" @click.stop>
+        <slot name="help" />
+      </span>
       <!-- An icon matches the text it sits in, and a column's label is the one `text-xs` on a
            screen. -->
       <ChevronUpIcon v-if="key && !key.descending" class="size-3" />

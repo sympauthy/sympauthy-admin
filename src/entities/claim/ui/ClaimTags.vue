@@ -12,7 +12,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-1">
+  <!-- One line, because the column holding these is shrink-wrapped around them: a row wrapping
+       its two tags is taller than every row beside it, and the set is two short words. -->
+  <div class="flex gap-1">
     <CommonTag v-if="required" color="purple">
       {{ t('pages.claims.required') }}
     </CommonTag>
