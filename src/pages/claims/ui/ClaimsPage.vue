@@ -54,7 +54,7 @@ onMounted(async () => {
           </HelpTooltip>
         </template>
       </CollectionSortHeader>
-      <TableHeader>{{ t('pages.claims.tags') }}</TableHeader>
+      <TableHeader fit>{{ t('pages.claims.tags') }}</TableHeader>
       <TableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}
         <HelpTooltip>
@@ -82,7 +82,7 @@ onMounted(async () => {
         <TableCell :label="t('pages.claims.kind.label')" fit>
           <ClaimKindTag :kind="claim.kind" />
         </TableCell>
-        <TableCell :label="t('pages.claims.tags')">
+        <TableCell :label="t('pages.claims.tags')" fit>
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
         </TableCell>
         <TableCell :label="t('pages.claims.publishedIn.label')" fit>
