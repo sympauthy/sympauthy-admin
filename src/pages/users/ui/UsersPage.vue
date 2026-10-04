@@ -124,7 +124,7 @@ onMounted(async () => {
           :primary="index === 0"
           :label="index === 0 ? undefined : claim.id"
         >
-          <span v-if="user.claims?.[claim.id]">{{ user.claims[claim.id] }}</span>
+          <span v-if="user.claims?.[claim.id] != null">{{ user.claims[claim.id] }}</span>
           <EmptyValue v-else />
         </TableCell>
         <TableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
