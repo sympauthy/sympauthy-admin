@@ -72,6 +72,12 @@ screen that reads it.
 and code holding a label the server supplied calls `translateMessageOr`, which keeps that label when
 the panel has no translation for it.
 
+**The instance is built in the Composition API mode, and that call takes no arguments.** A
+no-argument `useI18n()` resolves to the global scope, which is where the bundle is; `messages` or
+`useScope: 'local'` passed to it would give that component a scope of its own, holding what it was
+passed and nothing of `en.json`. The mode is what decides that, and it is the one vue-i18n 12
+leaves — the legacy mode is removed there.
+
 **A value is interpolated by name**, written `{name}` in the bundle and passed as an object:
 `t('common.pagination', { page, totalPages })`.
 

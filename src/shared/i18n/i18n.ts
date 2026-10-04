@@ -14,6 +14,12 @@ const getNavigatorLanguage = () => {
 const FALLBACK_LOCALE = 'en'
 
 export const i18n = createI18n({
+  // The Composition API mode, which vue-i18n 12 leaves as the only one. Every component here reads
+  // the global bundle through a no-argument `useI18n()`, which resolves to the same scope either
+  // way, so the mode is a choice about which versions this panel can take rather than about what a
+  // screen renders.
+  legacy: false,
+
   locale: getNavigatorLanguage(),
   fallbackLocale: FALLBACK_LOCALE,
   messages: messages,
@@ -32,13 +38,9 @@ export const i18n = createI18n({
  * server for French would put French field names inside an English screen — the mixed answer this
  * exists to prevent. A language the bundles hold under a plain tag answers a regional one: `fr-CA`
  * is served by `fr` where there is an `fr`.
- *
- * `i18n.global.locale` is a string under the legacy mode and a ref under the composition one, and
- * which of the two this is depends on the version rather than on anything written here.
  */
 export function currentLocale(): string {
-  const locale = i18n.global.locale
-  const requested = typeof locale === 'string' ? locale : locale.value
+  const requested = i18n.global.locale.value
   const available = i18n.global.availableLocales as string[]
 
   if (available.includes(requested)) {
