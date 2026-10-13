@@ -12,7 +12,7 @@ paths:
 # API standard
 
 Every screen is a call to the server's admin surface. `AbstractApi` holds what every call shares —
-the bearer token, the schema validation, the renewal retry and the error mapping — and a client per
+the access token, the schema validation, the renewal retry and the error mapping — and a client per
 surface holds the calls themselves.
 
 ## Clients
@@ -139,6 +139,10 @@ renew and one retry, and gives up with `api.unauthorized`;
 takes it from `currentLocale()`, which answers the locale a bundle exists for rather than the one
 the browser asked for — a deployment shipping one bundle must not be handed field names in a
 language its own screens cannot speak.
+
+**Every attempt carries the headers `useAuthStore().makeAuthorizationHeaders` answers for it.** A
+DPoP proof names one request, so they are built again for the retry;
+[authentication](authentication.md#presenting-the-token) says what they hold.
 
 **Nothing outside `shared/api` and a slice's `api/` segment calls `fetch`.**
 

@@ -12,7 +12,6 @@ export type AuthUser = {
   email: string
   /** The scopes the server granted, parsed from the `scope` of the token response. */
   scopes: string[]
-  accessToken: string
 }
 
 /**
@@ -118,14 +117,55 @@ export class AuthService {
     await this.userManager.signoutRedirect()
   }
 
+  /**
+   * Return the headers presenting the stored access token on a `method` request to `path` of the
+   * authorization server, or none when no user is stored.
+   *
+   * The scheme is the `token_type` the token response named, since the server refuses a token bound
+   * to a key presented as a bearer token, and one bound to none presented under the `DPoP` scheme. A
+   * bound token goes out beside a proof minted for this one request, so each attempt — a retry
+   * included — calls this again rather than reusing the headers of the last.
+   */
+  async makeAuthorizationHeaders(method: string, path: string): Promise<Record<string, string>> {
+    const user = await this.userManager.getUser()
+    if (!user) {
+      return {}
+    }
+    if (user.token_type.toLowerCase() !== 'dpop') {
+      return { Authorization: `Bearer ${user.access_token}` }
+    }
+    const headers: Record<string, string> = { Authorization: `DPoP ${user.access_token}` }
+    const proof = await this.userManager.dpopProof(
+      this.getServerUrl(path),
+      user,
+      method.toUpperCase()
+    )
+    if (proof) {
+      headers.DPoP = proof
+    }
+    return headers
+  }
+
+  /**
+   * Return the URL the authorization server knows `path` by: the authority, which is its root, with
+   * `path` appended.
+   *
+   * A proof names this rather than the URL the request went to, because the server compares its
+   * `htu` with its own configured root joined to the request path, whatever host the request arrived
+   * on. Under `npm run dev` the request goes to the dev server's proxy, and a proof naming that is
+   * refused.
+   */
+  private getServerUrl(path: string): string {
+    return `${this.userManager.settings.authority.replace(/\/+$/, '')}${path}`
+  }
+
   static toAuthUser(user: User): AuthUser {
     const profile = user.profile
     return {
       sub: profile.sub,
       name: (profile.name ?? profile.preferred_username ?? profile.sub) as string,
       email: (profile.email ?? '') as string,
-      scopes: user.scopes,
-      accessToken: user.access_token
+      scopes: user.scopes
     }
   }
 }

@@ -88,9 +88,10 @@ export class AbstractApi {
     postOptions?: PostQueryOptions
   ): Promise<Response | ErrorApiResponse> {
     const url = this.getUrl(options)
-    const requestInit = this.getRequestInit(method, postOptions)
 
     try {
+      // Built for each attempt, since a DPoP proof belongs to the one request it was minted for.
+      const requestInit = await this.getRequestInit(method, options, postOptions)
       return await fetch(url, requestInit)
     } catch (error) {
       console.error(`Failed to fetch ${url}.`, error)
@@ -109,10 +110,14 @@ export class AbstractApi {
     return url.toString()
   }
 
-  private getRequestInit(method: string, postOptions?: PostQueryOptions): RequestInit {
+  private async getRequestInit(
+    method: string,
+    options: QueryOptions,
+    postOptions?: PostQueryOptions
+  ): Promise<RequestInit> {
     const init: RequestInit = {
       method: method,
-      headers: this.makeHeaders(postOptions),
+      headers: await this.makeHeaders(method, options, postOptions),
       credentials: 'same-origin'
     }
     if (postOptions?.body !== undefined) {
@@ -121,7 +126,11 @@ export class AbstractApi {
     return init
   }
 
-  private makeHeaders(postOptions?: PostQueryOptions): Headers {
+  private async makeHeaders(
+    method: string,
+    options: QueryOptions,
+    postOptions?: PostQueryOptions
+  ): Promise<Headers> {
     const headers = new Headers()
     headers.set('Accept', 'application/json')
     // A capability document names its fields and their values in the language the request asked
@@ -131,9 +140,9 @@ export class AbstractApi {
     if (postOptions?.body !== undefined) {
       headers.set('Content-Type', 'application/json')
     }
-    const authStore = useAuthStore()
-    if (authStore.accessToken) {
-      headers.set('Authorization', `Bearer ${authStore.accessToken}`)
+    const authorizationHeaders = await useAuthStore().makeAuthorizationHeaders(method, options.path)
+    for (const [name, value] of Object.entries(authorizationHeaders)) {
+      headers.set(name, value)
     }
     return headers
   }
