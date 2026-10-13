@@ -27,8 +27,8 @@ resource type, so a contract that drifted is a logged error at the boundary rath
 field rendered three components deeper.
 
 **[oidc-client-ts](https://github.com/authts/oidc-client-ts).** The panel is an ordinary public
-client of the server it administers: authorization code with PKCE, silent renew, and DPoP-bound
-codes, none of which is worth reimplementing.
+client of the server it administers: authorization code with PKCE, silent renew, DPoP-bound tokens
+and the proof each request presents one with, none of which is worth reimplementing.
 
 ## The interface
 
@@ -68,9 +68,9 @@ the build on every push to `main` and every pull request targeting it.
 
 **No component library.** The shared components are written here against reka-ui primitives.
 
-**No HTTP client library.** `AbstractApi` wraps `fetch` directly, because what it adds — the bearer
-token, the schema validation, the renewal retry and the error mapping — is this panel's own and not
-an interceptor stack.
+**No HTTP client library.** `AbstractApi` wraps `fetch` directly, because what it adds — the access
+token and its proof, the schema validation, the renewal retry and the error mapping — is this
+panel's own and not an interceptor stack.
 
 **No form validation library.** `vee-validate` and `yup` were declared and never imported, and were
 removed in #124. A form here is a handful of fields checked in the submit handler, and

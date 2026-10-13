@@ -70,10 +70,27 @@ or a token typed into the form — and passes it to the authorization server as 
 parameter on the sign-in redirect, which is what lets a new operator claim the invitation and come
 back signed in.
 
+## Presenting the token
+
+**A request presents the token under the scheme its token response named.** `AbstractApi` asks
+`useAuthStore().makeAuthorizationHeaders` for every attempt, which answers from the user
+oidc-client-ts holds: a `token_type` of `DPoP` is sent as `Authorization: DPoP <token>` beside a
+`DPoP` proof, and any other as a bearer token.
+[RFC 9449 §7.2](https://datatracker.ietf.org/doc/html/rfc9449#section-7.2) has a bound token refused
+as a bearer token, and SympAuthy refuses an unbound one under the `DPoP` scheme.
+
+**A proof belongs to one request.** `UserManager.dpopProof` signs it with the key the token is bound
+to, naming the method, the URL and the token's hash, and the server accepts it within a minute of
+its `iat` — so the retry after a renewal mints its own.
+
+**A proof names the server's URL, not the one the request went to.** Its `htu` is the authority
+joined to the path, because the server compares it with its own configured root whatever host the
+request arrived on. A panel the server serves has one origin for both; under `npm run dev` the
+request goes to the proxy, and the authority is what still names the server.
+
 ## Staying signed in
 
-**A request carries the token, and nothing else renews it.** `AbstractApi` reads
-`useAuthStore().accessToken` for every call and sets the bearer header itself.
+**A request carries the token, and nothing else renews it.**
 
 **A 401 is answered by one silent renew and one retry.** When the renewal fails the call resolves to
 an `api.unauthorized` error rather than throwing, so the screen that made it shows a message.
@@ -88,8 +105,7 @@ failed in the background, or a sign-out elsewhere.
 
 ## What the token granted
 
-The store exposes the profile the server issued: `userName`, `userEmail`, `grantedScopes` and the
-`accessToken`.
+The store exposes the profile the server issued: `userName`, `userEmail` and `grantedScopes`.
 
 **`grantedScopes` is what the server granted, not what the panel asked for.** It is `User.scopes`,
 the parsed `scope` of the token response, which SympAuthy fills from the access token's own granted
@@ -127,6 +143,9 @@ buttons behind `admin:users:write`, `admin:consent:write`, `admin:users:delete` 
 
 **Why a scope is missing.** Whether the admin client is not allowed it or the granting rules did not
 grant it is not in the token, and the panel does not guess.
+
+**DPoP nonces.** The server hands none out and never answers `use_dpop_nonce`, so a proof carries
+none and a refusal asking for one is not retried.
 
 **The interactive flow itself.** It is served by the authorization server and rendered by the
 [flow application](https://github.com/sympauthy/sympauthy-flow); the panel only leaves and returns.

@@ -45,8 +45,9 @@ VITE_OIDC_POST_LOGOUT_REDIRECT_URI=http://localhost:5174
 ```
 
 Without them the panel derives its URLs from `window.location.origin`, which is right in production
-and wrong in development, where the authorization server is on another port.
-[The README](../README.md#configuring-the-panel) lists every variable, and
+and wrong in development, where the authorization server is on another port. The authority is also
+the root every DPoP proof names, so one left on the dev server's port has every call refused with
+`dpop.invalid_htu`. [The README](../README.md#configuring-the-panel) lists every variable, and
 [Authentication](authentication.md) says what the client is built from.
 
 ## Checking a change

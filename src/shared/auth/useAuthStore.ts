@@ -13,7 +13,6 @@ export const useAuthStore = defineStore('auth', () => {
   const userName = computed(() => user.value?.name ?? '')
   const userEmail = computed(() => user.value?.email ?? '')
   const grantedScopes = computed(() => user.value?.scopes ?? [])
-  const accessToken = computed(() => user.value?.accessToken ?? '')
 
   function hasScope(scope: string): boolean {
     return grantedScopes.value.includes(scope)
@@ -79,6 +78,13 @@ export const useAuthStore = defineStore('auth', () => {
     await authService.signout()
   }
 
+  async function makeAuthorizationHeaders(
+    method: string,
+    path: string
+  ): Promise<Record<string, string>> {
+    return await authService.makeAuthorizationHeaders(method, path)
+  }
+
   return {
     user,
     initialized,
@@ -87,13 +93,13 @@ export const useAuthStore = defineStore('auth', () => {
     userName,
     userEmail,
     grantedScopes,
-    accessToken,
     hasScope,
     hasAllScopes,
     initialize,
     trySilentRenew,
     signinRedirect,
     signinRedirectCallback,
-    signout
+    signout,
+    makeAuthorizationHeaders
   }
 })
