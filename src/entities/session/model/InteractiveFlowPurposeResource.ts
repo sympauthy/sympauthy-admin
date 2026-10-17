@@ -51,5 +51,5 @@ export function purposeLabel(purpose: InteractiveFlowPurposeResource): string {
  * row to read a label off. Falls back to the value itself.
  */
 export function purposeValueLabel(value: string, fallback: string = value): string {
-  return translateMessageOr(`common.interactiveFlowPurpose.${value}`, fallback)
+  return translateMessageOr(`terms.interactiveFlowPurpose.values.${value}`, fallback)
 }

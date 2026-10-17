@@ -79,11 +79,7 @@ const tabs = computed<RecordTab[]>(() => {
     .map((name) => ({
       label: t(`pages.${name}.title`),
       to: { name, params },
-      help: {
-        keypath: `pages.${name}.help`,
-        linkText: t(`pages.${name}.helpLinkText`),
-        linkUrl: t(`pages.${name}.helpLinkUrl`)
-      }
+      help: `pages.${name}`
     }))
 })
 

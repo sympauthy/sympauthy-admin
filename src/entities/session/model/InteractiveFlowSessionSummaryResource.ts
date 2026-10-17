@@ -117,5 +117,5 @@ export function interactiveFlowSessionStatusColor(
 }
 
 export function interactiveFlowSessionStatusLabel(status: string): string {
-  return translateMessageOr(`common.interactiveFlowSessionStatus.${status}`, status)
+  return translateMessageOr(`terms.interactiveFlowSession.status.values.${status}`, status)
 }

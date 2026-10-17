@@ -2,14 +2,16 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import {
-  ClientApi,
-  ClientTypeHelpTooltip,
-  type ClientListResource,
-  type ClientSummaryResource
-} from '@/entities/client'
+import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonButton, EmptyValue, TableCell, TableHeader, primaryColoredButton } from '@/shared/ui'
+import {
+  CommonButton,
+  DocHelpTooltip,
+  EmptyValue,
+  TableCell,
+  TableHeader,
+  primaryColoredButton
+} from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()
@@ -38,7 +40,7 @@ onMounted(async () => {
       />
       <TableHeader fit>
         {{ t('pages.clients.type') }}
-        <ClientTypeHelpTooltip />
+        <DocHelpTooltip term="terms.client.type" />
       </TableHeader>
       <CollectionSortHeader
         fit

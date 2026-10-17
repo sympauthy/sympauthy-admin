@@ -9,6 +9,7 @@ import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/
 import {
   CommonAlert,
   CommonButton,
+  DocHelpTooltip,
   EmptyValue,
   TableCell,
   TableHeader,
@@ -85,16 +86,24 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="users"
-        :label="t('pages.users.status')"
+        :label="t('pages.users.status.label')"
         field="status"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.users.status" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader
         v-for="claim in identifierClaims"
         :key="claim.id"
         :collection="users"
         :label="claim.id"
         :field="claim.id"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="terms.claim.identifier" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -107,7 +116,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="user in users.items" :key="user.user_id">
-        <TableCell :label="t('pages.users.status')" fit>
+        <TableCell :label="t('pages.users.status.label')" fit>
           <CommonTag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
           </CommonTag>

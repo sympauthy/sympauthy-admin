@@ -5,6 +5,7 @@ import {
   BaseDialog,
   CommonAlert,
   CommonButton,
+  DocHelpTooltip,
   FormField,
   FormInput,
   FormSelect,
@@ -170,7 +171,10 @@ async function onSubmit() {
             <FormTextarea v-model="note" :rows="2" />
           </FormField>
 
-          <FormField :label="t('pages.invitations.claimsLabel')">
+          <FormField :label="t('pages.invitations.claims.label')">
+            <template #help>
+              <DocHelpTooltip term="pages.invitations.claims" />
+            </template>
             <FormTextarea
               v-model="claimsJson"
               mono

@@ -10,7 +10,7 @@ import {
   type ClaimResource
 } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonTag, HelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
+import { CommonTag, DocHelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()
@@ -39,9 +39,13 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="claims"
-        :label="t('common.origin.label')"
+        :label="t('terms.origin.label')"
         field="origin"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.claims.origin" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader
         fit
         :collection="claims"
@@ -49,17 +53,13 @@ onMounted(async () => {
         field="kind"
       >
         <template #help>
-          <HelpTooltip>
-            <p>{{ t('pages.claims.kind.help') }}</p>
-          </HelpTooltip>
+          <DocHelpTooltip term="pages.claims.kind" />
         </template>
       </CollectionSortHeader>
       <TableHeader fit>{{ t('pages.claims.tags') }}</TableHeader>
       <TableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}
-        <HelpTooltip>
-          <p>{{ t('pages.claims.publishedIn.help') }}</p>
-        </HelpTooltip>
+        <DocHelpTooltip term="pages.claims.publishedIn" />
       </TableHeader>
     </template>
 
@@ -76,7 +76,7 @@ onMounted(async () => {
         <TableCell primary truncate>
           {{ claim.id }}
         </TableCell>
-        <TableCell :label="t('common.origin.label')" fit>
+        <TableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
         </TableCell>
         <TableCell :label="t('pages.claims.kind.label')" fit>

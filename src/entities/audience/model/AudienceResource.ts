@@ -39,10 +39,10 @@ export const audienceResourceSchema: JSONSchemaType<AudienceResource> = {
 
 export function audienceRegistrationModeKey(audience: AudienceResource): string {
   if (audience.sign_up_enabled && audience.invitation_enabled)
-    return 'common.audience.registrationMode.openInvitations'
-  if (audience.sign_up_enabled) return 'common.audience.registrationMode.open'
-  if (audience.invitation_enabled) return 'common.audience.registrationMode.invitationOnly'
-  return 'common.audience.registrationMode.closed'
+    return 'terms.audience.registrationMode.values.openInvitations'
+  if (audience.sign_up_enabled) return 'terms.audience.registrationMode.values.open'
+  if (audience.invitation_enabled) return 'terms.audience.registrationMode.values.invitationOnly'
+  return 'terms.audience.registrationMode.values.closed'
 }
 
 export function audienceRegistrationModeColor(

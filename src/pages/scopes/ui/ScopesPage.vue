@@ -5,7 +5,14 @@ import { ScopeApi } from '../api/ScopeApi'
 import type { ScopeListResource } from '../model/ScopeListResource'
 import type { ScopeResource } from '../model/ScopeResource'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { EmptyValue, OriginTag, TableCell, TableHeader, CommonTag } from '@/shared/ui'
+import {
+  CommonTag,
+  DocHelpTooltip,
+  EmptyValue,
+  OriginTag,
+  TableCell,
+  TableHeader
+} from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ScopeApi()
@@ -42,9 +49,24 @@ onMounted(async () => {
         field="enabled"
       />
       <CollectionSortHeader :collection="scopes" :label="t('pages.scopes.id')" field="scope" />
-      <CollectionSortHeader fit :collection="scopes" :label="t('pages.scopes.type')" field="type" />
-      <TableHeader fit>{{ t('common.origin.label') }}</TableHeader>
-      <TableHeader>{{ t('pages.scopes.claims') }}</TableHeader>
+      <CollectionSortHeader
+        fit
+        :collection="scopes"
+        :label="t('pages.scopes.type.label')"
+        field="type"
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.scopes.type" />
+        </template>
+      </CollectionSortHeader>
+      <TableHeader fit>
+        {{ t('terms.origin.label') }}
+        <DocHelpTooltip term="pages.scopes.origin" />
+      </TableHeader>
+      <TableHeader>
+        {{ t('pages.scopes.claims.label') }}
+        <DocHelpTooltip term="pages.scopes.claims" />
+      </TableHeader>
     </template>
 
     <template #rows>
@@ -60,15 +82,15 @@ onMounted(async () => {
         <TableCell primary truncate>
           {{ scope.id }}
         </TableCell>
-        <TableCell :label="t('pages.scopes.type')" fit>
+        <TableCell :label="t('pages.scopes.type.label')" fit>
           <CommonTag :color="typeColor(scope.type)">
             {{ t(`pages.scopes.${scope.type}`) }}
           </CommonTag>
         </TableCell>
-        <TableCell :label="t('common.origin.label')" fit>
+        <TableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="scope.origin" />
         </TableCell>
-        <TableCell :label="t('pages.scopes.claims')" truncate>
+        <TableCell :label="t('pages.scopes.claims.label')" truncate>
           <span v-if="scope.claims && scope.claims.length > 0">
             {{ scope.claims.join(', ') }}
           </span>

@@ -13,6 +13,7 @@ import {
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
+  DocHelpTooltip,
   EmptyValue,
   TableCell,
   TableHeader,
@@ -46,10 +47,17 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="sessions"
-        :label="t('pages.sessions.status')"
+        :label="t('pages.sessions.status.label')"
         field="status"
-      />
-      <TableHeader>{{ t('pages.sessions.user') }}</TableHeader>
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.sessions.status" />
+        </template>
+      </CollectionSortHeader>
+      <TableHeader>
+        {{ t('pages.sessions.user.label') }}
+        <DocHelpTooltip term="pages.sessions.user" />
+      </TableHeader>
       <CollectionSortHeader
         :collection="sessions"
         :label="t('pages.sessions.client')"
@@ -67,7 +75,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="session in sessions.items" :key="session.id">
-        <TableCell :label="t('pages.sessions.status')" fit>
+        <TableCell :label="t('pages.sessions.status.label')" fit>
           <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </CommonTag>
