@@ -29,53 +29,6 @@
     "pagination": "Page {page} of {totalPages}",
     "paginationRange": "Showing {from}-{to} of {total}",
     "addFilter": "Add filter",
-    "origin": {
-      "label": "Origin",
-      "oauth2": "oauth2",
-      "openid": "openid",
-      "system": "system",
-      "custom": "custom"
-    },
-    "audience": {
-      "registrationMode": {
-        "label": "Registration mode",
-        "open": "open",
-        "openInvitations": "open + invitations",
-        "invitationOnly": "invitation-only",
-        "closed": "closed"
-      }
-    },
-    "claimKind": {
-      "personal": "personal",
-      "application": "application"
-    },
-    "claimPublicationPlace": {
-      "id_token": "ID token",
-      "userinfo": "UserInfo",
-      "access_token": "Access token",
-      "introspection": "Introspection",
-      "discovery": "Discovery"
-    },
-    "interactiveFlowPurpose": {
-      "confirm": "Approving an action",
-      "oauth2_authorize": "Signing in at a client's request",
-      "mfa_enrollment": "Setting up a second factor",
-      "mfa_challenge": "Checking a second factor",
-      "reauthentication": "Proving the account again",
-      "link_provider": "Linking a third-party provider"
-    },
-    "interactiveFlowPurposeStatus": {
-      "completed": "completed",
-      "current": "current",
-      "pending": "pending"
-    },
-    "interactiveFlowSessionStatus": {
-      "ongoing": "ongoing",
-      "completed": "completed",
-      "cancelled": "cancelled",
-      "failed": "failed",
-      "expired": "expired"
-    },
     "yes": "Yes",
     "no": "No",
     "remove": "Remove",
@@ -120,6 +73,119 @@
       }
     }
   },
+  "terms": {
+    "claim": {
+      "kind": {
+        "values": {
+          "personal": "personal",
+          "application": "application"
+        }
+      },
+      "publicationPlace": {
+        "values": {
+          "id_token": "ID token",
+          "userinfo": "UserInfo",
+          "access_token": "Access token",
+          "introspection": "Introspection",
+          "discovery": "Discovery"
+        }
+      },
+      "required": {
+        "help": "A claim the person must have a value for before the flow lets them back to the application, collected rather than left for a client to ask for later. See {link} for details.",
+        "helpLinkText": "claim configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/claim.html#claims-id"
+      },
+      "identifier": {
+        "help": "An identifier claim is one of the values a person signs in with — an email address, a username, an employee number. A value belongs to one account across the whole set of them, and a provider asserting one is how a third-party sign-in reaches the account that already holds it rather than opening a second. See {link} for details.",
+        "helpLinkText": "identifier claims documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html#identifier-claims"
+      }
+    },
+    "flow": {
+      "id": {
+        "help": "A flow is the set of pages this server sends a person to so they can sign in — the one SympAuthy ships, or another this deployment declared. Naming none falls back to the default client template's flow, and to the shipped one behind that. See {link} for details.",
+        "helpLinkText": "flow configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/authorization.html#flows-id"
+      }
+    },
+    "client": {
+      "type": {
+        "help": "A client is an application that delegates the sign-in of its users to this server. A confidential client can keep a secret, and authenticates with a client id and a secret — a server-side application, a backend job. A public client cannot, because its code runs where the person can read it — a single-page application, a mobile app — so it authenticates with its client id alone. See {link} for details.",
+        "helpLinkText": "clients documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/client.html#confidential-and-public-clients"
+      }
+    },
+    "user": {
+      "status": {
+        "help": "An account is one person this server authenticates and holds the claims of. A disabled one is refused when it signs in with a password, and told what somebody typing the wrong password is told; it keeps everything it holds, since disabling an account deletes nothing of it. See {link} for details.",
+        "helpLinkText": "end-user management documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/end-user_management.html"
+      }
+    },
+    "origin": {
+      "label": "Origin",
+      "values": {
+        "oauth2": "oauth2",
+        "openid": "openid",
+        "system": "system",
+        "custom": "custom"
+      }
+    },
+    "audience": {
+      "id": {
+        "help": "An audience is a group of clients sharing one pool of the person's consents: a consent given through any of them covers them all, and every token issued for one names the audience in its aud claim. A client belongs to exactly one. See {link} for details.",
+        "helpLinkText": "audiences documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/audience.html"
+      },
+      "registrationMode": {
+        "label": "Registration mode",
+        "help": "How somebody comes by an account in this audience. Open lets anybody sign up, invitation-only closes sign-up to everybody holding no invitation, open + invitations allows either, and closed leaves the Admin API as the only way an account is created. See {link} for details.",
+        "helpLinkText": "registration modes documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/invitation.html#registration-modes",
+        "values": {
+          "open": "open",
+          "openInvitations": "open + invitations",
+          "invitationOnly": "invitation-only",
+          "closed": "closed"
+        }
+      }
+    },
+    "interactiveFlowPurpose": {
+      "help": "What the flow was started to settle — signing in for an application, enrolling a second factor, confirming an action. A session carries the purpose it began with, and the server may give it more while it runs.",
+      "values": {
+        "confirm": "Approving an action",
+        "oauth2_authorize": "Signing in at a client's request",
+        "mfa_enrollment": "Setting up a second factor",
+        "mfa_challenge": "Checking a second factor",
+        "reauthentication": "Proving the account again",
+        "link_provider": "Linking a third-party provider"
+      },
+      "status": {
+        "values": {
+          "completed": "completed",
+          "current": "current",
+          "pending": "pending"
+        }
+      }
+    },
+    "interactiveFlowSession": {
+      "status": {
+        "help": "A session is one person's trip through this server's own pages — signing in for an application, enrolling a second factor, confirming an action. An ongoing one is still in flight; completed, cancelled, failed and expired are what it ended as, and an expired one is a trip the person simply stopped. See {link} for details.",
+        "helpLinkText": "session state documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html#the-session-state",
+        "values": {
+          "ongoing": "ongoing",
+          "completed": "completed",
+          "cancelled": "cancelled",
+          "failed": "failed",
+          "expired": "expired"
+        }
+      },
+      "user": {
+        "help": "Who the session has identified, which is nobody until the person has authenticated. One creating the account it will belong to reads as signing up, and one that has identified nobody at all carries a dash."
+      }
+    }
+  },
   "nav": {
     "sectionUsers": "Users",
     "sectionConfiguration": "Configuration",
@@ -133,20 +199,6 @@
     "sessions": "Sessions",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
-  },
-  "client": {
-    "type": {
-      "help": "A confidential client can securely store credentials (e.g. server-side apps). A public client cannot (e.g. SPAs, mobile apps). See {link} for details.",
-      "helpLinkText": "OAuth 2.1 specification",
-      "helpLinkUrl": "https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12#section-2.1"
-    }
-  },
-  "claim": {
-    "identifier": {
-      "help": "Identifier claims uniquely identify a user. They serve as login identifiers for password authentication and enable automatic account merging across authentication providers. See {link} for details.",
-      "helpLinkText": "identifier claims documentation",
-      "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/authorization.html#auth"
-    }
   },
   "logoutDialog": {
     "title": "Force Logout",
@@ -179,17 +231,40 @@
       "copyClientId": "Copy client ID",
       "type": "Type",
       "audience": "Audience",
-      "grantTypes": "Grant Types",
+      "grantTypes": {
+        "label": "Grant Types",
+        "help": "The OAuth 2.1 grants this client may use: authorization_code sends a person through the sign-in flow, refresh_token trades a refresh token in for new ones, and client_credentials gets the client a token of its own with nobody signed in. See {link} for details.",
+        "helpLinkText": "grant types documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id-allowed-grant-types"
+      },
       "scopes": "Scopes",
-      "allowedScopes": "Allowed Scopes",
-      "defaultScopes": "Default Scopes",
+      "allowedScopes": {
+        "label": "Allowed Scopes",
+        "help": "The scopes this client may ask for: an authorization request naming one outside the list has it dropped rather than refused. A client the configuration restricts in no way reads as None here as well, since the server publishes the same empty list for either. See {link} for details.",
+        "helpLinkText": "client configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id"
+      },
+      "defaultScopes": {
+        "label": "Default Scopes",
+        "help": "The scopes an authorization request is treated as asking for when it names none of its own. Nothing here means such a request asks for nothing."
+      },
       "noScopes": "None",
       "redirectUris": "Redirect URIs",
       "noRedirectUris": "No redirect URIs configured.",
       "authorization": "Authorization",
       "authorizationFlow": "Flow",
-      "webhookUrl": "Webhook URL",
-      "webhookOnFailure": "On Failure"
+      "webhookUrl": {
+        "label": "Webhook URL",
+        "help": "An authorization webhook is a service of yours this server asks which scopes to grant, before its own granting rules run. A client with none configured is answered by those rules alone. See {link} for details.",
+        "helpLinkText": "authorization webhook documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/authorization_webhook.html"
+      },
+      "webhookOnFailure": {
+        "label": "On Failure",
+        "help": "What this server does when the call does not answer — a timeout, an error, a host that is down. deny_all denies every scope the request asked for; fallback_to_rules applies this deployment's granting rules as though no webhook were configured. See {link} for details.",
+        "helpLinkText": "failure behaviour documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/authorization_webhook.html#failure-behavior"
+      }
     },
     "users": {
       "title": "Users",
@@ -249,9 +324,29 @@
     "scopes": {
       "title": "Scopes",
       "id": "ID",
-      "status": "Status",
-      "type": "Type",
-      "claims": "Claims",
+      "status": {
+        "label": "Status",
+        "help": "Whether this deployment serves the scope. A request naming a disabled one is refused as unsupported, and this list is the only place such a scope appears — everything that decides what a token may carry reads the enabled ones. See {link} for details.",
+        "helpLinkText": "scope configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/scope.html#scopes-id"
+      },
+      "type": {
+        "label": "Type",
+        "help": "A scope is a named permission a client asks for, and that this server records in the token it issues. A consentable scope protects the person's claims and nothing but their consent grants it; a grantable one protects a resource and this deployment's granting rules decide it rather than the person; a client scope belongs to the client itself and needs no person at all. See {link} for details.",
+        "helpLinkText": "scopes documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/scope.html"
+      },
+      "origin": {
+        "help": "Who defined the scope: the OAuth 2 or OpenID Connect specifications, SympAuthy itself, or this deployment's configuration. A scope of your own is asked for, granted and carried exactly like a standard one. See {link} for details.",
+        "helpLinkText": "custom scopes documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/scope.html#custom-scopes"
+      },
+      "claims": {
+        "label": "Claims",
+        "help": "The claims a client may read once the person has consented to this scope. Only a consentable scope protects claims, so every other kind lists none. See {link} for details.",
+        "helpLinkText": "consentable scopes documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/scope.html#consentable-scope"
+      },
       "enabled": "enabled",
       "disabled": "disabled",
       "consentable": "consentable",
@@ -269,8 +364,16 @@
     },
     "invitations": {
       "title": "Invitations",
-      "status": "Status",
-      "tokenPrefix": "Token prefix",
+      "status": {
+        "label": "Status",
+        "help": "Where the invitation stands. A pending one is still usable; a consumed one was signed up with and cannot be used twice; a revoked one an operator cancelled; an expired one ran out of time before anybody used it."
+      },
+      "tokenPrefix": {
+        "label": "Token prefix",
+        "help": "An invitation is a single-use token somebody signs up with — how a person registers where the audience lets nobody sign up on their own, and a way to assign claims to the account up front where it does. This is the start of that token, which is all this server keeps of it: the whole of it is answered once, when the invitation is created, and never again. See {link} for details.",
+        "helpLinkText": "invitations documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/invitation.html"
+      },
       "audience": "Audience",
       "note": "Note",
       "createdAt": "Created at",
@@ -289,7 +392,12 @@
       "selectAudience": "Select an audience...",
       "expiresAtLabel": "Expires at",
       "noteLabel": "Note",
-      "claimsLabel": "Claims (JSON)",
+      "claims": {
+        "label": "Claims (JSON)",
+        "help": "Claims written onto the account the moment somebody registers with this invitation, as a JSON object of claim ids and values. Only a claim of this deployment's own is accepted: a standard one such as email or name has to come from the person themselves. A granting rule reading such a claim is how an invitation comes to grant scopes. See {link} for details.",
+        "helpLinkText": "claims pre-assignment documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/invitation.html#claims-pre-assignment"
+      },
       "claimsPlaceholder": "{'{'} \"role\": \"admin\" {'}'}",
       "invalidJson": "Claims must be a valid JSON object.",
       "audienceRequired": "Please select an audience.",
@@ -301,7 +409,10 @@
     "claims": {
       "title": "Claims",
       "id": "ID",
-      "status": "Status",
+      "status": {
+        "label": "Status",
+        "help": "Whether this deployment collects the claim. A disabled one is never stored, even where a client or a provider offers a value, and what was collected before it was turned off stays until an operator clears it. Every claim the OpenID Connect specification defines ships disabled."
+      },
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",
@@ -309,13 +420,22 @@
       "empty": "No claims found.",
       "kind": {
         "label": "Kind",
-        "help": "Whose the claim's value is. A personal claim is the person's: collected from them, and disclosed to a client once they agreed to a scope. An application claim is a backend's, attached to the person, and never typed by them. A claim this server computes itself is of neither kind and carries none."
+        "help": "Whose the claim's value is, which decides who may write it. A personal claim is the person's: collected from them, and disclosed to a client once they agreed to a scope. An application claim is a backend's, attached to the person, and never typed by them. A claim this server computes itself is of neither kind and carries none. See {link} for details.",
+        "helpLinkText": "claim kinds documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/claim_kinds.html"
+      },
+      "origin": {
+        "help": "Who named the claim: the OpenID Connect specification, or this deployment itself. A name of either kind says nothing about whose the value is or who may read it — a client is told a claim of your own exactly like a standard one. See {link} for details.",
+        "helpLinkText": "claim names documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html#standard-and-custom-claim-names"
       },
       "tags": "Tags",
       "publishedIn": {
         "label": "Published in",
         "count": "{n} place | {n} places",
-        "help": "Where this deployment publishes the claim. The first four carry its value; Discovery advertises the name alone, in claims_supported. A claim published nowhere stays readable through this panel and is carried by no token."
+        "help": "Where the claim's value travels once it leaves this server: the ID token, the userinfo response, the access token and the introspection response each carry it. The discovery document advertises the claim's name alone, so a client learns the claim exists without being told anybody's value. A claim published nowhere is carried by no token and stays readable through this panel. See {link} for details.",
+        "helpLinkText": "claim exposure documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html#where-a-claim-is-exposed"
       },
       "search": "Search claims..."
     },
@@ -346,7 +466,7 @@
     },
     "userClaims": {
       "title": "Claims",
-      "help": "Identity attributes associated with this user, such as email, name, or locale. See {link} for details.",
+      "help": "A claim is a piece of information this server holds about a person — their name, their email address, a tier a backend computed. These are the values this account holds, with when each was collected and whether it has been verified. See {link} for details.",
       "helpLinkText": "claims documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
       "claim": "Claim",
@@ -359,12 +479,22 @@
     },
     "userConsents": {
       "title": "Consents",
-      "help": "Audiences this user has granted access to. Revoking a consent will require the user to re-authorize. See {link} for details.",
+      "help": "A consent is the person's agreement to disclose some of their claims to an audience, given in the flow when a client asked for a scope. Every client of that audience reads it, and revoking it asks the person again the next time one of them needs the scope. See {link} for details.",
       "helpLinkText": "consents documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
       "audience": "Audience",
-      "client": "Client",
-      "scopes": "Scopes",
+      "client": {
+        "label": "Client",
+        "help": "The client whose authorization request last updated this consent. The consent itself belongs to the audience and every client in it reads the same one, so this names who prompted the person rather than who holds what they agreed to. See {link} for details.",
+        "helpLinkText": "audience and consent documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/audience.html#how-audiences-affect-consent"
+      },
+      "scopes": {
+        "label": "Consented scopes",
+        "help": "The scopes the person agreed to disclose to this audience. A grantable scope is never one of them — this deployment's granting rules decide those as a token is issued — so a client may hold scopes that appear nowhere here. See {link} for details.",
+        "helpLinkText": "scope granting rules documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/user_authorization.html#scope-granting-rules"
+      },
       "empty": "No active consents.",
       "consentedAt": "Consented at",
       "actions": "Actions",
@@ -376,7 +506,12 @@
       "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
       "helpLinkText": "authentication documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
-      "type": "Type",
+      "type": {
+        "label": "Type",
+        "help": "The kind of second factor the person registered. A time-based one-time password, read from an authenticator app, is the only kind this server enrols. See {link} for details.",
+        "helpLinkText": "TOTP documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#totp"
+      },
       "registeredAt": "Registered at",
       "empty": "No MFA methods registered.",
       "revokeTitle": "Revoke MFA Method",
@@ -390,7 +525,10 @@
       "helpLinkText": "providers documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",
       "provider": "Provider",
-      "subject": "Subject",
+      "subject": {
+        "label": "Subject",
+        "help": "The identifier the provider itself issued for this person, which this account is linked to. It is the provider's own string and names nothing on this server."
+      },
       "linkedAt": "Linked at",
       "unlink": "Unlink",
       "empty": "No provider links found.",
@@ -401,7 +539,9 @@
     },
     "sessionSecurityContexts": {
       "title": "Security contexts",
-      "help": "One entry per distinct address and user agent the session was driven from, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go.",
+      "help": "A security context is a place a session was driven from: one address, one user agent, and where the edge in front of this server says that address is. One entry per place, counting the requests that came from each rather than repeating them. Only a place where a credential was actually proven carries a proven date — anybody holding the session's state can produce the others. The list is bounded: once it is full, a request from a new place rolls out the one seen least recently, and a proven place is the last to go. See {link} for details.",
+      "helpLinkText": "security context documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/security-context.html",
       "ip": "IP",
       "userAgent": "User agent",
       "location": "Location",
@@ -414,12 +554,16 @@
     },
     "sessionPurposes": {
       "title": "Purposes",
-      "help": "One card per purpose the session carries, in the order it drives them. The labels are written by the server for a person to read and are never translated: they may be reworded in any release, so nothing branches on one.",
+      "help": "A purpose is something a flow can only settle with the person in front of a browser: signing in for an application, enrolling a second factor, confirming an action. One card per purpose this session carries, in the order it drives them, each labelled as the server wrote it rather than in this panel's language. See {link} for details.",
+      "helpLinkText": "interactive flow documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html",
       "noDebugInformation": "This purpose has nothing to say about the session."
     },
     "sessionFailure": {
       "title": "Failure",
-      "help": "What the session ended with, offered by one that failed and by one its expiry ended — nothing refused an expired session, the person simply stopped, and the flow told them so all the same. Every field below explains itself.",
+      "help": "What the session ended with, offered by one that failed and by one its expiry ended — nothing refused an expired session, the person simply stopped, and the flow told them so all the same. Every field below explains itself. See {link} for details.",
+      "helpLinkText": "error handling documentation",
+      "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html#error-handling",
       "notFailed": "This session has not ended in a failure. It carries nothing to read here.",
       "nothingRecorded": "This session ended in a failure the server recorded nothing about — no code, no message, no values. Its status is all there is to read of it.",
       "errorDetailsId": {

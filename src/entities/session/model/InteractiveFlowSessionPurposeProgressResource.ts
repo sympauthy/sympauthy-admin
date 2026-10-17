@@ -44,5 +44,5 @@ export function purposeProgressColor(status: string): 'green' | 'blue' | 'gray' 
 }
 
 export function purposeProgressLabel(status: string): string {
-  return translateMessageOr(`common.interactiveFlowPurposeStatus.${status}`, status)
+  return translateMessageOr(`terms.interactiveFlowPurpose.status.values.${status}`, status)
 }

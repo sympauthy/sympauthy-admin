@@ -10,6 +10,7 @@ import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/
 import {
   CommonButton,
   ConfirmDialog,
+  DocHelpTooltip,
   EmptyValue,
   PageActions,
   TableCell,
@@ -103,15 +104,26 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="invitations"
-        :label="t('pages.invitations.status')"
+        :label="t('pages.invitations.status.label')"
         field="status"
-      />
-      <TableHeader>{{ t('pages.invitations.tokenPrefix') }}</TableHeader>
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.invitations.status" />
+        </template>
+      </CollectionSortHeader>
+      <TableHeader>
+        {{ t('pages.invitations.tokenPrefix.label') }}
+        <DocHelpTooltip term="pages.invitations.tokenPrefix" />
+      </TableHeader>
       <CollectionSortHeader
         :collection="invitations"
         :label="t('pages.invitations.audience')"
         field="audience_id"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="terms.audience.id" />
+        </template>
+      </CollectionSortHeader>
       <TableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</TableHeader>
       <CollectionSortHeader
         fit
@@ -125,7 +137,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="invitation in invitations.items" :key="invitation.invitation_id">
-        <TableCell :label="t('pages.invitations.status')" fit>
+        <TableCell :label="t('pages.invitations.status.label')" fit>
           <CommonTag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
           </CommonTag>

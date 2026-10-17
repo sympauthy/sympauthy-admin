@@ -5,6 +5,7 @@ import {
   BaseDialog,
   CommonAlert,
   CommonButton,
+  DocHelpTooltip,
   FormField,
   FormInput,
   FormSelect,
@@ -152,6 +153,9 @@ async function onSubmit() {
 
         <div class="space-y-4">
           <FormField :label="t('pages.invitations.audience')">
+            <template #help>
+              <DocHelpTooltip term="terms.audience.id" />
+            </template>
             <FormSelect v-model="audience">
               <option value="" disabled>
                 {{ t('pages.invitations.selectAudience') }}
@@ -170,7 +174,10 @@ async function onSubmit() {
             <FormTextarea v-model="note" :rows="2" />
           </FormField>
 
-          <FormField :label="t('pages.invitations.claimsLabel')">
+          <FormField :label="t('pages.invitations.claims.label')">
+            <template #help>
+              <DocHelpTooltip term="pages.invitations.claims" />
+            </template>
             <FormTextarea
               v-model="claimsJson"
               mono

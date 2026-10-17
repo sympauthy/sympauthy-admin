@@ -77,7 +77,7 @@ export const claimResourceSchema: JSONSchemaType<ClaimResource> = {
  * renders rather than leaving a gap in the row.
  */
 export function claimPublicationPlaceLabel(place: string): string {
-  return translateMessageOr(`common.claimPublicationPlace.${place}`, place)
+  return translateMessageOr(`terms.claim.publicationPlace.values.${place}`, place)
 }
 
 /**
@@ -88,5 +88,5 @@ export function claimPublicationPlaceLabel(place: string): string {
  * cell with nothing to name is an `EmptyValue` rather than a label of its own.
  */
 export function claimKindLabel(kind: string): string {
-  return translateMessageOr(`common.claimKind.${kind}`, kind)
+  return translateMessageOr(`terms.claim.kind.values.${kind}`, kind)
 }

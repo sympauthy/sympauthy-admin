@@ -1,25 +1,12 @@
 <script lang="ts" setup>
 import type { RouteLocationRaw } from 'vue-router'
-import DocLink from './DocLink.vue'
-import HelpTooltip from './HelpTooltip.vue'
-
-/**
- * The explanation a tab carries, beside the name it is read under.
- *
- * [keypath] is a message key rather than the sentence itself: a `{link}` in the sentence is rendered
- * as an anchor, and that is what `i18n-t` slots in by key. [linkText] and [linkUrl] are the
- * sentence's own, and a sentence carrying no link needs neither.
- */
-export interface RecordTabHelp {
-  keypath: string
-  linkText?: string
-  linkUrl?: string
-}
+import DocHelpTooltip from './DocHelpTooltip.vue'
 
 export interface RecordTab {
   label: string
   to: RouteLocationRaw
-  help?: RecordTabHelp
+  /** The key the view's `help` triple nests under, which `DocHelpTooltip` reads it from. */
+  help?: string
 }
 
 /**
@@ -66,15 +53,7 @@ const inactiveTabClasses =
         >
           {{ tab.label }}
         </a>
-        <HelpTooltip v-if="tab.help">
-          <i18n-t :keypath="tab.help.keypath" tag="p" scope="global">
-            <template v-if="tab.help.linkUrl" #link>
-              <DocLink :href="tab.help.linkUrl">
-                {{ tab.help.linkText }}
-              </DocLink>
-            </template>
-          </i18n-t>
-        </HelpTooltip>
+        <DocHelpTooltip v-if="tab.help" :term="tab.help" />
       </div>
     </RouterLink>
   </nav>

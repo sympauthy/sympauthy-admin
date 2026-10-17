@@ -50,7 +50,7 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="claims"
-        :label="t('common.origin.label')"
+        :label="t('terms.origin.label')"
         field="origin"
       />
       <TableHeader fit>{{ t('pages.userClaims.tags') }}</TableHeader>
@@ -77,7 +77,7 @@ onMounted(async () => {
           <span v-if="claim.value != null">{{ userClaimValueLabel(claim) }}</span>
           <EmptyValue v-else />
         </TableCell>
-        <TableCell :label="t('common.origin.label')" fit>
+        <TableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
         </TableCell>
         <TableCell :label="t('pages.userClaims.tags')" fit>

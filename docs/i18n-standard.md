@@ -34,9 +34,22 @@ through the fallback must not carry field names the server wrote in another lang
 **A string two screens show goes under `common.`** — an action, a state, a unit of the table
 furniture. A label written twice under two pages is one translation that will drift.
 
-**A value the server publishes is translated under `common.<set>.<value>`.** The origin of a claim,
-the status of a session, the purpose of an interactive flow: the key is the value the API sent, so a
-component translates without a mapping of its own.
+**A word of the server's own vocabulary goes under `terms.`** — what a claim's kind is, what an
+audience's registration mode means, the values either of them publishes. A term one screen alone
+explains stays under that screen's `pages.<route>`, so `terms.` never becomes a second home for a
+page's labels.
+
+**A value the server publishes is translated under `terms.<set>.values.<value>`.** The origin of a
+claim, the status of a session, the purpose of an interactive flow: the key is the value the API
+sent, so a component translates without a mapping of its own.
+
+**The `values` segment is what keeps a set's own keys off its values.** The `label` a column is read
+under, the `help` explaining it and a set nested beside it all sit on the set itself, and nothing
+there can be mistaken for a value the server might send.
+
+**A set belonging to one entity nests under that entity, and a set two of them publish stands on its
+own.** `terms.claim.kind.values.<value>` and `terms.interactiveFlowSession.status.values.<value>`
+against `terms.origin.values.<value>`, which both a claim and a scope have.
 
 **A name the server sends in the reader's language is rendered as it arrived.** A capability
 document names every field it publishes and every value a closed set holds, and those sets are the
@@ -51,12 +64,19 @@ those codes against `en.json` here would be a second copy of that bundle, and th
 says. A field explaining itself is the exception; a screen whose fields need no help keeps its flat
 string per key.
 
+**A label two screens share keeps its explanation under each of them** where what it explains
+differs. `terms.origin.label` names a column on the claims screen and on the scopes screen, and
+`pages.claims.origin.help` beside `pages.scopes.origin.help` are the two sets of values and the two
+pages of documentation behind it.
+
 **A word the protocol fixes is the panel's to name.** The ten collection operators are closed and
 deliberately unlocalized on the wire, so `common.operators.<operator>` holds their labels, with
 `common.operators.date.<operator>` overriding the comparisons that read differently over a moment.
+They carry no `values` segment, because the set is the protocol's rather than the server's: nothing
+is ever added to it that the nested `date` could be mistaken for.
 
-**A term belonging to one entity lives under `<entity>.<term>`,** beside the component explaining
-it: `claim.identifier`, `client.type`.
+**A term belonging to one entity lives under `terms.<entity>.<term>`,** whichever screens explain
+it: `terms.claim.identifier`, `terms.client.type`, `terms.audience.registrationMode`.
 
 **A dialog reused by several screens takes a top-level key named after it.** `logoutDialog`.
 
@@ -84,8 +104,8 @@ leaves — the legacy mode is removed there.
 **A string carrying a link is rendered with `<i18n-t>`,** the link supplied as a named slot:
 
 ```html
-<i18n-t keypath="claim.identifier.help" tag="p" scope="global">
-  <template #link><a :href="t('claim.identifier.helpLinkUrl')">…</a></template>
+<i18n-t :keypath="keypath" tag="p" scope="global">
+  <template #link><DocLink :href="linkUrl">{{ linkText }}</DocLink></template>
 </i18n-t>
 ```
 
@@ -94,7 +114,9 @@ component here declares one. The bundle it reaches is the global one either way 
 what stops it searching a chain of components for a scope that does not exist.
 
 **An explanation and its link are the triple `help`, `helpLinkText`, `helpLinkUrl`,** so the URL is
-translatable with the sentence around it.
+translatable with the sentence around it. `DocHelpTooltip` renders the three from the key they nest
+under, and [the design system standard](design-system-standard.md#help) says what the sentence has
+to say.
 
 **A template holds no literal a person reads.** The product name is the exception: `SympAuthy Admin`
 is written as it is.

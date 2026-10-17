@@ -8,7 +8,14 @@ import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonButton, TableCell, TableHeader, CommonTag, dangerColoredButton } from '@/shared/ui'
+import {
+  CommonButton,
+  CommonTag,
+  DocHelpTooltip,
+  TableCell,
+  TableHeader,
+  dangerColoredButton
+} from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -55,14 +62,22 @@ onMounted(async () => {
         fit
         hidden-below="sm"
         :collection="consents"
-        :label="t('pages.userConsents.client')"
+        :label="t('pages.userConsents.client.label')"
         field="prompted_by_client_id"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.userConsents.client" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader
         :collection="consents"
-        :label="t('pages.userConsents.scopes')"
+        :label="t('pages.userConsents.scopes.label')"
         field="scope"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.userConsents.scopes" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -78,10 +93,10 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ consent.audience_id }}
         </TableCell>
-        <TableCell :label="t('pages.userConsents.client')" fit hidden-below="sm">
+        <TableCell :label="t('pages.userConsents.client.label')" fit hidden-below="sm">
           {{ consent.prompted_by_client_id }}
         </TableCell>
-        <TableCell :label="t('pages.userConsents.scopes')">
+        <TableCell :label="t('pages.userConsents.scopes.label')">
           <div class="flex flex-wrap gap-1">
             <CommonTag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}

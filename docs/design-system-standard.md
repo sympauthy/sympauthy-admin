@@ -32,7 +32,8 @@ to reach for, by need.
 | `CopyableValue` | an identifier an operator has to paste elsewhere |
 | `CopyToClipboard` | the control that copies one |
 | `OneTimeSecret` | a value the server answers once — a token, an enrolment link |
-| `HelpTooltip` | an explanation of a domain term |
+| `DocHelpTooltip` | what a domain term means, read from the bundle |
+| `HelpTooltip` | the popover it is read in, over anything that is not that sentence |
 | `DocLink` | a link into the public documentation |
 | `FormField` | one labelled field of a form |
 | `FormInput`, `FormSelect`, `FormTextarea` | the control inside it |
@@ -51,8 +52,8 @@ to reach for, by need.
 
 **A component that no domain vocabulary reaches belongs in `shared/ui`**, and joins
 [its `index.ts`](../src/shared/ui/index.ts) in the same commit. One that names an entity belongs in
-that entity's `ui/` segment — `ClaimTags`, `ClientTypeHelpTooltip` — so every page explains the term
-the same way.
+that entity's `ui/` segment — `ClaimTags`, `ClaimKindTag` — so every page draws the term the same
+way.
 
 **A component belonging to one action stays with that action**, and this table does not list it.
 `CollectionPage` and the toolbar, the filters and the sort headers under it sit in
@@ -236,16 +237,33 @@ beside a monospace value does not read as part of that value.
 
 ## Help
 
-**A domain term an operator may not know carries a `HelpTooltip`.** Its text lives in the bundle
-with the `help` / `helpLinkText` / `helpLinkUrl` triple.
+**A domain term an operator may not know carries a `DocHelpTooltip`, named by the key its
+explanation nests under.** The component reads the `help` / `helpLinkText` / `helpLinkUrl` triple
+from the bundle, so no screen writes the sentence or the anchor itself; `HelpTooltip` is the popover
+alone, for what is not that sentence — the places a claim is published, listed in full.
 
-**The link inside it is a `DocLink`**, pointing at the page of the
-[public documentation](https://sympauthy.github.io) covering the term, anchored at its section where
-it has one — not at the site root, which leaves the operator to search for what they were already
-reading about.
+**A help text is written for an operator meeting SympAuthy for the first time.** Say what the term
+is before saying what this screen does with it: somebody who has never read the server's
+documentation has to be able to act on the screen they are on.
 
-**A term explained on more than one screen becomes a component in its entity's `ui/` segment**, so
-the explanation cannot drift between two screens.
+**It names what the screen shows, never a position in it or a field of a document the panel does not
+draw.** *The first four* is read against a list the popover is not beside, and `claims_supported` is
+a key of the discovery document rather than anything on screen.
+
+**It closes on `See {link} for details.`** The tooltip is the introduction and
+[the public documentation](https://sympauthy.github.io) is the reference, so what that page writes
+up in full is linked rather than repeated here.
+
+**The link is a `DocLink` reaching the page covering the term, anchored at its section where it has
+one** — not the site root, which leaves the operator to search for what they were already reading
+about, and not the specification behind the term, which answers a question they did not ask.
+
+**A second explanation in one view carries the sentence alone where the documentation has nothing
+further to say about it.** A field under an explained section, and a set of states a sentence spells
+out in full, would both send the operator to the page the tooltip beside them already named.
+
+**A term explained on more than one screen names the same key at each of them.** The sentence is in
+the bundle once already, so a component per term would be a file that prevents no drift.
 
 ## What this standard does not cover
 

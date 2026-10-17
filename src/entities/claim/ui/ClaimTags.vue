@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { CommonTag } from '@/shared/ui'
-import ClaimIdentifierHelpTooltip from './ClaimIdentifierHelpTooltip.vue'
+import { CommonTag, DocHelpTooltip } from '@/shared/ui'
 
 defineProps<{
   required: boolean
@@ -17,11 +16,14 @@ const { t } = useI18n()
   <div class="flex gap-1">
     <CommonTag v-if="required" color="purple">
       {{ t('pages.claims.required') }}
+      <template #help>
+        <DocHelpTooltip term="terms.claim.required" />
+      </template>
     </CommonTag>
     <CommonTag v-if="identifier" color="yellow">
       {{ t('pages.claims.identifier') }}
       <template #help>
-        <ClaimIdentifierHelpTooltip />
+        <DocHelpTooltip term="terms.claim.identifier" />
       </template>
     </CommonTag>
   </div>

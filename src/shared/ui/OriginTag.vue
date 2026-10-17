@@ -24,6 +24,6 @@ const color = computed<'blue' | 'gray' | 'yellow'>(() => {
 
 <template>
   <CommonTag :color="color">
-    {{ t(`common.origin.${origin}`) }}
+    {{ t(`terms.origin.values.${origin}`) }}
   </CommonTag>
 </template>

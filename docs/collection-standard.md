@@ -271,7 +271,7 @@ beside its identifier, so what became of it is read whichever tab is open.
 
 **A tab names its view and carries that view's explanation**, both read under the route it opens:
 `pages.<route>.title` and the `help` triple beside it. The tab is the view's title, so the
-`HelpTooltip` belongs against it rather than inside the page.
+`DocHelpTooltip` belongs against it rather than inside the page.
 
 **A tab's page repeats neither.** Nothing renders a `DetailSection` titled the way the tab that
 opened it already is, and nothing draws a second tooltip for what the strip above it explains.

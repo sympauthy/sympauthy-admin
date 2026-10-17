@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DefinitionList, DefinitionRow, DetailSection, CommonTag } from '@/shared/ui'
+import {
+  CommonTag,
+  DefinitionList,
+  DefinitionRow,
+  DetailSection,
+  DocHelpTooltip
+} from '@/shared/ui'
 import type { ClientDetailResource } from '@/entities/client'
 
 defineProps<{
@@ -13,7 +19,11 @@ const { t } = useI18n()
 <template>
   <DetailSection :title="t('pages.clientDetail.scopes')">
     <DefinitionList>
-      <DefinitionRow :label="t('pages.clientDetail.allowedScopes')">
+      <DefinitionRow>
+        <template #label>
+          {{ t('pages.clientDetail.allowedScopes.label') }}
+          <DocHelpTooltip term="pages.clientDetail.allowedScopes" />
+        </template>
         <div v-if="client.allowed_scopes.length > 0" class="flex flex-wrap gap-1">
           <CommonTag v-for="scope in client.allowed_scopes" :key="scope" color="blue">
             {{ scope }}
@@ -21,7 +31,11 @@ const { t } = useI18n()
         </div>
         <span v-else class="text-gray-500">{{ t('pages.clientDetail.noScopes') }}</span>
       </DefinitionRow>
-      <DefinitionRow :label="t('pages.clientDetail.defaultScopes')">
+      <DefinitionRow>
+        <template #label>
+          {{ t('pages.clientDetail.defaultScopes.label') }}
+          <DocHelpTooltip term="pages.clientDetail.defaultScopes" />
+        </template>
         <div v-if="client.default_scopes.length > 0" class="flex flex-wrap gap-1">
           <CommonTag v-for="scope in client.default_scopes" :key="scope" color="green">
             {{ scope }}

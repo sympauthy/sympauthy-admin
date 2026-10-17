@@ -41,7 +41,7 @@ const tabs = computed<RecordTab[]>(() => {
   return [...failure, ...names].map((name) => ({
     label: t(`pages.${name}.title`),
     to: { name, params },
-    help: { keypath: `pages.${name}.help` }
+    help: `pages.${name}`
   }))
 })
 
