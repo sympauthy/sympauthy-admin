@@ -49,6 +49,19 @@ setup is `docs/running-locally.md`.
 is the next release; read the list rather than assuming which one it is, since it moves as releases
 ship.
 
+## Pull requests
+
+**A pull request is squash-merged, and its branch deleted on both sides.** The history is therefore
+one `Title (#number)` commit per change, and a merged branch never lingers.
+
+```sh
+gh pr merge <number> --squash --delete-branch   # squashes, drops the remote and local branch
+git checkout main && git pull --prune           # land on a main that carries the commit
+```
+
+Return to `main` and pull even when the merge left no local branch behind: the next change starts
+from the merged state, not the one the branch was cut from.
+
 ## Architecture — `docs/architecture.md`, `docs/general-code-standard.md`
 
 The source follows [Feature-Sliced Design](https://feature-sliced.design), and Steiger enforces it:
