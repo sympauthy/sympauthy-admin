@@ -12,6 +12,7 @@ import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/
 import {
   CommonButton,
   ConfirmDialog,
+  DocHelpTooltip,
   TableCell,
   TableHeader,
   dangerColoredButton
@@ -64,7 +65,10 @@ onMounted(async () => {
         :label="t('pages.userProviders.provider')"
         field="provider_id"
       />
-      <TableHeader>{{ t('pages.userProviders.subject') }}</TableHeader>
+      <TableHeader>
+        {{ t('pages.userProviders.subject.label') }}
+        <DocHelpTooltip term="pages.userProviders.subject" />
+      </TableHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -80,7 +84,7 @@ onMounted(async () => {
         <TableCell primary fit>
           {{ link.provider_id }}
         </TableCell>
-        <TableCell :label="t('pages.userProviders.subject')" truncate>
+        <TableCell :label="t('pages.userProviders.subject.label')" truncate>
           {{ link.subject }}
         </TableCell>
         <TableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">

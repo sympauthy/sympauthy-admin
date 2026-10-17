@@ -45,9 +45,13 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="scopes"
-        :label="t('pages.scopes.status')"
+        :label="t('pages.scopes.status.label')"
         field="enabled"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.scopes.status" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader :collection="scopes" :label="t('pages.scopes.id')" field="scope" />
       <CollectionSortHeader
         fit
@@ -71,7 +75,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="scope in scopes.items" :key="scope.id">
-        <TableCell :label="t('pages.scopes.status')" fit>
+        <TableCell :label="t('pages.scopes.status.label')" fit>
           <CommonTag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}
           </CommonTag>

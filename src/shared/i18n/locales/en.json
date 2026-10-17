@@ -324,7 +324,12 @@
     "scopes": {
       "title": "Scopes",
       "id": "ID",
-      "status": "Status",
+      "status": {
+        "label": "Status",
+        "help": "Whether this deployment serves the scope. A request naming a disabled one is refused as unsupported, and this list is the only place such a scope appears — everything that decides what a token may carry reads the enabled ones. See {link} for details.",
+        "helpLinkText": "scope configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/scope.html#scopes-id"
+      },
       "type": {
         "label": "Type",
         "help": "A scope is a named permission a client asks for, and that this server records in the token it issues. A consentable scope protects the person's claims and nothing but their consent grants it; a grantable one protects a resource and this deployment's granting rules decide it rather than the person; a client scope belongs to the client itself and needs no person at all. See {link} for details.",
@@ -404,7 +409,10 @@
     "claims": {
       "title": "Claims",
       "id": "ID",
-      "status": "Status",
+      "status": {
+        "label": "Status",
+        "help": "Whether this deployment collects the claim. A disabled one is never stored, even where a client or a provider offers a value, and what was collected before it was turned off stays until an operator clears it. Every claim the OpenID Connect specification defines ships disabled."
+      },
       "enabled": "enabled",
       "disabled": "disabled",
       "required": "required",
@@ -498,7 +506,12 @@
       "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
       "helpLinkText": "authentication documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
-      "type": "Type",
+      "type": {
+        "label": "Type",
+        "help": "The kind of second factor the person registered. A time-based one-time password, read from an authenticator app, is the only kind this server enrols. See {link} for details.",
+        "helpLinkText": "TOTP documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#totp"
+      },
       "registeredAt": "Registered at",
       "empty": "No MFA methods registered.",
       "revokeTitle": "Revoke MFA Method",
@@ -512,7 +525,10 @@
       "helpLinkText": "providers documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",
       "provider": "Provider",
-      "subject": "Subject",
+      "subject": {
+        "label": "Subject",
+        "help": "The identifier the provider itself issued for this person, which this account is linked to. It is the provider's own string and names nothing on this server."
+      },
       "linkedAt": "Linked at",
       "unlink": "Unlink",
       "empty": "No provider links found.",

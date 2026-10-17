@@ -32,9 +32,13 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="claims"
-        :label="t('pages.claims.status')"
+        :label="t('pages.claims.status.label')"
         field="enabled"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.claims.status" />
+        </template>
+      </CollectionSortHeader>
       <CollectionSortHeader :collection="claims" :label="t('pages.claims.id')" field="id" />
       <CollectionSortHeader
         fit
@@ -65,7 +69,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.id">
-        <TableCell :label="t('pages.claims.status')" fit>
+        <TableCell :label="t('pages.claims.status.label')" fit>
           <CommonTag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
           </CommonTag>

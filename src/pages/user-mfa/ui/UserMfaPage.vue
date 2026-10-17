@@ -12,6 +12,7 @@ import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/
 import {
   CommonButton,
   ConfirmDialog,
+  DocHelpTooltip,
   TableCell,
   TableHeader,
   dangerColoredButton
@@ -58,7 +59,10 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="mfaMethods">
     <template #header>
-      <TableHeader fit>{{ t('pages.userMfa.type') }}</TableHeader>
+      <TableHeader fit>
+        {{ t('pages.userMfa.type.label') }}
+        <DocHelpTooltip term="pages.userMfa.type" />
+      </TableHeader>
       <!-- The set has nothing else to say about a method, and a table of nothing but shrink-wrapped
            columns would bunch them against the left edge. This one takes what is left. -->
       <TableHeader />
