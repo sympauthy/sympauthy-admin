@@ -119,7 +119,11 @@ onMounted(async () => {
         :collection="invitations"
         :label="t('pages.invitations.audience')"
         field="audience_id"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="terms.audience.id" />
+        </template>
+      </CollectionSortHeader>
       <TableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</TableHeader>
       <CollectionSortHeader
         fit

@@ -47,16 +47,16 @@ onMounted(async () => {
       <CollectionSortHeader
         fit
         :collection="sessions"
-        :label="t('pages.sessions.status.label')"
+        :label="t('pages.sessions.status')"
         field="status"
       >
         <template #help>
-          <DocHelpTooltip term="pages.sessions.status" />
+          <DocHelpTooltip term="terms.interactiveFlowSession.status" />
         </template>
       </CollectionSortHeader>
       <TableHeader>
-        {{ t('pages.sessions.user.label') }}
-        <DocHelpTooltip term="pages.sessions.user" />
+        {{ t('pages.sessions.user') }}
+        <DocHelpTooltip term="terms.interactiveFlowSession.user" />
       </TableHeader>
       <CollectionSortHeader
         :collection="sessions"
@@ -75,7 +75,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="session in sessions.items" :key="session.id">
-        <TableCell :label="t('pages.sessions.status.label')" fit>
+        <TableCell :label="t('pages.sessions.status')" fit>
           <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </CommonTag>

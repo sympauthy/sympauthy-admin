@@ -153,6 +153,9 @@ async function onSubmit() {
 
         <div class="space-y-4">
           <FormField :label="t('pages.invitations.audience')">
+            <template #help>
+              <DocHelpTooltip term="terms.audience.id" />
+            </template>
             <FormSelect v-model="audience">
               <option value="" disabled>
                 {{ t('pages.invitations.selectAudience') }}

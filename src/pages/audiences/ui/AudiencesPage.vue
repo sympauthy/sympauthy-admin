@@ -30,11 +30,11 @@ onMounted(async () => {
     <template #header>
       <CollectionSortHeader
         :collection="audiences"
-        :label="t('pages.audiences.audienceId.label')"
+        :label="t('pages.audiences.audienceId')"
         field="id"
       >
         <template #help>
-          <DocHelpTooltip term="pages.audiences.audienceId" />
+          <DocHelpTooltip term="terms.audience.id" />
         </template>
       </CollectionSortHeader>
       <TableHeader fit hidden-below="sm">

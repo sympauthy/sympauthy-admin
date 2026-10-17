@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { CopyableValue, EmptyValue, SummaryCard, SummaryField, CommonTag } from '@/shared/ui'
+import {
+  CommonTag,
+  CopyableValue,
+  DocHelpTooltip,
+  EmptyValue,
+  SummaryCard,
+  SummaryField
+} from '@/shared/ui'
 import {
   purposeLabel,
   interactiveFlowSessionStatusColor,
@@ -23,11 +30,17 @@ const { t } = useI18n()
       <CopyableValue :value="session.id" :title="t('pages.sessionDetail.copySessionId')" />
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.status')">
+      <template #help>
+        <DocHelpTooltip term="terms.interactiveFlowSession.status" />
+      </template>
       <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
         {{ interactiveFlowSessionStatusLabel(session.status) }}
       </CommonTag>
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.startedFor')">
+      <template #help>
+        <DocHelpTooltip term="terms.interactiveFlowPurpose" />
+      </template>
       {{ purposeLabel(session.initiating_purpose) }}
     </SummaryField>
     <SummaryField mono :label="t('pages.sessionDetail.client')">
@@ -35,10 +48,16 @@ const { t } = useI18n()
       <EmptyValue v-else />
     </SummaryField>
     <SummaryField mono :label="t('pages.sessionDetail.flow')">
+      <template #help>
+        <DocHelpTooltip term="terms.flow.id" />
+      </template>
       <span v-if="session.flow_id">{{ session.flow_id }}</span>
       <EmptyValue v-else />
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.user')">
+      <template #help>
+        <DocHelpTooltip term="terms.interactiveFlowSession.user" />
+      </template>
       <router-link
         v-if="session.user"
         :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"

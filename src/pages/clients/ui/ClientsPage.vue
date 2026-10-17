@@ -48,7 +48,11 @@ onMounted(async () => {
         :collection="clients"
         :label="t('pages.clients.audience')"
         field="audience_id"
-      />
+      >
+        <template #help>
+          <DocHelpTooltip term="terms.audience.id" />
+        </template>
+      </CollectionSortHeader>
       <TableHeader>{{ t('pages.clients.redirectUris') }}</TableHeader>
       <TableHeader fit>{{ t('pages.clients.actions') }}</TableHeader>
     </template>

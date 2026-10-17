@@ -101,11 +101,25 @@
         "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html#identifier-claims"
       }
     },
+    "flow": {
+      "id": {
+        "help": "A flow is the set of pages this server sends a person to so they can sign in — the one SympAuthy ships, or another this deployment declared. Naming none falls back to the default client template's flow, and to the shipped one behind that. See {link} for details.",
+        "helpLinkText": "flow configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/authorization.html#flows-id"
+      }
+    },
     "client": {
       "type": {
         "help": "A client is an application that delegates the sign-in of its users to this server. A confidential client can keep a secret, and authenticates with a client id and a secret — a server-side application, a backend job. A public client cannot, because its code runs where the person can read it — a single-page application, a mobile app — so it authenticates with its client id alone. See {link} for details.",
         "helpLinkText": "clients documentation",
         "helpLinkUrl": "https://sympauthy.github.io/functional/client.html#confidential-and-public-clients"
+      }
+    },
+    "user": {
+      "status": {
+        "help": "An account is one person this server authenticates and holds the claims of. A disabled one is refused when it signs in with a password, and told what somebody typing the wrong password is told; it keeps everything it holds, since disabling an account deletes nothing of it. See {link} for details.",
+        "helpLinkText": "end-user management documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/end-user_management.html"
       }
     },
     "origin": {
@@ -118,6 +132,11 @@
       }
     },
     "audience": {
+      "id": {
+        "help": "An audience is a group of clients sharing one pool of the person's consents: a consent given through any of them covers them all, and every token issued for one names the audience in its aud claim. A client belongs to exactly one. See {link} for details.",
+        "helpLinkText": "audiences documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/audience.html"
+      },
       "registrationMode": {
         "label": "Registration mode",
         "help": "How somebody comes by an account in this audience. Open lets anybody sign up, invitation-only closes sign-up to everybody holding no invitation, open + invitations allows either, and closed leaves the Admin API as the only way an account is created. See {link} for details.",
@@ -132,6 +151,7 @@
       }
     },
     "interactiveFlowPurpose": {
+      "help": "What the flow was started to settle — signing in for an application, enrolling a second factor, confirming an action. A session carries the purpose it began with, and the server may give it more while it runs.",
       "values": {
         "confirm": "Approving an action",
         "oauth2_authorize": "Signing in at a client's request",
@@ -150,6 +170,9 @@
     },
     "interactiveFlowSession": {
       "status": {
+        "help": "A session is one person's trip through this server's own pages — signing in for an application, enrolling a second factor, confirming an action. An ongoing one is still in flight; completed, cancelled, failed and expired are what it ended as, and an expired one is a trip the person simply stopped. See {link} for details.",
+        "helpLinkText": "session state documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html#the-session-state",
         "values": {
           "ongoing": "ongoing",
           "completed": "completed",
@@ -157,6 +180,9 @@
           "failed": "failed",
           "expired": "expired"
         }
+      },
+      "user": {
+        "help": "Who the session has identified, which is nobody until the person has authenticated. One creating the account it will belong to reads as signing up, and one that has identified nobody at all carries a dash."
       }
     }
   },
@@ -205,26 +231,44 @@
       "copyClientId": "Copy client ID",
       "type": "Type",
       "audience": "Audience",
-      "grantTypes": "Grant Types",
+      "grantTypes": {
+        "label": "Grant Types",
+        "help": "The OAuth 2.1 grants this client may use: authorization_code sends a person through the sign-in flow, refresh_token trades a refresh token in for new ones, and client_credentials gets the client a token of its own with nobody signed in. See {link} for details.",
+        "helpLinkText": "grant types documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id-allowed-grant-types"
+      },
       "scopes": "Scopes",
-      "allowedScopes": "Allowed Scopes",
-      "defaultScopes": "Default Scopes",
+      "allowedScopes": {
+        "label": "Allowed Scopes",
+        "help": "The scopes this client may ask for: an authorization request naming one outside the list has it dropped rather than refused. A client the configuration restricts in no way reads as None here as well, since the server publishes the same empty list for either. See {link} for details.",
+        "helpLinkText": "client configuration documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id"
+      },
+      "defaultScopes": {
+        "label": "Default Scopes",
+        "help": "The scopes an authorization request is treated as asking for when it names none of its own. Nothing here means such a request asks for nothing."
+      },
       "noScopes": "None",
       "redirectUris": "Redirect URIs",
       "noRedirectUris": "No redirect URIs configured.",
       "authorization": "Authorization",
       "authorizationFlow": "Flow",
-      "webhookUrl": "Webhook URL",
-      "webhookOnFailure": "On Failure"
+      "webhookUrl": {
+        "label": "Webhook URL",
+        "help": "An authorization webhook is a service of yours this server asks which scopes to grant, before its own granting rules run. A client with none configured is answered by those rules alone. See {link} for details.",
+        "helpLinkText": "authorization webhook documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/authorization_webhook.html"
+      },
+      "webhookOnFailure": {
+        "label": "On Failure",
+        "help": "What this server does when the call does not answer — a timeout, an error, a host that is down. deny_all denies every scope the request asked for; fallback_to_rules applies this deployment's granting rules as though no webhook were configured. See {link} for details.",
+        "helpLinkText": "failure behaviour documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/technical/authorization_webhook.html#failure-behavior"
+      }
     },
     "users": {
       "title": "Users",
-      "status": {
-        "label": "Status",
-        "help": "An account is one person this server authenticates and holds the claims of. A disabled one is refused when it signs in with a password, and told what somebody typing the wrong password is told; it keeps everything it holds, since disabling an account deletes nothing of it. See {link} for details.",
-        "helpLinkText": "end-user management documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/functional/end-user_management.html"
-      },
+      "status": "Status",
       "createdAt": "Created at",
       "enabled": "enabled",
       "disabled": "disabled",
@@ -308,12 +352,7 @@
     },
     "audiences": {
       "title": "Audiences",
-      "audienceId": {
-        "label": "Audience ID",
-        "help": "An audience is a group of clients sharing one pool of the person's consents: a consent given through any of them covers them all, and every token issued for one names the audience in its aud claim. A client belongs to exactly one. See {link} for details.",
-        "helpLinkText": "audiences documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/functional/audience.html"
-      },
+      "audienceId": "Audience ID",
       "clientsCount": "Clients",
       "empty": "No audiences found.",
       "search": "Search audiences..."
@@ -394,16 +433,8 @@
     },
     "sessions": {
       "title": "Sessions",
-      "status": {
-        "label": "Status",
-        "help": "A session is one person's trip through this server's own pages — signing in for an application, enrolling a second factor, confirming an action. An ongoing one is still in flight; completed, cancelled, failed and expired are what it ended as, and an expired one is a trip the person simply stopped. See {link} for details.",
-        "helpLinkText": "interactive flow documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html"
-      },
-      "user": {
-        "label": "User",
-        "help": "Who the session has identified, which is nobody until the person has authenticated. One creating the account it will belong to reads as signing up, and one that has identified nobody at all carries a dash."
-      },
+      "status": "Status",
+      "user": "User",
       "client": "Client",
       "started": "Started",
       "actions": "Actions",
@@ -444,8 +475,18 @@
       "helpLinkText": "consents documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
       "audience": "Audience",
-      "client": "Client",
-      "scopes": "Scopes",
+      "client": {
+        "label": "Client",
+        "help": "The client whose authorization request last updated this consent. The consent itself belongs to the audience and every client in it reads the same one, so this names who prompted the person rather than who holds what they agreed to. See {link} for details.",
+        "helpLinkText": "audience and consent documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/audience.html#how-audiences-affect-consent"
+      },
+      "scopes": {
+        "label": "Consented scopes",
+        "help": "The scopes the person agreed to disclose to this audience. A grantable scope is never one of them — this deployment's granting rules decide those as a token is issued — so a client may hold scopes that appear nowhere here. See {link} for details.",
+        "helpLinkText": "scope granting rules documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/user_authorization.html#scope-granting-rules"
+      },
       "empty": "No active consents.",
       "consentedAt": "Consented at",
       "actions": "Actions",

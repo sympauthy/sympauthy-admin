@@ -83,14 +83,9 @@ onMounted(async () => {
     </template>
 
     <template #header>
-      <CollectionSortHeader
-        fit
-        :collection="users"
-        :label="t('pages.users.status.label')"
-        field="status"
-      >
+      <CollectionSortHeader fit :collection="users" :label="t('pages.users.status')" field="status">
         <template #help>
-          <DocHelpTooltip term="pages.users.status" />
+          <DocHelpTooltip term="terms.user.status" />
         </template>
       </CollectionSortHeader>
       <CollectionSortHeader
@@ -116,7 +111,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="user in users.items" :key="user.user_id">
-        <TableCell :label="t('pages.users.status.label')" fit>
+        <TableCell :label="t('pages.users.status')" fit>
           <CommonTag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
           </CommonTag>
