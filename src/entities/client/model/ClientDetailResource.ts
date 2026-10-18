@@ -9,7 +9,7 @@ export type ClientDetailResource = {
   client_id: string
   type: string
   audience_id: string
-  allowed_scopes: string[]
+  allowed_scopes?: string[]
   default_scopes: string[]
   allowed_redirect_uris?: string[]
   allowed_grant_types: string[]
@@ -42,7 +42,8 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
     },
     allowed_scopes: {
       type: 'array',
-      items: { type: 'string' }
+      items: { type: 'string' },
+      nullable: true
     },
     default_scopes: {
       type: 'array',
@@ -66,13 +67,16 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
       nullable: true
     }
   },
-  required: [
-    'client_id',
-    'type',
-    'audience_id',
-    'allowed_scopes',
-    'default_scopes',
-    'allowed_grant_types'
-  ],
+  required: ['client_id', 'type', 'audience_id', 'default_scopes', 'allowed_grant_types'],
   additionalProperties: true
+}
+
+/**
+ * Whether the configuration restricts the scopes `client` may ask for.
+ *
+ * The server publishes no `allowed_scopes` for a client it restricts in no way, and an empty list
+ * for one allowed none — the two the panel draws as every scope and as no scope at all.
+ */
+export function clientRestrictsScopes(client: ClientDetailResource): boolean {
+  return client.allowed_scopes != null
 }
