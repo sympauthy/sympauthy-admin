@@ -202,7 +202,7 @@
   },
   "logoutDialog": {
     "title": "Force Logout",
-    "description": "Revoke authentication tokens for this user. They will need to sign in again.",
+    "description": "Revoke every grant of this user, and every token issued under them. They will need to sign in again.",
     "allClients": "All clients",
     "specificClient": "Specific client",
     "selectClient": "Select a client...",
@@ -240,7 +240,7 @@
       "scopes": "Scopes",
       "allowedScopes": {
         "label": "Allowed Scopes",
-        "help": "The scopes this client may ask for: an authorization request naming one outside the list has it dropped rather than refused. A client the configuration restricts in no way reads as None here as well, since the server publishes the same empty list for either. See {link} for details.",
+        "help": "The scopes this client may ask for: an authorization request naming one outside the list has it dropped rather than refused. A client the configuration restricts in no way reads as Every scope, and one allowed none reads as None. See {link} for details.",
         "helpLinkText": "client configuration documentation",
         "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id"
       },
@@ -249,6 +249,7 @@
         "help": "The scopes an authorization request is treated as asking for when it names none of its own. Nothing here means such a request asks for nothing."
       },
       "noScopes": "None",
+      "allScopes": "Every scope",
       "redirectUris": "Redirect URIs",
       "noRedirectUris": "No redirect URIs configured.",
       "authorization": "Authorization",

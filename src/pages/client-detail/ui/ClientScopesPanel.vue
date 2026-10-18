@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   CommonTag,
@@ -7,13 +8,16 @@ import {
   DetailSection,
   DocHelpTooltip
 } from '@/shared/ui'
-import type { ClientDetailResource } from '@/entities/client'
+import { type ClientDetailResource, clientRestrictsScopes } from '@/entities/client'
 
-defineProps<{
+const props = defineProps<{
   client: ClientDetailResource
 }>()
 
 const { t } = useI18n()
+
+const restrictsScopes = computed(() => clientRestrictsScopes(props.client))
+const allowedScopes = computed(() => props.client.allowed_scopes ?? [])
 </script>
 
 <template>
@@ -24,12 +28,15 @@ const { t } = useI18n()
           {{ t('pages.clientDetail.allowedScopes.label') }}
           <DocHelpTooltip term="pages.clientDetail.allowedScopes" />
         </template>
-        <div v-if="client.allowed_scopes.length > 0" class="flex flex-wrap gap-1">
-          <CommonTag v-for="scope in client.allowed_scopes" :key="scope" color="blue">
+        <div v-if="allowedScopes.length > 0" class="flex flex-wrap gap-1">
+          <CommonTag v-for="scope in allowedScopes" :key="scope" color="blue">
             {{ scope }}
           </CommonTag>
         </div>
-        <span v-else class="text-gray-500">{{ t('pages.clientDetail.noScopes') }}</span>
+        <span v-else-if="restrictsScopes" class="text-gray-500">
+          {{ t('pages.clientDetail.noScopes') }}
+        </span>
+        <span v-else class="text-gray-500">{{ t('pages.clientDetail.allScopes') }}</span>
       </DefinitionRow>
       <DefinitionRow>
         <template #label>
