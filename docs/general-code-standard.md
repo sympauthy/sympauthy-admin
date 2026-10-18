@@ -90,6 +90,10 @@ because of them, not as a licence.
 **A narrowing helper is a type predicate.** `isSuccess(response)`, `isStringNotEmpty(value)` — the
 call site gets the narrowed type rather than a boolean it has to act on twice.
 
+**A value a predicate narrowed is passed as it is.** Casting it back — `getErrorMessage(response as
+ErrorApiResponse)` in the `else` branch of `isSuccess` — restates what the compiler already decided,
+and is a silent downcast wherever the branch is reached by something else.
+
 ## Comments
 
 **A comment says why, and the code says what.** The measurement that would oscillate, the request

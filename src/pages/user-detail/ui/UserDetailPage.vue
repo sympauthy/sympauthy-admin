@@ -3,7 +3,7 @@ import { onMounted, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { UserApi, type UserDetailResource } from '@/entities/user'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
 import { useRouteAccess } from '@/shared/auth'
 import UserSummaryPanel from './UserSummaryPanel.vue'
@@ -99,7 +99,7 @@ async function load(id: string) {
       : undefined
     setLabel(identifier != null ? String(identifier) : id)
   } else {
-    error.value = getErrorMessage(response as ErrorApiResponse)
+    error.value = getErrorMessage(response)
   }
 
   loading.value = false

@@ -2,7 +2,7 @@
 import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ClientApi, type ClientDetailResource } from '@/entities/client'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
 import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
@@ -29,7 +29,7 @@ onMounted(async () => {
     client.value = response.content
     setLabel(client.value.client_id)
   } else {
-    error.value = getErrorMessage(response as ErrorApiResponse)
+    error.value = getErrorMessage(response)
   }
 
   loading.value = false

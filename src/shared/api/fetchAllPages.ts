@@ -32,7 +32,7 @@ export async function fetchAllPages<T, R extends CollectionPageResource>(
   do {
     const response = await read({ page, size: COMPLETE_READ_PAGE_SIZE })
     if (!isSuccess<R>(response)) {
-      return { items: null, error: response as ErrorApiResponse }
+      return { items: null, error: response }
     }
 
     const read_ = items(response.content)

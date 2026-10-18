@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { UserApi, type UserListResource, type UserResource } from '@/entities/user'
 import { ClaimApi, type ClaimResource } from '@/entities/claim'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonAlert,
@@ -47,7 +47,7 @@ async function fetchIdentifierClaims(): Promise<void> {
   if (isSuccess(response)) {
     identifierClaims.value = response.content.claims.filter((c) => c.enabled && c.identifier)
   } else {
-    identifierClaimsError.value = getErrorMessage(response as ErrorApiResponse)
+    identifierClaimsError.value = getErrorMessage(response)
     identifierClaims.value = []
   }
 }
