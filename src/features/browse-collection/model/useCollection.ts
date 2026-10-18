@@ -147,7 +147,7 @@ export function useCollection<T, R extends CollectionPageResource>(
       capabilities.value = response.content
       capabilitiesError.value = null
     } else {
-      capabilitiesError.value = getErrorMessage(response as ErrorApiResponse)
+      capabilitiesError.value = getErrorMessage(response)
     }
   }
 
@@ -178,7 +178,7 @@ export function useCollection<T, R extends CollectionPageResource>(
       page.value = response.content.page
       total.value = response.content.total
     } else {
-      error.value = getErrorMessage(response as ErrorApiResponse)
+      error.value = getErrorMessage(response)
       items.value = []
     }
 

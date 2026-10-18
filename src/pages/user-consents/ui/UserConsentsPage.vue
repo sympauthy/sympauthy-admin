@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { ConsentApi } from '../api/ConsentApi'
 import type { ConsentListResource } from '../model/ConsentListResource'
 import type { ConsentResource } from '../model/ConsentResource'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
@@ -37,7 +37,7 @@ async function revokeConsent(audienceId: string): Promise<void> {
   if (isSuccess(response)) {
     await consents.fetch(consents.page)
   } else {
-    consents.error = getErrorMessage(response as ErrorApiResponse)
+    consents.error = getErrorMessage(response)
   }
 }
 

@@ -7,7 +7,7 @@ import {
   type UserProviderLinkListResource,
   type UserProviderLinkResource
 } from '@/entities/user'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
@@ -42,7 +42,7 @@ async function confirmUnlink() {
     if (isSuccess(response)) {
       await providerLinks.fetch(providerLinks.page)
     } else {
-      providerLinks.error = getErrorMessage(response as ErrorApiResponse)
+      providerLinks.error = getErrorMessage(response)
     }
   }
   unlinkTargetProviderId.value = null

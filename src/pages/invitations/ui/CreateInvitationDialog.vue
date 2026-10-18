@@ -17,7 +17,7 @@ import {
 import { AudienceApi, type AudienceResource } from '@/entities/audience'
 import { fetchAllPages } from '@/shared/api'
 import { InvitationApi } from '../api/InvitationApi'
-import { isSuccess, type ErrorApiResponse, getErrorMessage } from '@/shared/api'
+import { isSuccess, getErrorMessage } from '@/shared/api'
 
 interface Props {
   open: boolean
@@ -130,7 +130,7 @@ async function onSubmit() {
     phase.value = 'success'
     emit('created')
   } else {
-    error.value = getErrorMessage(response as ErrorApiResponse)
+    error.value = getErrorMessage(response)
   }
 
   submitting.value = false

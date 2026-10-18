@@ -5,7 +5,7 @@ import { PlusIcon } from '@heroicons/vue/20/solid'
 import { InvitationApi } from '../api/InvitationApi'
 import type { InvitationListResource } from '../model/InvitationListResource'
 import type { InvitationResource } from '../model/InvitationResource'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
@@ -69,7 +69,7 @@ async function onConfirmRevoke() {
     revokeInvitationId.value = null
     await invitations.fetch(invitations.page)
   } else {
-    revokeError.value = getErrorMessage(response as ErrorApiResponse)
+    revokeError.value = getErrorMessage(response)
   }
 
   revokeLoading.value = false

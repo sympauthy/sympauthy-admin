@@ -7,7 +7,7 @@ import {
   type UserMfaMethodListResource,
   type UserMfaMethodResource
 } from '@/entities/user'
-import { getErrorMessage, isSuccess, type ErrorApiResponse } from '@/shared/api'
+import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
@@ -42,7 +42,7 @@ async function confirmRevoke() {
     if (isSuccess(response)) {
       await mfaMethods.fetch(mfaMethods.page)
     } else {
-      mfaMethods.error = getErrorMessage(response as ErrorApiResponse)
+      mfaMethods.error = getErrorMessage(response)
     }
   }
   revokeTargetMfaId.value = null
