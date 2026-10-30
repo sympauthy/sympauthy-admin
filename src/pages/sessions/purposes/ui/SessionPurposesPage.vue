@@ -46,7 +46,6 @@ const store = useInteractiveFlowSessionDetailStore()
         <DefinitionRow
           v-for="(information, informationIndex) in progress.debug"
           :key="informationIndex"
-          mono
           :label="information.display_name"
         >
           <span v-if="information.value">{{ information.value }}</span>

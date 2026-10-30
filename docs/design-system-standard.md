@@ -241,6 +241,11 @@ whichever of them fits.
 **An identifier is `font-mono`**, reached as the `mono` prop of the cell, field or row holding it,
 and one an operator has to paste elsewhere is a `CopyableValue`.
 
+**A value the panel cannot tell an identifier from takes the body face.** A session's debug
+information is a list of strings the server labelled, and an identifier among them is
+indistinguishable from a date or a word; setting all of them in monospace drew that card unlike
+every other record's fields, the same grant read in two faces on two screens.
+
 **A field the record does not carry is an `EmptyValue`.** It drops back to the body face, so a dash
 beside a monospace value does not read as part of that value.
 
