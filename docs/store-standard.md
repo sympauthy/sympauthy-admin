@@ -13,7 +13,7 @@ state. It calls [an API client](api-standard.md) and exposes the result; it rend
 knows nothing about the route.
 
 **A store lives in `entities/` only where more than one slice reads it.** `allClients` is one
-because a dialog in `features/logout-user` and two under `pages/user-detail` offer the same list;
+because a dialog in `features/logout-user` and two under `pages/users/detail` offer the same list;
 an account's own record is not, because only the shell above its tabs reads it.
 
 **What one slice reads, that slice holds** — in the component that reads it, or in the slice's own

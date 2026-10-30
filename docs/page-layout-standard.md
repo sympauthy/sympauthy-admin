@@ -25,7 +25,14 @@ reads.
 breadcrumb and a `router.push` refer to.
 
 **The page slice is named after the route, in kebab-case**, and publishes its route component only:
-`pages/user-detail` exports `UserDetailPage`.
+`pages/audiences` exports `AudiencesPage`.
+
+**A resource with a record groups its routes under the folder its path starts with**, a slice per
+route: `list` for the collection, `detail` for the record's shell, and each tab named after the
+segment its path adds. `/users`, `/users/:userId` and `/users/:userId/claims` are
+`pages/users/list`, `pages/users/detail` and `pages/users/claims`, so a slice is found from the URL.
+Steiger counts a group apart from the layer's ungrouped slices, and a record with its tabs is what
+pushed `pages/` past the twenty `fsd/excessive-slicing` allows ungrouped.
 
 **`/` is the panel's root rather than a resource.** The guard resolves it to the first page the
 token can open, and it renders the no-access page when that is none of them —
@@ -226,7 +233,7 @@ over each value, so a screen reads one or two records;
 the record.** One record does both — a session's failure is a tab a session that ended in one
 gets, and the shell moves such a session off the fallback its route redirects to — and a shape
 written from the single case that has it states that case rather than a rule. It stays in
-[`SessionDetailPage.vue`](../src/pages/session-detail/ui/SessionDetailPage.vue) until a second
+[`SessionDetailPage.vue`](../src/pages/sessions/detail/ui/SessionDetailPage.vue) until a second
 record needs it.
 
 **Dashboards.** Every screen shows one collection or one record.
