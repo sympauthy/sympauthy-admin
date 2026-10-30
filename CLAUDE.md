@@ -67,7 +67,8 @@ from the merged state, not the one the branch was cut from.
 The source follows [Feature-Sliced Design](https://feature-sliced.design), and Steiger enforces it:
 
 - **`app/`** — `App.vue`, the router, the global stylesheet, the layout shell.
-- **`pages/`** — one slice per route, holding the route component and what only it uses.
+- **`pages/`** — one slice per route, holding the route component and what only it uses. A
+  resource with a record groups its routes: `pages/users/{list,detail,claims,…}`.
 - **`features/`** — an action reused by more than one page.
 - **`entities/`** — one slice per domain noun more than one slice reads: its API client,
   resources, schemas and stores. A noun one route reads lives in that route's slice until a second

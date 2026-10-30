@@ -43,7 +43,9 @@ The slices that exist are the folders under each layer. The entities are the nou
 than one slice — `user`, `client`, `claim`, `audience`, `session`; `features/` holds the actions
 reused by more than one page — `browse-collection`, `logout-user`; and `pages/` holds one slice per
 route in [the router](../src/app/router/index.ts), some of them owning the client and the resources
-only that route reads.
+only that route reads. A resource with a record groups its routes in a folder of no slice's own —
+`pages/users/` holds `list`, `detail` and a slice per tab — which [the page layout
+standard](page-layout-standard.md#a-route-per-screen) names.
 
 ## The public API of a slice
 
@@ -116,6 +118,7 @@ index.html               the document Vite builds around
 src/main.ts              the entry point: app, router, i18n, Pinia
 src/app/                 App.vue, router, layout shell, global stylesheet
 src/pages/<route>/       one slice per route, with the api/ and model/ only it reads
+src/pages/<resource>/    a record's routes grouped: list/, detail/ and a slice per tab
 src/features/<action>/   an action reused by more than one page
 src/entities/<noun>/     api/, model/, ui/ for one noun more than one slice reads
 src/shared/              api, auth, i18n, lib, ui
