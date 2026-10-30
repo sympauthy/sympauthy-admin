@@ -267,6 +267,12 @@ up in full is linked rather than repeated here.
 one** — not the site root, which leaves the operator to search for what they were already reading
 about, and not the specification behind the term, which answers a question they did not ask.
 
+**A set of states is explained state by state where one sentence cannot tell them apart.** The
+`help` says what the set is and links to the documentation, and each state gets a line of its own
+under it from `valuesHelp`: what it means for the record, and what tells it from its neighbours. A
+grant's four statuses read that way — a sentence chaining them by semicolons left *expired* and
+*lapsed* indistinguishable.
+
 **A second explanation in one view carries the sentence alone where the documentation has nothing
 further to say about it.** A field under an explained section, and a set of states a sentence spells
 out in full, would both send the operator to the page the tooltip beside them already named.

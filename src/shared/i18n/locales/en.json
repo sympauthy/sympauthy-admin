@@ -188,12 +188,20 @@
     },
     "grant": {
       "status": {
-        "help": "A grant is what a client was allowed — on a person's behalf, or on its own — and every token this server issues is issued under one. A live grant still holds a token that has not expired or a code still to be exchanged, and is what a revocation made now would reach; a revoked one was withdrawn and every token under it stopped working with it; an expired one is past the lifetime this server gives a grant; a lapsed one is neither, but is left with nothing that still works.",
+        "help": "A grant is what a client was allowed — on a person's behalf, or on its own — and every token this server issues is issued under one. Its status says whether those tokens still work. See {link} for details.",
+        "helpLinkText": "grants documentation",
+        "helpLinkUrl": "https://sympauthy.github.io/functional/grant.html",
         "values": {
           "live": "live",
           "revoked": "revoked",
           "expired": "expired",
           "lapsed": "lapsed"
+        },
+        "valuesHelp": {
+          "live": "Its tokens still work, or its authorization code is still waiting to be exchanged. The only status a revocation still changes.",
+          "revoked": "Withdrawn by its client, by an administrator, by the person's consent being revoked, or by its authorization code being used twice. Every token under it stopped working at once.",
+          "expired": "Past the lifetime this server gives a grant. It can no longer be refreshed, and every token under it has expired.",
+          "lapsed": "Neither revoked nor past its lifetime, but every token under it has expired and no code is left to exchange — usually a client that stopped refreshing. Nothing under it works any more."
         }
       },
       "user": {

@@ -47,6 +47,10 @@ sent, so a component translates without a mapping of its own.
 under, the `help` explaining it and a set nested beside it all sit on the set itself, and nothing
 there can be mistaken for a value the server might send.
 
+**A value explained on its own nests under `terms.<set>.valuesHelp.<value>`**, beside the `values`
+naming it. It is for a set whose states one sentence cannot tell apart, and
+[`DocHelpTooltip`](design-system-standard.md#help) lists every one of them under the set's `help`.
+
 **A set belonging to one entity nests under that entity, and a set two of them publish stands on its
 own.** `terms.claim.kind.values.<value>` and `terms.interactiveFlowSession.status.values.<value>`
 against `terms.origin.values.<value>`, which both a claim and a scope have.
