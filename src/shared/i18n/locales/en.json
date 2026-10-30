@@ -184,6 +184,48 @@
       "user": {
         "help": "Who the session has identified, which is nobody until the person has authenticated. One creating the account it will belong to reads as signing up, and one that has identified nobody at all carries a dash."
       }
+    },
+    "grant": {
+      "status": {
+        "help": "A grant is what a client was allowed — on a person's behalf, or on its own — and every token this server issues is issued under one. A live grant still holds a token that has not expired or a code still to be exchanged, and is what a revocation made now would reach; a revoked one was withdrawn and every token under it stopped working with it; an expired one is past the lifetime this server gives a grant; a lapsed one is neither, but is left with nothing that still works.",
+        "values": {
+          "live": "live",
+          "revoked": "revoked",
+          "expired": "expired",
+          "lapsed": "lapsed"
+        }
+      },
+      "user": {
+        "help": "The account the grant was opened for, or the one a client acts as through a token exchange. A client credentials grant is held by its client alone and names nobody."
+      },
+      "type": {
+        "values": {
+          "authorization_code": "Authorization code",
+          "client_credentials": "Client credentials",
+          "urn:ietf:params:oauth:grant-type:token-exchange": "Token exchange"
+        }
+      },
+      "revokedBy": {
+        "values": {
+          "client": "Its client",
+          "admin": "An administrator",
+          "consent_revoked": "The consent being revoked",
+          "authorization_code_replayed": "Its authorization code being replayed"
+        }
+      },
+      "grantedBy": {
+        "values": {
+          "auto": "Automatically",
+          "rule": "A scope granting rule",
+          "webhook": "The authorization webhook"
+        }
+      },
+      "consentedBy": {
+        "values": {
+          "auto": "Automatically",
+          "user": "The person"
+        }
+      }
     }
   },
   "nav": {
@@ -196,6 +238,7 @@
     "scopes": "Scopes",
     "audiences": "Audiences",
     "invitations": "Invitations",
+    "grants": "Grants",
     "sessions": "Sessions",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -439,6 +482,72 @@
         "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html#where-a-claim-is-exposed"
       },
       "search": "Search claims..."
+    },
+    "grants": {
+      "title": "Grants",
+      "status": "Status",
+      "user": "User",
+      "client": "Client",
+      "audience": "Audience",
+      "grantType": "Grant type",
+      "createdAt": "Created at",
+      "actions": "Actions",
+      "view": "View",
+      "search": "Search by user, client or audience",
+      "empty": "No grant is stored. Revoked, expired and lapsed grants are listed until the cleanup job collects them."
+    },
+    "grantDetail": {
+      "title": "Grant",
+      "grantId": "Grant ID",
+      "copyGrantId": "Copy grant ID",
+      "status": "Status",
+      "grantType": "Grant type",
+      "user": "User",
+      "client": "Client",
+      "audience": "Audience",
+      "createdAt": "Created at",
+      "expiresAt": {
+        "label": "Expires at",
+        "help": "Past this moment the grant can no longer be refreshed. A grant without one lasts as long as its tokens are refreshed."
+      },
+      "revocation": "Revocation",
+      "revokedAt": "Revoked at",
+      "revokedBy": "Revoked by",
+      "revokedByUser": "Revoking administrator",
+      "scopes": "Scopes",
+      "grantedScopes": {
+        "label": "Granted scopes",
+        "help": "The scopes the scope granting rules gave the person, which their consent does not need to cover."
+      },
+      "grantedBy": "Granted by",
+      "consentedScopes": {
+        "label": "Consented scopes",
+        "help": "The scopes the person consented to, or that were consented to on their behalf without asking."
+      },
+      "consentedBy": "Consented by",
+      "clientScopes": {
+        "label": "Client scopes",
+        "help": "The scopes the client was given on its own behalf, by the client credentials grant."
+      },
+      "authorization": "Authorization",
+      "authenticatedAt": {
+        "label": "Authenticated at",
+        "help": "When the person authenticated in the flow the grant was opened from — the auth_time every token under it states. Nobody authenticates for a client credentials grant or a token exchange."
+      },
+      "actorGrant": {
+        "label": "Grant of the acting client",
+        "help": "The grant of the token a token exchange was given. Revoking that grant revokes this one with it."
+      },
+      "requestedClaims": {
+        "label": "Requested claims",
+        "help": "The claims the claims parameter of the authorization request asked for.",
+        "idToken": "ID token",
+        "userinfo": "UserInfo"
+      },
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke Grant",
+      "revokeDescription": "Every token issued under this grant stops working at once, and so does every grant a client obtained by exchanging one of them. The client will need a new authorization. This cannot be undone.",
+      "notFound": "This grant no longer exists. The cleanup job collects a grant once it is finished."
     },
     "sessions": {
       "title": "Sessions",
