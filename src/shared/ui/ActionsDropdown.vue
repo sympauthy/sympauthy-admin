@@ -7,7 +7,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuPortal,
   DropdownMenuContent,
-  DropdownMenuItem
+  DropdownMenuItem,
+  DropdownMenuSeparator
 } from 'reka-ui'
 import CommonButton from './CommonButton.vue'
 import { type ButtonStyle, secondaryColoredButton } from './ButtonStyle'
@@ -43,7 +44,13 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 
 function missingScopes(action: ActionItem): string[] {
-  return (action.requiredScopes ?? []).filter((scope) => !authStore.hasAllScopes([scope]))
+  return authStore.missingScopes(action.requiredScopes ?? [])
+}
+
+// A destructive action closes the menu, under a rule, whatever its use: the item a slip of the
+// pointer lands on is never the one that cannot be undone.
+function startsDanger(index: number, actions: ActionItem[]): boolean {
+  return index > 0 && actions[index].danger === true && actions[index - 1].danger !== true
 }
 </script>
 
@@ -58,28 +65,32 @@ function missingScopes(action: ActionItem): string[] {
     </DropdownMenuTrigger>
     <DropdownMenuPortal>
       <DropdownMenuContent align="end" :side-offset="4" class="menu overlay-animated min-w-48">
-        <DropdownMenuItem
-          v-for="action in actions"
-          :key="action.key"
-          class="menu-item"
-          :class="
-            missingScopes(action).length > 0
-              ? 'cursor-not-allowed text-gray-400'
-              : action.danger
-                ? 'text-red-600 data-[highlighted]:bg-red-50'
-                : 'text-gray-700 data-[highlighted]:bg-gray-100'
-          "
-          :disabled="missingScopes(action).length > 0"
-          :title="
-            missingScopes(action).length > 0
-              ? t('common.missingScopes', { scopes: missingScopes(action).join(', ') })
-              : undefined
-          "
-          @select="emit('action', action.key)"
-        >
-          <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />
-          {{ action.label }}
-        </DropdownMenuItem>
+        <template v-for="(action, index) in actions" :key="action.key">
+          <DropdownMenuSeparator
+            v-if="startsDanger(index, actions)"
+            class="my-1 h-px bg-gray-200"
+          />
+          <DropdownMenuItem
+            class="menu-item"
+            :class="
+              missingScopes(action).length > 0
+                ? 'cursor-not-allowed text-gray-400'
+                : action.danger
+                  ? 'text-red-600 data-[highlighted]:bg-red-50'
+                  : 'text-gray-700 data-[highlighted]:bg-gray-100'
+            "
+            :disabled="missingScopes(action).length > 0"
+            :title="
+              missingScopes(action).length > 0
+                ? t('common.missingScopes', { scopes: missingScopes(action).join(', ') })
+                : undefined
+            "
+            @select="emit('action', action.key)"
+          >
+            <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />
+            {{ action.label }}
+          </DropdownMenuItem>
+        </template>
       </DropdownMenuContent>
     </DropdownMenuPortal>
   </DropdownMenuRoot>

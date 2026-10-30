@@ -95,6 +95,7 @@ onMounted(async () => {
       :button-style="primaryColoredButton"
       :label="t('pages.invitations.create')"
       :icon="PlusIcon"
+      :required-scopes="['admin:invitations:write']"
       @click="showCreateDialog = true"
     />
   </PageActions>
@@ -161,6 +162,7 @@ onMounted(async () => {
             v-if="invitation.status === 'pending'"
             :button-style="dangerColoredButton"
             :label="t('pages.invitations.revoke')"
+            :required-scopes="['admin:invitations:write']"
             @click="onRevoke(invitation.invitation_id)"
           />
         </TableCell>

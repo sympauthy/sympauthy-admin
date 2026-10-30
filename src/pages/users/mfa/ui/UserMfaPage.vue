@@ -88,6 +88,7 @@ onMounted(async () => {
           <CommonButton
             :button-style="dangerColoredButton"
             :label="t('pages.userMfa.revoke')"
+            :required-scopes="['admin:users:write']"
             @click="revokeTargetMfaId = method.mfa_id"
           />
         </TableCell>

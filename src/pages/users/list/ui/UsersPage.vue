@@ -146,6 +146,7 @@ onMounted(async () => {
               :button-style="dangerColoredButton"
               :label="t('pages.users.logout')"
               :icon="ArrowRightStartOnRectangleIcon"
+              :required-scopes="['admin:grants:write']"
               @click="logoutUserId = user.user_id"
             />
           </div>

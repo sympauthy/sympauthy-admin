@@ -110,6 +110,7 @@ onMounted(async () => {
           <CommonButton
             :button-style="dangerColoredButton"
             :label="t('pages.userConsents.revoke')"
+            :required-scopes="['admin:consent:write']"
             @click="revokeConsent(consent.audience_id)"
           />
         </TableCell>

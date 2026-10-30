@@ -94,6 +94,7 @@ onMounted(async () => {
           <CommonButton
             :button-style="dangerColoredButton"
             :label="t('pages.userProviders.unlink')"
+            :required-scopes="['admin:users:write']"
             @click="unlinkTargetProviderId = link.provider_id"
           />
         </TableCell>

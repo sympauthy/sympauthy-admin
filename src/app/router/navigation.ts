@@ -12,7 +12,8 @@ export interface NavSection {
 }
 
 /**
- * The panel's own index of its pages: the sections the sidebar draws, in the order it draws them.
+ * The panel's own index of its pages: the sections the sidebar draws, in the order it draws them —
+ * the most used first, sections and the entries in each alike.
  *
  * The router reads the same list to decide where `/` lands — the first entry the token can open —
  * so a page reachable from the sidebar is a page the panel can land on, and the two cannot
@@ -23,22 +24,22 @@ export const navSections: NavSection[] = [
     label: 'nav.sectionUsers',
     entries: [
       { name: 'users', label: 'nav.users' },
-      { name: 'invitations', label: 'nav.invitations' },
-      { name: 'grants', label: 'nav.grants' }
-    ]
-  },
-  {
-    label: 'nav.sectionConfiguration',
-    entries: [
-      { name: 'audiences', label: 'nav.audiences' },
-      { name: 'clients', label: 'nav.clients' },
-      { name: 'claims', label: 'nav.claims' },
-      { name: 'scopes', label: 'nav.scopes' }
+      { name: 'grants', label: 'nav.grants' },
+      { name: 'invitations', label: 'nav.invitations' }
     ]
   },
   {
     label: 'nav.sectionDiagnostics',
     entries: [{ name: 'sessions', label: 'nav.sessions' }]
+  },
+  {
+    label: 'nav.sectionConfiguration',
+    entries: [
+      { name: 'clients', label: 'nav.clients' },
+      { name: 'claims', label: 'nav.claims' },
+      { name: 'scopes', label: 'nav.scopes' },
+      { name: 'audiences', label: 'nav.audiences' }
+    ]
   }
 ]
 

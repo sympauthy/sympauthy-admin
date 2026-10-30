@@ -2,6 +2,8 @@
 import { computed, type Component } from 'vue'
 import { type ButtonStyle, primaryColoredButton } from './ButtonStyle'
 import CommonSpinner from './CommonSpinner.vue'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/shared/auth'
 
 interface Props {
   buttonStyle?: ButtonStyle
@@ -25,6 +27,11 @@ interface Props {
   loading?: boolean
   submitting?: boolean
   disabled?: boolean
+  /**
+   * The admin scopes the call behind the button is made under. A button the token is not granted
+   * all of is drawn disabled, naming them in its title, rather than offered to fail at the server.
+   */
+  requiredScopes?: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,13 +42,28 @@ const props = withDefaults(defineProps<Props>(), {
   collapseLabel: false,
   loading: false,
   submitting: false,
-  disabled: false
+  disabled: false,
+  requiredScopes: () => []
 })
 
-const computedDisabled = computed(() => props.loading || props.submitting || props.disabled)
+const { t } = useI18n()
+const authStore = useAuthStore()
+
+const missingScopes = computed(() => authStore.missingScopes(props.requiredScopes))
+const unauthorized = computed(() => missingScopes.value.length > 0)
+
+const computedDisabled = computed(
+  () => props.loading || props.submitting || props.disabled || unauthorized.value
+)
+
+const title = computed(() =>
+  unauthorized.value
+    ? t('common.missingScopes', { scopes: missingScopes.value.join(', ') })
+    : props.label
+)
 
 const computedClasses = computed(() => {
-  if (props.disabled) {
+  if (props.disabled || unauthorized.value) {
     return props.buttonStyle.disabledClasses
   } else if (props.loading) {
     return props.buttonStyle.loadingClasses
@@ -65,7 +87,7 @@ const stateSlot = computed(() => {
   <button
     :class="computedClasses"
     :disabled="computedDisabled"
-    :title="props.label"
+    :title="title"
     class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
   >
     <CommonSpinner v-if="loading || submitting" size="sm" />

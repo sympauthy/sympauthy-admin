@@ -135,24 +135,19 @@ of [the navigation](../src/app/router/navigation.ts) the token can open, and `No
 only when that is none of them — naming the scopes the console reads, off the routes themselves, so
 the operator reading it knows what to ask for.
 
-**A menu item the token does not cover is drawn disabled, never hidden.** That holds for an entry
-of the sidebar and for an item of a record's `ActionsDropdown` alike: the operator sees what the
-panel offers and what their token keeps them from, and a menu does not change shape with the scopes
-they were granted. The disabled item names what is missing in its title, so the operator knows
-what to ask for.
+**A control the token does not cover is drawn disabled, never hidden.** That holds for an entry of
+the sidebar, an item of a record's `ActionsDropdown` and a button alike: the operator sees what the
+panel offers and what their token keeps them from, and a screen does not change shape with the
+scopes they were granted. The disabled control names what is missing in its title, so the operator
+knows what to ask for.
 
-**An action names the scopes its call is made under, as `requiredScopes` on its `ActionItem`.** It
-is the action's counterpart of a route's `requiredScopes`, read from the server's `@Secured` on the
-endpoint, and `ActionsDropdown` is what disables the item — a page states the scopes and never
-decides the state itself. A force logout is a revocation of grants, so it names
-`admin:grants:write`.
+**An action names the scopes its call is made under, as `requiredScopes`** — on its `ActionItem` in
+a menu, and on its `CommonButton` outside one. It is the action's counterpart of a route's
+`requiredScopes`, read from the server's `@Secured` on the endpoint, and the shared component is
+what disables it: a page states the scopes and never decides the state itself. A force logout is a
+revocation of grants, so it names `admin:grants:write` wherever it is offered.
 
 ## What this document does not cover
-
-**A button outside a menu.** A collection's row action and toolbar button — revoking a consent or
-an invitation, a row's logout, creating an invitation — are still drawn enabled whatever the token
-holds, and fail at the server. The rule was set for menus, and no button has been brought under it
-yet.
 
 **A record's tab.** The tab strip still drops a tab the token cannot open rather than drawing it
 disabled: it lists the views of one record rather than offering a choice, and whether it joins the
