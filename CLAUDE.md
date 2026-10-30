@@ -5,8 +5,9 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 ## What this is
 
 SympAuthy Admin is the operator's panel of a [SympAuthy](https://github.com/sympauthy/sympauthy)
-authorization server: it inspects the accounts, clients, claims, scopes, audiences, invitations and
-interactive flow sessions the server owns, and performs the few actions an operator takes on them.
+authorization server: it inspects the accounts, clients, claims, scopes, audiences, invitations,
+grants and interactive flow sessions the server owns, and performs the few actions an operator takes
+on them.
 Vue 3 with `<script setup>`, Vite, Pinia, Vue Router, Tailwind and reka-ui, built into static assets
 the authorization server serves itself. It stores nothing: every screen is a call to
 `/api/v1/admin`, authenticated as an ordinary public OIDC client of that same server.

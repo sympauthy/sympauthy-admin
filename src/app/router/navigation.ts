@@ -23,7 +23,8 @@ export const navSections: NavSection[] = [
     label: 'nav.sectionUsers',
     entries: [
       { name: 'users', label: 'nav.users' },
-      { name: 'invitations', label: 'nav.invitations' }
+      { name: 'invitations', label: 'nav.invitations' },
+      { name: 'grants', label: 'nav.grants' }
     ]
   },
   {

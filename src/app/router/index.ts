@@ -7,6 +7,8 @@ import { ClaimsPage } from '@/pages/claims'
 import { ScopesPage } from '@/pages/scopes'
 import { UsersPage } from '@/pages/users/list'
 import { SessionsPage } from '@/pages/sessions/list'
+import { GrantsPage } from '@/pages/grants/list'
+import { GrantDetailPage } from '@/pages/grants/detail'
 import { UserDetailPage } from '@/pages/users/detail'
 import { UserClaimsPage } from '@/pages/users/claims'
 import { UserConsentsPage } from '@/pages/users/consents'
@@ -179,6 +181,26 @@ export function makeRouter() {
           requiresAuth: true,
           requiredScopes: ['admin:invitations:read'],
           breadcrumb: { label: 'nav.invitations' }
+        }
+      },
+      {
+        path: '/grants',
+        name: 'grants',
+        component: GrantsPage,
+        meta: {
+          requiresAuth: true,
+          requiredScopes: ['admin:grants:read'],
+          breadcrumb: { label: 'nav.grants' }
+        }
+      },
+      {
+        path: '/grants/:grantId',
+        name: 'grantDetail',
+        component: GrantDetailPage,
+        meta: {
+          requiresAuth: true,
+          requiredScopes: ['admin:grants:read'],
+          breadcrumb: { label: 'pages.grantDetail.title', parent: 'grants' }
         }
       },
       {

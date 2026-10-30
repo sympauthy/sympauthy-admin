@@ -138,8 +138,9 @@ the operator reading it knows what to ask for.
 ## What this document does not cover
 
 **Write actions.** A screen is shown for what the token can read, and nothing hides or disables the
-buttons behind `admin:users:write`, `admin:consent:write`, `admin:users:delete` and
-`admin:invitations:write`; one the token is not scoped for fails at the server.
+buttons behind `admin:users:write`, `admin:consent:write`, `admin:grants:write`,
+`admin:users:delete` and `admin:invitations:write`; one the token is not scoped for fails at the
+server. A force logout is a revocation of grants, so it is `admin:grants:write` it fails without.
 
 **Why a scope is missing.** Whether the admin client is not allowed it or the granting rules did not
 grant it is not in the token, and the panel does not guess.

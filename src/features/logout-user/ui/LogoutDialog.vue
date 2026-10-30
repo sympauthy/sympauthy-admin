@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ConfirmDialog, FormSelect } from '@/shared/ui'
-import { UserApi } from '@/entities/user'
+import { GrantApi } from '@/entities/grant'
 import { useClientStore } from '@/entities/client'
 import { isSuccess, getErrorMessage } from '@/shared/api'
 
@@ -18,7 +18,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
-const userApi = new UserApi()
+const grantApi = new GrantApi()
 const clientStore = useClientStore()
 
 const mode = ref<'all' | 'specific'>('all')
@@ -45,10 +45,13 @@ async function onConfirm() {
   loading.value = true
   error.value = null
 
-  const response =
-    mode.value === 'specific' && selectedClientId.value
-      ? await userApi.logoutUserClient(props.userId, selectedClientId.value)
-      : await userApi.logoutUser(props.userId)
+  // A force logout is a revocation of the grants the person holds, narrowed to one client where
+  // the operator picked one.
+  const response = await grantApi.revokeGrants({
+    user_ids: [props.userId],
+    client_ids:
+      mode.value === 'specific' && selectedClientId.value ? [selectedClientId.value] : undefined
+  })
 
   if (isSuccess(response)) {
     loading.value = false
