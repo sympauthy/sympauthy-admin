@@ -2,6 +2,7 @@
 import { computed, type Component } from 'vue'
 import { type ButtonStyle, primaryColoredButton } from './ButtonStyle'
 import CommonSpinner from './CommonSpinner.vue'
+import HintTooltip from './HintTooltip.vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
 
@@ -34,6 +35,8 @@ interface Props {
   requiredScopes?: string[]
 }
 
+defineOptions({ inheritAttrs: false })
+
 const props = withDefaults(defineProps<Props>(), {
   buttonStyle: () => primaryColoredButton,
   label: undefined,
@@ -56,10 +59,10 @@ const computedDisabled = computed(
   () => props.loading || props.submitting || props.disabled || unauthorized.value
 )
 
-const title = computed(() =>
+const hint = computed(() =>
   unauthorized.value
     ? t('common.missingScopes', { scopes: missingScopes.value.join(', ') })
-    : props.label
+    : undefined
 )
 
 const computedClasses = computed(() => {
@@ -84,10 +87,30 @@ const stateSlot = computed(() => {
 </script>
 
 <template>
+  <!-- Only a button the token is refused is wrapped: every other one stays the root, so the
+       attributes a caller and an \`as-child\` trigger pass reach the <button> and its element is the
+       one a dropdown positions against. -->
+  <HintTooltip v-if="hint" :text="hint">
+    <button
+      v-bind="$attrs"
+      :class="computedClasses"
+      disabled
+      :title="props.label"
+      class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
+    >
+      <component :is="props.icon" v-if="props.icon" class="size-4 shrink-0" />
+      <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
+        <slot>{{ props.label }}</slot>
+      </span>
+      <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
+    </button>
+  </HintTooltip>
   <button
+    v-else
+    v-bind="$attrs"
     :class="computedClasses"
     :disabled="computedDisabled"
-    :title="title"
+    :title="props.label"
     class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
   >
     <CommonSpinner v-if="loading || submitting" size="sm" />

@@ -80,15 +80,21 @@ function startsDanger(index: number, actions: ActionItem[]): boolean {
                   : 'text-gray-700 data-[highlighted]:bg-gray-100'
             "
             :disabled="missingScopes(action).length > 0"
-            :title="
-              missingScopes(action).length > 0
-                ? t('common.missingScopes', { scopes: missingScopes(action).join(', ') })
-                : undefined
-            "
             @select="emit('action', action.key)"
           >
-            <component :is="action.icon" v-if="action.icon" class="size-4 shrink-0" />
-            {{ action.label }}
+            <component
+              :is="action.icon"
+              v-if="action.icon"
+              class="mt-0.5 size-4 shrink-0 self-start"
+            />
+            <!-- The reason sits under the label rather than in a tooltip: a menu is read while it is
+                 open, and a hover over one of its items is a highlight, not a question. -->
+            <span class="flex flex-col">
+              {{ action.label }}
+              <span v-if="missingScopes(action).length > 0" class="text-xs">
+                {{ t('common.missingScopes', { scopes: missingScopes(action).join(', ') }) }}
+              </span>
+            </span>
           </DropdownMenuItem>
         </template>
       </DropdownMenuContent>

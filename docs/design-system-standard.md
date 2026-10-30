@@ -168,6 +168,7 @@ positioning; the styling stays Tailwind, ours.
 | `BaseDialog` | `Dialog*` |
 | `ActionsDropdown` | `DropdownMenu*` |
 | `HelpTooltip`, a collection's filter and its field list | `Popover*` |
+| `HintTooltip` | `Tooltip*` |
 | `FormListbox` | `Listbox*` |
 | `FormTagsInput` | `TagsInput*` |
 | `PaginatedTable`'s footer | `Pagination*` |
@@ -184,10 +185,17 @@ never fires a second one.
 stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
 takes the line and not the box: it is a control, and draws the one every control shares.
 
-**A menu item that cannot be used is disabled, not removed.** It drops its colour for `gray-400`
-and the pointer for `cursor-not-allowed`, and says why in its `title`; `ActionsDropdown` and the
-sidebar draw it that way, a `CommonButton` takes its own disabled style, and
-[authentication](authentication.md#what-the-token-granted) says when.
+**A control that cannot be used is disabled, not removed, and says why.** A menu item drops its
+colour for `gray-400` and the pointer for `cursor-not-allowed`, and writes the reason under its
+label: a menu is read while it is open, and a hover over one of its items is a highlight rather
+than a question. A button and a sidebar entry carry the reason in a `HintTooltip`, opened by the
+pointer or the keyboard. Never a `title` alone — the browser shows it late, never over a button
+that takes no pointer events, and never on a touch screen.
+[Authentication](authentication.md#what-the-token-granted) says when a control is disabled.
+
+**A `HintTooltip` is a sentence about the control under it, and a `HelpTooltip` a term's
+explanation.** One opens on hover and focus over the control itself and carries no link; the other
+is pressed open from an ⓘ and may close on one, so the two are never interchanged.
 
 **A menu's destructive items are set apart by a `gray-200` rule**, which `ActionsDropdown` draws
 before the first of them; [the page layout standard](page-layout-standard.md#menus) says why they

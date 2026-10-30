@@ -124,11 +124,13 @@ another states the whole set rather than the difference, since a child's `meta` 
 parent's key.
 
 **Three readers answer from that one declaration.** The guard refuses a route whose scopes are not
-all granted; the sidebar draws an entry the token cannot open disabled; a record's tab strip drops
-the tab. All three answer through `canOpenRoute`, which
-`useRouteAccess` binds to the router of the component calling it — and which answers `false` for a
-route the router does not know, so a navigation naming a renamed route loses its entry rather than
-throwing out of the render that drew it.
+all granted; a record's tab strip drops the tab; the sidebar draws an entry the token cannot open
+disabled, naming the scopes it lacks. The guard and the tab strip answer through `canOpenRoute`,
+which `useRouteAccess` binds to the router of the component calling it — and which answers `false`
+for a route the router does not know, so a navigation naming a renamed route loses its entry rather
+than throwing out of the render that drew it. The sidebar asks `missingScopes` of the same
+`requiredScopes`, since it has to say which are missing rather than whether one is; its entries are
+the panel's own index, so none of them names a route the router does not know.
 
 **`/` is the panel's root and its no-access page at once.** The guard sends it on to the first entry
 of [the navigation](../src/app/router/navigation.ts) the token can open, and `NoAccessPage` renders
@@ -138,8 +140,9 @@ the operator reading it knows what to ask for.
 **A control the token does not cover is drawn disabled, never hidden.** That holds for an entry of
 the sidebar, an item of a record's `ActionsDropdown` and a button alike: the operator sees what the
 panel offers and what their token keeps them from, and a screen does not change shape with the
-scopes they were granted. The disabled control names what is missing in its title, so the operator
-knows what to ask for.
+scopes they were granted. The disabled control names the scopes it is missing, so the operator
+knows what to ask for — under its label in a menu, and in a `HintTooltip` on a button or a sidebar
+entry.
 
 **An action names the scopes its call is made under, as `requiredScopes`** — on its `ActionItem` in
 a menu, and on its `CommonButton` outside one. It is the action's counterpart of a route's

@@ -2,16 +2,16 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore, useRouteAccess } from '@/shared/auth'
+import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
+import { HintTooltip } from '@/shared/ui'
 import { navSections } from '../router/navigation'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const { canOpen } = useRouteAccess()
 const { closeSidebar } = useSidebar()
 
 // Every entry is drawn, and one the token cannot open is drawn disabled: the operator sees what the
@@ -20,11 +20,14 @@ const { closeSidebar } = useSidebar()
 const sections = computed(() =>
   navSections.map((section) => ({
     label: section.label,
-    entries: section.entries.map((entry) => ({
-      ...entry,
-      path: router.resolve({ name: entry.name }).path,
-      disabled: !canOpen(entry.name)
-    }))
+    entries: section.entries.map((entry) => {
+      const route = router.resolve({ name: entry.name })
+      return {
+        ...entry,
+        path: route.path,
+        missingScopes: authStore.missingScopes(route.meta.requiredScopes ?? [])
+      }
+    })
   }))
 )
 
@@ -58,14 +61,16 @@ async function logout() {
           {{ t(section.label) }}
         </li>
         <li v-for="entry in section.entries" :key="entry.name">
-          <span
-            v-if="entry.disabled"
-            aria-disabled="true"
-            :title="t('nav.missingScopes')"
-            class="block cursor-not-allowed px-4 py-2 text-gray-500"
+          <HintTooltip
+            v-if="entry.missingScopes.length > 0"
+            :text="t('common.missingScopes', { scopes: entry.missingScopes.join(', ') })"
+            side="right"
+            block
           >
-            {{ t(entry.label) }}
-          </span>
+            <span aria-disabled="true" class="block cursor-not-allowed px-4 py-2 text-gray-500">
+              {{ t(entry.label) }}
+            </span>
+          </HintTooltip>
           <router-link
             v-else
             :to="entry.path"

@@ -250,8 +250,7 @@
     "grants": "Grants",
     "sessions": "Sessions",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "missingScopes": "Your token is not granted the scopes this page reads."
+    "closeMenu": "Close menu"
   },
   "logoutDialog": {
     "title": "Force Logout",

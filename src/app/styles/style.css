@@ -181,7 +181,9 @@ body {
  * class rather than repeated in each overlay's own scoped block, so the three of them cannot come
  * to open at three speeds.
  */
-.overlay-animated[data-state='open'] {
+.overlay-animated[data-state='open'],
+.overlay-animated[data-state='delayed-open'],
+.overlay-animated[data-state='instant-open'] {
   animation: overlay-in 120ms ease-out;
 }
 .overlay-animated[data-state='closed'] {
