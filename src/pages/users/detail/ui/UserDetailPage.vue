@@ -47,13 +47,25 @@ const linkProviderOpen = ref(false)
 // here beside forcing a logout all the same: they are what an operator does to the account, and a
 // menu they have to open a tab to find is one they have to know about first.
 const actions = computed<ActionItem[]>(() => [
-  { key: 'enrollMfa', label: t('pages.userDetail.enrollMfa'), icon: ShieldCheckIcon },
-  { key: 'linkProvider', label: t('pages.userDetail.linkProvider'), icon: LinkIcon },
+  {
+    key: 'enrollMfa',
+    label: t('pages.userDetail.enrollMfa'),
+    icon: ShieldCheckIcon,
+    // Its dialog picks the client the person returns to from the configuration's clients.
+    requiredScopes: ['admin:users:write', 'admin:config:read']
+  },
+  {
+    key: 'linkProvider',
+    label: t('pages.userDetail.linkProvider'),
+    icon: LinkIcon,
+    requiredScopes: ['admin:users:write', 'admin:config:read']
+  },
   {
     key: 'logout',
     label: t('pages.userDetail.forceLogout'),
     icon: ArrowRightStartOnRectangleIcon,
-    danger: true
+    danger: true,
+    requiredScopes: ['admin:grants:write']
   }
 ])
 

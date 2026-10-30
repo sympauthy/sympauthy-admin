@@ -22,6 +22,11 @@ export const useAuthStore = defineStore('auth', () => {
     return scopes.every(hasScope)
   }
 
+  /** The scopes of [scopes] the token was not granted, which a disabled control names. */
+  function missingScopes(scopes: string[]): string[] {
+    return scopes.filter((scope) => !hasScope(scope))
+  }
+
   function setUser(oidcUser: User | null): void {
     user.value = oidcUser ? AuthService.toAuthUser(oidcUser) : null
   }
@@ -95,6 +100,7 @@ export const useAuthStore = defineStore('auth', () => {
     grantedScopes,
     hasScope,
     hasAllScopes,
+    missingScopes,
     initialize,
     trySilentRenew,
     signinRedirect,

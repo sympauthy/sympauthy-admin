@@ -2,9 +2,9 @@
 
 SympAuthy Admin is the operator's panel of a [SympAuthy](https://github.com/sympauthy/sympauthy)
 authorization server. It lists and inspects what the server owns — the accounts, the clients, the
-claims, the scopes, the audiences, the invitations and the interactive flow sessions — and performs
-the few actions an operator takes on them: forcing a logout, revoking a consent, enrolling a second
-factor, issuing an invitation.
+claims, the scopes, the audiences, the invitations, the grants and the interactive flow sessions —
+and performs the few actions an operator takes on them: forcing a logout, revoking a grant or a
+consent, enrolling a second factor, issuing an invitation.
 
 It is a Vue 3 single page application, built by Vite and served by the authorization server itself.
 It stores nothing: every screen is a call to the server's `/api/v1/admin` surface, authenticated

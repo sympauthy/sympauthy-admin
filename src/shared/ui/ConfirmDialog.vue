@@ -10,6 +10,8 @@ interface Props {
   confirmLabel?: string
   cancelLabel?: string
   confirmStyle?: ButtonStyle
+  /** Holds the confirmation back while what it would act on is not yet chosen. */
+  confirmDisabled?: boolean
   loading?: boolean
   error?: string | null
 }
@@ -18,6 +20,7 @@ withDefaults(defineProps<Props>(), {
   confirmLabel: undefined,
   cancelLabel: undefined,
   confirmStyle: () => dangerColoredButton,
+  confirmDisabled: false,
   loading: false,
   error: null
 })
@@ -53,6 +56,7 @@ const { t } = useI18n()
         :button-style="confirmStyle"
         :label="confirmLabel ?? t('common.confirm')"
         :submitting="loading"
+        :disabled="confirmDisabled"
         @click="emit('confirm')"
       />
     </template>

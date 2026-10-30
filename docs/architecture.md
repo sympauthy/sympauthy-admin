@@ -40,7 +40,7 @@ reserves the segment names, so nothing inside a segment is called `ui/` or `mode
 `shared/api`, `shared/auth`, `shared/i18n`, `shared/lib` and `shared/ui`.
 
 The slices that exist are the folders under each layer. The entities are the nouns read by more
-than one slice — `user`, `client`, `claim`, `audience`, `session`; `features/` holds the actions
+than one slice — `user`, `client`, `claim`, `audience`, `session`, `grant`; `features/` holds the actions
 reused by more than one page — `browse-collection`, `logout-user`; and `pages/` holds one slice per
 route in [the router](../src/app/router/index.ts), some of them owning the client and the resources
 only that route reads. A resource with a record groups its routes in a folder of no slice's own —

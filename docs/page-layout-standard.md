@@ -63,7 +63,7 @@ so `userConsents` names `admin:users:read` beside the `admin:consent:read` its c
 
 **A screen rendered outside the panel shell sets `noLayout: true`.** The callback and the invitation
 registration add `requiresAuth: false`; the no-access page is signed in and stays outside all the
-same, since every entry the shell would draw is one the token cannot open.
+same, since every entry the shell would draw would be disabled.
 
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.
@@ -85,11 +85,30 @@ and linking a provider each create a record in a tab under the account, and are 
 forcing a logout all the same: an action an operator has to open a tab to find is one they have to
 know about first. **A tab adds nothing to the bar** — one screen, one set of actions.
 
+**A record's action names the scopes its call is made under**, and the menu draws it disabled
+where the token lacks one, in the order [menus](#menus) sets — [authentication](authentication.md#what-the-token-granted) owns the
+rule.
+
 **The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
 summary panel under it renders the record and nothing else.
 
 **A screen outside the panel shell has no bar, and so no actions.** What one of them lets an
 operator do it draws itself, inside its own content — the no-access page's sign-out.
+
+## Menus
+
+**A menu lists what it offers from the most used to the least.** The sidebar orders its sections
+and the entries in each that way, and a record's `ActionsDropdown` its actions. The panel keeps no
+usage data, so the order is a judgement, written in
+[the navigation](../src/app/router/navigation.ts) and at each menu's call site, and revised when it
+stops being true.
+
+**The sidebar's first entry is the page the panel lands on**, since `/` sends the operator to the
+first entry their token opens — the most used page is therefore the one an operator starts on.
+
+**A destructive action closes its menu, whatever its use**, under a separator `ActionsDropdown`
+draws before it. The item a slip of the pointer lands on is never the one that cannot be undone,
+and a `ConfirmDialog` behind it is the second guard, not the only one.
 
 ## Collection pages
 

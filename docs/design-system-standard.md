@@ -168,6 +168,7 @@ positioning; the styling stays Tailwind, ours.
 | `BaseDialog` | `Dialog*` |
 | `ActionsDropdown` | `DropdownMenu*` |
 | `HelpTooltip`, a collection's filter and its field list | `Popover*` |
+| `HintTooltip` | `Tooltip*` |
 | `FormListbox` | `Listbox*` |
 | `FormTagsInput` | `TagsInput*` |
 | `PaginatedTable`'s footer | `Pagination*` |
@@ -183,6 +184,24 @@ never fires a second one.
 **A menu an overlay drops is `.menu`, and a line of it `.menu-item`.** Both are in the global
 stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
 takes the line and not the box: it is a control, and draws the one every control shares.
+
+**A control that cannot be used is disabled, not removed, and says why.** A menu item drops its
+colour for `gray-400` and the pointer for `cursor-not-allowed`, and writes the reason under its
+label: a menu is read while it is open, and a hover over one of its items is a highlight rather
+than a question; an option of a dialog does the same. A button, a sidebar entry and a link carry
+the reason in a `HintTooltip`, opened by the pointer, the keyboard or a tap. The control is the
+tooltip's trigger, so it is marked `aria-disabled` rather than `disabled` — it keeps the focus and
+the pointer a disabled element refuses, and drops its own action instead. Never a `title` alone:
+the browser shows it late, and never on a touch screen.
+[Authentication](authentication.md#what-the-token-granted) says when a control is disabled.
+
+**A `HintTooltip` is a sentence about the control under it, and a `HelpTooltip` a term's
+explanation.** One opens on hover and focus over the control itself and carries no link; the other
+is pressed open from an ⓘ and may close on one, so the two are never interchanged.
+
+**A menu's destructive items are set apart by a `gray-200` rule**, which `ActionsDropdown` draws
+before the first of them; [the page layout standard](page-layout-standard.md#menus) says why they
+come last.
 
 **A surface an overlay asks or explains something on is `.popover`.** The help behind a domain term
 and the box a filter's operator and value are filled in from are one box, and it takes a card's
@@ -232,6 +251,11 @@ whichever of them fits.
 **An identifier is `font-mono`**, reached as the `mono` prop of the cell, field or row holding it,
 and one an operator has to paste elsewhere is a `CopyableValue`.
 
+**A value the panel cannot tell an identifier from takes the body face.** A session's debug
+information is a list of strings the server labelled, and an identifier among them is
+indistinguishable from a date or a word; setting all of them in monospace drew that card unlike
+every other record's fields, the same grant read in two faces on two screens.
+
 **A field the record does not carry is an `EmptyValue`.** It drops back to the body face, so a dash
 beside a monospace value does not read as part of that value.
 
@@ -257,6 +281,12 @@ up in full is linked rather than repeated here.
 **The link is a `DocLink` reaching the page covering the term, anchored at its section where it has
 one** — not the site root, which leaves the operator to search for what they were already reading
 about, and not the specification behind the term, which answers a question they did not ask.
+
+**A set of states is explained state by state where one sentence cannot tell them apart.** The
+`help` says what the set is and links to the documentation, and each state gets a line of its own
+under it from `valuesHelp`: what it means for the record, and what tells it from its neighbours. A
+grant's four statuses read that way — a sentence chaining them by semicolons left *expired* and
+*lapsed* indistinguishable.
 
 **A second explanation in one view carries the sentence alone where the documentation has nothing
 further to say about it.** A field under an explained section, and a set of states a sentence spells

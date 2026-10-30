@@ -22,7 +22,7 @@ client per surface of the server, not one per screen: `UserApi`, `UserMfaApi`,
 `InteractiveFlowSessionApi`.
 
 **A method is named after the call it makes** — `listUsers`, `getUser`, `createInvitation`,
-`revokeConsent`, `logoutUser` — and returns `Promise<SuccessApiResponse<T> | ErrorApiResponse>`.
+`revokeConsent`, `revokeGrants` — and returns `Promise<SuccessApiResponse<T> | ErrorApiResponse>`.
 
 **The path is written in full at the call site**, with the identifiers interpolated:
 

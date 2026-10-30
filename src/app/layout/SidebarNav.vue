@@ -2,30 +2,40 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore, useRouteAccess } from '@/shared/auth'
+import { missingScopesHint, useAuthStore, useRouteAccess } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
+import { HintTooltip } from '@/shared/ui'
 import { navSections } from '../router/navigation'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const { canOpen } = useRouteAccess()
+const { missingScopes } = useRouteAccess()
 const { closeSidebar } = useSidebar()
 
-// An entry the token cannot open is not drawn, and a section left without one goes with it — an
-// operator is told what the panel holds by what it offers, and a heading over nothing says the
-// opposite.
+// Every entry is drawn, and one the token cannot open is drawn disabled: the operator sees what the
+// panel holds and what their token keeps them from, rather than a sidebar that changes shape with
+// the scopes they were granted. An entry naming a route the router does not know is dropped rather
+// than drawn, since there is nothing to open.
 const sections = computed(() =>
-  navSections
-    .map((section) => ({
-      label: section.label,
-      entries: section.entries
-        .filter((entry) => canOpen(entry.name))
-        .map((entry) => ({ ...entry, path: router.resolve({ name: entry.name }).path }))
-    }))
-    .filter((section) => section.entries.length > 0)
+  navSections.map((section) => ({
+    label: section.label,
+    entries: section.entries.flatMap((entry) => {
+      const missing = missingScopes(entry.name)
+      if (missing === undefined) {
+        return []
+      }
+      return [
+        {
+          ...entry,
+          path: router.resolve({ name: entry.name }).path,
+          hint: missingScopesHint(missing)
+        }
+      ]
+    })
+  }))
 )
 
 function isActive(path: string) {
@@ -58,7 +68,18 @@ async function logout() {
           {{ t(section.label) }}
         </li>
         <li v-for="entry in section.entries" :key="entry.name">
+          <HintTooltip v-if="entry.hint" :text="entry.hint" side="right">
+            <span
+              role="link"
+              aria-disabled="true"
+              tabindex="0"
+              class="block cursor-not-allowed px-4 py-2 text-gray-500"
+            >
+              {{ t(entry.label) }}
+            </span>
+          </HintTooltip>
           <router-link
+            v-else
             :to="entry.path"
             :class="[
               'block px-4 py-2 transition-colors hover:bg-gray-700',
