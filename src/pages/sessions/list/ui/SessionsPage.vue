@@ -18,7 +18,8 @@ import {
   TableCell,
   TableHeader,
   CommonTag,
-  primaryColoredButton
+  primaryColoredButton,
+  RouteLink
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
@@ -81,13 +82,13 @@ onMounted(async () => {
           </CommonTag>
         </TableCell>
         <TableCell primary truncate>
-          <router-link
+          <RouteLink
             v-if="session.user"
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-            class="font-medium text-gray-900 hover:underline"
+            class="font-medium text-gray-900"
           >
             {{ userIdentifierLabel(session.user) }}
-          </router-link>
+          </RouteLink>
           <CommonTag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
           </CommonTag>

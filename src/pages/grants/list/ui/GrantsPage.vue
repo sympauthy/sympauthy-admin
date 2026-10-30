@@ -19,7 +19,8 @@ import {
   EmptyValue,
   TableCell,
   TableHeader,
-  primaryColoredButton
+  primaryColoredButton,
+  RouteLink
 } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
@@ -94,13 +95,13 @@ onMounted(async () => {
         <!-- The identifier rather than the person's claims: a grant names its user and nothing
              more, and the search field is what finds one by the address they sign in with. -->
         <TableCell primary truncate mono>
-          <router-link
+          <RouteLink
             v-if="grant.user_id"
             :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
-            class="font-medium text-gray-900 hover:underline"
+            class="font-medium text-gray-900"
           >
             {{ grant.user_id }}
-          </router-link>
+          </RouteLink>
           <EmptyValue v-else />
         </TableCell>
         <!-- Plain text rather than a link: a grant may name a client or an audience the

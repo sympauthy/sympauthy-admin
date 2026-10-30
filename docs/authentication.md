@@ -125,12 +125,10 @@ parent's key.
 
 **Three readers answer from that one declaration.** The guard refuses a route whose scopes are not
 all granted; a record's tab strip drops the tab; the sidebar draws an entry the token cannot open
-disabled, naming the scopes it lacks. The guard and the tab strip answer through `canOpenRoute`,
-which `useRouteAccess` binds to the router of the component calling it — and which answers `false`
-for a route the router does not know, so a navigation naming a renamed route loses its entry rather
-than throwing out of the render that drew it. The sidebar asks `missingScopes` of the same
-`requiredScopes`, since it has to say which are missing rather than whether one is; its entries are
-the panel's own index, so none of them names a route the router does not know.
+disabled, naming the scopes it lacks. All three answer through `missingRouteScopes` —
+`canOpenRoute` is it answering none — which `useRouteAccess` binds to the router of the component
+calling it, and which answers nothing for a route the router does not know, so a navigation naming
+a renamed route loses its entry rather than throwing out of the render that drew it.
 
 **`/` is the panel's root and its no-access page at once.** The guard sends it on to the first entry
 of [the navigation](../src/app/router/navigation.ts) the token can open, and `NoAccessPage` renders
@@ -138,17 +136,26 @@ only when that is none of them — naming the scopes the console reads, off the 
 the operator reading it knows what to ask for.
 
 **A control the token does not cover is drawn disabled, never hidden.** That holds for an entry of
-the sidebar, an item of a record's `ActionsDropdown` and a button alike: the operator sees what the
-panel offers and what their token keeps them from, and a screen does not change shape with the
-scopes they were granted. The disabled control names the scopes it is missing, so the operator
-knows what to ask for — under its label in a menu, and in a `HintTooltip` on a button or a sidebar
-entry.
+the sidebar, an item of a record's `ActionsDropdown`, a button and a link to another screen alike:
+the operator sees what the panel offers and what their token keeps them from, and a screen does not
+change shape with the scopes they were granted. The disabled control names the scopes it is
+missing, so the operator knows what to ask for — under its label in a menu or a dialog, and in a
+`HintTooltip` on a button, a sidebar entry or a link. `missingScopesHint` writes that sentence, once.
+
+**A link to another screen is a `RouteLink`.** It reads the scopes off the route it names, as the
+sidebar does, because a link the guard refuses sends the operator back to where they stood — a click
+that looks like it did nothing.
 
 **An action names the scopes its call is made under, as `requiredScopes`** — on its `ActionItem` in
 a menu, and on its `CommonButton` outside one. It is the action's counterpart of a route's
 `requiredScopes`, read from the server's `@Secured` on the endpoint, and the shared component is
 what disables it: a page states the scopes and never decides the state itself. A force logout is a
 revocation of grants, so it names `admin:grants:write` wherever it is offered.
+
+**An action names the scopes its dialog reads, too.** Enrolling a factor and linking a provider each
+pick a client from the configuration, so they name `admin:config:read` beside `admin:users:write`.
+A choice inside a dialog that only some of its uses need is disabled on its own instead: a force
+logout narrowed to one client reads the clients, and one reaching every client does not.
 
 ## What this document does not cover
 

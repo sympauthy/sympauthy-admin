@@ -6,7 +6,8 @@ import {
   DocHelpTooltip,
   EmptyValue,
   SummaryCard,
-  SummaryField
+  SummaryField,
+  RouteLink
 } from '@/shared/ui'
 import {
   purposeLabel,
@@ -58,13 +59,12 @@ const { t } = useI18n()
       <template #help>
         <DocHelpTooltip term="terms.interactiveFlowSession.user" />
       </template>
-      <router-link
+      <RouteLink
         v-if="session.user"
         :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-        class="hover:underline"
       >
         {{ userIdentifierLabel(session.user) }}
-      </router-link>
+      </RouteLink>
       <CommonTag v-else-if="session.signed_up" color="gray">
         {{ t('pages.sessions.signingUp') }}
       </CommonTag>

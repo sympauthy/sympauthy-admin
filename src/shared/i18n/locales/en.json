@@ -503,7 +503,7 @@
       "actions": "Actions",
       "view": "View",
       "search": "Search by user, client or audience",
-      "empty": "No grant is stored. Revoked, expired and lapsed grants are listed until the cleanup job collects them."
+      "empty": "No grants found."
     },
     "grantDetail": {
       "title": "Grant",

@@ -63,7 +63,7 @@ so `userConsents` names `admin:users:read` beside the `admin:consent:read` its c
 
 **A screen rendered outside the panel shell sets `noLayout: true`.** The callback and the invitation
 registration add `requiresAuth: false`; the no-access page is signed in and stays outside all the
-same, since every entry the shell would draw is one the token cannot open.
+same, since every entry the shell would draw would be disabled.
 
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/shared/auth'
+import { missingScopesHint, useAuthStore, useRouteAccess } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
 import { HintTooltip } from '@/shared/ui'
@@ -12,21 +12,28 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const { missingScopes } = useRouteAccess()
 const { closeSidebar } = useSidebar()
 
 // Every entry is drawn, and one the token cannot open is drawn disabled: the operator sees what the
 // panel holds and what their token keeps them from, rather than a sidebar that changes shape with
-// the scopes they were granted.
+// the scopes they were granted. An entry naming a route the router does not know is dropped rather
+// than drawn, since there is nothing to open.
 const sections = computed(() =>
   navSections.map((section) => ({
     label: section.label,
-    entries: section.entries.map((entry) => {
-      const route = router.resolve({ name: entry.name })
-      return {
-        ...entry,
-        path: route.path,
-        missingScopes: authStore.missingScopes(route.meta.requiredScopes ?? [])
+    entries: section.entries.flatMap((entry) => {
+      const missing = missingScopes(entry.name)
+      if (missing === undefined) {
+        return []
       }
+      return [
+        {
+          ...entry,
+          path: router.resolve({ name: entry.name }).path,
+          hint: missingScopesHint(missing)
+        }
+      ]
     })
   }))
 )
@@ -61,13 +68,13 @@ async function logout() {
           {{ t(section.label) }}
         </li>
         <li v-for="entry in section.entries" :key="entry.name">
-          <HintTooltip
-            v-if="entry.missingScopes.length > 0"
-            :text="t('common.missingScopes', { scopes: entry.missingScopes.join(', ') })"
-            side="right"
-            block
-          >
-            <span aria-disabled="true" class="block cursor-not-allowed px-4 py-2 text-gray-500">
+          <HintTooltip v-if="entry.hint" :text="entry.hint" side="right">
+            <span
+              role="link"
+              aria-disabled="true"
+              tabindex="0"
+              class="block cursor-not-allowed px-4 py-2 text-gray-500"
+            >
               {{ t(entry.label) }}
             </span>
           </HintTooltip>

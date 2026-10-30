@@ -6,7 +6,8 @@ import {
   DocHelpTooltip,
   EmptyValue,
   SummaryCard,
-  SummaryField
+  SummaryField,
+  RouteLink
 } from '@/shared/ui'
 import {
   grantStatusColor,
@@ -43,13 +44,12 @@ const { t } = useI18n()
       <template #help>
         <DocHelpTooltip term="terms.grant.user" />
       </template>
-      <router-link
+      <RouteLink
         v-if="grant.user_id"
         :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
-        class="hover:underline"
       >
         {{ grant.user_id }}
-      </router-link>
+      </RouteLink>
       <EmptyValue v-else />
     </SummaryField>
     <!-- Plain text rather than links: a grant may name a client or an audience the configuration

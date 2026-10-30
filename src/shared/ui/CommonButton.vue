@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { computed, type Component } from 'vue'
+import { computed, useAttrs, type Component, type FunctionalComponent } from 'vue'
 import { type ButtonStyle, primaryColoredButton } from './ButtonStyle'
 import CommonSpinner from './CommonSpinner.vue'
 import HintTooltip from './HintTooltip.vue'
-import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/shared/auth'
+import { useAuthStore, missingScopesHint } from '@/shared/auth'
 
 interface Props {
   buttonStyle?: ButtonStyle
@@ -30,7 +29,8 @@ interface Props {
   disabled?: boolean
   /**
    * The admin scopes the call behind the button is made under. A button the token is not granted
-   * all of is drawn disabled, naming them in its title, rather than offered to fail at the server.
+   * all of is drawn disabled, naming them in a `HintTooltip`, rather than offered to fail at the
+   * server.
    */
   requiredScopes?: string[]
 }
@@ -49,24 +49,32 @@ const props = withDefaults(defineProps<Props>(), {
   requiredScopes: () => []
 })
 
-const { t } = useI18n()
+const attrs = useAttrs()
 const authStore = useAuthStore()
 
-const missingScopes = computed(() => authStore.missingScopes(props.requiredScopes))
-const unauthorized = computed(() => missingScopes.value.length > 0)
+const hint = computed(() => missingScopesHint(authStore.missingScopes(props.requiredScopes)))
+
+// A button the token is refused stays focusable and takes the pointer, which is what lets it open
+// the tooltip saying why: it is `aria-disabled` rather than `disabled`, so the caller's own click
+// handler is what it drops, and a click it receives does nothing — inside a form, not even submit.
+const buttonAttrs = computed(() => {
+  if (!hint.value) {
+    return attrs
+  }
+  const rest = Object.fromEntries(Object.entries(attrs).filter(([name]) => name !== 'onClick'))
+  return { ...rest, 'aria-disabled': 'true', onClick: (event: Event) => event.preventDefault() }
+})
 
 const computedDisabled = computed(
-  () => props.loading || props.submitting || props.disabled || unauthorized.value
+  () => !hint.value && (props.loading || props.submitting || props.disabled)
 )
 
-const hint = computed(() =>
-  unauthorized.value
-    ? t('common.missingScopes', { scopes: missingScopes.value.join(', ') })
-    : undefined
-)
+// Renders its content as it is, standing in for `HintTooltip` around a button the token covers, so
+// that one's element is the <button> itself: an `as-child` trigger positions against it.
+const Bare: FunctionalComponent = (_, { slots }) => slots.default?.()[0]
 
 const computedClasses = computed(() => {
-  if (props.disabled || unauthorized.value) {
+  if (props.disabled || hint.value) {
     return props.buttonStyle.disabledClasses
   } else if (props.loading) {
     return props.buttonStyle.loadingClasses
@@ -87,37 +95,20 @@ const stateSlot = computed(() => {
 </script>
 
 <template>
-  <!-- Only a button the token is refused is wrapped: every other one stays the root, so the
-       attributes a caller and an \`as-child\` trigger pass reach the <button> and its element is the
-       one a dropdown positions against. -->
-  <HintTooltip v-if="hint" :text="hint">
+  <component :is="hint ? HintTooltip : Bare" v-bind="hint ? { text: hint } : {}">
     <button
-      v-bind="$attrs"
+      v-bind="buttonAttrs"
       :class="computedClasses"
-      disabled
+      :disabled="computedDisabled"
       :title="props.label"
       class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
     >
-      <component :is="props.icon" v-if="props.icon" class="size-4 shrink-0" />
+      <CommonSpinner v-if="loading || submitting" size="sm" />
+      <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
       <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
-        <slot>{{ props.label }}</slot>
+        <slot :name="stateSlot">{{ props.label }}</slot>
       </span>
       <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
     </button>
-  </HintTooltip>
-  <button
-    v-else
-    v-bind="$attrs"
-    :class="computedClasses"
-    :disabled="computedDisabled"
-    :title="props.label"
-    class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
-  >
-    <CommonSpinner v-if="loading || submitting" size="sm" />
-    <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
-    <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
-      <slot :name="stateSlot">{{ props.label }}</slot>
-    </span>
-    <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
-  </button>
+  </component>
 </template>

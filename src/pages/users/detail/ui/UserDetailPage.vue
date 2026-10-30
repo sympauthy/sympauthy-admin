@@ -51,13 +51,14 @@ const actions = computed<ActionItem[]>(() => [
     key: 'enrollMfa',
     label: t('pages.userDetail.enrollMfa'),
     icon: ShieldCheckIcon,
-    requiredScopes: ['admin:users:write']
+    // Its dialog picks the client the person returns to from the configuration's clients.
+    requiredScopes: ['admin:users:write', 'admin:config:read']
   },
   {
     key: 'linkProvider',
     label: t('pages.userDetail.linkProvider'),
     icon: LinkIcon,
-    requiredScopes: ['admin:users:write']
+    requiredScopes: ['admin:users:write', 'admin:config:read']
   },
   {
     key: 'logout',

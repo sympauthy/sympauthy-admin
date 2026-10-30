@@ -73,6 +73,12 @@ async function load(id: string) {
 
   const response = await api.getGrant(id)
 
+  // Following a grant's acting grant and coming back can leave two reads in flight; only the one for
+  // the grant the URL names now is painted, or the page would show one grant under another's path.
+  if (id !== grantId.value) {
+    return
+  }
+
   if (isSuccess(response)) {
     grant.value = response.content
     setLabel(grant.value.grant_id)
@@ -86,10 +92,14 @@ async function load(id: string) {
 }
 
 async function onRevoke() {
+  if (!grant.value) return
+  const id = grant.value.grant_id
+
   revokeLoading.value = true
   revokeError.value = null
 
-  const response = await api.revokeGrants({ grant_ids: [grantId.value] })
+  // The grant revoked is the one the operator read and confirmed, whatever the URL has moved to.
+  const response = await api.revokeGrants({ grant_ids: [id] })
 
   revokeLoading.value = false
   if (isSuccess(response)) {

@@ -21,7 +21,7 @@ export const primaryColoredButton: ButtonStyle = Object.freeze({
   activeClasses: 'border-transparent bg-primary text-on-primary hover:bg-primary-hover',
   loadingClasses: 'border-transparent bg-primary text-on-primary cursor-wait',
   submittingClasses: 'border-transparent bg-primary text-on-primary cursor-wait',
-  disabledClasses: 'border-transparent bg-disabled text-on-disabled pointer-events-none'
+  disabledClasses: 'border-transparent bg-disabled text-on-disabled cursor-not-allowed'
 })
 
 export const secondaryColoredButton: ButtonStyle = Object.freeze({
@@ -30,12 +30,12 @@ export const secondaryColoredButton: ButtonStyle = Object.freeze({
   submittingClasses: 'border-gray-200 bg-gray-100 text-gray-700 cursor-wait',
   // Paler than its active state, not darker: this is the style the toolbar's refresh control
   // wears, and it is disabled on every fetch.
-  disabledClasses: 'border-gray-200 bg-gray-50 text-gray-400 pointer-events-none'
+  disabledClasses: 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
 })
 
 export const dangerColoredButton: ButtonStyle = Object.freeze({
   activeClasses: 'border-transparent bg-red-600 text-white hover:bg-red-700',
   loadingClasses: 'border-transparent bg-red-600 text-white cursor-wait',
   submittingClasses: 'border-transparent bg-red-600 text-white cursor-wait',
-  disabledClasses: 'border-transparent bg-disabled text-on-disabled pointer-events-none'
+  disabledClasses: 'border-transparent bg-disabled text-on-disabled cursor-not-allowed'
 })

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Component } from 'vue'
+import { computed, type Component } from 'vue'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { useI18n } from 'vue-i18n'
 import {
@@ -12,7 +12,7 @@ import {
 } from 'reka-ui'
 import CommonButton from './CommonButton.vue'
 import { type ButtonStyle, secondaryColoredButton } from './ButtonStyle'
-import { useAuthStore } from '@/shared/auth'
+import { missingScopesHint, useAuthStore } from '@/shared/auth'
 
 export interface ActionItem {
   key: string
@@ -26,7 +26,7 @@ export interface ActionItem {
   requiredScopes?: string[]
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     actions: ActionItem[]
     buttonStyle?: ButtonStyle
@@ -43,9 +43,14 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const authStore = useAuthStore()
 
-function missingScopes(action: ActionItem): string[] {
-  return authStore.missingScopes(action.requiredScopes ?? [])
-}
+// Each action with the sentence it is disabled with, read once per render rather than once per place
+// the item asks.
+const items = computed(() =>
+  props.actions.map((action) => ({
+    ...action,
+    hint: missingScopesHint(authStore.missingScopes(action.requiredScopes ?? []))
+  }))
+)
 
 // A destructive action closes the menu, under a rule, whatever its use: the item a slip of the
 // pointer lands on is never the one that cannot be undone.
@@ -65,21 +70,18 @@ function startsDanger(index: number, actions: ActionItem[]): boolean {
     </DropdownMenuTrigger>
     <DropdownMenuPortal>
       <DropdownMenuContent align="end" :side-offset="4" class="menu overlay-animated min-w-48">
-        <template v-for="(action, index) in actions" :key="action.key">
-          <DropdownMenuSeparator
-            v-if="startsDanger(index, actions)"
-            class="my-1 h-px bg-gray-200"
-          />
+        <template v-for="(action, index) in items" :key="action.key">
+          <DropdownMenuSeparator v-if="startsDanger(index, items)" class="my-1 h-px bg-gray-200" />
           <DropdownMenuItem
             class="menu-item"
             :class="
-              missingScopes(action).length > 0
+              action.hint
                 ? 'cursor-not-allowed text-gray-400'
                 : action.danger
                   ? 'text-red-600 data-[highlighted]:bg-red-50'
                   : 'text-gray-700 data-[highlighted]:bg-gray-100'
             "
-            :disabled="missingScopes(action).length > 0"
+            :disabled="action.hint !== undefined"
             @select="emit('action', action.key)"
           >
             <component
@@ -91,9 +93,7 @@ function startsDanger(index: number, actions: ActionItem[]): boolean {
                  open, and a hover over one of its items is a highlight, not a question. -->
             <span class="flex flex-col">
               {{ action.label }}
-              <span v-if="missingScopes(action).length > 0" class="text-xs">
-                {{ t('common.missingScopes', { scopes: missingScopes(action).join(', ') }) }}
-              </span>
+              <span v-if="action.hint" class="text-xs">{{ action.hint }}</span>
             </span>
           </DropdownMenuItem>
         </template>

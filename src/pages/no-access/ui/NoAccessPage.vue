@@ -10,7 +10,7 @@ import { CommonButton, CommonCard, CommonTag, secondaryColoredButton } from '@/s
  * rules gave them `openid` and nothing this console reads.
  *
  * It is drawn outside the panel shell because there is nothing for the shell to draw: every entry
- * of the navigation would be hidden, and signing out is the only thing left to do.
+ * of the navigation would be disabled, and signing out is the only thing left to do.
  */
 const router = useRouter()
 const { t } = useI18n()

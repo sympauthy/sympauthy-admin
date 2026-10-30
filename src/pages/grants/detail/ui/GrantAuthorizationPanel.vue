@@ -6,7 +6,8 @@ import {
   DefinitionRow,
   DetailSection,
   DocHelpTooltip,
-  EmptyValue
+  EmptyValue,
+  RouteLink
 } from '@/shared/ui'
 import type { GrantDetailResource } from '@/entities/grant'
 import { formatDateTime } from '@/shared/lib'
@@ -36,13 +37,12 @@ const { t } = useI18n()
           {{ t('pages.grantDetail.actorGrant.label') }}
           <DocHelpTooltip term="pages.grantDetail.actorGrant" />
         </template>
-        <router-link
+        <RouteLink
           v-if="grant.actor_grant_id"
           :to="{ name: 'grantDetail', params: { grantId: grant.actor_grant_id } }"
-          class="hover:underline"
         >
           {{ grant.actor_grant_id }}
-        </router-link>
+        </RouteLink>
         <EmptyValue v-else />
       </DefinitionRow>
       <DefinitionRow>

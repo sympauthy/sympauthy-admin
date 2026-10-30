@@ -188,9 +188,11 @@ takes the line and not the box: it is a control, and draws the one every control
 **A control that cannot be used is disabled, not removed, and says why.** A menu item drops its
 colour for `gray-400` and the pointer for `cursor-not-allowed`, and writes the reason under its
 label: a menu is read while it is open, and a hover over one of its items is a highlight rather
-than a question. A button and a sidebar entry carry the reason in a `HintTooltip`, opened by the
-pointer or the keyboard. Never a `title` alone — the browser shows it late, never over a button
-that takes no pointer events, and never on a touch screen.
+than a question; an option of a dialog does the same. A button, a sidebar entry and a link carry
+the reason in a `HintTooltip`, opened by the pointer, the keyboard or a tap. The control is the
+tooltip's trigger, so it is marked `aria-disabled` rather than `disabled` — it keeps the focus and
+the pointer a disabled element refuses, and drops its own action instead. Never a `title` alone:
+the browser shows it late, and never on a touch screen.
 [Authentication](authentication.md#what-the-token-granted) says when a control is disabled.
 
 **A `HintTooltip` is a sentence about the control under it, and a `HelpTooltip` a term's
