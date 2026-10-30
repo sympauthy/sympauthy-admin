@@ -184,6 +184,10 @@ never fires a second one.
 stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
 takes the line and not the box: it is a control, and draws the one every control shares.
 
+**A menu item that cannot be used is disabled, not removed.** It drops its colour for `gray-400`
+and the pointer for `cursor-not-allowed`, and says why in its `title`; `ActionsDropdown` and the
+sidebar draw it that way, and [authentication](authentication.md#what-the-token-granted) says when.
+
 **A surface an overlay asks or explains something on is `.popover`.** The help behind a domain term
 and the box a filter's operator and value are filled in from are one box, and it takes a card's
 radius rather than a menu's.

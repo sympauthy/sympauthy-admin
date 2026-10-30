@@ -11,12 +11,18 @@ import {
 } from 'reka-ui'
 import CommonButton from './CommonButton.vue'
 import { type ButtonStyle, secondaryColoredButton } from './ButtonStyle'
+import { useAuthStore } from '@/shared/auth'
 
 export interface ActionItem {
   key: string
   label: string
   icon?: Component
   danger?: boolean
+  /**
+   * The admin scopes the call behind the action is made under. An item the token is not granted
+   * all of is drawn disabled, naming them, rather than offered to fail at the server.
+   */
+  requiredScopes?: string[]
 }
 
 withDefaults(
@@ -34,6 +40,11 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const authStore = useAuthStore()
+
+function missingScopes(action: ActionItem): string[] {
+  return (action.requiredScopes ?? []).filter((scope) => !authStore.hasAllScopes([scope]))
+}
 </script>
 
 <template>
@@ -52,9 +63,17 @@ const { t } = useI18n()
           :key="action.key"
           class="menu-item"
           :class="
-            action.danger
-              ? 'text-red-600 data-[highlighted]:bg-red-50'
-              : 'text-gray-700 data-[highlighted]:bg-gray-100'
+            missingScopes(action).length > 0
+              ? 'cursor-not-allowed text-gray-400'
+              : action.danger
+                ? 'text-red-600 data-[highlighted]:bg-red-50'
+                : 'text-gray-700 data-[highlighted]:bg-gray-100'
+          "
+          :disabled="missingScopes(action).length > 0"
+          :title="
+            missingScopes(action).length > 0
+              ? t('common.missingScopes', { scopes: missingScopes(action).join(', ') })
+              : undefined
           "
           @select="emit('action', action.key)"
         >

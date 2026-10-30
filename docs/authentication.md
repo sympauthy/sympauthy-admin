@@ -124,8 +124,8 @@ another states the whole set rather than the difference, since a child's `meta` 
 parent's key.
 
 **Three readers answer from that one declaration.** The guard refuses a route whose scopes are not
-all granted; the sidebar draws neither an entry the token cannot open nor a section left without
-one; a record's tab strip drops the tab. All three answer through `canOpenRoute`, which
+all granted; the sidebar draws an entry the token cannot open disabled; a record's tab strip drops
+the tab. All three answer through `canOpenRoute`, which
 `useRouteAccess` binds to the router of the component calling it — and which answers `false` for a
 route the router does not know, so a navigation naming a renamed route loses its entry rather than
 throwing out of the render that drew it.
@@ -135,12 +135,28 @@ of [the navigation](../src/app/router/navigation.ts) the token can open, and `No
 only when that is none of them — naming the scopes the console reads, off the routes themselves, so
 the operator reading it knows what to ask for.
 
+**A menu item the token does not cover is drawn disabled, never hidden.** That holds for an entry
+of the sidebar and for an item of a record's `ActionsDropdown` alike: the operator sees what the
+panel offers and what their token keeps them from, and a menu does not change shape with the scopes
+they were granted. The disabled item names what is missing in its title, so the operator knows
+what to ask for.
+
+**An action names the scopes its call is made under, as `requiredScopes` on its `ActionItem`.** It
+is the action's counterpart of a route's `requiredScopes`, read from the server's `@Secured` on the
+endpoint, and `ActionsDropdown` is what disables the item — a page states the scopes and never
+decides the state itself. A force logout is a revocation of grants, so it names
+`admin:grants:write`.
+
 ## What this document does not cover
 
-**Write actions.** A screen is shown for what the token can read, and nothing hides or disables the
-buttons behind `admin:users:write`, `admin:consent:write`, `admin:grants:write`,
-`admin:users:delete` and `admin:invitations:write`; one the token is not scoped for fails at the
-server. A force logout is a revocation of grants, so it is `admin:grants:write` it fails without.
+**A button outside a menu.** A collection's row action and toolbar button — revoking a consent or
+an invitation, a row's logout, creating an invitation — are still drawn enabled whatever the token
+holds, and fail at the server. The rule was set for menus, and no button has been brought under it
+yet.
+
+**A record's tab.** The tab strip still drops a tab the token cannot open rather than drawing it
+disabled: it lists the views of one record rather than offering a choice, and whether it joins the
+rule above is open.
 
 **Why a scope is missing.** Whether the admin client is not allowed it or the granting rules did not
 grant it is not in the token, and the panel does not guess.

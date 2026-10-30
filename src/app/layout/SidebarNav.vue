@@ -14,18 +14,18 @@ const authStore = useAuthStore()
 const { canOpen } = useRouteAccess()
 const { closeSidebar } = useSidebar()
 
-// An entry the token cannot open is not drawn, and a section left without one goes with it — an
-// operator is told what the panel holds by what it offers, and a heading over nothing says the
-// opposite.
+// Every entry is drawn, and one the token cannot open is drawn disabled: the operator sees what the
+// panel holds and what their token keeps them from, rather than a sidebar that changes shape with
+// the scopes they were granted.
 const sections = computed(() =>
-  navSections
-    .map((section) => ({
-      label: section.label,
-      entries: section.entries
-        .filter((entry) => canOpen(entry.name))
-        .map((entry) => ({ ...entry, path: router.resolve({ name: entry.name }).path }))
+  navSections.map((section) => ({
+    label: section.label,
+    entries: section.entries.map((entry) => ({
+      ...entry,
+      path: router.resolve({ name: entry.name }).path,
+      disabled: !canOpen(entry.name)
     }))
-    .filter((section) => section.entries.length > 0)
+  }))
 )
 
 function isActive(path: string) {
@@ -58,7 +58,16 @@ async function logout() {
           {{ t(section.label) }}
         </li>
         <li v-for="entry in section.entries" :key="entry.name">
+          <span
+            v-if="entry.disabled"
+            aria-disabled="true"
+            :title="t('nav.missingScopes')"
+            class="block cursor-not-allowed px-4 py-2 text-gray-500"
+          >
+            {{ t(entry.label) }}
+          </span>
           <router-link
+            v-else
             :to="entry.path"
             :class="[
               'block px-4 py-2 transition-colors hover:bg-gray-700',

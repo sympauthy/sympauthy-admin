@@ -71,7 +71,8 @@
         "starts_with": "starts with",
         "is_null": "is empty"
       }
-    }
+    },
+    "missingScopes": "Your token is not granted {scopes}."
   },
   "terms": {
     "claim": {
@@ -241,7 +242,8 @@
     "grants": "Grants",
     "sessions": "Sessions",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "missingScopes": "Your token is not granted the scopes this page reads."
   },
   "logoutDialog": {
     "title": "Force Logout",

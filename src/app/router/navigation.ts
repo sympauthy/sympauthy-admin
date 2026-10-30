@@ -1,11 +1,11 @@
 /** One page the sidebar offers. */
 export interface NavEntry {
-  /** The route it opens. Its `requiredScopes` are what decides whether it is drawn. */
+  /** The route it opens. Its `requiredScopes` decide whether it is drawn enabled or disabled. */
   name: string
   label: string
 }
 
-/** A group of entries under one heading, hidden when none of its entries is drawn. */
+/** A group of entries under one heading. */
 export interface NavSection {
   label: string
   entries: NavEntry[]

@@ -46,7 +46,15 @@ const revokeError = ref<string | null>(null)
 // would succeed and change nothing.
 const actions = computed<ActionItem[]>(() =>
   grant.value && grantIsLive(grant.value)
-    ? [{ key: 'revoke', label: t('pages.grantDetail.revoke'), icon: NoSymbolIcon, danger: true }]
+    ? [
+        {
+          key: 'revoke',
+          label: t('pages.grantDetail.revoke'),
+          icon: NoSymbolIcon,
+          danger: true,
+          requiredScopes: ['admin:grants:write']
+        }
+      ]
     : []
 )
 

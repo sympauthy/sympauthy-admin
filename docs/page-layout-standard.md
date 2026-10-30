@@ -85,6 +85,10 @@ and linking a provider each create a record in a tab under the account, and are 
 forcing a logout all the same: an action an operator has to open a tab to find is one they have to
 know about first. **A tab adds nothing to the bar** — one screen, one set of actions.
 
+**A record's action names the scopes its call is made under**, and the menu draws it disabled
+where the token lacks one — [authentication](authentication.md#what-the-token-granted) owns the
+rule.
+
 **The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
 summary panel under it renders the record and nothing else.
 
