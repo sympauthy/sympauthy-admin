@@ -144,7 +144,7 @@ function onOpenAutoFocus(event: Event) {
       class="control control-focus-within flex max-w-full items-center overflow-hidden bg-white p-0 text-gray-700"
     >
       <PopoverTrigger
-        class="flex min-w-0 items-center gap-1 py-2 pr-1 pl-3 text-left outline-none"
+        class="flex min-w-0 items-center gap-1 self-stretch pr-1 pl-3 text-left outline-none"
         :title="title"
       >
         <span class="shrink-0 font-medium text-gray-600">{{ props.filter.name }}</span>
@@ -159,7 +159,7 @@ function onOpenAutoFocus(event: Event) {
       </PopoverTrigger>
 
       <button
-        class="shrink-0 py-2 pr-2.5 pl-1 text-gray-400 outline-none hover:text-gray-600 focus-visible:text-gray-900"
+        class="shrink-0 self-stretch pr-2.5 pl-1 text-gray-400 outline-none hover:text-gray-600 focus-visible:text-gray-900"
         :title="t('common.collection.removeFilter')"
         :aria-label="t('common.collection.removeFilter')"
         @click="emit('remove')"

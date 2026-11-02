@@ -97,7 +97,7 @@ async function onConfirm() {
 
     <div class="space-y-3">
       <label class="flex cursor-pointer items-center gap-2">
-        <input v-model="mode" type="radio" value="all" class="text-primary focus:ring-primary" />
+        <input v-model="mode" type="radio" value="all" class="accent-primary" />
         <span class="text-sm text-gray-700">{{ t('logoutDialog.allClients') }}</span>
       </label>
 
@@ -110,7 +110,7 @@ async function onConfirm() {
           type="radio"
           value="specific"
           :disabled="clientPickerHint !== undefined"
-          class="mt-0.5 text-primary focus:ring-primary"
+          class="mt-0.5 accent-primary"
         />
         <span
           class="flex flex-col text-sm"

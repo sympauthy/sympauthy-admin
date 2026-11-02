@@ -344,12 +344,13 @@ server's, at its root.
 none. `BrandWordmark` draws it and `main.ts` titles the document with it, so neither is written
 anywhere else.
 
-**The ground under a logo chooses its file.** `BrandLogo` is passed `on-dark` on the sidebar, and
+**The ground under a logo chooses its file.** `BrandLogo` is passed `dark` on the sidebar, and
 draws the light logo on `ground` and `surface` everywhere else; the device's preference has no say,
 since the panel is pinned light.
 
 **An unreadable brand draws the panel as SympAuthy's.** `fetchBrand` never rejects and gives up
-after 3 seconds, and `theme.css` carries the light values the stylesheet would have answered.
+after 3 seconds, `theme.css` carries the light values the stylesheet would have answered, and
+`BrandLogo` draws the logo the package ships.
 
 ## What this standard does not cover
 

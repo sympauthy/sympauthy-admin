@@ -51,15 +51,15 @@ async function logout() {
   <nav class="flex h-full flex-col bg-nav text-nav-text">
     <div class="flex h-14 items-center justify-between gap-2 border-b border-nav-divider px-4">
       <div class="flex min-w-0 items-center gap-2">
-        <BrandLogo on-dark />
-        <span class="truncate text-lg font-semibold text-white">
+        <BrandLogo dark />
+        <span class="truncate text-lg font-semibold">
           <BrandWordmark />
           <span class="ml-1.5 font-medium text-nav-muted">{{ t('nav.panel') }}</span>
         </span>
       </div>
       <button
         :title="t('nav.closeMenu')"
-        class="shrink-0 text-nav-muted hover:text-white lg:hidden"
+        class="shrink-0 text-nav-muted hover:text-nav-text lg:hidden"
         @click="closeSidebar"
       >
         <XMarkIcon class="size-5" />
@@ -88,7 +88,7 @@ async function logout() {
             :class="[
               'relative block px-4 py-2 text-sm transition-colors',
               isActive(entry.path)
-                ? 'bg-nav-active font-medium text-white before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-gold'
+                ? 'bg-nav-active font-medium before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-gold'
                 : 'hover:bg-nav-hover'
             ]"
           >
@@ -100,7 +100,7 @@ async function logout() {
     <div class="border-t border-nav-divider p-4">
       <div class="mb-2 truncate text-sm">{{ authStore.userName }}</div>
       <button
-        class="flex items-center gap-2 text-sm text-nav-muted transition-colors hover:text-white"
+        class="flex items-center gap-2 text-sm text-nav-muted transition-colors hover:text-nav-text"
         @click="logout"
       >
         <ArrowRightStartOnRectangleIcon class="size-4" />

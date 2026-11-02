@@ -5,7 +5,7 @@ import { onBeforeUnmount, onMounted, onUpdated, type Ref } from 'vue'
 // holding action buttons): overestimating leaves a gap under the last row until the real height is
 // known, where underestimating would request more rows than fit and make the table scroll.
 const FALLBACK_HEADER_HEIGHT = 40
-const FALLBACK_ROW_HEIGHT = 72
+const FALLBACK_ROW_HEIGHT = 77
 
 // A viewport change smaller than this is ignored, in either direction: a scrollbar appearing or
 // disappearing resizes the viewport by ~15px and would otherwise feed back into the page size.
