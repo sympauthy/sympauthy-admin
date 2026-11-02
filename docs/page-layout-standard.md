@@ -203,9 +203,8 @@ component owns them.
 **The panel is built for 360px and up.** That is the narrowest phone still in use; below it nothing
 is checked and nothing is promised.
 
-**It stops growing at `max-w-page`**, the `--container-page` token in
-[the global stylesheet](../src/app/styles/style.css), and centres past it. A label and the value
-beside it drifting a monitor apart is not more readable for the room.
+**It stops growing at `max-w-page`**, the design system's `--container-page` token, and centres past
+it. A label and the value beside it drifting a monitor apart is not more readable for the room.
 
 **Three arrangements carry that range, and there is no fourth.**
 

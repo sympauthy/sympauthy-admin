@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import CommonSpinner from './CommonSpinner.vue'
+import { CommonSpinner } from '@sympauthy/design'
 
 /**
  * What a screen shows while it waits for the record or the page it was asked for. Every screen says

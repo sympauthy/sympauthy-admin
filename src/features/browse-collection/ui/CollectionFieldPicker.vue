@@ -82,7 +82,7 @@ function onCloseAutoFocus(event: Event) {
          The chevron stays with it: with nothing written on the control, it is what says a list
          opens. -->
     <PopoverTrigger
-      class="control control-focus flex shrink-0 items-center gap-1.5 border-gray-300 bg-white"
+      class="control control-focus flex shrink-0 items-center gap-1.5 bg-white"
       :title="t('common.addFilter')"
     >
       <PlusIcon class="size-4 shrink-0" />
@@ -94,7 +94,7 @@ function onCloseAutoFocus(event: Event) {
       <PopoverContent
         align="end"
         :side-offset="4"
-        class="overlay-animated z-10 w-64 max-w-[calc(100vw-2rem)] rounded-md shadow-lg"
+        class="overlay-animated z-10 w-64 max-w-[calc(100vw-2rem)] rounded-md"
         @close-auto-focus="onCloseAutoFocus"
       >
         <FormListbox

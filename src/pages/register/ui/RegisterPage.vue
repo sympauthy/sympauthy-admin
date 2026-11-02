@@ -3,7 +3,14 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
-import { CommonButton, CommonCard, FormField, FormInput, primaryColoredButton } from '@/shared/ui'
+import {
+  BrandLogo,
+  CommonButton,
+  CommonCard,
+  FormField,
+  FormInput,
+  primaryColoredButton
+} from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -30,8 +37,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+  <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-sm">
+      <BrandLogo large class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('register.title') }}
       </h1>

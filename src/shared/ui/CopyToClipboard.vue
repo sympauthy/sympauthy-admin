@@ -21,11 +21,11 @@ async function copy(value: string) {
 <template>
   <button
     type="button"
-    class="shrink-0 cursor-pointer text-gray-400 hover:text-gray-600"
+    class="-m-1 shrink-0 cursor-pointer rounded-md p-1 text-gray-500 hover:bg-primary-subtle hover:text-primary"
     :title="title"
     @click="copy(value)"
   >
-    <CheckIcon v-if="copied" class="size-4 text-green-500" />
+    <CheckIcon v-if="copied" class="size-4 text-green-800" />
     <ClipboardDocumentIcon v-else class="size-4" />
   </button>
 </template>

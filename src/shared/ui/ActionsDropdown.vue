@@ -10,8 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator
 } from 'reka-ui'
+import { type ButtonStyle, secondaryColoredButton } from '@sympauthy/design'
 import CommonButton from './CommonButton.vue'
-import { type ButtonStyle, secondaryColoredButton } from './ButtonStyle'
 import { missingScopesHint, useAuthStore } from '@/shared/auth'
 
 export interface ActionItem {
@@ -78,8 +78,8 @@ function startsDanger(index: number, actions: ActionItem[]): boolean {
               action.hint
                 ? 'cursor-not-allowed text-gray-400'
                 : action.danger
-                  ? 'text-red-600 data-[highlighted]:bg-red-50'
-                  : 'text-gray-700 data-[highlighted]:bg-gray-100'
+                  ? 'text-danger data-[highlighted]:bg-red-50'
+                  : 'text-gray-700 data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-900'
             "
             :disabled="action.hint !== undefined"
             @select="emit('action', action.key)"
@@ -88,12 +88,13 @@ function startsDanger(index: number, actions: ActionItem[]): boolean {
               :is="action.icon"
               v-if="action.icon"
               class="mt-0.5 size-4 shrink-0 self-start"
+              :class="action.hint || action.danger ? '' : 'text-gray-500'"
             />
             <!-- The reason sits under the label rather than in a tooltip: a menu is read while it is
                  open, and a hover over one of its items is a highlight, not a question. -->
             <span class="flex flex-col">
               {{ action.label }}
-              <span v-if="action.hint" class="text-xs">{{ action.hint }}</span>
+              <span v-if="action.hint" class="text-xs text-gray-500">{{ action.hint }}</span>
             </span>
           </DropdownMenuItem>
         </template>

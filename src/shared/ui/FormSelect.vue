@@ -10,7 +10,7 @@ const model = defineModel<string>({ default: '' })
 <template>
   <select
     v-model="model"
-    class="control control-focus block w-full border-gray-300 bg-white shadow-sm disabled:cursor-not-allowed disabled:bg-gray-50"
+    class="control control-focus block w-full bg-white text-base text-gray-900 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
   >
     <slot />
   </select>

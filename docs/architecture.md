@@ -22,8 +22,8 @@ A layer imports from the layers strictly below it, and never sideways or upward.
 | `entities/` | a domain noun more than one slice reads: its client, its schemas, its stores |
 | `shared/` | the design system, the HTTP plumbing and the collection wire, auth, i18n, utilities |
 
-`src/main.ts` is Vite's entry point and sits outside the layers: it creates the app, the router, the
-i18n instance and the Pinia instance, and mounts the result.
+`src/main.ts` is Vite's entry point and sits outside the layers: it reads the deployment's brand,
+creates the app, the router, the i18n instance and the Pinia instance, and mounts the result.
 
 ## Slices and segments
 
@@ -115,7 +115,7 @@ is also why two screens over the same records no longer share a page number.
 
 ```
 index.html               the document Vite builds around
-src/main.ts              the entry point: app, router, i18n, Pinia
+src/main.ts              the entry point: brand, app, router, i18n, Pinia
 src/app/                 App.vue, router, layout shell, global stylesheet
 src/pages/<route>/       one slice per route, with the api/ and model/ only it reads
 src/pages/<resource>/    a record's routes grouped: list/, detail/ and a slice per tab

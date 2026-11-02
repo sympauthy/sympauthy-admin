@@ -141,7 +141,7 @@ function onOpenAutoFocus(event: Event) {
     <!-- The box is the wrapper's and the two controls inside it are real ones, so removing a filter
          stays one press and stays reachable from the keyboard. -->
     <div
-      class="control control-focus-within flex max-w-full items-center overflow-hidden border-gray-300 bg-white p-0 text-gray-700"
+      class="control control-focus-within flex max-w-full items-center overflow-hidden bg-white p-0 text-gray-700"
     >
       <PopoverTrigger
         class="flex min-w-0 items-center gap-1 py-2 pr-1 pl-3 text-left outline-none"

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.1.3",
+    "@sympauthy/design": "github:sympauthy/sympauthy-design#v0.2.0",
     "@tailwindcss/vite": "^4.2.1",
     "ajv": "^8.12.0",
     "oidc-client-ts": "^3.4.1",

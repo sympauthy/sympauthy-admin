@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import BaseDialog from './BaseDialog.vue'
-import CommonAlert from './CommonAlert.vue'
+import {
+  type ButtonStyle,
+  CommonAlert,
+  dangerColoredButton,
+  secondaryColoredButton
+} from '@sympauthy/design'
 import CommonButton from './CommonButton.vue'
-import { type ButtonStyle, dangerColoredButton, secondaryColoredButton } from './ButtonStyle'
 import { useI18n } from 'vue-i18n'
 
 interface Props {

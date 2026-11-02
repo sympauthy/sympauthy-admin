@@ -4,6 +4,7 @@ import { Bars3Icon } from '@heroicons/vue/20/solid'
 import SidebarNav from './SidebarNav.vue'
 import BreadcrumbNav from './BreadcrumbNav.vue'
 import { useSidebar } from '@/shared/lib'
+import { BrandLogo, BrandWordmark } from '@/shared/ui'
 
 const { t } = useI18n()
 const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
@@ -12,11 +13,7 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
 <template>
   <div class="flex h-screen">
     <!-- Backdrop (mobile/tablet only) -->
-    <div
-      v-if="sidebarOpen"
-      class="fixed inset-0 z-40 bg-black/50 lg:hidden"
-      @click="closeSidebar"
-    />
+    <div v-if="sidebarOpen" class="fixed inset-0 z-40 bg-nav/50 lg:hidden" @click="closeSidebar" />
 
     <!-- Sidebar -->
     <SidebarNav
@@ -31,7 +28,10 @@ const { sidebarOpen, toggleSidebar, closeSidebar } = useSidebar()
         <button :title="t('nav.openMenu')" @click="toggleSidebar">
           <Bars3Icon class="size-6 text-gray-600" />
         </button>
-        <span class="ml-3 text-lg font-semibold text-gray-900">SympAuthy Admin</span>
+        <BrandLogo class="ml-3" />
+        <span class="ml-2 min-w-0 truncate text-lg font-semibold text-gray-900">
+          <BrandWordmark /> {{ t('nav.panel') }}
+        </span>
       </div>
       <!-- The breadcrumb and the page under it scroll in one box, and both centre their column
            in it. A vertical scrollbar narrows the box it belongs to and not its neighbour, so two

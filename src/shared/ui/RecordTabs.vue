@@ -25,7 +25,7 @@ defineProps<{
 // one — so `border-transparent` would win over the active border every time.
 const activeTabClasses = 'border-primary text-primary'
 const inactiveTabClasses =
-  'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+  'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-800'
 </script>
 
 <template>

@@ -14,6 +14,21 @@ paths:
 add to it rather than beside it. [The component code standard](component-code-standard.md) says how
 a component is written; this one says which to use and what it is made of.
 
+**The values, the shared rules and the components both apps draw are
+[`@sympauthy/design`](https://sympauthy.github.io/sympauthy-design/)'s.** This standard says which
+component a screen uses; what each one looks like is that system's, and a value is changed there.
+
+**A screen imports from `@/shared/ui`, which re-exports the package.** Only `shared/ui` imports a
+component from `@sympauthy/design`, so a screen cannot tell which of the two draws what it asked
+for.
+
+**A component both apps draw moves to the package, and one only this panel draws stays here.**
+`CommonAlert`, `CommonCard`, `CommonSpinner`, `FormField`, `FormInput` and the button styles are the
+package's. `CommonButton` wraps the package's to add `requiredScopes`, which it cannot know about.
+
+**It is installed from its git tag, `github:sympauthy/sympauthy-design#vX.Y.Z`,** and never with
+`--ignore-scripts`: npm builds its `dist/` through `prepare`.
+
 ## The kit
 
 **What `shared/ui` publishes is [its `index.ts`](../src/shared/ui/index.ts).** The table says what
@@ -26,6 +41,8 @@ to reach for, by need.
 | `LoadingState` | the wait a screen shows while it fetches |
 | `CommonAlert` | a failure a screen keeps showing, or a `warning` for what is missing from one |
 | `CommonCard` | the white box anything on a record page is drawn in |
+| `BrandLogo` | the deployment's logo, as [the server answers it](#the-deployments-brand) |
+| `BrandWordmark` | the deployment's name |
 | `CommonTag` | a short status or label |
 | `OriginTag` | the origin of a claim or a scope |
 | `EmptyValue` | a field the record does not carry |
@@ -72,7 +89,7 @@ next.
 
 | Step | Between |
 | --- | --- |
-| `gap-1.5` | a control and the icon inside it |
+| `gap-1.5` | a control and the icon inside it, a field's label and its control |
 | `gap-1` | two tags |
 | `gap-2` | two controls in a row |
 | `gap-3` | two buttons in a dialog's footer |
@@ -83,10 +100,11 @@ next.
 | `px-6 py-4` | a table cell, `py-3` in a header |
 | `p-4`, `gap-3` inside | a record's card, below `sm:`, and its lines |
 
-**Text is `text-xs`, `text-sm`, `text-lg` or `text-2xl`.** A label and a tag are `text-xs`;
-everything an operator reads is `text-sm`; `text-lg font-semibold` heads a section or a dialog; and
-`text-2xl font-bold` the title of a screen drawn outside the panel shell, which has no bar to be
-named in.
+**Text is `text-xs`, `text-sm`, `text-base`, `text-lg` or `text-2xl`.** A label and a tag are
+`text-xs`; everything an operator reads is `text-sm`; what an operator types into a field is
+`text-base`, below which iOS zooms the page on focus; `text-lg font-semibold` heads a section or a
+dialog; and `text-2xl font-bold` the title of a screen drawn outside the panel shell, which has no
+bar to be named in.
 
 **An icon matches the text beside it** — `size-4` in a control, a cell or a menu, `size-3` beside a
 `text-xs` label, `size-5` and `size-6` for the sidebar's own affordances. Write `size-*`, never
@@ -100,20 +118,22 @@ named in.
 ([the page layout standard](page-layout-standard.md#table-columns) owns which), and everything else
 is sized by its parent.
 
-**The one width that is written is `--container-page`**, where a screen stops growing and starts
-centring. [The page layout standard](page-layout-standard.md#the-widths-it-is-for) says what range
-the panel is built for.
+**The one width that is written is the design system's `--container-page`**, where a screen stops
+growing and starts centring. [The page layout
+standard](page-layout-standard.md#the-widths-it-is-for) says what range the panel is built for.
 
 ## Controls
 
-**A control is `.control`,** declared in [the global stylesheet](../src/app/styles/style.css). An
-input, a select, a textarea, a button and a dropdown trigger share that rule, so a row of them is
-one height whatever each is made of.
+**A control is `.control`,** declared by the design system. An input, a select, a textarea, a button
+and a dropdown trigger share that rule, so a row of them is one height whatever each is made of.
 
-**That height is stated, not inherited from the content.** `.control` carries a `min-h`, because a
-button laying its label out as a line box is a descender taller than one laying it out as a flex
-row, and an icon with the label collapsed is shorter than either. **A control holding more than
-text centres it** — `flex items-center` — so what the height gains does not sit at the top of it.
+**That height is stated, not inherited from the content.** `.control` carries the 44px
+`control-height` as a `min-h` and a `min-w`, so never write a height or a border colour on one.
+**A control holding more than text centres it** — `flex items-center` — so what the height gains
+does not sit at the top of it.
+
+**A pager is not a `.control`.** The bar under a table is its own scale, one row of `text-sm` tall,
+so that a phone can hold the pager on one row.
 
 **A control that takes focus adds `.control-focus`**, which is the panel's one focus ring.
 
@@ -176,13 +196,16 @@ positioning; the styling stays Tailwind, ours.
 **Never hand-roll a click-outside, an Escape handler or focus management.** Reach for the primitive
 that already has it.
 
+**Nothing an overlay draws casts a shadow.** A surface is set apart by its `gray-200` border, and a
+dialog also by its `bg-nav/50` scrim, which the sidebar's drawer shares.
+
 **A dialog is built on `BaseDialog`.** It supplies the overlay, the centred card, the `h3` title,
 the fade and the `#actions` footer its buttons sit in, and it is controlled by `:open` plus
 `@close` — reka-ui emits a close on a user dismissal only, so a parent closing it programmatically
 never fires a second one.
 
-**A menu an overlay drops is `.menu`, and a line of it `.menu-item`.** Both are in the global
-stylesheet, so a record's actions and a collection's fields read as the same list. A `FormListbox`
+**A menu an overlay drops is `.menu`, and a line of it `.menu-item`.** Both are the design system's,
+so a record's actions and a collection's fields read as the same list. A `FormListbox`
 takes the line and not the box: it is a control, and draws the one every control shares.
 
 **A control that cannot be used is disabled, not removed, and says why.** A menu item drops its
@@ -216,17 +239,22 @@ pagination bar.
 
 ## Colour
 
-**A colour a deployment could want to change is declared to Tailwind in `@theme`**, in
-[the global stylesheet](../src/app/styles/style.css), and reached as a generated utility —
-`bg-primary`, `text-on-primary`, `ring-primary`. Nothing writes a raw `var()`.
+**A colour is reached as a utility of the design system's theme** — `bg-primary`,
+`text-on-primary`, `bg-nav`, `text-gray-500`, `bg-white`. Never write a hex value or a raw `var()`.
 
-**Everything else comes from Tailwind's palette**, and the same role keeps the same shade: `gray-50`
-behind a table header, `gray-200` for a border, `gray-300` for a value a record does not carry,
+**`gray-*` and `white` are the system's ink scale and `surface`**, not Tailwind's, so a deployment's
+colours reach them. The same role keeps the same shade: `gray-50` behind a table header, `gray-200`
+for a border, `gray-300` for a value a record does not carry, `gray-400` for a control's border,
 `gray-500` for a label and a secondary cell, `gray-900` for the column identifying a record.
 
-**A message box is a `CommonAlert`**, `red-200`/`red-50`/`red-700` for a failure and
-`amber-200`/`amber-50`/`amber-800` for what an operator has to read before closing a dialog. No
-screen draws its own.
+**The sidebar reads `nav-*` and nothing else**, since it stays dark while the rest of the panel is
+light. `gold` marks its current entry, and marks no state anywhere else.
+
+**A status colour stays Tailwind's**, because red means a failure whatever the brand. No deployment
+can change one, and `danger` is the one the theme names.
+
+**A message box is a `CommonAlert`**: `danger` for a failure and `warning` for what an operator has
+to read before closing a dialog. No screen draws its own.
 
 **A `CommonTag` picks its colour from the meaning, not the palette.** Green for what is enabled,
 red for what is not, yellow for what needs attention, purple and blue for a classification, gray
@@ -295,18 +323,46 @@ out in full, would both send the operator to the page the tooltip beside them al
 **A term explained on more than one screen names the same key at each of them.** The sentence is in
 the bundle once already, so a component per term would be a file that prevents no drift.
 
+## The deployment's brand
+
+**A deployment's brand is what the server answers under `/branding`,** so changing one is a change
+of its configuration and a restart rather than a rebuild of the panel. This standard deferred
+per-deployment theming until the server answered it, which it now does.
+
+| Path | Reached by |
+| --- | --- |
+| `/branding/tokens.css` | a link in `index.html`, ahead of the app's own stylesheet |
+| `/branding/icon` | a link in `index.html` |
+| `/branding/logo`, `/branding/logo-dark` | `BrandLogo` |
+| `/branding/brand.json` | `fetchBrand` in `main.ts`, once, before mounting |
+
+**The stylesheet and the icon are linked, not fetched,** so a deployment's colours never flash
+SympAuthy's first. `vite-ignore` keeps them out of the bundle and off the base path: they are the
+server's, at its root.
+
+**The name reaches a component through `useBrand`,** and is `SympAuthy` where the server configures
+none. `BrandWordmark` draws it and `main.ts` titles the document with it, so neither is written
+anywhere else.
+
+**The ground under a logo chooses its file.** `BrandLogo` is passed `on-dark` on the sidebar, and
+draws the light logo on `ground` and `surface` everywhere else; the device's preference has no say,
+since the panel is pinned light.
+
+**An unreadable brand draws the panel as SympAuthy's.** `fetchBrand` never rejects and gives up
+after 3 seconds, and `theme.css` carries the light values the stylesheet would have answered.
+
 ## What this standard does not cover
 
-**Dark mode and per-deployment theming.** The `@theme` block is the one place a palette would be
-swapped, nothing switches it, and no screen is checked against a second one.
+**Dark mode.** `data-theme="light"` on `index.html` pins the panel, whatever a deployment's
+`dark-mode` says, and no screen is checked against the Dark values.
 
 **Toasts and notifications.** Nothing reports success out of band; a screen shows the result it
 asked for.
 
 **Illustrations and empty state artwork.** An empty table is a sentence.
 
-**Labels bound to their controls.** `FormField` draws a `<label>` and no `for`, because nothing here
-issues the identifiers one would point at.
+**Labels bound to their controls.** `FormField` takes a `for` and no screen passes one, because
+nothing here issues the identifiers it would point at.
 
 **A lint rule over the scale.** Prettier sorts a class list and the components own the steps, but
 nothing rejects a step written by hand.

@@ -9,9 +9,10 @@ What the panel is built on, and why each piece was picked. The versions that shi
 [interactive flow application](https://github.com/sympauthy/sympauthy-flow), so a person moving
 between the two repositories reads the same kind of component.
 
-**[Vite](https://vite.dev).** The dev server proxies `/api` and `/.well-known` to a SympAuthy
-running on `localhost:8080`, which is what lets the panel be developed against a real server without
-CORS or a second origin. The production build is static assets the server serves itself.
+**[Vite](https://vite.dev).** The dev server proxies `/api`, `/.well-known` and `/branding` to a
+SympAuthy running on `localhost:8080`, which is what lets the panel be developed against a real
+server without CORS or a second origin. The production build is static assets the server serves
+itself.
 
 **[TypeScript](https://www.typescriptlang.org).** The server's JSON is the contract this panel is
 written against, and a resource type is how that contract is stated in the source.
@@ -32,8 +33,15 @@ and the proof each request presents one with, none of which is worth reimplement
 
 ## The interface
 
-**[Tailwind CSS 4](https://tailwindcss.com).** Utility classes in the template, with the deployment
-colours declared as CSS variables in [`src/app/styles/style.css`](../src/app/styles/style.css).
+**[`@sympauthy/design`](https://sympauthy.github.io/sympauthy-design/).** The design system this
+panel and the [interactive flow application](https://github.com/sympauthy/sympauthy-flow) share: the
+Tailwind theme, the faces, the rules every control is drawn with and the components both apps draw.
+Keeping them in one package is what makes the two read as one product.
+
+**[Tailwind CSS 4](https://tailwindcss.com).** Utility classes in the template, themed by the design
+system, whose utilities read the colours a deployment configures from the stylesheet the server
+answers. [The design system standard](design-system-standard.md#the-deployments-brand) says how it
+reaches the page.
 
 **[reka-ui](https://reka-ui.com).** Headless primitives supply the behaviour nobody should hand-roll
 — focus trap, keyboard navigation, ARIA roles, scroll lock, collision-aware positioning — while all
@@ -66,7 +74,8 @@ the build on every push to `main` and every pull request targeting it.
 **No test framework.** Nothing in the repository runs a test, and
 [the general code standard](general-code-standard.md) is what a change is held to instead.
 
-**No component library.** The shared components are written here against reka-ui primitives.
+**No third-party component library.** What the design system does not ship is written here against
+reka-ui primitives.
 
 **No HTTP client library.** `AbstractApi` wraps `fetch` directly, because what it adds — the access
 token and its proof, the schema validation, the renewal retry and the error mapping — is this
