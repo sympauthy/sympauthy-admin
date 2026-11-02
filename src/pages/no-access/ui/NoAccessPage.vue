@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
-import { CommonButton, CommonCard, CommonTag, secondaryColoredButton } from '@/shared/ui'
+import { BrandLogo, CommonButton, CommonCard, CommonTag, secondaryColoredButton } from '@/shared/ui'
 
 /**
  * Where a signed-in operator lands when their token opens no page of the panel — the granting
@@ -38,8 +38,9 @@ async function logout() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+  <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-md">
+      <BrandLogo large class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('pages.noAccess.title') }}
       </h1>

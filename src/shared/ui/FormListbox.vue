@@ -99,14 +99,14 @@ function onUpdate(value: unknown) {
     :model-value="model"
     :selection-behavior="props.multiple ? 'toggle' : 'replace'"
     highlight-on-hover
-    class="rounded-md border border-gray-300 bg-white"
+    class="rounded-md border border-gray-400 bg-white"
     @update:model-value="onUpdate"
   >
     <div v-if="searchable" class="relative border-b border-gray-200 p-2">
       <MagnifyingGlassIcon class="absolute top-1/2 left-5 size-4 -translate-y-1/2 text-gray-400" />
       <ListboxFilter
         v-model="search"
-        class="control control-focus block w-full border-gray-300 bg-white pl-9"
+        class="control control-focus block w-full bg-white pl-9 text-base text-gray-900 placeholder:text-gray-500"
         :placeholder="props.searchPlaceholder ?? t('common.list.search')"
       />
     </div>

@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { computed, useAttrs, type Component, type FunctionalComponent } from 'vue'
-import { type ButtonStyle, primaryColoredButton } from './ButtonStyle'
-import CommonSpinner from './CommonSpinner.vue'
+import { computed, type Component, type FunctionalComponent } from 'vue'
+import { type ButtonStyle, CommonButton as DesignButton } from '@sympauthy/design'
 import HintTooltip from './HintTooltip.vue'
 import { useAuthStore, missingScopesHint } from '@/shared/auth'
 
+/**
+ * The design system's button, plus the one thing it cannot know: the scopes behind it. Everything
+ * else is handed down as it arrived.
+ */
 interface Props {
   buttonStyle?: ButtonStyle
   /**
@@ -38,7 +41,7 @@ interface Props {
 defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<Props>(), {
-  buttonStyle: () => primaryColoredButton,
+  buttonStyle: undefined,
   label: undefined,
   icon: undefined,
   trailingIcon: undefined,
@@ -49,66 +52,32 @@ const props = withDefaults(defineProps<Props>(), {
   requiredScopes: () => []
 })
 
-const attrs = useAttrs()
 const authStore = useAuthStore()
 
 const hint = computed(() => missingScopesHint(authStore.missingScopes(props.requiredScopes)))
 
-// A button the token is refused stays focusable and takes the pointer, which is what lets it open
-// the tooltip saying why: it is `aria-disabled` rather than `disabled`, so the caller's own click
-// handler is what it drops, and a click it receives does nothing — inside a form, not even submit.
-const buttonAttrs = computed(() => {
-  if (!hint.value) {
-    return attrs
-  }
-  const rest = Object.fromEntries(Object.entries(attrs).filter(([name]) => name !== 'onClick'))
-  return { ...rest, 'aria-disabled': 'true', onClick: (event: Event) => event.preventDefault() }
-})
-
-const computedDisabled = computed(
-  () => !hint.value && (props.loading || props.submitting || props.disabled)
-)
-
 // Renders its content as it is, standing in for `HintTooltip` around a button the token covers, so
 // that one's element is the <button> itself: an `as-child` trigger positions against it.
 const Bare: FunctionalComponent = (_, { slots }) => slots.default?.()[0]
-
-const computedClasses = computed(() => {
-  if (props.disabled || hint.value) {
-    return props.buttonStyle.disabledClasses
-  } else if (props.loading) {
-    return props.buttonStyle.loadingClasses
-  } else if (props.submitting) {
-    return props.buttonStyle.submittingClasses
-  } else {
-    return props.buttonStyle.activeClasses
-  }
-})
-
-// A state names its own slot, so a caller can say `Saving…` where the label alone would not do. The
-// label is the fallback for all three, which is what most of them want.
-const stateSlot = computed(() => {
-  if (props.submitting) return 'submitting'
-  if (props.loading) return 'loading'
-  return 'default'
-})
 </script>
 
 <template>
   <component :is="hint ? HintTooltip : Bare" v-bind="hint ? { text: hint } : {}">
-    <button
-      v-bind="buttonAttrs"
-      :class="computedClasses"
-      :disabled="computedDisabled"
-      :title="props.label"
-      class="control flex items-center justify-center gap-1.5 font-medium transition-colors"
+    <DesignButton
+      v-bind="$attrs"
+      :button-style="props.buttonStyle"
+      :label="props.label"
+      :icon="props.icon"
+      :trailing-icon="props.trailingIcon"
+      :collapse-label="props.collapseLabel"
+      :loading="props.loading"
+      :submitting="props.submitting"
+      :disabled="props.disabled"
+      :refused="hint !== undefined"
     >
-      <CommonSpinner v-if="loading || submitting" size="sm" />
-      <component :is="props.icon" v-else-if="props.icon" class="size-4 shrink-0" />
-      <span :class="props.collapseLabel ? 'hidden sm:inline' : ''">
-        <slot :name="stateSlot">{{ props.label }}</slot>
-      </span>
-      <component :is="props.trailingIcon" v-if="props.trailingIcon" class="size-4 shrink-0" />
-    </button>
+      <template v-for="(_, name) in $slots" #[name]>
+        <slot :name="name" />
+      </template>
+    </DesignButton>
   </component>
 </template>

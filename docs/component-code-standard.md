@@ -18,9 +18,9 @@ into.
 one.** Nothing else, and in that order.
 
 **A `<style scoped>` block holds only what a utility class cannot express** — a keyframe, an
-animation keyed on a `data-state` attribute. Everything else is Tailwind in the template, and a rule
-that has to hold for every screen goes in [the global
-stylesheet](../src/app/styles/style.css).
+animation keyed on a `data-state` attribute. Everything else is Tailwind in the template. A rule that
+has to hold for every screen goes in [the global stylesheet](../src/app/styles/style.css), or in the
+design system's when the flow draws it too.
 
 **A component's file name is its name, in PascalCase, and multi-word.** ESLint enforces the
 multi-word part, and a component is written in PascalCase in a template.

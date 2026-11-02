@@ -37,9 +37,9 @@ function preventWhenDisabled(event: Event) {
 <template>
   <DialogRoot :open="open" @update:open="onOpenChange">
     <DialogPortal>
-      <DialogOverlay class="dialog-overlay fixed inset-0 z-50 bg-black/50" />
+      <DialogOverlay class="dialog-overlay fixed inset-0 z-50 bg-nav/50" />
       <DialogContent
-        class="dialog-content fixed top-1/2 left-1/2 z-50 mx-4 max-h-[calc(100vh-2rem)] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg bg-white p-4 shadow-xl sm:p-6"
+        class="dialog-content fixed top-1/2 left-1/2 z-50 mx-4 max-h-[calc(100vh-2rem)] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 sm:p-6"
         :aria-describedby="undefined"
         @escape-key-down="preventWhenDisabled"
         @pointer-down-outside="preventWhenDisabled"

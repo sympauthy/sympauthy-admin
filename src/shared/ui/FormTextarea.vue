@@ -22,7 +22,7 @@ const model = defineModel<string>({ default: '' })
   <textarea
     v-model="model"
     :rows="rows"
-    class="control control-focus block w-full border-gray-300 bg-white shadow-sm disabled:cursor-not-allowed disabled:bg-gray-50"
+    class="control control-focus block w-full bg-white text-base text-gray-900 placeholder:text-gray-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
     :class="mono ? 'font-mono' : ''"
   />
 </template>

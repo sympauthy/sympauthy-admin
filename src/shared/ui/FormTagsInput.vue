@@ -70,7 +70,7 @@ defineExpose({ flush })
   <TagsInputRoot
     v-model="model"
     add-on-blur
-    class="control control-focus-within flex w-full flex-wrap items-center gap-1 border-gray-300 bg-white"
+    class="control control-focus-within flex w-full flex-wrap items-center gap-1 bg-white"
   >
     <TagsInputItem
       v-for="value in model"
@@ -88,7 +88,7 @@ defineExpose({ flush })
     </TagsInputItem>
 
     <TagsInputInput
-      class="min-w-16 flex-1 bg-transparent text-sm outline-none"
+      class="min-w-16 flex-1 bg-transparent text-base text-gray-900 outline-none placeholder:text-gray-500"
       :placeholder="placeholder"
       :aria-label="ariaLabel"
       @input="onPendingInput"

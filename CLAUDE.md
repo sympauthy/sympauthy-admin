@@ -29,7 +29,7 @@ does not cover. If you end a deferral, say there why.
 Always run `nvm use` before any `npm` or `node` command.
 
 ```sh
-npm run dev          # port 5174, proxies /api and /.well-known to localhost:8080
+npm run dev          # port 5174, proxies /api, /.well-known and /branding to localhost:8080
 npm run type-check   # vue-tsc over the sources and the templates
 npm run lint         # ESLint, with --fix
 npm run lint:arch    # Steiger: the Feature-Sliced Design rules
@@ -81,4 +81,5 @@ A layer imports only from the layers below it, a slice only through another slic
 two slices on the same layer never import each other — except through an `@x/` cross-import, which
 `entities/user` publishes to `entities/session`.
 
-`src/main.ts` sits outside the layers and mounts the app, the router, the i18n instance and Pinia.
+`src/main.ts` sits outside the layers: it reads the deployment's brand, then mounts the app, the
+router, the i18n instance and Pinia.

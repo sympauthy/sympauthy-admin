@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import CommonCard from './CommonCard.vue'
+import { CommonCard } from '@sympauthy/design'
 
 /**
  * The first thing on a record page: what identifies the record, in a grid of `SummaryField`s.

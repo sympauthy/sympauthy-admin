@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CommonAlert from './CommonAlert.vue'
+import { CommonAlert } from '@sympauthy/design'
 import LoadingState from './LoadingState.vue'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import {
@@ -86,7 +86,7 @@ const totalItems = computed(() => (props.size > 0 ? props.total : props.totalPag
 // The bar under a table is its own scale: every control on it is one row of `text-sm` tall, which
 // is a step under the controls above the table rather than the same height as them.
 const pageControlClasses =
-  'inline-flex h-8 items-center justify-center rounded-md border border-gray-300 px-3 text-sm text-gray-700 hover:bg-gray-50'
+  'inline-flex h-8 items-center justify-center rounded-md border border-gray-400 px-3 text-sm text-gray-700 hover:bg-gray-50'
 const navButtonClasses = `${pageControlClasses} disabled:cursor-not-allowed disabled:opacity-50`
 const pageButtonClasses = `${pageControlClasses} min-w-8 data-[selected]:border-transparent data-[selected]:bg-primary data-[selected]:text-on-primary`
 </script>

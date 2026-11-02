@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import CommonAlert from './CommonAlert.vue'
+import { CommonAlert } from '@sympauthy/design'
 import CopyToClipboard from './CopyToClipboard.vue'
 
 /**

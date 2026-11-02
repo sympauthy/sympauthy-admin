@@ -3,7 +3,7 @@
  * The fields of one record, a `DefinitionRow` each, inside the card a section is drawn in. The rows
  * carry their own padding, so the card carries none.
  */
-import CommonCard from './CommonCard.vue'
+import { CommonCard } from '@sympauthy/design'
 </script>
 
 <template>

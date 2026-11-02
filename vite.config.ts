@@ -15,8 +15,14 @@ export default defineConfig({
       },
       '/.well-known': {
         target: 'http://localhost:8080'
+      },
+      '/branding': {
+        target: 'http://localhost:8080'
       }
     }
+  },
+  optimizeDeps: {
+    exclude: ['@sympauthy/design']
   },
   plugins: [
     tailwindcss(),

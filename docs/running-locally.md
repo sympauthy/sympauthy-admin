@@ -15,8 +15,8 @@ npm install
 npm run dev
 ```
 
-The dev server listens on `http://localhost:5174` and proxies `/api` and `/.well-known` to
-`http://localhost:8080`, so it needs a SympAuthy running there — see the server's own
+The dev server listens on `http://localhost:5174` and proxies `/api`, `/.well-known` and
+`/branding` to `http://localhost:8080`, so it needs a SympAuthy running there — see the server's own
 [running locally](https://github.com/sympauthy/sympauthy/blob/main/docs/running-locally.md).
 Start it with the `admin` environment enabled, which is what registers the `admin` client the panel
 signs in as. The panel requests no scope of its own, so what it can reach is that client's
