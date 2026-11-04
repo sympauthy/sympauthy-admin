@@ -81,7 +81,7 @@ onMounted(() => load(sessionId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <LoadingState v-if="store.loading" />
+    <LoadingState v-if="store.loading" :label="t('common.loading')" />
 
     <!-- Collected state. This is a live view rather than a history, so a session that is gone is
          the expected outcome and reads as one rather than as a failure. -->

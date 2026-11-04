@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { ClientApi, type ClientDetailResource } from '@/entities/client'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
@@ -10,6 +11,7 @@ import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
 import { CommonAlert, LoadingState } from '@/shared/ui'
 
+const { t } = useI18n()
 const route = useRoute()
 const api = new ClientApi()
 const { setLabel } = useBreadcrumb()
@@ -39,7 +41,7 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Loading state -->
-    <LoadingState v-if="loading" />
+    <LoadingState v-if="loading" :label="t('common.loading')" />
 
     <!-- Error state -->
     <CommonAlert v-else-if="error" color="danger">

@@ -38,6 +38,13 @@ panel and the [interactive flow application](https://github.com/sympauthy/sympau
 Tailwind theme, the faces, the rules every control is drawn with and the shared components.
 Keeping them in one package is what makes the two read as one product.
 
+**What the package is built on is not named again.** It brings reka-ui as a peer dependency and
+Heroicons as a dependency, npm installs both beside it, and the panel imports them from there.
+Taking them from the package is what keeps every SympAuthy project aligned on them: `package.json`
+holds no second range for either, a release of the package is what moves them, and the panel's
+reka-ui cannot leave the range the package's components were built for. This leans on npm placing
+both at the top of `node_modules`, and a package manager that does not would need them named.
+
 **[Tailwind CSS 4](https://tailwindcss.com).** Utility classes in the template, themed by the design
 system, whose utilities read the colours a deployment configures from the stylesheet the server
 answers. [The design system standard](design-system-standard.md#the-deployments-brand) says how it

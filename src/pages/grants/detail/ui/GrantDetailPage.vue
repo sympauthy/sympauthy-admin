@@ -120,7 +120,7 @@ onMounted(() => load(grantId.value))
 <template>
   <div>
     <!-- Loading state -->
-    <LoadingState v-if="loading" />
+    <LoadingState v-if="loading" :label="t('common.loading')" />
 
     <!-- Collected state -->
     <CommonCard v-else-if="notFound">

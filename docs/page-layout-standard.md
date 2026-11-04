@@ -214,8 +214,8 @@ it. A label and the value beside it drifting a monitor apart is not more readabl
 | 640–1023 (`sm:`) | drawer | a table | three columns |
 | 1024+ (`lg:`) | permanent | a table | three columns |
 
-**Write the phone layout first and add the wider ones with `sm:` and `lg:`.** The panel uses
-Tailwind's default breakpoints and only those two.
+**Write the phone layout first and add the wider ones with `sm:` and `lg:`.** The panel uses the
+design system's two breakpoints and no other.
 
 **Nothing scrolls sideways at any supported width** — not the page, and not a table inside it. A
 column that cannot be made to fit is dropped with `hidden-below`, not left to overflow. The one
