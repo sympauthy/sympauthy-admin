@@ -35,7 +35,7 @@ and the proof each request presents one with, none of which is worth reimplement
 
 **[`@sympauthy/design`](https://sympauthy.github.io/sympauthy-design/).** The design system this
 panel and the [interactive flow application](https://github.com/sympauthy/sympauthy-flow) share: the
-Tailwind theme, the faces, the rules every control is drawn with and the components both apps draw.
+Tailwind theme, the faces, the rules every control is drawn with and the shared components.
 Keeping them in one package is what makes the two read as one product.
 
 **[Tailwind CSS 4](https://tailwindcss.com).** Utility classes in the template, themed by the design
