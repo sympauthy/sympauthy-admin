@@ -101,7 +101,7 @@ onMounted(async () => {
 
   <SaConfirmDialog
     :open="revokeTargetMfaId !== null"
-    :confirm-label="t('pages.userMfa.revoke')"
+    :confirm-label="t('pages.userMfa.revokeConfirm')"
     :cancel-label="t('common.cancel')"
     @confirm="confirmRevoke"
     @cancel="revokeTargetMfaId = null"

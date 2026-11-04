@@ -105,7 +105,7 @@ async function onConfirm() {
     </p>
 
     <div class="space-y-3">
-      <SaRadioGroup v-model="mode" :options="modes" :aria-label="t('logoutDialog.title')" />
+      <SaRadioGroup v-model="mode" :options="modes" :aria-label="t('logoutDialog.clients')" />
 
       <SaAlert v-if="mode === 'specific' && clientStore.allClientsError" color="danger">
         {{ clientStore.allClientsError }}

@@ -146,7 +146,7 @@ onMounted(() => load(grantId.value))
 
   <SaConfirmDialog
     :open="revokeOpen"
-    :confirm-label="t('pages.grantDetail.revoke')"
+    :confirm-label="t('pages.grantDetail.revokeConfirm')"
     :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"

@@ -174,7 +174,7 @@ onMounted(async () => {
 
   <SaConfirmDialog
     :open="revokeInvitationId !== null"
-    :confirm-label="t('pages.invitations.revoke')"
+    :confirm-label="t('pages.invitations.revokeConfirm')"
     :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"

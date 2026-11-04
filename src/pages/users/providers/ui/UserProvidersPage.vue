@@ -107,7 +107,7 @@ onMounted(async () => {
 
   <SaConfirmDialog
     :open="unlinkTargetProviderId !== null"
-    :confirm-label="t('pages.userProviders.unlink')"
+    :confirm-label="t('pages.userProviders.unlinkConfirm')"
     :cancel-label="t('common.cancel')"
     @confirm="confirmUnlink"
     @cancel="unlinkTargetProviderId = null"

@@ -141,27 +141,31 @@ function onOpenAutoFocus(event: Event) {
 <template>
   <PopoverRoot :open="open" @update:open="onOpenChange">
     <!-- The box is the wrapper's and the two controls inside it are real ones, so removing a filter
-         stays one press and stays reachable from the keyboard. -->
+         stays one press and stays reachable from the keyboard. The box's border takes 2px of its
+         height, so each control's target reaches over it, and only the text inside clips, or the
+         box would clip that target. -->
     <div
-      class="sa-control sa-control-focus-within flex max-w-full items-center overflow-hidden bg-white p-0 text-gray-700"
+      class="sa-control sa-control-focus-within flex max-w-full items-center bg-white p-0 text-gray-700"
     >
       <PopoverTrigger
-        class="flex min-w-0 items-center gap-1 self-stretch pr-1 pl-3 text-left outline-none"
+        class="relative flex min-w-0 items-center self-stretch pr-1 pl-3 text-left outline-none after:absolute after:inset-x-0 after:-inset-y-px"
         :title="title"
       >
-        <span class="shrink-0 font-medium text-gray-600">{{ props.filter.name }}</span>
-        <span class="shrink-0 text-gray-500">{{ operatorLabel }}</span>
-        <span
-          v-if="!valueless"
-          class="min-w-0 truncate"
-          :class="valueLabel === '' ? 'text-gray-400' : 'font-medium text-gray-900'"
-        >
-          {{ shownValue }}
+        <span class="flex min-w-0 items-center gap-1 overflow-hidden">
+          <span class="shrink-0 font-medium text-gray-600">{{ props.filter.name }}</span>
+          <span class="shrink-0 text-gray-500">{{ operatorLabel }}</span>
+          <span
+            v-if="!valueless"
+            class="min-w-0 truncate"
+            :class="valueLabel === '' ? 'text-gray-400' : 'font-medium text-gray-900'"
+          >
+            {{ shownValue }}
+          </span>
         </span>
       </PopoverTrigger>
 
       <button
-        class="flex min-w-control shrink-0 items-center justify-center self-stretch text-gray-400 outline-none hover:text-gray-600 focus-visible:text-gray-900"
+        class="relative flex min-w-control shrink-0 items-center justify-center self-stretch text-gray-400 outline-none after:absolute after:inset-x-0 after:-inset-y-px hover:text-gray-600 focus-visible:text-gray-900"
         :title="t('common.collection.removeFilter')"
         :aria-label="t('common.collection.removeFilter')"
         @click="emit('remove')"

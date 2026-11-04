@@ -259,7 +259,8 @@
     "closeMenu": "Close menu"
   },
   "logoutDialog": {
-    "title": "Force logout",
+    "title": "Force this user to log out?",
+    "clients": "Clients to log the user out of",
     "description": "Revoke every grant of this user, and every token issued under them. They will need to sign in again.",
     "allClients": "All clients",
     "specificClient": "Specific client",
@@ -446,7 +447,8 @@
       "empty": "No invitations found.",
       "create": "Create invitation",
       "revoke": "Revoke",
-      "revokeTitle": "Revoke invitation",
+      "revokeTitle": "Revoke this invitation?",
+      "revokeConfirm": "Revoke invitation",
       "revokeDescription": "This invitation will no longer be usable. This action cannot be undone.",
       "createTitle": "Create invitation",
       "selectAudience": "Select an audience...",
@@ -561,7 +563,8 @@
         "userinfo": "UserInfo"
       },
       "revoke": "Revoke",
-      "revokeTitle": "Revoke grant",
+      "revokeTitle": "Revoke this grant?",
+      "revokeConfirm": "Revoke grant",
       "revokeDescription": "Every token issued under this grant stops working at once, and so does every grant a client obtained by exchanging one of them. The client will need a new authorization. This cannot be undone.",
       "notFound": "This grant no longer exists. The cleanup job collects a grant once it is finished."
     },
@@ -644,7 +647,8 @@
       },
       "registeredAt": "Registered at",
       "empty": "No MFA methods registered.",
-      "revokeTitle": "Revoke MFA method",
+      "revokeTitle": "Revoke this MFA method?",
+      "revokeConfirm": "Revoke MFA method",
       "revokeDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
       "actions": "Actions",
       "revoke": "Revoke"
@@ -662,7 +666,8 @@
       "linkedAt": "Linked at",
       "unlink": "Unlink",
       "empty": "No provider links found.",
-      "unlinkTitle": "Unlink provider",
+      "unlinkTitle": "Unlink this provider?",
+      "unlinkConfirm": "Unlink provider",
       "unlinkDescription": "This will remove the link between this user and the identity provider. The user will no longer be able to sign in with this provider.",
       "actions": "Actions",
       "search": "Search by provider or subject"
