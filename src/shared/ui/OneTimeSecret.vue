@@ -16,7 +16,7 @@ const { t } = useI18n()
 
 <template>
   <div>
-    <SaAlert color="warning" class="mb-4">
+    <SaAlert color="warning" urgent class="mb-4">
       <slot name="warning" />
     </SaAlert>
 

@@ -146,7 +146,7 @@ async function onSubmit() {
             </SaSelect>
           </SaField>
 
-          <SaAlert v-if="clientId && !hasRedirectUris" color="warning">
+          <SaAlert v-if="clientId && !hasRedirectUris" color="warning" urgent>
             {{ t('pages.userDetail.enrollMfaNoRedirectUris') }}
           </SaAlert>
 
