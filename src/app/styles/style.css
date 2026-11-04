@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import '@sympauthy/design/theme.css';
 @import '@sympauthy/design/components.css';
-@source '../../../node_modules/@sympauthy/design/src';
 
 /**
  * The colours, the faces, `.sa-control`, `.sa-menu`, `.sa-popover` and the panel's one motion are the design
