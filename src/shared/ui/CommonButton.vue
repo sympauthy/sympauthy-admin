@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed, type Component, type FunctionalComponent } from 'vue'
-import { type ButtonStyle, CommonButton as DesignButton } from '@sympauthy/design'
-import HintTooltip from './HintTooltip.vue'
+import { SaButton, SaTooltip, type SaButtonVariant } from '@sympauthy/design'
 import { useAuthStore, missingScopesHint } from '@/shared/auth'
 
 /**
@@ -9,7 +8,7 @@ import { useAuthStore, missingScopesHint } from '@/shared/auth'
  * else is handed down as it arrived.
  */
 interface Props {
-  buttonStyle?: ButtonStyle
+  variant?: SaButtonVariant
   /**
    * What the button does. Written here rather than in the default slot so that the button in
    * flight keeps saying it, and so that a button whose label is collapsed still carries it as a
@@ -32,7 +31,7 @@ interface Props {
   disabled?: boolean
   /**
    * The admin scopes the call behind the button is made under. A button the token is not granted
-   * all of is drawn disabled, naming them in a `HintTooltip`, rather than offered to fail at the
+   * all of is drawn disabled, naming them in a `SaTooltip`, rather than offered to fail at the
    * server.
    */
   requiredScopes?: string[]
@@ -41,7 +40,7 @@ interface Props {
 defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<Props>(), {
-  buttonStyle: undefined,
+  variant: undefined,
   label: undefined,
   icon: undefined,
   trailingIcon: undefined,
@@ -56,16 +55,16 @@ const authStore = useAuthStore()
 
 const hint = computed(() => missingScopesHint(authStore.missingScopes(props.requiredScopes)))
 
-// Renders its content as it is, standing in for `HintTooltip` around a button the token covers, so
+// Renders its content as it is, standing in for `SaTooltip` around a button the token covers, so
 // that one's element is the <button> itself: an `as-child` trigger positions against it.
 const Bare: FunctionalComponent = (_, { slots }) => slots.default?.()[0]
 </script>
 
 <template>
-  <component :is="hint ? HintTooltip : Bare" v-bind="hint ? { text: hint } : {}">
-    <DesignButton
+  <component :is="hint ? SaTooltip : Bare" v-bind="hint ? { text: hint } : {}">
+    <SaButton
       v-bind="$attrs"
-      :button-style="props.buttonStyle"
+      :variant="props.variant"
       :label="props.label"
       :icon="props.icon"
       :trailing-icon="props.trailingIcon"
@@ -78,6 +77,6 @@ const Bare: FunctionalComponent = (_, { slots }) => slots.default?.()[0]
       <template v-for="(_, name) in $slots" #[name]>
         <slot :name="name" />
       </template>
-    </DesignButton>
+    </SaButton>
   </component>
 </template>

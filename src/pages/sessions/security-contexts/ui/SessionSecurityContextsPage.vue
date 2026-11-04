@@ -9,7 +9,7 @@ import {
   type InteractiveFlowSessionSecurityContextResource
 } from '@/entities/session'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { EmptyValue, TableCell, TableHeader } from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()
@@ -41,8 +41,8 @@ onMounted(async () => {
     :search-placeholder="t('pages.sessionSecurityContexts.search')"
   >
     <template #header>
-      <TableHeader fit>{{ t('pages.sessionSecurityContexts.ip') }}</TableHeader>
-      <TableHeader>{{ t('pages.sessionSecurityContexts.userAgent') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.sessionSecurityContexts.ip') }}</SaTableHeader>
+      <SaTableHeader>{{ t('pages.sessionSecurityContexts.userAgent') }}</SaTableHeader>
       <CollectionSortHeader
         hidden-below="lg"
         :collection="securityContexts"
@@ -82,38 +82,42 @@ onMounted(async () => {
         v-for="context in securityContexts.items"
         :key="`${context.ip}|${context.user_agent ?? ''}`"
       >
-        <TableCell primary fit mono>
+        <SaTableCell primary fit mono>
           {{ context.ip }}
-        </TableCell>
-        <TableCell :label="t('pages.sessionSecurityContexts.userAgent')" truncate>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessionSecurityContexts.userAgent')" truncate>
           <span v-if="context.user_agent">{{ context.user_agent }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.sessionSecurityContexts.location')" truncate hidden-below="lg">
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell
+          :label="t('pages.sessionSecurityContexts.location')"
+          truncate
+          hidden-below="lg"
+        >
           <span v-if="securityContextLocation(context)">
             {{ securityContextLocation(context) }}
           </span>
-          <EmptyValue v-else />
+          <SaEmptyValue v-else />
           <div v-if="context.time_zone" class="text-xs text-gray-400">
             {{ context.time_zone }}
           </div>
-        </TableCell>
-        <TableCell :label="t('pages.sessionSecurityContexts.requests')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessionSecurityContexts.requests')" fit>
           {{ context.observation_count }}
-        </TableCell>
-        <TableCell :label="t('pages.sessionSecurityContexts.firstSeen')" fit hidden-below="lg">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessionSecurityContexts.firstSeen')" fit hidden-below="lg">
           {{ formatDateTime(context.first_seen_date) }}
-        </TableCell>
-        <TableCell :label="t('pages.sessionSecurityContexts.lastSeen')" fit hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessionSecurityContexts.lastSeen')" fit hidden-below="sm">
           {{ formatDateTime(context.last_seen_date) }}
-        </TableCell>
+        </SaTableCell>
         <!-- Only a place a credential was proven from carries a date. A place without one is
              merely where requests came from, which anybody holding the session's state can
              produce. -->
-        <TableCell :label="t('pages.sessionSecurityContexts.proven')" fit>
+        <SaTableCell :label="t('pages.sessionSecurityContexts.proven')" fit>
           <span v-if="context.proven_date">{{ formatDateTime(context.proven_date) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
+          <SaEmptyValue v-else />
+        </SaTableCell>
       </tr>
     </template>
 

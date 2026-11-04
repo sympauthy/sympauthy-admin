@@ -1,16 +1,7 @@
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  BaseDialog,
-  CommonAlert,
-  CommonButton,
-  FormField,
-  FormSelect,
-  OneTimeSecret,
-  primaryColoredButton,
-  secondaryColoredButton
-} from '@/shared/ui'
+import { CommonButton, OneTimeSecret, SaAlert, SaDialog, SaField, SaSelect } from '@/shared/ui'
 import { useClientStore } from '@/entities/client'
 import { UserMfaApi, type MfaEnrollmentInput } from '@/entities/user'
 import { isSuccess, getErrorMessage } from '@/shared/api'
@@ -27,6 +18,9 @@ defineEmits<{
 }>()
 
 const { t } = useI18n()
+const clientFieldId = useId()
+const returnUrlFieldId = useId()
+const cancelUrlFieldId = useId()
 const clientStore = useClientStore()
 const userMfaApi = new UserMfaApi()
 
@@ -110,7 +104,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <BaseDialog
+  <SaDialog
     :open="open"
     :title="dialogTitle"
     :dismiss-disabled="submitting"
@@ -123,13 +117,17 @@ async function onSubmit() {
           {{ t('pages.userDetail.enrollMfaDescription') }}
         </p>
 
-        <CommonAlert v-if="displayError" color="danger" class="mb-4">
+        <SaAlert v-if="displayError" color="danger" class="mb-4">
           {{ displayError }}
-        </CommonAlert>
+        </SaAlert>
 
         <div class="space-y-4">
-          <FormField :label="t('pages.userDetail.enrollMfaClient')">
-            <FormSelect v-model="clientId" :disabled="clientStore.allClientsLoading">
+          <SaField :for="clientFieldId" :label="t('pages.userDetail.enrollMfaClient')">
+            <SaSelect
+              :id="clientFieldId"
+              v-model="clientId"
+              :disabled="clientStore.allClientsLoading"
+            >
               <option value="" disabled>
                 {{
                   clientStore.allClientsLoading
@@ -144,34 +142,34 @@ async function onSubmit() {
               >
                 {{ client.client_id }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
 
-          <CommonAlert v-if="clientId && !hasRedirectUris" color="warning">
+          <SaAlert v-if="clientId && !hasRedirectUris" color="warning">
             {{ t('pages.userDetail.enrollMfaNoRedirectUris') }}
-          </CommonAlert>
+          </SaAlert>
 
-          <FormField :label="t('pages.userDetail.enrollMfaReturnUrl')">
-            <FormSelect v-model="returnUri" :disabled="!hasRedirectUris">
+          <SaField :for="returnUrlFieldId" :label="t('pages.userDetail.enrollMfaReturnUrl')">
+            <SaSelect :id="returnUrlFieldId" v-model="returnUri" :disabled="!hasRedirectUris">
               <option value="" disabled>
                 {{ t('pages.userDetail.enrollMfaSelectReturnUrl') }}
               </option>
               <option v-for="uri in redirectUris" :key="uri" :value="uri">
                 {{ uri }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
 
-          <FormField :label="t('pages.userDetail.enrollMfaCancelUrl')">
-            <FormSelect v-model="cancelUri" :disabled="!hasRedirectUris">
+          <SaField :for="cancelUrlFieldId" :label="t('pages.userDetail.enrollMfaCancelUrl')">
+            <SaSelect :id="cancelUrlFieldId" v-model="cancelUri" :disabled="!hasRedirectUris">
               <option value="">
                 {{ t('pages.userDetail.enrollMfaNoCancelUrl') }}
               </option>
               <option v-for="uri in redirectUris" :key="uri" :value="uri">
                 {{ uri }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
         </div>
       </template>
 
@@ -184,13 +182,13 @@ async function onSubmit() {
     <template #actions>
       <template v-if="phase === 'form'">
         <CommonButton
-          :button-style="secondaryColoredButton"
+          variant="secondary"
           :label="t('common.cancel')"
           :disabled="submitting"
           @click="$emit('close')"
         />
         <CommonButton
-          :button-style="primaryColoredButton"
+          variant="primary"
           :label="t('pages.userDetail.enrollMfaGenerate')"
           :submitting="submitting"
           :disabled="!!clientId && !hasRedirectUris"
@@ -199,10 +197,10 @@ async function onSubmit() {
       </template>
       <CommonButton
         v-else
-        :button-style="primaryColoredButton"
+        variant="primary"
         :label="t('pages.userDetail.enrollMfaDone')"
         @click="$emit('close')"
       />
     </template>
-  </BaseDialog>
+  </SaDialog>
 </template>

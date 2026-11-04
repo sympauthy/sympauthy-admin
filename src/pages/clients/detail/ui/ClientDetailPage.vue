@@ -9,7 +9,7 @@ import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
-import { CommonAlert, LoadingState } from '@/shared/ui'
+import { SaAlert, SaLoadingState } from '@/shared/ui'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -41,12 +41,12 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Loading state -->
-    <LoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" :label="t('common.loading')" />
 
     <!-- Error state -->
-    <CommonAlert v-else-if="error" color="danger">
+    <SaAlert v-else-if="error" color="danger">
       {{ error }}
-    </CommonAlert>
+    </SaAlert>
 
     <!-- Content -->
     <div v-else-if="client" class="space-y-6">

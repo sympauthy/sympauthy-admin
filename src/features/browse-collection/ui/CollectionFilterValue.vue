@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { FormInput, FormListbox, FormTagsInput } from '@/shared/ui'
+import { SaInput, SaListbox, SaTagsInput } from '@/shared/ui'
 import type { CollectionCriterion } from '../model/CollectionCriteria'
 import { collectionFilterValues, type CollectionFilter } from '../model/CollectionFilter'
 import { isMultiValuedOperator } from '../model/CollectionOperatorUtils'
@@ -13,6 +13,8 @@ import { isMultiValuedOperator } from '../model/CollectionOperatorUtils'
  * It renders nothing for an operator taking no value; the popover holding it decides not to ask.
  */
 const props = defineProps<{
+  /** Reaches the field a label can point at. A list of values names itself by its `aria-label`. */
+  id: string
   filter: CollectionFilter
   criterion: CollectionCriterion
 }>()
@@ -84,7 +86,7 @@ function onSelect(values: string[]) {
  * being written rather than to the filter around it. The two lists do not go through here at all:
  * one adds a value with Enter and the other picks one with it.
  */
-const tags = ref<InstanceType<typeof FormTagsInput> | null>(null)
+const tags = ref<InstanceType<typeof SaTagsInput> | null>(null)
 
 /**
  * Settles what the rendered control holds but has not handed over yet.
@@ -106,28 +108,31 @@ function onValueKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <FormListbox
+  <SaListbox
     v-if="options"
     :options="options"
     :selected="selected"
     :multiple="multiValued"
     :search-placeholder="t('common.collection.searchValues')"
+    :no-match-label="t('common.list.noMatch')"
     :aria-label="props.filter.name"
     @select="onSelect"
   />
 
   <!-- An `in` over a field publishing no values: the caller enters the list themselves, one value
        at a time, and never meets the comma the grammar joins them back with. -->
-  <FormTagsInput
+  <SaTagsInput
     v-else-if="multiValued"
     ref="tags"
     v-model="typedValues"
+    :remove-label="t('common.remove')"
     :placeholder="t('common.collection.addValue')"
     :aria-label="props.filter.name"
   />
 
-  <FormInput
+  <SaInput
     v-else
+    :id="props.id"
     :type="inputType"
     :model-value="props.criterion.value"
     :aria-label="props.filter.name"

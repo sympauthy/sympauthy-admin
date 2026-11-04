@@ -85,7 +85,7 @@ export function claimPublicationPlaceLabel(place: string): string {
  * release may add a kind to it, and a value this panel holds no translation for renders as itself.
  *
  * It takes the value rather than the claim because a claim of neither kind carries none, and a
- * cell with nothing to name is an `EmptyValue` rather than a label of its own.
+ * cell with nothing to name is an `SaEmptyValue` rather than a label of its own.
  */
 export function claimKindLabel(kind: string): string {
   return translateMessageOr(`terms.claim.kind.values.${kind}`, kind)

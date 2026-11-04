@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DefinitionList, DefinitionRow, DetailSection, RouteLink } from '@/shared/ui'
+import { RouteLink, SaDefinitionList, SaDefinitionRow, SaDetailSection } from '@/shared/ui'
 import { grantRevokedByLabel, type GrantDetailResource } from '@/entities/grant'
 import { formatDateTime } from '@/shared/lib'
 
@@ -12,15 +12,15 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <DetailSection :title="t('pages.grantDetail.revocation')">
-    <DefinitionList>
-      <DefinitionRow v-if="grant.revoked_at" :label="t('pages.grantDetail.revokedAt')">
+  <SaDetailSection :title="t('pages.grantDetail.revocation')">
+    <SaDefinitionList>
+      <SaDefinitionRow v-if="grant.revoked_at" :label="t('pages.grantDetail.revokedAt')">
         {{ formatDateTime(grant.revoked_at) }}
-      </DefinitionRow>
-      <DefinitionRow v-if="grant.revoked_by" :label="t('pages.grantDetail.revokedBy')">
+      </SaDefinitionRow>
+      <SaDefinitionRow v-if="grant.revoked_by" :label="t('pages.grantDetail.revokedBy')">
         {{ grantRevokedByLabel(grant.revoked_by) }}
-      </DefinitionRow>
-      <DefinitionRow
+      </SaDefinitionRow>
+      <SaDefinitionRow
         v-if="grant.revoked_by_user_id"
         mono
         :label="t('pages.grantDetail.revokedByUser')"
@@ -28,7 +28,7 @@ const { t } = useI18n()
         <RouteLink :to="{ name: 'userDetail', params: { userId: grant.revoked_by_user_id } }">
           {{ grant.revoked_by_user_id }}
         </RouteLink>
-      </DefinitionRow>
-    </DefinitionList>
-  </DetailSection>
+      </SaDefinitionRow>
+    </SaDefinitionList>
+  </SaDetailSection>
 </template>

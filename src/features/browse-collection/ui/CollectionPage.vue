@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useSlots } from 'vue'
-import { PaginatedTable } from '@/shared/ui'
+import { useI18n } from 'vue-i18n'
+import { SaPagination, SaTable } from '@/shared/ui'
 import type { Collection } from '../model/useCollection'
 import CollectionToolbar from './CollectionToolbar.vue'
 
@@ -11,7 +12,7 @@ import CollectionToolbar from './CollectionToolbar.vue'
  *
  * Everything but the columns comes from the collection it is handed — the toolbar from the
  * capability document, the paging and the order from what the caller asked. The page writes its
- * `header` and `rows` slots and nothing else; what the page lets an operator do is a `PageActions`,
+ * `header` and `rows` slots and nothing else; what the page lets an operator do is a `SaPageActions`,
  * which puts it in the bar naming the screen rather than in the row narrowing the list.
  */
 const props = withDefaults(
@@ -28,6 +29,7 @@ const props = withDefaults(
 )
 
 const slots = useSlots()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -44,19 +46,15 @@ const slots = useSlots()
       <slot name="notice" />
     </div>
 
-    <PaginatedTable
+    <SaTable
       class="min-h-0 flex-1"
       fill
       auto-page-size
+      :loading-label="t('common.loading')"
       :loading="props.collection.loading"
       :error="props.collection.error"
       :empty="props.collection.items.length === 0"
-      :page="props.collection.page"
-      :size="props.collection.size"
-      :total="props.collection.total"
-      :total-pages="props.collection.totalPages"
       :min-page-size="props.minPageSize"
-      @page-change="props.collection.fetch"
       @page-size-change="props.collection.setSize"
     >
       <template #header>
@@ -68,6 +66,23 @@ const slots = useSlots()
       <template #empty>
         <slot name="empty" />
       </template>
-    </PaginatedTable>
+      <!-- Kept on screen for a single page: hiding it would give the rows more room, which in turn
+           feeds back into the number of rows per page. -->
+      <template #footer>
+        <SaPagination
+          always-shown
+          :page="props.collection.page"
+          :total-pages="props.collection.totalPages"
+          :size="props.collection.size"
+          :total="props.collection.total"
+          :label="t('common.paginationLabel')"
+          :previous-label="t('common.previous')"
+          :next-label="t('common.next')"
+          :page-label="(page, totalPages) => t('common.pagination', { page, totalPages })"
+          :range-label="(range) => t('common.paginationRange', range)"
+          @page-change="props.collection.fetch"
+        />
+      </template>
+    </SaTable>
   </div>
 </template>

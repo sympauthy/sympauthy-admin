@@ -14,13 +14,12 @@ import {
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
-  CommonTag,
   DocHelpTooltip,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  primaryColoredButton,
-  RouteLink
+  RouteLink,
+  SaEmptyValue,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
 } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
@@ -82,51 +81,52 @@ onMounted(async () => {
         :label="t('pages.grants.createdAt')"
         field="created_at"
       />
-      <TableHeader fit>{{ t('pages.grants.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.grants.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="grant in grants.items" :key="grant.grant_id">
-        <TableCell :label="t('pages.grants.status')" fit>
-          <CommonTag :color="grantStatusColor(grant.status)">
+        <SaTableCell :label="t('pages.grants.status')" fit>
+          <SaTag :color="grantStatusColor(grant.status)">
             {{ grantStatusLabel(grant.status) }}
-          </CommonTag>
-        </TableCell>
+          </SaTag>
+        </SaTableCell>
         <!-- The identifier rather than the person's claims: a grant names its user and nothing
              more, and the search field is what finds one by the address they sign in with. -->
-        <TableCell primary truncate mono>
+        <SaTableCell primary truncate mono>
           <RouteLink
             v-if="grant.user_id"
+            block
             :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
             class="font-medium text-gray-900"
           >
             {{ grant.user_id }}
           </RouteLink>
-          <EmptyValue v-else />
-        </TableCell>
+          <SaEmptyValue v-else />
+        </SaTableCell>
         <!-- Plain text rather than a link: a grant may name a client or an audience the
              configuration no longer declares, and a link landing on an error page is worse than
              no link. -->
-        <TableCell :label="t('pages.grants.client')" truncate>
+        <SaTableCell :label="t('pages.grants.client')" truncate>
           {{ grant.client_id }}
-        </TableCell>
-        <TableCell :label="t('pages.grants.audience')" truncate hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.grants.audience')" truncate hidden-below="sm">
           {{ grant.audience_id }}
-        </TableCell>
-        <TableCell :label="t('pages.grants.grantType')" fit hidden-below="lg">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.grants.grantType')" fit hidden-below="lg">
           {{ grantTypeLabel(grant.grant_type) }}
-        </TableCell>
-        <TableCell :label="t('pages.grants.createdAt')" fit hidden-below="lg">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.grants.createdAt')" fit hidden-below="lg">
           {{ formatDateTime(grant.created_at) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="primaryColoredButton"
+            variant="secondary"
             :label="t('pages.grants.view')"
             :icon="EyeIcon"
             @click="router.push({ name: 'grantDetail', params: { grantId: grant.grant_id } })"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

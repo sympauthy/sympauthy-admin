@@ -52,8 +52,8 @@ reaches the page.
 
 **[reka-ui](https://reka-ui.com).** Headless primitives supply the behaviour nobody should hand-roll
 — focus trap, keyboard navigation, ARIA roles, scroll lock, collision-aware positioning — while all
-styling stays ours. [The design system standard](design-system-standard.md) says which primitive
-each shared component wraps.
+styling stays Tailwind's. The design system wraps most of them, and [its
+standard](design-system-standard.md#overlays) says when the panel reaches for one directly.
 
 **[Heroicons](https://heroicons.com).** One icon set, one variant, imported per use so the build
 keeps only what a screen draws.

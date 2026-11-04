@@ -4,14 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  primaryColoredButton
-} from '@/shared/ui'
+import { CommonButton, DocHelpTooltip, SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()
@@ -38,10 +31,10 @@ onMounted(async () => {
         :label="t('pages.clients.clientId')"
         field="id"
       />
-      <TableHeader fit>
+      <SaTableHeader fit>
         {{ t('pages.clients.type') }}
         <DocHelpTooltip term="terms.client.type" />
-      </TableHeader>
+      </SaTableHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -53,37 +46,37 @@ onMounted(async () => {
           <DocHelpTooltip term="terms.audience.id" />
         </template>
       </CollectionSortHeader>
-      <TableHeader>{{ t('pages.clients.redirectUris') }}</TableHeader>
-      <TableHeader fit>{{ t('pages.clients.actions') }}</TableHeader>
+      <SaTableHeader>{{ t('pages.clients.redirectUris') }}</SaTableHeader>
+      <SaTableHeader fit>{{ t('pages.clients.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="client in clients.items" :key="client.client_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ client.client_id }}
-        </TableCell>
-        <TableCell :label="t('pages.clients.type')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.clients.type')" fit>
           {{ client.type }}
-        </TableCell>
-        <TableCell :label="t('pages.clients.audience')" fit hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.clients.audience')" fit hidden-below="sm">
           {{ client.audience_id }}
-        </TableCell>
-        <TableCell :label="t('pages.clients.redirectUris')">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.clients.redirectUris')">
           <template v-if="client.allowed_redirect_uris?.length">
             <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
               {{ uri }}
             </div>
           </template>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell fit>
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="primaryColoredButton"
+            variant="secondary"
             :label="t('pages.clients.view')"
             :icon="EyeIcon"
             @click="router.push({ name: 'clientDetail', params: { clientId: client.client_id } })"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

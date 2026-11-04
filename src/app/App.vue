@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { TooltipProvider } from 'reka-ui'
 import AdminLayout from './layout/AdminLayout.vue'
 import { useAuthStore } from '@/shared/auth'
-import { CommonSpinner } from '@/shared/ui'
+import { SaSpinner, SaTooltipProvider } from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -31,15 +30,15 @@ watch(
 <template>
   <!-- One provider for every hint, so moving the pointer from one to the next skips the delay the
        first one waited. -->
-  <TooltipProvider :delay-duration="150">
+  <SaTooltipProvider>
     <RouterView v-if="route.meta.noLayout" />
 
     <div v-else-if="showLoading" class="flex min-h-screen items-center justify-center">
-      <CommonSpinner size="lg" />
+      <SaSpinner size="lg" />
     </div>
 
     <AdminLayout v-else-if="showLayout">
       <RouterView />
     </AdminLayout>
-  </TooltipProvider>
+  </SaTooltipProvider>
 </template>

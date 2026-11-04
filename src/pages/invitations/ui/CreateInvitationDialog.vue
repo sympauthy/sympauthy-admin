@@ -1,18 +1,16 @@
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  BaseDialog,
-  CommonAlert,
   CommonButton,
   DocHelpTooltip,
-  FormField,
-  FormInput,
-  FormSelect,
-  FormTextarea,
   OneTimeSecret,
-  primaryColoredButton,
-  secondaryColoredButton
+  SaAlert,
+  SaDialog,
+  SaField,
+  SaInput,
+  SaSelect,
+  SaTextarea
 } from '@/shared/ui'
 import { AudienceApi, type AudienceResource } from '@/entities/audience'
 import { fetchAllPages } from '@/shared/api'
@@ -31,6 +29,10 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const audienceFieldId = useId()
+const expiresAtFieldId = useId()
+const noteFieldId = useId()
+const claimsFieldId = useId()
 const api = new InvitationApi()
 const audienceApi = new AudienceApi()
 
@@ -138,7 +140,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <BaseDialog
+  <SaDialog
     :open="open"
     :title="dialogTitle"
     :dismiss-disabled="submitting"
@@ -147,44 +149,45 @@ async function onSubmit() {
     <template #default>
       <!-- Form phase -->
       <template v-if="phase === 'form'">
-        <CommonAlert v-if="error" color="danger" class="mb-4">
+        <SaAlert v-if="error" color="danger" class="mb-4">
           {{ error }}
-        </CommonAlert>
+        </SaAlert>
 
         <div class="space-y-4">
-          <FormField :label="t('pages.invitations.audience')">
+          <SaField :for="audienceFieldId" :label="t('pages.invitations.audience')">
             <template #help>
               <DocHelpTooltip term="terms.audience.id" />
             </template>
-            <FormSelect v-model="audience">
+            <SaSelect :id="audienceFieldId" v-model="audience">
               <option value="" disabled>
                 {{ t('pages.invitations.selectAudience') }}
               </option>
               <option v-for="a in allAudiences" :key="a.audience_id" :value="a.audience_id">
                 {{ a.audience_id }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
 
-          <FormField :label="t('pages.invitations.expiresAtLabel')">
-            <FormInput v-model="expiresAt" type="datetime-local" />
-          </FormField>
+          <SaField :for="expiresAtFieldId" :label="t('pages.invitations.expiresAtLabel')">
+            <SaInput :id="expiresAtFieldId" v-model="expiresAt" type="datetime-local" />
+          </SaField>
 
-          <FormField :label="t('pages.invitations.noteLabel')">
-            <FormTextarea v-model="note" :rows="2" />
-          </FormField>
+          <SaField :for="noteFieldId" :label="t('pages.invitations.noteLabel')">
+            <SaTextarea :id="noteFieldId" v-model="note" :rows="2" />
+          </SaField>
 
-          <FormField :label="t('pages.invitations.claims.label')">
+          <SaField :for="claimsFieldId" :label="t('pages.invitations.claims.label')">
             <template #help>
               <DocHelpTooltip term="pages.invitations.claims" />
             </template>
-            <FormTextarea
+            <SaTextarea
+              :id="claimsFieldId"
               v-model="claimsJson"
               mono
               :rows="3"
               :placeholder="t('pages.invitations.claimsPlaceholder')"
             />
-          </FormField>
+          </SaField>
         </div>
       </template>
 
@@ -197,13 +200,13 @@ async function onSubmit() {
     <template #actions>
       <template v-if="phase === 'form'">
         <CommonButton
-          :button-style="secondaryColoredButton"
+          variant="secondary"
           :label="t('common.cancel')"
           :disabled="submitting"
           @click="$emit('close')"
         />
         <CommonButton
-          :button-style="primaryColoredButton"
+          variant="primary"
           :label="t('pages.invitations.create')"
           :submitting="submitting"
           @click="onSubmit"
@@ -211,10 +214,10 @@ async function onSubmit() {
       </template>
       <CommonButton
         v-else
-        :button-style="primaryColoredButton"
+        variant="primary"
         :label="t('pages.invitations.done')"
         @click="$emit('close')"
       />
     </template>
-  </BaseDialog>
+  </SaDialog>
 </template>

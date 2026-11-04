@@ -10,7 +10,7 @@ import {
 } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { EmptyValue, OriginTag, TableCell, TableHeader } from '@/shared/ui'
+import { OriginTag, SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -53,7 +53,7 @@ onMounted(async () => {
         :label="t('terms.origin.label')"
         field="origin"
       />
-      <TableHeader fit>{{ t('pages.userClaims.tags') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.userClaims.tags') }}</SaTableHeader>
       <CollectionSortHeader
         fit
         :collection="claims"
@@ -70,27 +70,27 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.claim_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ claim.claim_id }}
-        </TableCell>
-        <TableCell :label="t('pages.userClaims.value')" truncate>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userClaims.value')" truncate>
           <span v-if="claim.value != null">{{ userClaimValueLabel(claim) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('terms.origin.label')" fit>
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
-        </TableCell>
-        <TableCell :label="t('pages.userClaims.tags')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userClaims.tags')" fit>
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
-        </TableCell>
-        <TableCell :label="t('pages.userClaims.collectedAt')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userClaims.collectedAt')" fit>
           <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.userClaims.verifiedAt')" fit>
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userClaims.verifiedAt')" fit>
           <span v-if="claim.verified_at">{{ formatDate(claim.verified_at) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
+          <SaEmptyValue v-else />
+        </SaTableCell>
       </tr>
     </template>
 

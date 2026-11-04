@@ -11,11 +11,10 @@ import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
-  ConfirmDialog,
   DocHelpTooltip,
-  TableCell,
-  TableHeader,
-  dangerColoredButton
+  SaConfirmDialog,
+  SaTableCell,
+  SaTableHeader
 } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -65,10 +64,10 @@ onMounted(async () => {
         :label="t('pages.userProviders.provider')"
         field="provider_id"
       />
-      <TableHeader>
+      <SaTableHeader>
         {{ t('pages.userProviders.subject.label') }}
         <DocHelpTooltip term="pages.userProviders.subject" />
-      </TableHeader>
+      </SaTableHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -76,28 +75,28 @@ onMounted(async () => {
         :label="t('pages.userProviders.linkedAt')"
         field="link_date"
       />
-      <TableHeader fit>{{ t('pages.userProviders.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.userProviders.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="link in providerLinks.items" :key="link.provider_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ link.provider_id }}
-        </TableCell>
-        <TableCell :label="t('pages.userProviders.subject.label')" truncate>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userProviders.subject.label')" truncate>
           {{ link.subject }}
-        </TableCell>
-        <TableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">
           {{ formatDate(link.linked_at) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="dangerColoredButton"
+            variant="secondary"
             :label="t('pages.userProviders.unlink')"
             :required-scopes="['admin:users:write']"
             @click="unlinkTargetProviderId = link.provider_id"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 
@@ -106,9 +105,10 @@ onMounted(async () => {
     </template>
   </CollectionPage>
 
-  <ConfirmDialog
+  <SaConfirmDialog
     :open="unlinkTargetProviderId !== null"
     :confirm-label="t('pages.userProviders.unlink')"
+    :cancel-label="t('common.cancel')"
     @confirm="confirmUnlink"
     @cancel="unlinkTargetProviderId = null"
   >
@@ -118,5 +118,5 @@ onMounted(async () => {
     <p class="text-sm text-gray-600">
       {{ t('pages.userProviders.unlinkDescription') }}
     </p>
-  </ConfirmDialog>
+  </SaConfirmDialog>
 </template>

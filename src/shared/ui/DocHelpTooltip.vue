@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { SaPopover } from '@sympauthy/design'
 import DocLink from './DocLink.vue'
-import HelpTooltip from './HelpTooltip.vue'
 
 /**
  * What a term means, read from the bundle: the sentence its `help` holds, closing on the link into
@@ -32,7 +32,7 @@ const explainedValues = computed(() => Object.keys(tm(`${props.term}.valuesHelp`
 </script>
 
 <template>
-  <HelpTooltip>
+  <SaPopover :label="t('common.moreInformation')">
     <i18n-t :keypath="keypath" tag="p" scope="global">
       <template #link>
         <DocLink :href="linkUrl">{{ linkText }}</DocLink>
@@ -44,5 +44,5 @@ const explainedValues = computed(() => Object.keys(tm(`${props.term}.valuesHelp`
         <dd class="inline">— {{ t(`${term}.valuesHelp.${value}`) }}</dd>
       </div>
     </dl>
-  </HelpTooltip>
+  </SaPopover>
 </template>

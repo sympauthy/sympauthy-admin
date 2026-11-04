@@ -14,12 +14,11 @@ import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/
 import {
   CommonButton,
   DocHelpTooltip,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  CommonTag,
-  primaryColoredButton,
-  RouteLink
+  RouteLink,
+  SaEmptyValue,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
 } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
@@ -55,10 +54,10 @@ onMounted(async () => {
           <DocHelpTooltip term="terms.interactiveFlowSession.status" />
         </template>
       </CollectionSortHeader>
-      <TableHeader>
+      <SaTableHeader>
         {{ t('pages.sessions.user') }}
         <DocHelpTooltip term="terms.interactiveFlowSession.user" />
-      </TableHeader>
+      </SaTableHeader>
       <CollectionSortHeader
         :collection="sessions"
         :label="t('pages.sessions.client')"
@@ -71,46 +70,47 @@ onMounted(async () => {
         :label="t('pages.sessions.started')"
         field="session_date"
       />
-      <TableHeader fit>{{ t('pages.sessions.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.sessions.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="session in sessions.items" :key="session.id">
-        <TableCell :label="t('pages.sessions.status')" fit>
-          <CommonTag :color="interactiveFlowSessionStatusColor(session.status)">
+        <SaTableCell :label="t('pages.sessions.status')" fit>
+          <SaTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
-          </CommonTag>
-        </TableCell>
-        <TableCell primary truncate>
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell primary truncate>
           <RouteLink
             v-if="session.user"
+            block
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
             class="font-medium text-gray-900"
           >
             {{ userIdentifierLabel(session.user) }}
           </RouteLink>
-          <CommonTag v-else-if="session.signed_up" color="gray">
+          <SaTag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
-          </CommonTag>
-          <EmptyValue v-else />
-        </TableCell>
+          </SaTag>
+          <SaEmptyValue v-else />
+        </SaTableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no
              longer declares, and a link landing on an error page is worse than no link. -->
-        <TableCell :label="t('pages.sessions.client')" truncate>
+        <SaTableCell :label="t('pages.sessions.client')" truncate>
           <span v-if="session.client_id">{{ session.client_id }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
           {{ formatDateTime(session.session_date) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="primaryColoredButton"
+            variant="secondary"
             :label="t('pages.sessions.view')"
             :icon="EyeIcon"
             @click="router.push({ name: 'sessionDetail', params: { sessionId: session.id } })"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

@@ -3,13 +3,13 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
-import { FormListbox } from '@/shared/ui'
+import { SaListbox } from '@/shared/ui'
 import type { CollectionFilter } from '../model/CollectionFilter'
 
 /**
  * The fields a collection filters on, searched rather than read down.
  *
- * It is a popover over a `FormListbox` and not a `DropdownMenu` because a menu has nowhere to
+ * It is a popover over a `SaListbox` and not a `DropdownMenu` because a menu has nowhere to
  * type: its keystrokes are its own typeahead. The list is the deployment's as well — an instance
  * publishing a field per claim renders a menu taller than the viewport — so it scrolls and it is
  * searched.
@@ -82,7 +82,7 @@ function onCloseAutoFocus(event: Event) {
          The chevron stays with it: with nothing written on the control, it is what says a list
          opens. -->
     <PopoverTrigger
-      class="control control-focus flex shrink-0 items-center gap-1.5 bg-white"
+      class="sa-control sa-control-focus flex shrink-0 items-center gap-1.5 bg-white"
       :title="t('common.addFilter')"
     >
       <PlusIcon class="size-4 shrink-0" />
@@ -94,13 +94,14 @@ function onCloseAutoFocus(event: Event) {
       <PopoverContent
         align="end"
         :side-offset="4"
-        class="overlay-animated z-10 w-64 max-w-[calc(100vw-2rem)] rounded-md"
+        class="sa-overlay-animated z-10 w-64 max-w-[calc(100vw-2rem)] rounded-md"
         @close-auto-focus="onCloseAutoFocus"
       >
-        <FormListbox
+        <SaListbox
           :options="options"
           :selected="[]"
           :search-placeholder="t('common.collection.searchFields')"
+          :no-match-label="t('common.list.noMatch')"
           @select="onSelect"
         />
       </PopoverContent>

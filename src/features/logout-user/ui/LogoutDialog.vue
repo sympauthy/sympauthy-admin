@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { CommonAlert, ConfirmDialog, FormSelect } from '@/shared/ui'
+import { SaAlert, SaConfirmDialog, SaRadioGroup, SaSelect } from '@/shared/ui'
 import { GrantApi } from '@/entities/grant'
 import { useClientStore } from '@/entities/client'
 import { isSuccess, getErrorMessage } from '@/shared/api'
@@ -35,6 +35,14 @@ const clientPickerHint = computed(() =>
 const awaitingClient = computed(() => mode.value === 'specific' && !selectedClientId.value)
 
 const mode = ref<'all' | 'specific'>('all')
+const modes = computed(() => [
+  { value: 'all' as const, label: t('logoutDialog.allClients') },
+  {
+    value: 'specific' as const,
+    label: t('logoutDialog.specificClient'),
+    disabledReason: clientPickerHint.value
+  }
+])
 const selectedClientId = ref<string>('')
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -78,9 +86,10 @@ async function onConfirm() {
 </script>
 
 <template>
-  <ConfirmDialog
+  <SaConfirmDialog
     :open="open"
     :confirm-label="t('logoutDialog.confirm')"
+    :cancel-label="t('common.cancel')"
     :loading="loading"
     :error="error"
     :confirm-disabled="awaitingClient"
@@ -96,36 +105,13 @@ async function onConfirm() {
     </p>
 
     <div class="space-y-3">
-      <label class="flex cursor-pointer items-center gap-2">
-        <input v-model="mode" type="radio" value="all" class="accent-primary" />
-        <span class="text-sm text-gray-700">{{ t('logoutDialog.allClients') }}</span>
-      </label>
+      <SaRadioGroup v-model="mode" :options="modes" :aria-label="t('logoutDialog.title')" />
 
-      <label
-        class="flex items-start gap-2"
-        :class="clientPickerHint ? 'cursor-not-allowed' : 'cursor-pointer'"
-      >
-        <input
-          v-model="mode"
-          type="radio"
-          value="specific"
-          :disabled="clientPickerHint !== undefined"
-          class="mt-0.5 accent-primary"
-        />
-        <span
-          class="flex flex-col text-sm"
-          :class="clientPickerHint ? 'text-gray-400' : 'text-gray-700'"
-        >
-          {{ t('logoutDialog.specificClient') }}
-          <span v-if="clientPickerHint" class="text-xs">{{ clientPickerHint }}</span>
-        </span>
-      </label>
-
-      <CommonAlert v-if="mode === 'specific' && clientStore.allClientsError" color="danger">
+      <SaAlert v-if="mode === 'specific' && clientStore.allClientsError" color="danger">
         {{ clientStore.allClientsError }}
-      </CommonAlert>
+      </SaAlert>
 
-      <FormSelect v-else-if="mode === 'specific'" v-model="selectedClientId">
+      <SaSelect v-else-if="mode === 'specific'" v-model="selectedClientId">
         <option value="" disabled>
           {{ t('logoutDialog.selectClient') }}
         </option>
@@ -136,7 +122,7 @@ async function onConfirm() {
         >
           {{ client.client_id }}
         </option>
-      </FormSelect>
+      </SaSelect>
     </div>
-  </ConfirmDialog>
+  </SaConfirmDialog>
 </template>

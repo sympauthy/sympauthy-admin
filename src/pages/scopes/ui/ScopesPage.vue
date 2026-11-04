@@ -6,12 +6,12 @@ import type { ScopeListResource } from '../model/ScopeListResource'
 import type { ScopeResource } from '../model/ScopeResource'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
-  CommonTag,
   DocHelpTooltip,
-  EmptyValue,
   OriginTag,
-  TableCell,
-  TableHeader
+  SaEmptyValue,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
 } from '@/shared/ui'
 
 const { t } = useI18n()
@@ -63,43 +63,43 @@ onMounted(async () => {
           <DocHelpTooltip term="pages.scopes.type" />
         </template>
       </CollectionSortHeader>
-      <TableHeader fit>
+      <SaTableHeader fit>
         {{ t('terms.origin.label') }}
         <DocHelpTooltip term="pages.scopes.origin" />
-      </TableHeader>
-      <TableHeader>
+      </SaTableHeader>
+      <SaTableHeader>
         {{ t('pages.scopes.claims.label') }}
         <DocHelpTooltip term="pages.scopes.claims" />
-      </TableHeader>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="scope in scopes.items" :key="scope.id">
-        <TableCell :label="t('pages.scopes.status.label')" fit>
-          <CommonTag v-if="scope.enabled" color="green">
+        <SaTableCell :label="t('pages.scopes.status.label')" fit>
+          <SaTag v-if="scope.enabled" color="green">
             {{ t('pages.scopes.enabled') }}
-          </CommonTag>
-          <CommonTag v-else color="red">
+          </SaTag>
+          <SaTag v-else color="red">
             {{ t('pages.scopes.disabled') }}
-          </CommonTag>
-        </TableCell>
-        <TableCell primary truncate>
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell primary truncate>
           {{ scope.id }}
-        </TableCell>
-        <TableCell :label="t('pages.scopes.type.label')" fit>
-          <CommonTag :color="typeColor(scope.type)">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.scopes.type.label')" fit>
+          <SaTag :color="typeColor(scope.type)">
             {{ t(`pages.scopes.${scope.type}`) }}
-          </CommonTag>
-        </TableCell>
-        <TableCell :label="t('terms.origin.label')" fit>
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="scope.origin" />
-        </TableCell>
-        <TableCell :label="t('pages.scopes.claims.label')" truncate>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.scopes.claims.label')" truncate>
           <span v-if="scope.claims && scope.claims.length > 0">
             {{ scope.claims.join(', ') }}
           </span>
-          <EmptyValue v-else />
-        </TableCell>
+          <SaEmptyValue v-else />
+        </SaTableCell>
       </tr>
     </template>
 

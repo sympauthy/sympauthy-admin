@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { CommonTag } from '@sympauthy/design'
+import { SaTag } from '@sympauthy/design'
 
 const props = defineProps<{
   origin: string
@@ -23,7 +23,7 @@ const color = computed<'blue' | 'gray' | 'yellow'>(() => {
 </script>
 
 <template>
-  <CommonTag :color="color">
+  <SaTag :color="color">
     {{ t(`terms.origin.values.${origin}`) }}
-  </CommonTag>
+  </SaTag>
 </template>

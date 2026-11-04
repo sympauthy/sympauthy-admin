@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ConsentApi } from '../api/ConsentApi'
@@ -10,11 +10,11 @@ import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
-  CommonTag,
   DocHelpTooltip,
-  TableCell,
-  TableHeader,
-  dangerColoredButton
+  SaConfirmDialog,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
 } from '@/shared/ui'
 
 const route = useRoute()
@@ -29,15 +29,30 @@ const consents = useCollection<ConsentResource, ConsentListResource>({
   items: (content) => content.consents
 })
 
+const revokeTargetAudienceId = ref<string | null>(null)
+const revokeLoading = ref(false)
+const revokeError = ref<string | null>(null)
+
+function onCancelRevoke() {
+  revokeTargetAudienceId.value = null
+  revokeError.value = null
+}
+
 // The list is read again at the page it is displaying rather than from the first, so revoking the
 // last consent of a page does not send the operator back to the top of the list.
-async function revokeConsent(audienceId: string): Promise<void> {
-  const response = await api.revokeConsent(userId.value, audienceId)
+async function confirmRevoke(): Promise<void> {
+  if (!revokeTargetAudienceId.value) return
+
+  revokeLoading.value = true
+  revokeError.value = null
+  const response = await api.revokeConsent(userId.value, revokeTargetAudienceId.value)
+  revokeLoading.value = false
 
   if (isSuccess(response)) {
+    revokeTargetAudienceId.value = null
     await consents.fetch(consents.page)
   } else {
-    consents.error = getErrorMessage(response)
+    revokeError.value = getErrorMessage(response)
   }
 }
 
@@ -85,35 +100,35 @@ onMounted(async () => {
         :label="t('pages.userConsents.consentedAt')"
         field="consented_at"
       />
-      <TableHeader fit>{{ t('pages.userConsents.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.userConsents.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="consent in consents.items" :key="consent.audience_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ consent.audience_id }}
-        </TableCell>
-        <TableCell :label="t('pages.userConsents.client.label')" fit hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userConsents.client.label')" fit hidden-below="sm">
           {{ consent.prompted_by_client_id }}
-        </TableCell>
-        <TableCell :label="t('pages.userConsents.scopes.label')">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userConsents.scopes.label')">
           <div class="flex flex-wrap gap-1">
-            <CommonTag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
+            <SaTag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}
-            </CommonTag>
+            </SaTag>
           </div>
-        </TableCell>
-        <TableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">
           {{ formatDateTime(consent.consented_at) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="dangerColoredButton"
+            variant="secondary"
             :label="t('pages.userConsents.revoke')"
             :required-scopes="['admin:consent:write']"
-            @click="revokeConsent(consent.audience_id)"
+            @click="revokeTargetAudienceId = consent.audience_id"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 
@@ -121,4 +136,21 @@ onMounted(async () => {
       <p class="text-sm text-gray-600">{{ t('pages.userConsents.empty') }}</p>
     </template>
   </CollectionPage>
+
+  <SaConfirmDialog
+    :open="revokeTargetAudienceId !== null"
+    :confirm-label="t('pages.userConsents.revokeConfirm')"
+    :cancel-label="t('common.cancel')"
+    :loading="revokeLoading"
+    :error="revokeError"
+    @confirm="confirmRevoke"
+    @cancel="onCancelRevoke"
+  >
+    <template #title>
+      {{ t('pages.userConsents.revokeTitle') }}
+    </template>
+    <p class="text-sm text-gray-600">
+      {{ t('pages.userConsents.revokeDescription') }}
+    </p>
+  </SaConfirmDialog>
 </template>

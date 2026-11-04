@@ -11,13 +11,13 @@ import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
 import LinkProviderDialog from './LinkProviderDialog.vue'
 import {
-  ActionsDropdown,
-  CommonAlert,
-  LoadingState,
-  PageActions,
-  RecordTabs,
   type ActionItem,
-  type RecordTab
+  ActionsDropdown,
+  type RecordTab,
+  RecordTabs,
+  SaAlert,
+  SaLoadingState,
+  SaPageActions
 } from '@/shared/ui'
 import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 
@@ -127,20 +127,20 @@ onMounted(() => load(userId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <LoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" :label="t('common.loading')" />
 
     <!-- Error state -->
-    <CommonAlert v-else-if="error" color="danger">
+    <SaAlert v-else-if="error" color="danger">
       {{ error }}
-    </CommonAlert>
+    </SaAlert>
 
     <!-- Content -->
     <template v-else-if="user">
-      <PageActions>
+      <SaPageActions>
         <ActionsDropdown :actions="actions" @action="onAction" />
-      </PageActions>
+      </SaPageActions>
       <UserSummaryPanel class="shrink-0" :user="user" />
-      <RecordTabs :tabs="tabs" />
+      <RecordTabs :tabs="tabs" :label="t('pages.userDetail.views')" />
       <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
            page. -->
       <div class="min-h-0 flex-1">

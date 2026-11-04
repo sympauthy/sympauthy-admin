@@ -9,15 +9,13 @@ import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
   CommonButton,
-  ConfirmDialog,
   DocHelpTooltip,
-  EmptyValue,
-  PageActions,
-  TableCell,
-  TableHeader,
-  CommonTag,
-  dangerColoredButton,
-  primaryColoredButton
+  SaConfirmDialog,
+  SaEmptyValue,
+  SaPageActions,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
 } from '@/shared/ui'
 import CreateInvitationDialog from './CreateInvitationDialog.vue'
 import { formatDate } from '@/shared/lib'
@@ -90,15 +88,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PageActions>
+  <SaPageActions>
     <CommonButton
-      :button-style="primaryColoredButton"
+      variant="primary"
       :label="t('pages.invitations.create')"
       :icon="PlusIcon"
       :required-scopes="['admin:invitations:write']"
       @click="showCreateDialog = true"
     />
-  </PageActions>
+  </SaPageActions>
 
   <CollectionPage :collection="invitations" :search-placeholder="t('pages.invitations.search')">
     <template #header>
@@ -112,10 +110,10 @@ onMounted(async () => {
           <DocHelpTooltip term="pages.invitations.status" />
         </template>
       </CollectionSortHeader>
-      <TableHeader>
+      <SaTableHeader>
         {{ t('pages.invitations.tokenPrefix.label') }}
         <DocHelpTooltip term="pages.invitations.tokenPrefix" />
-      </TableHeader>
+      </SaTableHeader>
       <CollectionSortHeader
         :collection="invitations"
         :label="t('pages.invitations.audience')"
@@ -125,7 +123,7 @@ onMounted(async () => {
           <DocHelpTooltip term="terms.audience.id" />
         </template>
       </CollectionSortHeader>
-      <TableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</TableHeader>
+      <SaTableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</SaTableHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -133,39 +131,39 @@ onMounted(async () => {
         :label="t('pages.invitations.expiresAt')"
         field="expires_at"
       />
-      <TableHeader fit>{{ t('pages.invitations.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.invitations.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="invitation in invitations.items" :key="invitation.invitation_id">
-        <TableCell :label="t('pages.invitations.status.label')" fit>
-          <CommonTag :color="statusColor(invitation.status)">
+        <SaTableCell :label="t('pages.invitations.status.label')" fit>
+          <SaTag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
-          </CommonTag>
-        </TableCell>
-        <TableCell primary mono>
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell primary mono>
           {{ invitation.token_prefix }}
-        </TableCell>
-        <TableCell :label="t('pages.invitations.audience')" truncate>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.invitations.audience')" truncate>
           {{ invitation.audience_id }}
-        </TableCell>
-        <TableCell :label="t('pages.invitations.note')" truncate hidden-below="sm">
+        </SaTableCell>
+        <SaTableCell :label="t('pages.invitations.note')" truncate hidden-below="sm">
           <span v-if="invitation.note">{{ invitation.note }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.invitations.expiresAt')" fit hidden-below="sm">
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.invitations.expiresAt')" fit hidden-below="sm">
           <span v-if="invitation.expires_at">{{ formatDate(invitation.expires_at) }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell fit>
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
             v-if="invitation.status === 'pending'"
-            :button-style="dangerColoredButton"
+            variant="secondary"
             :label="t('pages.invitations.revoke')"
             :required-scopes="['admin:invitations:write']"
             @click="onRevoke(invitation.invitation_id)"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 
@@ -174,9 +172,10 @@ onMounted(async () => {
     </template>
   </CollectionPage>
 
-  <ConfirmDialog
+  <SaConfirmDialog
     :open="revokeInvitationId !== null"
     :confirm-label="t('pages.invitations.revoke')"
+    :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"
     @confirm="onConfirmRevoke"
@@ -188,7 +187,7 @@ onMounted(async () => {
     <p class="text-sm text-gray-600">
       {{ t('pages.invitations.revokeDescription') }}
     </p>
-  </ConfirmDialog>
+  </SaConfirmDialog>
 
   <CreateInvitationDialog
     :open="showCreateDialog"
