@@ -14,7 +14,7 @@ paths:
 add to it rather than beside it. [The component code standard](component-code-standard.md) says how
 a component is written; this one says which to use and what it is made of.
 
-**The values, the shared rules and the components both apps draw are
+**The values, the shared rules and the shared components are
 [`@sympauthy/design`](https://sympauthy.github.io/sympauthy-design/)'s.** This standard says which
 component a screen uses; what each one looks like is that system's, and a value is changed there.
 
@@ -22,9 +22,12 @@ component a screen uses; what each one looks like is that system's, and a value 
 component from `@sympauthy/design`, so a screen cannot tell which of the two draws what it asked
 for.
 
-**A component both apps draw moves to the package, and one only this panel draws stays here.**
-`CommonAlert`, `CommonCard`, `CommonSpinner`, `FormField`, `FormInput` and the button styles are the
-package's. `CommonButton` wraps the package's to add `requiredScopes`, which it cannot know about.
+**A component moves to the package when [its components
+standard](https://github.com/sympauthy/sympauthy-design/blob/main/docs/standards/components-standard.md#which-components-ship)
+admits it, and stays here until then.** That takes a second app drawing it, or one naming nothing of
+this panel that any app built like it would draw. `CommonAlert`, `CommonCard`, `CommonSpinner`,
+`FormField`, `FormInput` and the button styles are the package's, and `CommonButton` wraps the
+package's button to add `requiredScopes`, which it cannot know about.
 
 **It is installed from its git tag, `github:sympauthy/sympauthy-design#vX.Y.Z`,** and never with
 `--ignore-scripts`: npm builds its `dist/` through `prepare`.
