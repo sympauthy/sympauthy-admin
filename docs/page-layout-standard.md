@@ -75,7 +75,11 @@ every one of its records has, so the URL always names a view.
 
 **What a screen lets an operator do is a `SaPageActions`.** It draws the control in the bar naming
 the screen, so it sits in one position on every screen and does not move when a filter appears
-under it. Nothing else goes in that bar.
+under it. Nothing else a screen writes goes in that bar.
+
+**An action leaves the screen's name room at 360px.** The bar's row holds the control opening the
+drawer, the name and the actions, and the name is what truncates. A label that leaves it no room is
+passed `collapseLabel` and an `icon`.
 
 **A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has
 one or two — open a create dialog, re-read a live list — and a record has a set, read together.
@@ -104,7 +108,8 @@ usage data, so the order is a judgement, written in
 stops being true.
 
 **The sidebar's first entry is the page the panel lands on**, since `/` sends the operator to the
-first entry their token opens — the most used page is therefore the one an operator starts on.
+first entry their token opens — the most used page is therefore the one an operator starts on. The
+sidebar's head links to `/`, so it reaches that page whatever the token opens.
 
 **A destructive action closes its menu, whatever its use**, under a separator `SaMenu`
 draws before it. The item a slip of the pointer lands on is never the one that cannot be undone,
@@ -210,7 +215,7 @@ it. A label and the value beside it drifting a monitor apart is not more readabl
 
 | Width | Sidebar | A collection | A record's fields |
 | --- | --- | --- | --- |
-| 360–639 | drawer, behind a header | a card per record | one column |
+| 360–639 | drawer | a card per record | one column |
 | 640–1023 (`sm:`) | drawer | a table | three columns |
 | 1024+ (`lg:`) | permanent | a table | three columns |
 
@@ -222,8 +227,11 @@ column that cannot be made to fit is dropped with `hidden-below`, not left to ov
 exception is `RecordTabs`, which scrolls its strip because dropping a tab would hide a view.
 
 **The sidebar is a drawer below `lg:` and permanent from it.** `useSidebar` holds the state and
-closes it on navigation; `SaAppShell` draws the backdrop and the mobile header, and sizes the
-`SaSidebar` that `SidebarNav` hands it.
+closes it on navigation; `SaAppShell` draws the backdrop, puts the control opening the drawer in the
+bar, and sizes the `SaSidebar` that `SidebarNav` hands it.
+
+**Below `sm:` the breadcrumb names the screen alone.** Its ancestors and chevrons drop out, and the
+way back is the drawer. The last item is the page's `h1` at every width.
 
 **Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `SaCard` steps its own from
 `p-4` to `sm:p-6`. [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
