@@ -97,14 +97,14 @@ moving the tag, since it does not watch `node_modules`.
 | `SaRadioGroup` | one choice among a few, all of them in sight |
 | `SaDetailSection` | a titled section of a record page |
 | `SaSummaryCard`, `SaSummaryField` | the panel identifying the record above its sections |
-| `SaPageActions` | what the screen lets an operator do, drawn in its header |
+| `SaPageActions` | what the screen lets an operator do, drawn in the bar naming it |
 | `SaDefinitionList`, `SaDefinitionRow` | the fields of a record, inside a section |
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
 | `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` |
 | `RecordTabs` | the views one record is read through |
 | `SaDialog` | the shell of any dialog |
 | `SaConfirmDialog` | a destructive action's confirmation |
-| `SaAppShell`, `SaSidebar`, `SaBreadcrumb` | the frame, which only `app/layout` draws |
+| `SaAppShell`, `SaSidebar`, `SaSidebarAccount`, `SaBreadcrumb` | the frame, which only `app/layout` draws |
 
 **A component that no domain vocabulary reaches belongs in `shared/ui`**, and joins
 [its `index.ts`](../src/shared/ui/index.ts) in the same commit. One that names an entity belongs in
@@ -131,9 +131,9 @@ written.
 is sized by its parent; [the page layout standard](page-layout-standard.md#table-columns) owns
 which.
 
-**A heading is drawn by the component that owns it.** `SaDetailSection` draws the `h2` of a section
-and `SaDialog` the `h3` of a dialog; a screen outside the panel shell, which has no bar to be named
-in, titles itself in `panel-screen-title`.
+**A heading is drawn by the component that owns it.** `SaBreadcrumb` draws the `h1` naming the
+screen, `SaDetailSection` the `h2` of a section and `SaDialog` the `h3` of a dialog; a screen outside
+the panel shell, which has no bar to be named in, titles itself in `panel-screen-title`.
 
 ## Controls
 

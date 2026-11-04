@@ -3,8 +3,7 @@ import { useI18n } from 'vue-i18n'
 import SidebarNav from './SidebarNav.vue'
 import BreadcrumbNav from './BreadcrumbNav.vue'
 import { useSidebar } from '@/shared/lib'
-import { SaAppShell, SaBrandLogo } from '@sympauthy/design'
-import { BrandWordmark } from '@/shared/ui'
+import { SaAppShell } from '@sympauthy/design'
 
 const { t } = useI18n()
 const { sidebarOpen } = useSidebar()
@@ -14,10 +13,6 @@ const { sidebarOpen } = useSidebar()
   <SaAppShell v-model:sidebar-open="sidebarOpen" :open-menu-label="t('nav.openMenu')">
     <template #sidebar>
       <SidebarNav />
-    </template>
-    <template #title>
-      <SaBrandLogo />
-      <span class="min-w-0 truncate"><BrandWordmark /> {{ t('nav.panel') }}</span>
     </template>
     <template #bar>
       <BreadcrumbNav />

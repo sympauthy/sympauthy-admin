@@ -34,7 +34,7 @@ async function onSubmit() {
 <template>
   <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-sm">
-      <SaBrandLogo large class="mx-auto mb-4" />
+      <SaBrandLogo size="lg" class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('register.title') }}
       </h1>

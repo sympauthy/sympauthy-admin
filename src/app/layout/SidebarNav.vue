@@ -3,9 +3,8 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { missingScopesHint, useAuthStore, useRouteAccess } from '@/shared/auth'
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
-import { SaBrandLogo, SaSidebar, type SaSidebarSection } from '@sympauthy/design'
+import { SaBrandLogo, SaSidebar, SaSidebarAccount, type SaSidebarSection } from '@sympauthy/design'
 import { BrandWordmark } from '@/shared/ui'
 import { navSections } from '../router/navigation'
 
@@ -51,26 +50,25 @@ async function logout() {
   <SaSidebar
     :sections="sections"
     :label="t('nav.main')"
+    :home-link="{ to: '/' }"
     :close-label="t('nav.closeMenu')"
     :link-as="RouterLink"
     @close="closeSidebar"
   >
     <template #head>
-      <SaBrandLogo dark />
-      <span class="truncate text-lg font-semibold">
-        <BrandWordmark />
-        <span class="ml-1.5 font-medium text-nav-muted">{{ t('nav.panel') }}</span>
+      <SaBrandLogo dark size="md" />
+      <span class="truncate text-lg tracking-tight"><BrandWordmark /></span>
+      <span class="text-xs font-medium tracking-wider text-nav-muted uppercase">
+        {{ t('nav.panel') }}
       </span>
     </template>
     <template #foot>
-      <div class="mb-2 truncate text-sm">{{ authStore.userName }}</div>
-      <button
-        class="flex min-h-control items-center gap-2 text-sm text-nav-muted outline-nav-text transition-colors hover:text-nav-text focus-visible:outline-2"
-        @click="logout"
-      >
-        <ArrowRightStartOnRectangleIcon class="size-4" />
-        {{ t('auth.logout') }}
-      </button>
+      <SaSidebarAccount
+        :name="authStore.userName"
+        :detail="authStore.userEmail"
+        :sign-out-label="t('auth.logout')"
+        @sign-out="logout"
+      />
     </template>
   </SaSidebar>
 </template>
