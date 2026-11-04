@@ -154,7 +154,9 @@ onMounted(async () => {
           <span v-if="invitation.expires_at">{{ formatDate(invitation.expires_at) }}</span>
           <SaEmptyValue v-else />
         </SaTableCell>
-        <SaTableCell fit>
+        <!-- Only a pending invitation can be revoked. Another keeps the height the button would give
+             its row, so rows stay one height, and has no empty line to draw below `sm:`. -->
+        <SaTableCell fit :hidden-below="invitation.status === 'pending' ? undefined : 'sm'">
           <CommonButton
             v-if="invitation.status === 'pending'"
             variant="secondary"
@@ -162,6 +164,7 @@ onMounted(async () => {
             :required-scopes="['admin:invitations:write']"
             @click="onRevoke(invitation.invitation_id)"
           />
+          <div v-else class="min-h-control" />
         </SaTableCell>
       </tr>
     </template>
