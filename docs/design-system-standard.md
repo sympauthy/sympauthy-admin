@@ -25,9 +25,14 @@ for.
 **A component moves to the package when [its components
 standard](https://github.com/sympauthy/sympauthy-design/blob/main/docs/standards/components-standard.md#which-components-ship)
 admits it, and stays here until then.** That takes a second app drawing it, or one naming nothing of
-this panel that any app built like it would draw. `CommonAlert`, `CommonCard`, `CommonSpinner`,
-`FormField`, `FormInput` and the button styles are the package's, and `CommonButton` wraps the
+this panel that any app built like it would draw. `BrandLogo`, `CommonAlert`, `CommonCard`,
+`CommonSpinner`, `CommonTag`, `CopyableValue`, `CopyToClipboard`, `EmptyValue`, `FormField`,
+`FormInput`, `LoadingState` and the button styles are the package's, and `CommonButton` wraps the
 package's button to add `requiredScopes`, which it cannot know about.
+
+**A package's component is handed its words.** It knows no message bundle, so what it draws is a
+prop filled from ours: `LoadingState` takes `common.loading` as its `label`, and the copy controls
+take what they copy as their `label`, with `common.copied` and `common.copyFailed` beside it.
 
 **It is installed from its git tag, `github:sympauthy/sympauthy-design#vX.Y.Z`,** and never with
 `--ignore-scripts`: npm builds its `dist/` through `prepare`.
@@ -253,8 +258,8 @@ for a border, `gray-300` for a value a record does not carry, `gray-400` for a c
 **The sidebar reads `nav-*` and nothing else**, since it stays dark while the rest of the panel is
 light. `gold` marks its current entry, and marks no state anywhere else.
 
-**A status colour stays Tailwind's**, because red means a failure whatever the brand. No deployment
-can change one, and `danger` is the one the theme names.
+**A status colour is no deployment's to change**, because red means a failure whatever the brand.
+`danger` and a `CommonTag`'s `tag-*` are the ones the theme names, and the rest stay Tailwind's.
 
 **A message box is a `CommonAlert`**: `danger` for a failure and `warning` for what an operator has
 to read before closing a dialog. No screen draws its own.
@@ -278,6 +283,10 @@ and `BaseDialog` the `h3` of a dialog, so neither is written by hand.
 **A label above a value is `.field-label`.** `TableHeader`, `SummaryField` and `DefinitionRow` draw
 one, and a stacked `TableCell` grows one from its `label`; a fifth place needing one reaches for
 whichever of them fits.
+
+**A link inside a sentence is `.link`,** underlined at rest so that its colour is not its only
+signal. `DocLink` draws it; a `RouteLink` in a table's column is not in a sentence, and underlines
+on hover.
 
 **An identifier is `font-mono`**, reached as the `mono` prop of the cell, field or row holding it,
 and one an operator has to paste elsewhere is a `CopyableValue`.

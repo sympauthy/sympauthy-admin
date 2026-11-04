@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { CommonAlert } from '@sympauthy/design'
-import LoadingState from './LoadingState.vue'
+import { CommonAlert, LoadingState } from '@sympauthy/design'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import {
   PaginationRoot,
@@ -98,7 +97,7 @@ const pageButtonClasses = `${pageControlClasses} min-w-8 data-[selected]:border-
       :class="props.fill ? 'min-h-0 flex-1 overflow-x-auto overflow-y-auto' : 'overflow-x-auto'"
     >
       <!-- Loading state -->
-      <LoadingState v-if="props.loading" :centered="props.fill" />
+      <LoadingState v-if="props.loading" :label="t('common.loading')" :centered="props.fill" />
 
       <!-- Error state -->
       <CommonAlert v-else-if="props.error" color="danger">

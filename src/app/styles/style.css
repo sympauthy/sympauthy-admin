@@ -30,7 +30,7 @@
  * These rules sit outside every layer on purpose: they undo utilities (`truncate`, `max-w-0`,
  * `whitespace-nowrap`, `divide-y`) that a layered rule could not reach, whatever its specificity.
  */
-@media (max-width: 639px) {
+@media (width < theme(--breakpoint-sm)) {
   .table-as-cards,
   .table-as-cards tbody,
   .table-as-cards tr {

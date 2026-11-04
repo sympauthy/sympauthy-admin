@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { CommonAlert } from '@sympauthy/design'
-import CopyToClipboard from './CopyToClipboard.vue'
+import { useI18n } from 'vue-i18n'
+import { CommonAlert, CopyToClipboard } from '@sympauthy/design'
 
 /**
  * A value the server answered once and will not answer again — an invitation's token, a link
@@ -10,6 +10,8 @@ import CopyToClipboard from './CopyToClipboard.vue'
 defineProps<{
   value: string
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -20,7 +22,12 @@ defineProps<{
 
     <div class="flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
       <code class="flex-1 text-sm break-all">{{ value }}</code>
-      <CopyToClipboard :value="value" />
+      <CopyToClipboard
+        :value="value"
+        :label="t('common.copy')"
+        :copied-label="t('common.copied')"
+        :failed-label="t('common.copyFailed')"
+      />
     </div>
   </div>
 </template>

@@ -28,7 +28,12 @@ const { t } = useI18n()
 <template>
   <SummaryCard>
     <SummaryField mono :label="t('pages.sessionDetail.sessionId')">
-      <CopyableValue :value="session.id" :title="t('pages.sessionDetail.copySessionId')" />
+      <CopyableValue
+        :value="session.id"
+        :label="t('pages.sessionDetail.copySessionId')"
+        :copied-label="t('common.copied')"
+        :failed-label="t('common.copyFailed')"
+      />
     </SummaryField>
     <SummaryField :label="t('pages.sessionDetail.status')">
       <template #help>
