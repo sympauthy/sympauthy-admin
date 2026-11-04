@@ -2,7 +2,8 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
-import { CommonAlert, CommonButton, FormInput, secondaryColoredButton } from '@/shared/ui'
+import { SaAlert, SaInput } from '@sympauthy/design'
+import { CommonButton } from '@/shared/ui'
 import type { CollectionCriterion } from '../model/CollectionCriteria'
 import type { CollectionFilter } from '../model/CollectionFilter'
 import type { Collection } from '../model/useCollection'
@@ -66,7 +67,7 @@ function onAddFilter(field: string) {
     <div class="flex items-center gap-2">
       <!-- Bound to the criteria rather than left to the DOM: the store outlives the page, so a
            query still narrowing the collection would otherwise come back to an empty field. -->
-      <FormInput
+      <SaInput
         v-if="props.collection.searchable"
         class="min-w-0 flex-1"
         :icon="MagnifyingGlassIcon"
@@ -90,7 +91,7 @@ function onAddFilter(field: string) {
       <CommonButton
         collapse-label
         class="shrink-0"
-        :button-style="secondaryColoredButton"
+        variant="secondary"
         :label="t('common.collection.refresh')"
         :icon="ArrowPathIcon"
         :disabled="props.collection.loading"
@@ -99,9 +100,9 @@ function onAddFilter(field: string) {
     </div>
 
     <!-- The records list without the document; what is missing is the toolbar above them. -->
-    <CommonAlert v-if="props.collection.capabilitiesError" color="warning" class="mt-3">
+    <SaAlert v-if="props.collection.capabilitiesError" color="warning" class="mt-3">
       {{ t('common.collection.capabilitiesFailed') }}
-    </CommonAlert>
+    </SaAlert>
 
     <!-- The one row the toolbar may grow: a filter is as wide as the sentence it reads, and a
          phone fits one of them. -->

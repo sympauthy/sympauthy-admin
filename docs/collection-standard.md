@@ -181,16 +181,16 @@ same of a capability document it failed to read.
 height, one radius, one border — because the row it sits in is under the row holding the search
 field, and a tag beside a field is two families on one screen.
 
-**A filter holds its own box with `.control-focus-within`.** The trigger reading it and the control
-removing it are two focusable parts of one control, so the box shows the focus either of them
-takes and removing a filter stays one press.
+**A filter holds its own box with `.sa-control-focus-within`.** The trigger reading it and the
+control removing it are two focusable parts of one control, so the box shows the focus either of
+them takes and removing a filter stays one press.
 
 **A filter reads its criterion as a sentence** — the field, the operator, the value — and truncates
 it, since a value has no length the panel knows. The value stands in as
 `common.collection.selectValue` until there is one.
 
 **The fields are searched, not read down.** `CollectionFieldPicker` is a popover over a
-`FormListbox`, because the set is the deployment's: an instance publishing a field per claim renders
+`SaListbox`, because the set is the deployment's: an instance publishing a field per claim renders
 a menu taller than the viewport, and a menu has nowhere to type.
 
 **The operator and the value are filled in from the filter's own popover.** Inside the sentence
@@ -204,9 +204,9 @@ its set falls back to the first operator it lists.
 
 | The field | The control |
 | --- | --- |
-| publishes `values` | a `FormListbox` of them, `multiple` under `in` |
+| publishes `values` | a `SaListbox` of them, `multiple` under `in` |
 | `boolean` | the same list, over the *Yes* and *No* the panel names |
-| under `in` publishing no values | a `FormTagsInput`, one value entered at a time |
+| under `in` publishing no values | a `SaTagsInput`, one value entered at a time |
 | `date`, `date_time` | a date or datetime input |
 | `number` | a number input |
 | `string`, `email`, `phone_number`, `uuid`, `timezone` | a text input |
@@ -273,7 +273,7 @@ beside its identifier, so what became of it is read whichever tab is open.
 `pages.<route>.title` and the `help` triple beside it. The tab is the view's title, so the
 `DocHelpTooltip` belongs against it rather than inside the page.
 
-**A tab's page repeats neither.** Nothing renders a `DetailSection` titled the way the tab that
+**A tab's page repeats neither.** Nothing renders a `SaDetailSection` titled the way the tab that
 opened it already is, and nothing draws a second tooltip for what the strip above it explains.
 
 **A shell re-reads its record only when the identifier changes.** Moving between tabs must not

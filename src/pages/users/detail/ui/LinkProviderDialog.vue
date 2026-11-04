@@ -1,17 +1,8 @@
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  BaseDialog,
-  CommonAlert,
-  CommonButton,
-  FormField,
-  FormInput,
-  FormSelect,
-  OneTimeSecret,
-  primaryColoredButton,
-  secondaryColoredButton
-} from '@/shared/ui'
+import { SaAlert, SaDialog, SaField, SaInput, SaSelect } from '@sympauthy/design'
+import { CommonButton, OneTimeSecret } from '@/shared/ui'
 import { useClientStore } from '@/entities/client'
 import { UserProviderLinkApi, type ProviderLinkStartInput } from '@/entities/user'
 import { isSuccess, getErrorMessage } from '@/shared/api'
@@ -28,6 +19,10 @@ defineEmits<{
 }>()
 
 const { t } = useI18n()
+const providerFieldId = useId()
+const clientFieldId = useId()
+const returnUrlFieldId = useId()
+const cancelUrlFieldId = useId()
 const clientStore = useClientStore()
 const providerLinkApi = new UserProviderLinkApi()
 
@@ -121,7 +116,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <BaseDialog
+  <SaDialog
     :open="open"
     :title="dialogTitle"
     :dismiss-disabled="submitting"
@@ -134,23 +129,29 @@ async function onSubmit() {
           {{ t('pages.userDetail.linkProviderDescription') }}
         </p>
 
-        <CommonAlert v-if="displayError" color="danger" class="mb-4">
+        <SaAlert v-if="displayError" color="danger" class="mb-4">
           {{ displayError }}
-        </CommonAlert>
+        </SaAlert>
 
         <div class="space-y-4">
-          <FormField
+          <SaField
+            :for="providerFieldId"
             :label="t('pages.userDetail.linkProviderProviderId')"
             :hint="t('pages.userDetail.linkProviderProviderIdHelp')"
           >
-            <FormInput
+            <SaInput
+              :id="providerFieldId"
               v-model="providerId"
               :placeholder="t('pages.userDetail.linkProviderProviderIdPlaceholder')"
             />
-          </FormField>
+          </SaField>
 
-          <FormField :label="t('pages.userDetail.linkProviderClient')">
-            <FormSelect v-model="clientId" :disabled="clientStore.allClientsLoading">
+          <SaField :for="clientFieldId" :label="t('pages.userDetail.linkProviderClient')">
+            <SaSelect
+              :id="clientFieldId"
+              v-model="clientId"
+              :disabled="clientStore.allClientsLoading"
+            >
               <option value="" disabled>
                 {{
                   clientStore.allClientsLoading
@@ -165,34 +166,34 @@ async function onSubmit() {
               >
                 {{ client.client_id }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
 
-          <CommonAlert v-if="clientId && !hasRedirectUris" color="warning">
+          <SaAlert v-if="clientId && !hasRedirectUris" color="warning">
             {{ t('pages.userDetail.linkProviderNoRedirectUris') }}
-          </CommonAlert>
+          </SaAlert>
 
-          <FormField :label="t('pages.userDetail.linkProviderReturnUrl')">
-            <FormSelect v-model="returnUri" :disabled="!hasRedirectUris">
+          <SaField :for="returnUrlFieldId" :label="t('pages.userDetail.linkProviderReturnUrl')">
+            <SaSelect :id="returnUrlFieldId" v-model="returnUri" :disabled="!hasRedirectUris">
               <option value="" disabled>
                 {{ t('pages.userDetail.linkProviderSelectReturnUrl') }}
               </option>
               <option v-for="uri in redirectUris" :key="uri" :value="uri">
                 {{ uri }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
 
-          <FormField :label="t('pages.userDetail.linkProviderCancelUrl')">
-            <FormSelect v-model="cancelUri" :disabled="!hasRedirectUris">
+          <SaField :for="cancelUrlFieldId" :label="t('pages.userDetail.linkProviderCancelUrl')">
+            <SaSelect :id="cancelUrlFieldId" v-model="cancelUri" :disabled="!hasRedirectUris">
               <option value="">
                 {{ t('pages.userDetail.linkProviderNoCancelUrl') }}
               </option>
               <option v-for="uri in redirectUris" :key="uri" :value="uri">
                 {{ uri }}
               </option>
-            </FormSelect>
-          </FormField>
+            </SaSelect>
+          </SaField>
         </div>
       </template>
 
@@ -205,13 +206,13 @@ async function onSubmit() {
     <template #actions>
       <template v-if="phase === 'form'">
         <CommonButton
-          :button-style="secondaryColoredButton"
+          variant="secondary"
           :label="t('common.cancel')"
           :disabled="submitting"
           @click="$emit('close')"
         />
         <CommonButton
-          :button-style="primaryColoredButton"
+          variant="primary"
           :label="t('pages.userDetail.linkProviderGenerate')"
           :submitting="submitting"
           :disabled="!!clientId && !hasRedirectUris"
@@ -220,10 +221,10 @@ async function onSubmit() {
       </template>
       <CommonButton
         v-else
-        :button-style="primaryColoredButton"
+        variant="primary"
         :label="t('pages.userDetail.linkProviderDone')"
         @click="$emit('close')"
       />
     </template>
-  </BaseDialog>
+  </SaDialog>
 </template>

@@ -9,14 +9,8 @@ import {
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  ConfirmDialog,
-  DocHelpTooltip,
-  TableCell,
-  TableHeader,
-  dangerColoredButton
-} from '@/shared/ui'
+import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -59,39 +53,39 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="mfaMethods">
     <template #header>
-      <TableHeader fit>
+      <SaTableHeader fit>
         {{ t('pages.userMfa.type.label') }}
         <DocHelpTooltip term="pages.userMfa.type" />
-      </TableHeader>
+      </SaTableHeader>
       <!-- The set has nothing else to say about a method, and a table of nothing but shrink-wrapped
            columns would bunch them against the left edge. This one takes what is left. -->
-      <TableHeader />
+      <SaTableHeader />
       <CollectionSortHeader
         fit
         :collection="mfaMethods"
         :label="t('pages.userMfa.registeredAt')"
         field="confirmed_date"
       />
-      <TableHeader fit>{{ t('pages.userMfa.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.userMfa.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="method in mfaMethods.items" :key="method.mfa_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ method.type }}
-        </TableCell>
-        <TableCell />
-        <TableCell :label="t('pages.userMfa.registeredAt')" fit>
+        </SaTableCell>
+        <SaTableCell />
+        <SaTableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <CommonButton
-            :button-style="dangerColoredButton"
+            variant="secondary"
             :label="t('pages.userMfa.revoke')"
             :required-scopes="['admin:users:write']"
             @click="revokeTargetMfaId = method.mfa_id"
           />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 
@@ -100,9 +94,10 @@ onMounted(async () => {
     </template>
   </CollectionPage>
 
-  <ConfirmDialog
+  <SaConfirmDialog
     :open="revokeTargetMfaId !== null"
-    :confirm-label="t('pages.userMfa.revoke')"
+    :confirm-label="t('pages.userMfa.revokeConfirm')"
+    :cancel-label="t('common.cancel')"
     @confirm="confirmRevoke"
     @cancel="revokeTargetMfaId = null"
   >
@@ -112,5 +107,5 @@ onMounted(async () => {
     <p class="text-sm text-gray-600">
       {{ t('pages.userMfa.revokeDescription') }}
     </p>
-  </ConfirmDialog>
+  </SaConfirmDialog>
 </template>

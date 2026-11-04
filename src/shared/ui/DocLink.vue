@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-  <a :href="href" target="_blank" rel="noopener noreferrer" class="link">
+  <a :href="href" target="_blank" rel="noopener noreferrer" class="sa-link">
     <slot />
   </a>
 </template>

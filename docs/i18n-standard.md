@@ -64,7 +64,7 @@ an identifier.** Both come from the server's own error bundle of hundreds of cod
 those codes against `en.json` here would be a second copy of that bundle, and the copy that drifts.
 
 **A field carrying an explanation nests as `label` and `help` under the key it is read by**, so
-`pages.sessionFailure.errorDetails.label` names the field and `.help` is what its `HelpTooltip`
+`pages.sessionFailure.errorDetails.label` names the field and `.help` is what its `SaPopover`
 says. A field explaining itself is the exception; a screen whose fields need no help keeps its flat
 string per key.
 

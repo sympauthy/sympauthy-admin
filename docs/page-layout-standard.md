@@ -73,8 +73,8 @@ every one of its records has, so the URL always names a view.
 
 ## Page actions
 
-**What a screen lets an operator do is a `PageActions`.** It draws the control in the bar naming the
-screen, so it sits in one position on every screen and does not move when a filter appears
+**What a screen lets an operator do is a `SaPageActions`.** It draws the control in the bar naming
+the screen, so it sits in one position on every screen and does not move when a filter appears
 under it. Nothing else goes in that bar.
 
 **A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has
@@ -106,9 +106,9 @@ stops being true.
 **The sidebar's first entry is the page the panel lands on**, since `/` sends the operator to the
 first entry their token opens — the most used page is therefore the one an operator starts on.
 
-**A destructive action closes its menu, whatever its use**, under a separator `ActionsDropdown`
+**A destructive action closes its menu, whatever its use**, under a separator `SaMenu`
 draws before it. The item a slip of the pointer lands on is never the one that cannot be undone,
-and a `ConfirmDialog` behind it is the second guard, not the only one.
+and a `SaConfirmDialog` behind it is the second guard, not the only one.
 
 ## Collection pages
 
@@ -121,23 +121,23 @@ pinned pagination bar.
 
 **The number of rows per page is derived from the height available**, down to one where one is
 all that fits — a card below `sm:` is several times the height of the row it replaces, so a floor
-written for rows would put the list back into a scroll. `PaginatedTable` measures it
+written for rows would put the list back into a scroll. `SaTable` measures it
 and emits `page-size-change`; the collection answers by refetching at the new size.
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.
 
-**Below `sm:` the table is drawn as a card per record**, by `PaginatedTable`, from the same `#header`
+**Below `sm:` the table is drawn as a card per record**, by `SaTable`, from the same `#header`
 and `#rows` a wider screen reads. A page describes its records once; it does not write a phone
 layout of its own, and a column added to it reaches the phone with it.
 
 ## Table columns
 
-**A column is a `CollectionSortHeader` where the collection may order on it, and a `TableHeader`
+**A column is a `CollectionSortHeader` where the collection may order on it, and a `SaTableHeader`
 where it may not.** Both draw the same header; only one of them responds to a click.
 
-**Every cell under one is a `TableCell`.** Neither a page's header nor its rows write a padding, a
-text size or a colour — [the design system standard](design-system-standard.md#the-scale) says which
-step each takes, and the component takes it.
+**Every cell under one is a `SaTableCell`.** Neither a page's header nor its rows write a padding, a
+text size or a colour — [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
+says which step each takes, and the component takes it.
 
 | Kind of column | Props on the header | Props on the cell |
 | --- | --- | --- |
@@ -152,10 +152,10 @@ step each takes, and the component takes it.
 That is the whole sizing model.
 
 **Never write a fixed width.** `w-[100px]` and `w-[10%]` hold at one breakpoint and break at the
-next, and `PaginatedTable` keeps `table-layout: auto` for that reason.
+next, and `SaTable` keeps `table-layout: auto` for that reason.
 
-**A cell the record has no value for holds an `EmptyValue`.** A blank cell and a cell the fetch did
-not fill read alike; a dash does not.
+**A cell the record has no value for holds an `SaEmptyValue`.** A blank cell and a cell the fetch
+did not fill read alike; a dash does not.
 
 **A cell's `hidden-below` matches its header's.** They are two components and one column, and a
 column dropped on a phone stays dropped once the row is a card.
@@ -171,22 +171,22 @@ filling what is left.** Its root is `flex h-full min-h-0 flex-col`, so the tab b
 a height and its table scrolls rather than the page.
 
 **A record's page renders loading, error and content, and resets its store in `onMounted` before
-fetching.** The wait is a `LoadingState` and the failure a `CommonAlert`. It re-reads the record
+fetching.** The wait is a `SaLoadingState` and the failure a `SaAlert`. It re-reads the record
 when the identifier changes and not when the tab does.
 
-**The first thing on the page is a `SummaryCard` of `SummaryField`s**, one per value that identifies
-the record, and no heading — the bar above names the record and carries what is done to it. The
-record's identifier is a `CopyableValue`.
+**The first thing on the page is a `SaSummaryCard` of `SaSummaryField`s**, one per value that
+identifies the record, and no heading — the bar above names the record and carries what is done to
+it. The record's identifier is a `SaCopyableValue`.
 
-**Everything below it is a `DetailSection`,** whose `#help` slot takes the `HelpTooltip` when the
+**Everything below it is a `SaDetailSection`,** whose `#help` slot takes the `SaPopover` when the
 section needs one.
 
 **A section is laid out by what it holds:**
 
 | Holds | Rendered as |
 | --- | --- |
-| fields of one record | a `DefinitionList` of `DefinitionRow`s |
-| plain values | a `CommonCard` listing them |
+| fields of one record | a `SaDefinitionList` of `SaDefinitionRow`s |
+| plain values | a `SaCard` listing them |
 
 **Records are not a section.** A paged set of them is a collection, and a collection is a tab of its
 own — [the collection standard](collection-standard.md#a-collection-under-a-record) says how one
@@ -222,12 +222,12 @@ column that cannot be made to fit is dropped with `hidden-below`, not left to ov
 exception is `RecordTabs`, which scrolls its strip because dropping a tab would hide a view.
 
 **The sidebar is a drawer below `lg:` and permanent from it.** `useSidebar` holds the state and
-closes it on navigation; `AdminLayout` draws the backdrop and the mobile header; `SidebarNav` is
-sized by its parent (`h-full w-full`), never by itself.
+closes it on navigation; `SaAppShell` draws the backdrop and the mobile header, and sizes the
+`SaSidebar` that `SidebarNav` hands it.
 
-**Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `CommonCard` steps its own from
-`p-4` to `sm:p-6`. [The design system standard](design-system-standard.md#the-scale) holds the
-whole scale.
+**Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `SaCard` steps its own from
+`p-4` to `sm:p-6`. [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
+holds the whole scale.
 
 **A toolbar is one row at every width.** Its controls give up their labels rather than their
 place — a second row costs the list below it a record, and the field beside them still reads.

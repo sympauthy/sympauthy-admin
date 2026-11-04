@@ -10,7 +10,8 @@ import {
   type ClaimResource
 } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonTag, DocHelpTooltip, OriginTag, TableCell, TableHeader } from '@/shared/ui'
+import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip, OriginTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()
@@ -60,38 +61,38 @@ onMounted(async () => {
           <DocHelpTooltip term="pages.claims.kind" />
         </template>
       </CollectionSortHeader>
-      <TableHeader fit>{{ t('pages.claims.tags') }}</TableHeader>
-      <TableHeader fit>
+      <SaTableHeader fit>{{ t('pages.claims.tags') }}</SaTableHeader>
+      <SaTableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}
         <DocHelpTooltip term="pages.claims.publishedIn" />
-      </TableHeader>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.id">
-        <TableCell :label="t('pages.claims.status.label')" fit>
-          <CommonTag v-if="claim.enabled" color="green">
+        <SaTableCell :label="t('pages.claims.status.label')" fit>
+          <SaTag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
-          </CommonTag>
-          <CommonTag v-else color="red">
+          </SaTag>
+          <SaTag v-else color="red">
             {{ t('pages.claims.disabled') }}
-          </CommonTag>
-        </TableCell>
-        <TableCell primary truncate>
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell primary truncate>
           {{ claim.id }}
-        </TableCell>
-        <TableCell :label="t('terms.origin.label')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
-        </TableCell>
-        <TableCell :label="t('pages.claims.kind.label')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.claims.kind.label')" fit>
           <ClaimKindTag :kind="claim.kind" />
-        </TableCell>
-        <TableCell :label="t('pages.claims.tags')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.claims.tags')" fit>
           <ClaimTags :required="claim.required" :identifier="claim.identifier" />
-        </TableCell>
-        <TableCell :label="t('pages.claims.publishedIn.label')" fit>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.claims.publishedIn.label')" fit>
           <ClaimPublishedInTag :places="claim.published_in" />
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

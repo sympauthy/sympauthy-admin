@@ -140,7 +140,7 @@ the sidebar, an item of a record's `ActionsDropdown`, a button and a link to ano
 the operator sees what the panel offers and what their token keeps them from, and a screen does not
 change shape with the scopes they were granted. The disabled control names the scopes it is
 missing, so the operator knows what to ask for — under its label in a menu or a dialog, and in a
-`HintTooltip` on a button, a sidebar entry or a link. `missingScopesHint` writes that sentence, once.
+`SaTooltip` on a button, a sidebar entry or a link. `missingScopesHint` writes that sentence, once.
 
 **A link to another screen is a `RouteLink`.** It reads the scopes off the route it names, as the
 sidebar does, because a link the guard refuses sends the operator back to where they stood — a click

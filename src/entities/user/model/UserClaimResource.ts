@@ -69,7 +69,7 @@ export const userClaimResourceSchema: JSONSchemaType<UserClaimResource> = {
  * How the value held for a claim reads: a boolean as the *Yes* and *No* the panel names, since those
  * are words it owns rather than values the server sends, and anything else as it arrived.
  *
- * A claim nothing was collected for holds no value, and the cell showing one draws an `EmptyValue`
+ * A claim nothing was collected for holds no value, and the cell showing one draws an `SaEmptyValue`
  * rather than asking this for a label.
  */
 export function userClaimValueLabel(claim: UserClaimResource): string {

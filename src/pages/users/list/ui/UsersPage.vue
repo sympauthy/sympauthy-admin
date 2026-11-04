@@ -6,17 +6,8 @@ import { UserApi, type UserListResource, type UserResource } from '@/entities/us
 import { ClaimApi, type ClaimResource } from '@/entities/claim'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonAlert,
-  CommonButton,
-  DocHelpTooltip,
-  EmptyValue,
-  TableCell,
-  TableHeader,
-  CommonTag,
-  dangerColoredButton,
-  primaryColoredButton
-} from '@/shared/ui'
+import { SaAlert, SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
 import { formatDate } from '@/shared/lib'
@@ -77,9 +68,9 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="users" :search-placeholder="t('pages.users.search')">
     <template v-if="identifierClaimsError" #notice>
-      <CommonAlert color="warning">
+      <SaAlert color="warning">
         {{ t('pages.users.identifierClaimsFailed') }}
-      </CommonAlert>
+      </SaAlert>
     </template>
 
     <template #header>
@@ -106,22 +97,22 @@ onMounted(async () => {
         :label="t('pages.users.createdAt')"
         field="created_at"
       />
-      <TableHeader fit>{{ t('pages.users.actions') }}</TableHeader>
+      <SaTableHeader fit>{{ t('pages.users.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="user in users.items" :key="user.user_id">
-        <TableCell :label="t('pages.users.status')" fit>
-          <CommonTag v-if="user.status === 'enabled'" color="green">
+        <SaTableCell :label="t('pages.users.status')" fit>
+          <SaTag v-if="user.status === 'enabled'" color="green">
             {{ t('pages.users.enabled') }}
-          </CommonTag>
-          <CommonTag v-else color="red">
+          </SaTag>
+          <SaTag v-else color="red">
             {{ t('pages.users.disabled') }}
-          </CommonTag>
-        </TableCell>
+          </SaTag>
+        </SaTableCell>
         <!-- The first identifier is what names the account, so it titles the card rather than
              being another labelled line of it. -->
-        <TableCell
+        <SaTableCell
           v-for="(claim, index) in identifierClaims"
           :key="claim.id"
           truncate
@@ -129,28 +120,28 @@ onMounted(async () => {
           :label="index === 0 ? undefined : claim.id"
         >
           <span v-if="user.claims?.[claim.id] != null">{{ user.claims[claim.id] }}</span>
-          <EmptyValue v-else />
-        </TableCell>
-        <TableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
           {{ formatDate(user.created_at) }}
-        </TableCell>
-        <TableCell fit>
+        </SaTableCell>
+        <SaTableCell fit>
           <div class="flex gap-2">
             <CommonButton
-              :button-style="primaryColoredButton"
+              variant="secondary"
               :label="t('pages.users.view')"
               :icon="EyeIcon"
               @click="router.push({ name: 'userDetail', params: { userId: user.user_id } })"
             />
             <CommonButton
-              :button-style="dangerColoredButton"
+              variant="secondary"
               :label="t('pages.users.logout')"
               :icon="ArrowRightStartOnRectangleIcon"
               :required-scopes="['admin:grants:write']"
               @click="logoutUserId = user.user_id"
             />
           </div>
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

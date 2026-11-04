@@ -2,13 +2,13 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-  CommonCard,
-  DefinitionList,
-  DefinitionRow,
-  DetailSection,
-  EmptyValue,
-  HelpTooltip
-} from '@/shared/ui'
+  SaCard,
+  SaDefinitionList,
+  SaDefinitionRow,
+  SaDetailSection,
+  SaEmptyValue,
+  SaPopover
+} from '@sympauthy/design'
 import {
   interactiveFlowSessionCarriesFailure,
   interactiveFlowSessionEndedInFailure,
@@ -53,17 +53,17 @@ const hasErrorValues = computed(() => Object.keys(errorValues.value).length > 0)
 <template>
   <!-- The strip above offers this tab to a session that ended in a failure, but the route stays
        reachable by hand — one that has not is told so rather than shown a row of empty fields. -->
-  <CommonCard v-if="notEndedInFailure">
+  <SaCard v-if="notEndedInFailure">
     <p class="text-sm text-gray-600">{{ t('pages.sessionFailure.notFailed') }}</p>
-  </CommonCard>
+  </SaCard>
 
   <!-- A session the status puts in the failure set but that carries none of the fields. The tab is
        still offered, since the server saying a session failed is worth reading even where it
        recorded nothing of what happened — but the page says that rather than drawing three
        dashes, and the shell does not land the operator here. -->
-  <CommonCard v-else-if="nothingRecorded">
+  <SaCard v-else-if="nothingRecorded">
     <p class="text-sm text-gray-600">{{ t('pages.sessionFailure.nothingRecorded') }}</p>
-  </CommonCard>
+  </SaCard>
 
   <!-- The failure is what the record says it is, and the status beside the record's identifier
        already says it — so this reads as a record's fields rather than as an alert, which would
@@ -72,33 +72,33 @@ const hasErrorValues = computed(() => Object.keys(errorValues.value).length > 0)
        release. Each field carries its own explanation, since what separates a code from a message,
        and an operator's message from the person's, is the whole of what this view is read for. -->
   <div v-else-if="store.session" class="space-y-6">
-    <DefinitionList>
-      <DefinitionRow v-for="field in fields" :key="field.stem" :mono="field.mono">
+    <SaDefinitionList>
+      <SaDefinitionRow v-for="field in fields" :key="field.stem" :mono="field.mono">
         <template #label>
           {{ t(`pages.sessionFailure.${field.stem}.label`) }}
-          <HelpTooltip>
+          <SaPopover :label="t('common.moreInformation')">
             <p>{{ t(`pages.sessionFailure.${field.stem}.help`) }}</p>
-          </HelpTooltip>
+          </SaPopover>
         </template>
         <span v-if="field.value">{{ field.value }}</span>
-        <EmptyValue v-else />
-      </DefinitionRow>
-    </DefinitionList>
+        <SaEmptyValue v-else />
+      </SaDefinitionRow>
+    </SaDefinitionList>
 
-    <DetailSection v-if="hasErrorValues" :title="t('pages.sessionFailure.values.label')">
+    <SaDetailSection v-if="hasErrorValues" :title="t('pages.sessionFailure.values.label')">
       <template #help>
-        <HelpTooltip>
+        <SaPopover :label="t('common.moreInformation')">
           <p>{{ t('pages.sessionFailure.values.help') }}</p>
-        </HelpTooltip>
+        </SaPopover>
       </template>
-      <DefinitionList>
-        <DefinitionRow v-for="(value, key) in errorValues" :key="key" mono>
+      <SaDefinitionList>
+        <SaDefinitionRow v-for="(value, key) in errorValues" :key="key" mono>
           <template #label>
             <span class="font-mono break-all normal-case">{{ key }}</span>
           </template>
           {{ value }}
-        </DefinitionRow>
-      </DefinitionList>
-    </DetailSection>
+        </SaDefinitionRow>
+      </SaDefinitionList>
+    </SaDetailSection>
   </div>
 </template>

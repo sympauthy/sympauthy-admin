@@ -6,15 +6,8 @@ import { NoSymbolIcon } from '@heroicons/vue/20/solid'
 import { GrantApi, grantIsLive, type GrantDetailResource } from '@/entities/grant'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
-import {
-  ActionsDropdown,
-  CommonAlert,
-  CommonCard,
-  ConfirmDialog,
-  LoadingState,
-  PageActions,
-  type ActionItem
-} from '@/shared/ui'
+import { SaAlert, SaCard, SaConfirmDialog, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { type ActionItem, ActionsDropdown } from '@/shared/ui'
 import GrantSummaryPanel from './GrantSummaryPanel.vue'
 import GrantRevocationPanel from './GrantRevocationPanel.vue'
 import GrantScopesPanel from './GrantScopesPanel.vue'
@@ -120,23 +113,23 @@ onMounted(() => load(grantId.value))
 <template>
   <div>
     <!-- Loading state -->
-    <LoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" :label="t('common.loading')" />
 
     <!-- Collected state -->
-    <CommonCard v-else-if="notFound">
+    <SaCard v-else-if="notFound">
       <p class="text-sm text-gray-600">{{ t('pages.grantDetail.notFound') }}</p>
-    </CommonCard>
+    </SaCard>
 
     <!-- Error state -->
-    <CommonAlert v-else-if="error" color="danger">
+    <SaAlert v-else-if="error" color="danger">
       {{ error }}
-    </CommonAlert>
+    </SaAlert>
 
     <!-- Content -->
     <div v-else-if="grant" class="space-y-6">
-      <PageActions v-if="actions.length > 0">
+      <SaPageActions v-if="actions.length > 0">
         <ActionsDropdown :actions="actions" @action="onAction" />
-      </PageActions>
+      </SaPageActions>
       <GrantSummaryPanel :grant="grant" />
       <GrantRevocationPanel v-if="grant.revoked_at" :grant="grant" />
       <GrantScopesPanel :grant="grant" />
@@ -144,9 +137,10 @@ onMounted(() => load(grantId.value))
     </div>
   </div>
 
-  <ConfirmDialog
+  <SaConfirmDialog
     :open="revokeOpen"
-    :confirm-label="t('pages.grantDetail.revoke')"
+    :confirm-label="t('pages.grantDetail.revokeConfirm')"
+    :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"
     @confirm="onRevoke"
@@ -156,5 +150,5 @@ onMounted(() => load(grantId.value))
       {{ t('pages.grantDetail.revokeTitle') }}
     </template>
     <p class="text-sm text-gray-600">{{ t('pages.grantDetail.revokeDescription') }}</p>
-  </ConfirmDialog>
+  </SaConfirmDialog>
 </template>

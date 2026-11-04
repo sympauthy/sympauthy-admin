@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/shared/auth'
 import { useI18n } from 'vue-i18n'
-import { CommonSpinner, CommonAlert } from '@/shared/ui'
+import { SaAlert, SaSpinner } from '@sympauthy/design'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -24,11 +24,11 @@ onMounted(async () => {
 
 <template>
   <div class="flex min-h-screen items-center justify-center">
-    <CommonAlert v-if="error" color="danger">
+    <SaAlert v-if="error" color="danger">
       {{ error }}
-    </CommonAlert>
+    </SaAlert>
     <div v-else class="flex flex-col items-center gap-4">
-      <CommonSpinner size="lg" />
+      <SaSpinner size="lg" />
       <p class="text-sm text-gray-600">{{ t('auth.signingIn') }}</p>
     </div>
   </div>

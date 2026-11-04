@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 import type { CollectionOperator } from '@/shared/api'
-import { FormField, FormSelect } from '@/shared/ui'
+import { SaField, SaSelect } from '@sympauthy/design'
 import { isCriterionComplete, type CollectionCriterion } from '../model/CollectionCriteria'
 import { collectionFilterValues, type CollectionFilter } from '../model/CollectionFilter'
 import {
@@ -44,6 +44,8 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const operatorFieldId = useId()
+const valueFieldId = useId()
 
 const open = ref(props.openOnMount)
 // What the popover focuses when it opens, read off the DOM rather than exposed by each of the
@@ -139,27 +141,31 @@ function onOpenAutoFocus(event: Event) {
 <template>
   <PopoverRoot :open="open" @update:open="onOpenChange">
     <!-- The box is the wrapper's and the two controls inside it are real ones, so removing a filter
-         stays one press and stays reachable from the keyboard. -->
+         stays one press and stays reachable from the keyboard. The box's border takes 2px of its
+         height, so each control's target reaches over it, and only the text inside clips, or the
+         box would clip that target. -->
     <div
-      class="control control-focus-within flex max-w-full items-center overflow-hidden bg-white p-0 text-gray-700"
+      class="sa-control sa-control-focus-within flex max-w-full items-center bg-white p-0 text-gray-700"
     >
       <PopoverTrigger
-        class="flex min-w-0 items-center gap-1 self-stretch pr-1 pl-3 text-left outline-none"
+        class="relative flex min-w-0 items-center self-stretch pr-1 pl-3 text-left outline-none after:absolute after:inset-x-0 after:-inset-y-px"
         :title="title"
       >
-        <span class="shrink-0 font-medium text-gray-600">{{ props.filter.name }}</span>
-        <span class="shrink-0 text-gray-500">{{ operatorLabel }}</span>
-        <span
-          v-if="!valueless"
-          class="min-w-0 truncate"
-          :class="valueLabel === '' ? 'text-gray-400' : 'font-medium text-gray-900'"
-        >
-          {{ shownValue }}
+        <span class="flex min-w-0 items-center gap-1 overflow-hidden">
+          <span class="shrink-0 font-medium text-gray-600">{{ props.filter.name }}</span>
+          <span class="shrink-0 text-gray-500">{{ operatorLabel }}</span>
+          <span
+            v-if="!valueless"
+            class="min-w-0 truncate"
+            :class="valueLabel === '' ? 'text-gray-400' : 'font-medium text-gray-900'"
+          >
+            {{ shownValue }}
+          </span>
         </span>
       </PopoverTrigger>
 
       <button
-        class="shrink-0 self-stretch pr-2.5 pl-1 text-gray-400 outline-none hover:text-gray-600 focus-visible:text-gray-900"
+        class="relative flex min-w-control shrink-0 items-center justify-center self-stretch text-gray-400 outline-none after:absolute after:inset-x-0 after:-inset-y-px hover:text-gray-600 focus-visible:text-gray-900"
         :title="t('common.collection.removeFilter')"
         :aria-label="t('common.collection.removeFilter')"
         @click="emit('remove')"
@@ -172,31 +178,33 @@ function onOpenAutoFocus(event: Event) {
       <PopoverContent
         align="start"
         :side-offset="4"
-        class="popover overlay-animated z-10 w-72 max-w-[calc(100vw-2rem)] space-y-3 p-3"
+        class="sa-popover sa-overlay-animated z-10 w-72 max-w-[calc(100vw-2rem)] space-y-3 p-3"
         @open-auto-focus="onOpenAutoFocus"
       >
-        <FormField :label="t('common.collection.operator')">
-          <FormSelect
+        <SaField :for="operatorFieldId" :label="t('common.collection.operator')">
+          <SaSelect
+            :id="operatorFieldId"
             :model-value="props.criterion.operator"
             @update:model-value="onOperatorChange"
           >
             <option v-for="option in operatorOptions" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
-          </FormSelect>
-        </FormField>
+          </SaSelect>
+        </SaField>
 
         <!-- `is_null` asks whether the row carries a value at all, so there is nothing to fill in. -->
         <div v-if="!valueless" ref="valueBox">
-          <FormField :label="t('common.collection.value')">
+          <SaField :for="valueFieldId" :label="t('common.collection.value')">
             <CollectionFilterValue
+              :id="valueFieldId"
               ref="value"
               :filter="props.filter"
               :criterion="props.criterion"
               @update="(patch) => emit('update', patch)"
               @submit="onOpenChange(false)"
             />
-          </FormField>
+          </SaField>
         </div>
       </PopoverContent>
     </PopoverPortal>

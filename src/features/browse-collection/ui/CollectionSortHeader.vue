@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { TableHeader } from '@/shared/ui'
+import { SaTableHeader } from '@sympauthy/design'
 import type { Collection } from '../model/useCollection'
 
 /**
@@ -13,7 +13,7 @@ import type { Collection } from '../model/useCollection'
  * respond to a click. The label stays the page's own string: the document names a filter and a sort
  * key, not a column.
  *
- * The term a column is read under is the page's to explain, so a `HelpTooltip` goes in the `help`
+ * The term a column is read under is the page's to explain, so a `SaPopover` goes in the `help`
  * slot rather than beside the header, which would put the explanation outside the box that sorts.
  */
 const props = withDefaults(
@@ -49,10 +49,10 @@ function onClick() {
 </script>
 
 <template>
-  <TableHeader
+  <SaTableHeader
     :fit="props.fit"
     :hidden-below="props.hiddenBelow"
-    :class="sortable ? 'cursor-pointer select-none hover:bg-gray-100' : ''"
+    :class="sortable ? 'h-control cursor-pointer select-none hover:bg-gray-100' : ''"
     :aria-sort="key ? (key.descending ? 'descending' : 'ascending') : undefined"
     @click="onClick"
   >
@@ -69,5 +69,5 @@ function onClick() {
       <ChevronUpIcon v-if="key && !key.descending" class="size-3" />
       <ChevronDownIcon v-else-if="key" class="size-3" />
     </span>
-  </TableHeader>
+  </SaTableHeader>
 </template>

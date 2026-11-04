@@ -3,7 +3,8 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
-import { BrandLogo, CommonButton, CommonCard, CommonTag, secondaryColoredButton } from '@/shared/ui'
+import { SaBrandLogo, SaCard, SaTag } from '@sympauthy/design'
+import { CommonButton } from '@/shared/ui'
 
 /**
  * Where a signed-in operator lands when their token opens no page of the panel — the granting
@@ -40,7 +41,7 @@ async function logout() {
 <template>
   <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-md">
-      <BrandLogo large class="mx-auto mb-4" />
+      <SaBrandLogo large class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('pages.noAccess.title') }}
       </h1>
@@ -48,21 +49,21 @@ async function logout() {
         {{ t('pages.noAccess.description', { account: authStore.userName }) }}
       </p>
 
-      <CommonCard>
+      <SaCard>
         <p class="text-sm text-gray-700">{{ t('pages.noAccess.scopes') }}</p>
         <div class="mt-3 flex flex-wrap gap-1">
-          <CommonTag v-for="scope in consoleScopes" :key="scope" color="blue">
+          <SaTag v-for="scope in consoleScopes" :key="scope" color="blue">
             {{ scope }}
-          </CommonTag>
+          </SaTag>
         </div>
         <CommonButton
           class="mt-4 w-full"
-          :button-style="secondaryColoredButton"
+          variant="secondary"
           :icon="ArrowRightStartOnRectangleIcon"
           :label="t('auth.logout')"
           @click="logout"
         />
-      </CommonCard>
+      </SaCard>
     </div>
   </div>
 </template>

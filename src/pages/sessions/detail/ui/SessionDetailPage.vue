@@ -9,7 +9,8 @@ import {
 } from '@/entities/session'
 import { useBreadcrumb } from '@/shared/lib'
 import SessionSummaryPanel from './SessionSummaryPanel.vue'
-import { CommonAlert, CommonCard, LoadingState, RecordTabs, type RecordTab } from '@/shared/ui'
+import { SaAlert, SaCard, SaLoadingState } from '@sympauthy/design'
+import { type RecordTab, RecordTabs } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 
 /**
@@ -81,23 +82,23 @@ onMounted(() => load(sessionId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <LoadingState v-if="store.loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="store.loading" :label="t('common.loading')" />
 
     <!-- Collected state. This is a live view rather than a history, so a session that is gone is
          the expected outcome and reads as one rather than as a failure. -->
-    <CommonCard v-else-if="store.notFound">
+    <SaCard v-else-if="store.notFound">
       <p class="text-sm text-gray-600">{{ t('pages.sessionDetail.notFound') }}</p>
-    </CommonCard>
+    </SaCard>
 
     <!-- Error state -->
-    <CommonAlert v-else-if="store.error" color="danger">
+    <SaAlert v-else-if="store.error" color="danger">
       {{ store.error }}
-    </CommonAlert>
+    </SaAlert>
 
     <!-- Content -->
     <template v-else-if="store.session">
       <SessionSummaryPanel class="shrink-0" :session="store.session" />
-      <RecordTabs :tabs="tabs" />
+      <RecordTabs :tabs="tabs" :label="t('pages.sessionDetail.views')" />
       <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
            page. The purposes are shorter than the viewport and scroll inside the same box. -->
       <div class="min-h-0 flex-1 overflow-y-auto">

@@ -9,7 +9,8 @@ import {
   type AudienceResource
 } from '@/entities/audience'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonTag, DocHelpTooltip, TableCell, TableHeader } from '@/shared/ui'
+import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new AudienceApi()
@@ -37,10 +38,10 @@ onMounted(async () => {
           <DocHelpTooltip term="terms.audience.id" />
         </template>
       </CollectionSortHeader>
-      <TableHeader fit hidden-below="sm">
+      <SaTableHeader fit hidden-below="sm">
         {{ t('terms.audience.registrationMode.label') }}
         <DocHelpTooltip term="terms.audience.registrationMode" />
-      </TableHeader>
+      </SaTableHeader>
       <CollectionSortHeader
         fit
         hidden-below="sm"
@@ -52,17 +53,17 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="audience in audiences.items" :key="audience.audience_id">
-        <TableCell primary fit>
+        <SaTableCell primary fit>
           {{ audience.audience_id }}
-        </TableCell>
-        <TableCell :label="t('terms.audience.registrationMode.label')" fit hidden-below="sm">
-          <CommonTag :color="audienceRegistrationModeColor(audience)">
+        </SaTableCell>
+        <SaTableCell :label="t('terms.audience.registrationMode.label')" fit hidden-below="sm">
+          <SaTag :color="audienceRegistrationModeColor(audience)">
             {{ t(audienceRegistrationModeKey(audience)) }}
-          </CommonTag>
-        </TableCell>
-        <TableCell :label="t('pages.audiences.clientsCount')" fit hidden-below="sm">
+          </SaTag>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.audiences.clientsCount')" fit hidden-below="sm">
           {{ audience.clients_count }}
-        </TableCell>
+        </SaTableCell>
       </tr>
     </template>
 

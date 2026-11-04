@@ -4,7 +4,7 @@
 @source '../../../node_modules/@sympauthy/design/src';
 
 /**
- * The colours, the faces, `.control`, `.menu`, `.popover` and the panel's one motion are the design
+ * The colours, the faces, `.sa-control`, `.sa-menu`, `.sa-popover` and the panel's one motion are the design
  * system's. What is left here is what only this panel draws.
  */
 @layer base {
@@ -12,96 +12,4 @@
   body {
     @apply bg-body font-sans text-gray-900;
   }
-}
-
-@layer components {
-  /* A stacked cell names its column with the label a table draws over it. */
-  .table-as-cards td[data-label]::before {
-    @apply text-xs font-medium tracking-wider text-gray-500 uppercase;
-  }
-}
-
-/**
- * Below `sm:` a table of records is a list of them: every row becomes a card and every cell a
- * labelled line down it. The markup is the table's own — a phone is handed the same description of
- * a record, laid out down instead of across — so a column added to a screen reaches the phone with
- * it and a card cannot fall behind the table it was written beside.
- *
- * These rules sit outside every layer on purpose: they undo utilities (`truncate`, `max-w-0`,
- * `whitespace-nowrap`, `divide-y`) that a layered rule could not reach, whatever its specificity.
- */
-@media (width < theme(--breakpoint-sm)) {
-  .table-as-cards,
-  .table-as-cards tbody,
-  .table-as-cards tr {
-    display: block;
-  }
-
-  /* The column names move into the cells; the header row has nothing left to say. */
-  .table-as-cards thead {
-    display: none;
-  }
-
-  /* `divide-y` colours a row's top border and deliberately skips the last child, so a card
-     bordered on four sides states its own colour — and its own ground, since the gutters between
-     cards belong to the page and not to the white the table body paints. */
-  .table-as-cards tr {
-    border-width: 1px;
-    border-color: var(--color-gray-200);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-white);
-    padding: calc(var(--spacing) * 4);
-  }
-
-  .table-as-cards tbody {
-    background-color: transparent;
-  }
-
-  .table-as-cards tr + tr {
-    margin-top: calc(var(--spacing) * 4);
-  }
-
-  /* A column the page drops on a phone stays dropped: it carries `hidden`, and what a screen has
-     already decided not to show a phone is not resurrected by being stacked. */
-  .table-as-cards td:not(.hidden) {
-    display: block;
-  }
-
-  .table-as-cards td {
-    max-width: none;
-    padding: 0;
-    overflow: visible;
-    text-overflow: clip;
-    white-space: normal;
-  }
-
-  .table-as-cards td + td {
-    margin-top: calc(var(--spacing) * 3);
-  }
-
-  .table-as-cards td:empty {
-    display: none;
-  }
-
-  /* A value cut with an ellipsis across a row has the width of the card to wrap into down one. */
-  .table-as-cards td > .cell-truncate {
-    overflow: visible;
-    text-overflow: clip;
-    white-space: normal;
-  }
-
-  .table-as-cards td[data-label]::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: calc(var(--spacing) * 1);
-  }
-}
-
-/** Header row kept visible while the rows of a full height table scroll under it. **/
-.table-pinned-header thead th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: var(--color-gray-50);
-  box-shadow: inset 0 -1px 0 var(--color-gray-200);
 }

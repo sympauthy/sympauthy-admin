@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { CommonAlert, CopyToClipboard } from '@sympauthy/design'
+import { SaAlert, SaCopyButton } from '@sympauthy/design'
 
 /**
  * A value the server answered once and will not answer again — an invitation's token, a link
@@ -16,13 +16,13 @@ const { t } = useI18n()
 
 <template>
   <div>
-    <CommonAlert color="warning" class="mb-4">
+    <SaAlert color="warning" class="mb-4">
       <slot name="warning" />
-    </CommonAlert>
+    </SaAlert>
 
     <div class="flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
       <code class="flex-1 text-sm break-all">{{ value }}</code>
-      <CopyToClipboard
+      <SaCopyButton
         :value="value"
         :label="t('common.copy')"
         :copied-label="t('common.copied')"
