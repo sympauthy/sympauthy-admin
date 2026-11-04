@@ -3,7 +3,8 @@ import { ref, onMounted, useId } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
-import { CommonButton, SaBrandLogo, SaCard, SaField, SaInput } from '@/shared/ui'
+import { SaBrandLogo, SaCard, SaField, SaInput } from '@sympauthy/design'
+import { CommonButton } from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()

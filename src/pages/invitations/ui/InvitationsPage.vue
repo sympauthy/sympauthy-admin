@@ -8,15 +8,14 @@ import type { InvitationResource } from '../model/InvitationResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import {
-  CommonButton,
-  DocHelpTooltip,
   SaConfirmDialog,
   SaEmptyValue,
   SaPageActions,
   SaTableCell,
   SaTableHeader,
   SaTag
-} from '@/shared/ui'
+} from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import CreateInvitationDialog from './CreateInvitationDialog.vue'
 import { formatDate } from '@/shared/lib'
 

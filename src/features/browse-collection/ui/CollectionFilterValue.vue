@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SaInput, SaListbox, SaTagsInput } from '@/shared/ui'
+import { SaInput, SaListbox, SaTagsInput } from '@sympauthy/design'
 import type { CollectionCriterion } from '../model/CollectionCriteria'
 import { collectionFilterValues, type CollectionFilter } from '../model/CollectionFilter'
 import { isMultiValuedOperator } from '../model/CollectionOperatorUtils'

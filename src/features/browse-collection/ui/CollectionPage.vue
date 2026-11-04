@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useSlots } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SaPagination, SaTable } from '@/shared/ui'
+import { SaPagination, SaTable } from '@sympauthy/design'
 import type { Collection } from '../model/useCollection'
 import CollectionToolbar from './CollectionToolbar.vue'
 

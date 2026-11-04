@@ -3,7 +3,8 @@ import { useI18n } from 'vue-i18n'
 import SidebarNav from './SidebarNav.vue'
 import BreadcrumbNav from './BreadcrumbNav.vue'
 import { useSidebar } from '@/shared/lib'
-import { BrandWordmark, SaAppShell, SaBrandLogo } from '@/shared/ui'
+import { SaAppShell, SaBrandLogo } from '@sympauthy/design'
+import { BrandWordmark } from '@/shared/ui'
 
 const { t } = useI18n()
 const { sidebarOpen } = useSidebar()

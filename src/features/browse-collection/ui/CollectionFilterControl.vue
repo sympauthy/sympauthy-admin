@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 import type { CollectionOperator } from '@/shared/api'
-import { SaField, SaSelect } from '@/shared/ui'
+import { SaField, SaSelect } from '@sympauthy/design'
 import { isCriterionComplete, type CollectionCriterion } from '../model/CollectionCriteria'
 import { collectionFilterValues, type CollectionFilter } from '../model/CollectionFilter'
 import {

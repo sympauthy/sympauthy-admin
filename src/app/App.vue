@@ -3,7 +3,7 @@ import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import AdminLayout from './layout/AdminLayout.vue'
 import { useAuthStore } from '@/shared/auth'
-import { SaSpinner, SaTooltipProvider } from '@/shared/ui'
+import { SaSpinner, SaTooltipProvider } from '@sympauthy/design'
 
 const route = useRoute()
 const authStore = useAuthStore()

@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import {
-  DocHelpTooltip,
-  RouteLink,
   SaCopyableValue,
   SaEmptyValue,
   SaSummaryCard,
   SaSummaryField,
   SaTag
-} from '@/shared/ui'
+} from '@sympauthy/design'
+import { DocHelpTooltip, RouteLink } from '@/shared/ui'
 import {
   purposeLabel,
   interactiveFlowSessionStatusColor,

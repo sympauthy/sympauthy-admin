@@ -5,7 +5,8 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { missingScopesHint, useAuthStore, useRouteAccess } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
 import { useSidebar } from '@/shared/lib'
-import { BrandWordmark, SaBrandLogo, SaSidebar, type SaSidebarSection } from '@/shared/ui'
+import { SaBrandLogo, SaSidebar, type SaSidebarSection } from '@sympauthy/design'
+import { BrandWordmark } from '@/shared/ui'
 import { navSections } from '../router/navigation'
 
 const { t } = useI18n()

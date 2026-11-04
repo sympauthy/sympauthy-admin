@@ -8,14 +8,8 @@ import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  SaConfirmDialog,
-  SaTableCell,
-  SaTableHeader,
-  SaTag
-} from '@/shared/ui'
+import { SaConfirmDialog, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()

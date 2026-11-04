@@ -20,7 +20,7 @@ A layer imports from the layers strictly below it, and never sideways or upward.
 | `pages/` | one slice per route: the route component and what only it uses |
 | `features/` | a user action reused by more than one page |
 | `entities/` | a domain noun more than one slice reads: its client, its schemas, its stores |
-| `shared/` | the design system, the HTTP plumbing and the collection wire, auth, i18n, utilities |
+| `shared/` | the panel's own kit, the HTTP plumbing and the collection wire, auth, i18n, utilities |
 
 `src/main.ts` is Vite's entry point and sits outside the layers: it reads the deployment's brand,
 creates the app, the router, the i18n instance and the Pinia instance, and mounts the result.

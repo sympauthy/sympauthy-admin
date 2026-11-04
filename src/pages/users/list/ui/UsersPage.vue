@@ -6,15 +6,8 @@ import { UserApi, type UserListResource, type UserResource } from '@/entities/us
 import { ClaimApi, type ClaimResource } from '@/entities/claim'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  SaAlert,
-  SaEmptyValue,
-  SaTableCell,
-  SaTableHeader,
-  SaTag
-} from '@/shared/ui'
+import { SaAlert, SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { EyeIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
 import { formatDate } from '@/shared/lib'

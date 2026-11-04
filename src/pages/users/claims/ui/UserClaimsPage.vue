@@ -10,7 +10,8 @@ import {
 } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { OriginTag, SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { OriginTag } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()

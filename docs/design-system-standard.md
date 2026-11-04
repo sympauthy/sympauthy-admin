@@ -9,9 +9,9 @@ paths:
 
 # Design system standard
 
-`shared/ui` is the kit every screen is assembled from. Reach for it before writing a component, and
-add to it rather than beside it. [The component code standard](component-code-standard.md) says how
-a component is written; this one says which to use.
+`@sympauthy/design` and `shared/ui` are the kit every screen is assembled from. Reach for them
+before writing a component, and add to `shared/ui` rather than beside it. [The component code
+standard](component-code-standard.md) says how a component is written; this one says which to use.
 
 **[`@sympauthy/design`](https://sympauthy.github.io/sympauthy-design/)
 decides what a thing looks like and when each variant is right; this standard decides which
@@ -42,10 +42,10 @@ reach for instead.
 
 ## The package
 
-**A screen imports from `@/shared/ui`, which re-exports the package.** Only `shared/ui` imports a
-component from `@sympauthy/design`. What the package names starts with `Sa` and is re-exported under
-that name, with no alias, so a page of its documentation and the template drawing the component
-agree on what it is called.
+**A screen imports a package's component from `@sympauthy/design`, and one of the panel's from
+`@/shared/ui`.** What the package names starts with `Sa` and is imported under that name, with no
+alias, so a page of its documentation and the template drawing the component agree on what it is
+called.
 
 **A component moves to the package when [its components
 standard](https://github.com/sympauthy/sympauthy-design/blob/main/docs/standards/components-standard.md#which-components-ship)
@@ -66,8 +66,8 @@ moving the tag, since it does not watch `node_modules`.
 
 ## The kit
 
-**What `shared/ui` publishes is [its `index.ts`](../src/shared/ui/index.ts).** The table says what
-to reach for, by need.
+**The table says what to reach for, by need.** A `Sa*` component is the package's, and what
+`shared/ui` publishes is [its `index.ts`](../src/shared/ui/index.ts).
 
 | Component | Use it for |
 | --- | --- |

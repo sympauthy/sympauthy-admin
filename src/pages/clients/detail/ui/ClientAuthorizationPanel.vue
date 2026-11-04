@@ -1,12 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import {
-  DocHelpTooltip,
-  SaDefinitionList,
-  SaDefinitionRow,
-  SaDetailSection,
-  SaTag
-} from '@/shared/ui'
+import { SaDefinitionList, SaDefinitionRow, SaDetailSection, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 import type { ClientDetailResource } from '@/entities/client'
 
 defineProps<{

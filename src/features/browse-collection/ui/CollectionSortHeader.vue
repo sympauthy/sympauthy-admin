@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { SaTableHeader } from '@/shared/ui'
+import { SaTableHeader } from '@sympauthy/design'
 import type { Collection } from '../model/useCollection'
 
 /**

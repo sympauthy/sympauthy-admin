@@ -6,7 +6,7 @@ import {
   purposeProgressColor,
   purposeProgressLabel
 } from '@/entities/session'
-import { SaCard, SaDefinitionRow, SaEmptyValue, SaTag } from '@/shared/ui'
+import { SaCard, SaDefinitionRow, SaEmptyValue, SaTag } from '@sympauthy/design'
 
 /**
  * The purposes one session carries, and how far each of them got.

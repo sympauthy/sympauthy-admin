@@ -10,15 +10,8 @@ import UserSummaryPanel from './UserSummaryPanel.vue'
 import { LogoutDialog } from '@/features/logout-user'
 import EnrollMfaDialog from './EnrollMfaDialog.vue'
 import LinkProviderDialog from './LinkProviderDialog.vue'
-import {
-  type ActionItem,
-  ActionsDropdown,
-  type RecordTab,
-  RecordTabs,
-  SaAlert,
-  SaLoadingState,
-  SaPageActions
-} from '@/shared/ui'
+import { SaAlert, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { type ActionItem, ActionsDropdown, type RecordTab, RecordTabs } from '@/shared/ui'
 import { ArrowRightStartOnRectangleIcon, LinkIcon, ShieldCheckIcon } from '@heroicons/vue/20/solid'
 
 /**

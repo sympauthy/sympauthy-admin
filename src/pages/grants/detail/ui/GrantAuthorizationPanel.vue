@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import {
-  DocHelpTooltip,
-  RouteLink,
   SaDefinitionList,
   SaDefinitionRow,
   SaDetailSection,
   SaEmptyValue,
   SaTag
-} from '@/shared/ui'
+} from '@sympauthy/design'
+import { DocHelpTooltip, RouteLink } from '@/shared/ui'
 import type { GrantDetailResource } from '@/entities/grant'
 import { formatDateTime } from '@/shared/lib'
 

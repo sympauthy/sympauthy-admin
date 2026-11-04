@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DocHelpTooltip, SaCopyableValue, SaSummaryCard, SaSummaryField, SaTag } from '@/shared/ui'
+import { SaCopyableValue, SaSummaryCard, SaSummaryField, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 import type { UserDetailResource } from '@/entities/user'
 import { formatDate } from '@/shared/lib'
 

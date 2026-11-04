@@ -12,15 +12,8 @@ import {
   type GrantSummaryResource
 } from '@/entities/grant'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  RouteLink,
-  SaEmptyValue,
-  SaTableCell,
-  SaTableHeader,
-  SaTag
-} from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip, RouteLink } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()

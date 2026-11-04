@@ -8,7 +8,7 @@ import {
   SaDetailSection,
   SaEmptyValue,
   SaPopover
-} from '@/shared/ui'
+} from '@sympauthy/design'
 import {
   interactiveFlowSessionCarriesFailure,
   interactiveFlowSessionEndedInFailure,

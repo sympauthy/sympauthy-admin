@@ -10,7 +10,8 @@ import {
   type ClaimResource
 } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { DocHelpTooltip, OriginTag, SaTableCell, SaTableHeader, SaTag } from '@/shared/ui'
+import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip, OriginTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClaimApi()

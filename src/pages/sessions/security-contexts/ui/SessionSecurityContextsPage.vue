@@ -9,7 +9,7 @@ import {
   type InteractiveFlowSessionSecurityContextResource
 } from '@/entities/session'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { formatDateTime } from '@/shared/lib'
 
 const route = useRoute()

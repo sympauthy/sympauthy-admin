@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { DocHelpTooltip, SaTag } from '@/shared/ui'
+import { SaTag } from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 
 defineProps<{
   required: boolean

@@ -5,14 +5,8 @@ import { ScopeApi } from '../api/ScopeApi'
 import type { ScopeListResource } from '../model/ScopeListResource'
 import type { ScopeResource } from '../model/ScopeResource'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  DocHelpTooltip,
-  OriginTag,
-  SaEmptyValue,
-  SaTableCell,
-  SaTableHeader,
-  SaTag
-} from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip, OriginTag } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ScopeApi()

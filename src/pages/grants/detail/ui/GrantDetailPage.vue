@@ -6,15 +6,8 @@ import { NoSymbolIcon } from '@heroicons/vue/20/solid'
 import { GrantApi, grantIsLive, type GrantDetailResource } from '@/entities/grant'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb } from '@/shared/lib'
-import {
-  type ActionItem,
-  ActionsDropdown,
-  SaAlert,
-  SaCard,
-  SaConfirmDialog,
-  SaLoadingState,
-  SaPageActions
-} from '@/shared/ui'
+import { SaAlert, SaCard, SaConfirmDialog, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { type ActionItem, ActionsDropdown } from '@/shared/ui'
 import GrantSummaryPanel from './GrantSummaryPanel.vue'
 import GrantRevocationPanel from './GrantRevocationPanel.vue'
 import GrantScopesPanel from './GrantScopesPanel.vue'

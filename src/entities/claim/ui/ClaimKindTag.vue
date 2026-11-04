@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { SaEmptyValue, SaTag } from '@/shared/ui'
+import { SaEmptyValue, SaTag } from '@sympauthy/design'
 import { claimKindLabel } from '../model/ClaimResource'
 
 /**

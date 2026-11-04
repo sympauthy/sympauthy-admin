@@ -4,7 +4,8 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { CommonButton, DocHelpTooltip, SaEmptyValue, SaTableCell, SaTableHeader } from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import { EyeIcon } from '@heroicons/vue/20/solid'
 
 const { t } = useI18n()

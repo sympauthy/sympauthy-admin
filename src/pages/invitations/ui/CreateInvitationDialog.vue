@@ -1,17 +1,8 @@
 <script lang="ts" setup>
 import { ref, watch, computed, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  OneTimeSecret,
-  SaAlert,
-  SaDialog,
-  SaField,
-  SaInput,
-  SaSelect,
-  SaTextarea
-} from '@/shared/ui'
+import { SaAlert, SaDialog, SaField, SaInput, SaSelect, SaTextarea } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip, OneTimeSecret } from '@/shared/ui'
 import { AudienceApi, type AudienceResource } from '@/entities/audience'
 import { fetchAllPages } from '@/shared/api'
 import { InvitationApi } from '../api/InvitationApi'

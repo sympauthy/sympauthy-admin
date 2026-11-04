@@ -9,7 +9,8 @@ import {
 } from '@/entities/session'
 import { useBreadcrumb } from '@/shared/lib'
 import SessionSummaryPanel from './SessionSummaryPanel.vue'
-import { type RecordTab, RecordTabs, SaAlert, SaCard, SaLoadingState } from '@/shared/ui'
+import { SaAlert, SaCard, SaLoadingState } from '@sympauthy/design'
+import { type RecordTab, RecordTabs } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 
 /**

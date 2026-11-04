@@ -9,7 +9,8 @@ import {
   type AudienceResource
 } from '@/entities/audience'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { DocHelpTooltip, SaTableCell, SaTableHeader, SaTag } from '@/shared/ui'
+import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new AudienceApi()

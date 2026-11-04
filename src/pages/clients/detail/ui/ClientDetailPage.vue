@@ -9,7 +9,7 @@ import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
-import { SaAlert, SaLoadingState } from '@/shared/ui'
+import { SaAlert, SaLoadingState } from '@sympauthy/design'
 
 const { t } = useI18n()
 const route = useRoute()

@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useBreadcrumb } from '@/shared/lib'
-import { SaBreadcrumb, type SaBreadcrumbItem } from '@/shared/ui'
+import { SaBreadcrumb, type SaBreadcrumbItem } from '@sympauthy/design'
 
 const route = useRoute()
 const router = useRouter()

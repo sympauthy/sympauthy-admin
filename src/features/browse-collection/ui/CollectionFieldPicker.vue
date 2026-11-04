@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
-import { SaListbox } from '@/shared/ui'
+import { SaListbox } from '@sympauthy/design'
 import type { CollectionFilter } from '../model/CollectionFilter'
 
 /**

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { SaEmptyValue, SaPopover, SaTag } from '@/shared/ui'
+import { SaEmptyValue, SaPopover, SaTag } from '@sympauthy/design'
 import { claimPublicationPlaceLabel } from '../model/ClaimResource'
 
 /**

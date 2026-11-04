@@ -11,15 +11,8 @@ import {
   type InteractiveFlowSessionSummaryResource
 } from '@/entities/session'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  RouteLink,
-  SaEmptyValue,
-  SaTableCell,
-  SaTableHeader,
-  SaTag
-} from '@/shared/ui'
+import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip, RouteLink } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
 

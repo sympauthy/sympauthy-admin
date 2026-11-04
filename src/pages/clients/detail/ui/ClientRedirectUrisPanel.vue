@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { SaCard, SaDetailSection } from '@/shared/ui'
+import { SaCard, SaDetailSection } from '@sympauthy/design'
 import type { ClientDetailResource } from '@/entities/client'
 
 defineProps<{

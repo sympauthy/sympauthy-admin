@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/shared/auth'
 import { useI18n } from 'vue-i18n'
-import { SaAlert, SaSpinner } from '@/shared/ui'
+import { SaAlert, SaSpinner } from '@sympauthy/design'
 
 const router = useRouter()
 const authStore = useAuthStore()

@@ -1,15 +1,8 @@
 <script lang="ts" setup>
 import { ref, computed, watch, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  CommonButton,
-  OneTimeSecret,
-  SaAlert,
-  SaDialog,
-  SaField,
-  SaInput,
-  SaSelect
-} from '@/shared/ui'
+import { SaAlert, SaDialog, SaField, SaInput, SaSelect } from '@sympauthy/design'
+import { CommonButton, OneTimeSecret } from '@/shared/ui'
 import { useClientStore } from '@/entities/client'
 import { UserProviderLinkApi, type ProviderLinkStartInput } from '@/entities/user'
 import { isSuccess, getErrorMessage } from '@/shared/api'

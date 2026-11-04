@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { RouteLink, SaDefinitionList, SaDefinitionRow, SaDetailSection } from '@/shared/ui'
+import { SaDefinitionList, SaDefinitionRow, SaDetailSection } from '@sympauthy/design'
+import { RouteLink } from '@/shared/ui'
 import { grantRevokedByLabel, type GrantDetailResource } from '@/entities/grant'
 import { formatDateTime } from '@/shared/lib'
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SaAlert, SaConfirmDialog, SaRadioGroup, SaSelect } from '@/shared/ui'
+import { SaAlert, SaConfirmDialog, SaRadioGroup, SaSelect } from '@sympauthy/design'
 import { GrantApi } from '@/entities/grant'
 import { useClientStore } from '@/entities/client'
 import { isSuccess, getErrorMessage } from '@/shared/api'

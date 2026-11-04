@@ -9,13 +9,8 @@ import {
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import {
-  CommonButton,
-  DocHelpTooltip,
-  SaConfirmDialog,
-  SaTableCell,
-  SaTableHeader
-} from '@/shared/ui'
+import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { CommonButton, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()

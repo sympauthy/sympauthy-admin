@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import {
-  DocHelpTooltip,
   SaDefinitionList,
   SaDefinitionRow,
   SaDetailSection,
   SaEmptyValue,
   SaTag
-} from '@/shared/ui'
+} from '@sympauthy/design'
+import { DocHelpTooltip } from '@/shared/ui'
 import {
   grantConsentedByLabel,
   grantGrantedByLabel,
