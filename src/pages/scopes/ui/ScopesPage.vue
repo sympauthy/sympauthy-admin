@@ -36,16 +36,6 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="scopes" :search-placeholder="t('pages.scopes.search')">
     <template #header>
-      <CollectionSortHeader
-        fit
-        :collection="scopes"
-        :label="t('pages.scopes.status.label')"
-        field="enabled"
-      >
-        <template #help>
-          <DocHelpTooltip term="pages.scopes.status" />
-        </template>
-      </CollectionSortHeader>
       <CollectionSortHeader :collection="scopes" :label="t('pages.scopes.id')" field="scope" />
       <CollectionSortHeader
         fit
@@ -65,19 +55,21 @@ onMounted(async () => {
         {{ t('pages.scopes.claims.label') }}
         <DocHelpTooltip term="pages.scopes.claims" />
       </SaTableHeader>
+      <CollectionSortHeader
+        fit
+        :collection="scopes"
+        :label="t('pages.scopes.status.label')"
+        field="enabled"
+      >
+        <template #help>
+          <DocHelpTooltip term="pages.scopes.status" />
+        </template>
+      </CollectionSortHeader>
     </template>
 
     <template #rows>
       <tr v-for="scope in scopes.items" :key="scope.id">
-        <SaTableCell :label="t('pages.scopes.status.label')" fit>
-          <SaTag v-if="scope.enabled" color="green">
-            {{ t('pages.scopes.enabled') }}
-          </SaTag>
-          <SaTag v-else color="red">
-            {{ t('pages.scopes.disabled') }}
-          </SaTag>
-        </SaTableCell>
-        <SaTableCell primary truncate>
+        <SaTableCell primary mono>
           {{ scope.id }}
         </SaTableCell>
         <SaTableCell :label="t('pages.scopes.type.label')" fit>
@@ -88,11 +80,21 @@ onMounted(async () => {
         <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="scope.origin" />
         </SaTableCell>
-        <SaTableCell :label="t('pages.scopes.claims.label')" truncate>
-          <span v-if="scope.claims && scope.claims.length > 0">
-            {{ scope.claims.join(', ') }}
-          </span>
+        <SaTableCell :label="t('pages.scopes.claims.label')">
+          <div v-if="scope.claims && scope.claims.length > 0" class="flex flex-wrap gap-1">
+            <SaTag v-for="claim in scope.claims" :key="claim" color="gray" class="font-mono">
+              {{ claim }}
+            </SaTag>
+          </div>
           <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.scopes.status.label')" label-hidden fit>
+          <SaTag v-if="scope.enabled" color="green">
+            {{ t('pages.scopes.enabled') }}
+          </SaTag>
+          <SaTag v-else color="red">
+            {{ t('pages.scopes.disabled') }}
+          </SaTag>
         </SaTableCell>
       </tr>
     </template>

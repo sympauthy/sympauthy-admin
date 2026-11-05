@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip } from '@/shared/ui'
-import { EyeIcon } from '@heroicons/vue/20/solid'
+import { DocHelpTooltip, TableRecord } from '@/shared/ui'
 
 const { t } = useI18n()
-const router = useRouter()
 const api = new ClientApi()
 
 const clients = useCollection<ClientSummaryResource, ClientListResource>({
@@ -26,12 +23,7 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="clients" :search-placeholder="t('pages.clients.search')">
     <template #header>
-      <CollectionSortHeader
-        fit
-        :collection="clients"
-        :label="t('pages.clients.clientId')"
-        field="id"
-      />
+      <CollectionSortHeader :collection="clients" :label="t('pages.clients.clientId')" field="id" />
       <SaTableHeader fit>
         {{ t('pages.clients.type') }}
         <DocHelpTooltip term="terms.client.type" />
@@ -48,35 +40,29 @@ onMounted(async () => {
         </template>
       </CollectionSortHeader>
       <SaTableHeader>{{ t('pages.clients.redirectUris') }}</SaTableHeader>
-      <SaTableHeader fit>{{ t('pages.clients.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="client in clients.items" :key="client.client_id">
-        <SaTableCell primary fit>
-          {{ client.client_id }}
+        <SaTableCell primary mono>
+          <TableRecord
+            :name="client.client_id"
+            :to="{ name: 'clientDetail', params: { clientId: client.client_id } }"
+          />
         </SaTableCell>
         <SaTableCell :label="t('pages.clients.type')" fit>
           {{ client.type }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.clients.audience')" fit hidden-below="sm">
+        <SaTableCell :label="t('pages.clients.audience')" fit mono hidden-below="sm">
           {{ client.audience_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.clients.redirectUris')">
+        <SaTableCell :label="t('pages.clients.redirectUris')" mono>
           <template v-if="client.allowed_redirect_uris?.length">
             <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
               {{ uri }}
             </div>
           </template>
           <SaEmptyValue v-else />
-        </SaTableCell>
-        <SaTableCell fit>
-          <CommonButton
-            variant="secondary"
-            :label="t('pages.clients.view')"
-            :icon="EyeIcon"
-            @click="router.push({ name: 'clientDetail', params: { clientId: client.client_id } })"
-          />
         </SaTableCell>
       </tr>
     </template>

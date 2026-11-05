@@ -30,6 +30,7 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="claims" :search-placeholder="t('pages.claims.search')">
     <template #header>
+      <CollectionSortHeader :collection="claims" :label="t('pages.claims.id')" field="id" />
       <CollectionSortHeader
         fit
         :collection="claims"
@@ -40,7 +41,6 @@ onMounted(async () => {
           <DocHelpTooltip term="pages.claims.status" />
         </template>
       </CollectionSortHeader>
-      <CollectionSortHeader :collection="claims" :label="t('pages.claims.id')" field="id" />
       <CollectionSortHeader
         fit
         :collection="claims"
@@ -70,16 +70,16 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.id">
-        <SaTableCell :label="t('pages.claims.status.label')" fit>
+        <SaTableCell primary truncate>
+          {{ claim.id }}
+        </SaTableCell>
+        <SaTableCell :label="t('pages.claims.status.label')" label-hidden fit>
           <SaTag v-if="claim.enabled" color="green">
             {{ t('pages.claims.enabled') }}
           </SaTag>
           <SaTag v-else color="red">
             {{ t('pages.claims.disabled') }}
           </SaTag>
-        </SaTableCell>
-        <SaTableCell primary truncate>
-          {{ claim.id }}
         </SaTableCell>
         <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />

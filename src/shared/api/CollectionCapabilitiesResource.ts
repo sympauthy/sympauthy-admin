@@ -24,7 +24,7 @@ export type CollectionSearchResource = {
  * One field a collection filters on.
  *
  * `type` is a plain string and not [CollectionFieldType]: a server ahead of this panel may publish
- * a word it does not know, and `knownCollectionFilters` is where that is decided rather than here,
+ * a word it does not know, and `saFilterKnownFields` is where that is decided rather than here,
  * where it would blank the screen.
  */
 export type CollectionFilterResource = {

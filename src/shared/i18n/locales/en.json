@@ -25,6 +25,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "actions": "Actions",
+    "actionsFor": "Actions for {name}",
     "delete": "Delete",
     "previous": "Previous",
     "next": "Next",
@@ -48,6 +49,14 @@
       "searchValues": "Search values",
       "addValue": "Add a value",
       "removeFilter": "Remove this filter",
+      "activeFilters": "Active filters",
+      "clearFilters": "Clear filters",
+      "filtered": "Filtered",
+      "matches": "{total} record matches | {total} records match",
+      "sort": "Sort",
+      "searchOrders": "Search orders",
+      "ascending": "ascending",
+      "descending": "descending",
       "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
       "refresh": "Refresh"
     },
@@ -279,8 +288,6 @@
       "type": "Type",
       "audience": "Audience",
       "redirectUris": "Redirect URIs",
-      "actions": "Actions",
-      "view": "View",
       "empty": "No clients found.",
       "search": "Search clients..."
     },
@@ -328,6 +335,7 @@
     },
     "users": {
       "title": "Users",
+      "user": "User",
       "status": "Status",
       "createdAt": "Created at",
       "enabled": "enabled",
@@ -335,8 +343,10 @@
       "empty": "No users found.",
       "search": "Search users...",
       "actions": "Actions",
-      "view": "View",
-      "logout": "Logout",
+      "view": "View user",
+      "copyId": "Copy user ID",
+      "showGrants": "Show their grants",
+      "logout": "Sign out of every session…",
       "identifierClaimsFailed": "The configured claims could not be read, so the columns naming each account are missing. The accounts below are complete."
     },
     "userDetail": {
@@ -384,7 +394,7 @@
     },
     "scopes": {
       "title": "Scopes",
-      "id": "ID",
+      "id": "Scope",
       "status": {
         "label": "Status",
         "help": "Whether this deployment serves the scope. A request naming a disabled one is refused as unsupported, and this list is the only place such a scope appears — everything that decides what a token may carry reads the enabled ones. See {link} for details.",
@@ -446,7 +456,7 @@
       "expired": "expired",
       "empty": "No invitations found.",
       "create": "Create invitation",
-      "revoke": "Revoke",
+      "revoke": "Revoke…",
       "revokeTitle": "Revoke this invitation?",
       "revokeConfirm": "Revoke invitation",
       "revokeDescription": "This invitation will no longer be usable. This action cannot be undone.",
@@ -470,7 +480,7 @@
     },
     "claims": {
       "title": "Claims",
-      "id": "ID",
+      "id": "Claim",
       "status": {
         "label": "Status",
         "help": "Whether this deployment collects the claim. A disabled one is never stored, even where a client or a provider offers a value, and what was collected before it was turned off stays until an operator clears it. Every claim the OpenID Connect specification defines ships disabled."
@@ -503,14 +513,12 @@
     },
     "grants": {
       "title": "Grants",
+      "grant": "Grant",
       "status": "Status",
       "user": "User",
       "client": "Client",
       "audience": "Audience",
-      "grantType": "Grant type",
       "createdAt": "Created at",
-      "actions": "Actions",
-      "view": "View",
       "search": "Search by user, client or audience",
       "empty": "No grants found."
     },
@@ -570,12 +578,11 @@
     },
     "sessions": {
       "title": "Sessions",
+      "session": "Session",
       "status": "Status",
       "user": "User",
       "client": "Client",
       "started": "Started",
-      "actions": "Actions",
-      "view": "View",
       "signingUp": "Signing up",
       "search": "Search by IP, user agent or client",
       "empty": "No interactive flow session is in flight. This is a live view rather than a history — expired sessions are collected every fifteen minutes, so a session that has finished may already be gone."
@@ -600,8 +607,8 @@
       "helpLinkText": "claims documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
       "claim": "Claim",
+      "notCollected": "not collected",
       "value": "Value",
-      "tags": "Tags",
       "collectedAt": "Collected at",
       "verifiedAt": "Verified at",
       "empty": "No claims found.",
@@ -628,7 +635,7 @@
       "empty": "No active consents.",
       "consentedAt": "Consented at",
       "actions": "Actions",
-      "revoke": "Revoke",
+      "revoke": "Revoke…",
       "revokeTitle": "Revoke this consent?",
       "revokeDescription": "The person is asked to agree again the next time a client of this audience needs one of these scopes.",
       "revokeConfirm": "Revoke consent",
@@ -651,7 +658,7 @@
       "revokeConfirm": "Revoke MFA method",
       "revokeDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
       "actions": "Actions",
-      "revoke": "Revoke"
+      "revoke": "Revoke…"
     },
     "userProviders": {
       "title": "Provider links",
@@ -664,7 +671,7 @@
         "help": "The identifier the provider itself issued for this person, which this account is linked to. It is the provider's own string and names nothing on this server."
       },
       "linkedAt": "Linked at",
-      "unlink": "Unlink",
+      "unlink": "Unlink…",
       "empty": "No provider links found.",
       "unlinkTitle": "Unlink this provider?",
       "unlinkConfirm": "Unlink provider",

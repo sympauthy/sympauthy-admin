@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PlusIcon } from '@heroicons/vue/20/solid'
 import { InvitationApi } from '../api/InvitationApi'
@@ -15,7 +15,7 @@ import {
   SaTableHeader,
   SaTag
 } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip } from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, CommonButton, DocHelpTooltip } from '@/shared/ui'
 import CreateInvitationDialog from './CreateInvitationDialog.vue'
 import { formatDate } from '@/shared/lib'
 
@@ -29,6 +29,15 @@ const invitations = useCollection<InvitationResource, InvitationListResource>({
 })
 
 const showCreateDialog = ref(false)
+const actions = computed<ActionItem[]>(() => [
+  {
+    key: 'revoke',
+    label: t('pages.invitations.revoke'),
+    danger: true,
+    requiredScopes: ['admin:invitations:write']
+  }
+])
+
 const revokeInvitationId = ref<string | null>(null)
 const revokeLoading = ref(false)
 const revokeError = ref<string | null>(null)
@@ -99,6 +108,10 @@ onMounted(async () => {
 
   <CollectionPage :collection="invitations" :search-placeholder="t('pages.invitations.search')">
     <template #header>
+      <SaTableHeader>
+        {{ t('pages.invitations.tokenPrefix.label') }}
+        <DocHelpTooltip term="pages.invitations.tokenPrefix" />
+      </SaTableHeader>
       <CollectionSortHeader
         fit
         :collection="invitations"
@@ -109,10 +122,6 @@ onMounted(async () => {
           <DocHelpTooltip term="pages.invitations.status" />
         </template>
       </CollectionSortHeader>
-      <SaTableHeader>
-        {{ t('pages.invitations.tokenPrefix.label') }}
-        <DocHelpTooltip term="pages.invitations.tokenPrefix" />
-      </SaTableHeader>
       <CollectionSortHeader
         :collection="invitations"
         :label="t('pages.invitations.audience')"
@@ -130,20 +139,22 @@ onMounted(async () => {
         :label="t('pages.invitations.expiresAt')"
         field="expires_at"
       />
-      <SaTableHeader fit>{{ t('pages.invitations.actions') }}</SaTableHeader>
+      <SaTableHeader fit>
+        <span class="sr-only">{{ t('pages.invitations.actions') }}</span>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="invitation in invitations.items" :key="invitation.invitation_id">
-        <SaTableCell :label="t('pages.invitations.status.label')" fit>
+        <SaTableCell primary truncate mono>
+          {{ invitation.token_prefix }}<span class="text-gray-400">…</span>
+        </SaTableCell>
+        <SaTableCell :label="t('pages.invitations.status.label')" label-hidden fit>
           <SaTag :color="statusColor(invitation.status)">
             {{ t(`pages.invitations.${invitation.status}`) }}
           </SaTag>
         </SaTableCell>
-        <SaTableCell primary mono>
-          {{ invitation.token_prefix }}
-        </SaTableCell>
-        <SaTableCell :label="t('pages.invitations.audience')" truncate>
+        <SaTableCell :label="t('pages.invitations.audience')" truncate mono>
           {{ invitation.audience_id }}
         </SaTableCell>
         <SaTableCell :label="t('pages.invitations.note')" truncate hidden-below="sm">
@@ -156,13 +167,12 @@ onMounted(async () => {
         </SaTableCell>
         <!-- Only a pending invitation can be revoked. Another keeps the height the button would give
              its row, so rows stay one height, and has no empty line to draw below `sm:`. -->
-        <SaTableCell fit :hidden-below="invitation.status === 'pending' ? undefined : 'sm'">
-          <CommonButton
+        <SaTableCell actions :hidden-below="invitation.status === 'pending' ? undefined : 'sm'">
+          <ActionsDropdown
             v-if="invitation.status === 'pending'"
-            variant="secondary"
-            :label="t('pages.invitations.revoke')"
-            :required-scopes="['admin:invitations:write']"
-            @click="onRevoke(invitation.invitation_id)"
+            :record="invitation.token_prefix"
+            :actions="actions"
+            @action="onRevoke(invitation.invitation_id)"
           />
           <div v-else class="min-h-control" />
         </SaTableCell>
