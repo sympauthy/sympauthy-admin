@@ -15,10 +15,13 @@
 
 /**
  * A row's action button, which the package's menu draws as any secondary button, with no state for
- * being open. Outside every layer, to reach the utilities that button is drawn with.
+ * being open. Outside every layer, to reach the utilities that button is drawn with. Below `sm:` it
+ * is the menu's mark, with no fill of its own.
  */
-.sa-cell-actions [aria-haspopup='menu'] {
-  @apply bg-gray-50 hover:bg-gray-100;
+@media (width >= theme(--breakpoint-sm)) {
+  .sa-cell-actions [aria-haspopup='menu'] {
+    @apply bg-gray-50 hover:bg-gray-100;
+  }
 }
 
 .sa-cell-actions [aria-haspopup='menu'][aria-expanded='true'] {

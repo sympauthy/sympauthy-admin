@@ -68,8 +68,14 @@ same, since every entry the shell would draw would be disabled.
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.
 
-**A record's route carries the breadcrumb for every tab under it**, and redirects to the first tab
-every one of its records has, so the URL always names a view.
+**A record's route carries the breadcrumb for every tab under it.** Landing on a record with views
+opens the first one every one of its records has from `sm:`, so that the URL names a view, and lists
+them on a phone.
+
+**A view's route names itself in `meta.view`**, with the record's route it goes back to. A phone opens
+a view as a screen of its own, so `BreadcrumbNav` adds it as the last item there. From `sm:` the bar
+names the record, and the view is a tab. What a screen's ancestors draw at each width is [the design
+system's Navigation foundation](https://sympauthy.github.io/sympauthy-design/foundations/navigation).
 
 ## Page actions
 
@@ -77,9 +83,11 @@ every one of its records has, so the URL always names a view.
 the screen, so it sits in one position on every screen and does not move when a filter appears
 under it. Nothing else a screen writes goes in that bar.
 
-**An action leaves the screen's name room at 360px.** The bar's row holds the control opening the
-drawer, the name and the actions, and the name is what truncates. A label that leaves it no room is
-passed `collapseLabel` and an `icon`.
+**Below `sm:` a screen's actions are always a `⋯` mark with no border, even for a single action.**
+The bar's row holds the control opening the drawer, the name and the mark, and the name is what
+truncates, so that a phone finds what it can do in the same place and the same shape on every screen.
+`ActionsDropdown` draws the mark, and a screen with one action passes the button a wider screen
+shows in its `#expanded` slot.
 
 **A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has
 one or two — open a create dialog, re-read a live list — and a record has a set, read together.
@@ -87,7 +95,9 @@ one or two — open a create dialog, re-read a live list — and a record has a 
 **A record's action stays with the record, even where it fills a tab below it.** Enrolling a factor
 and linking a provider each create a record in a tab under the account, and are listed beside
 forcing a logout all the same: an action an operator has to open a tab to find is one they have to
-know about first. **A tab adds nothing to the bar** — one screen, one set of actions.
+know about first. **A tab adds nothing to the bar** — one screen, one set of actions. The one
+exception is a phone's link to the open view's help, first in the record's menu, since a phone has
+no tab to draw it beside.
 
 **A record's action names the scopes its call is made under**, and the menu draws it disabled
 where the token lacks one, in the order [menus](#menus) sets — [authentication](authentication.md#what-the-token-granted) owns the
@@ -221,6 +231,10 @@ claim's verification — carries the green check beside it.
 filling what is left.** Its root is `flex h-full min-h-0 flex-col`, so the tab below the strip gets
 a height and its table scrolls rather than the page.
 
+**Below `sm:` a record with views opens on its summary and a `SaRecordViews`,** and each view fills a
+screen of its own with neither the summary nor a strip above it. There is no room for the three
+together on a phone, and a view is read longer than the summary is.
+
 **A record's page renders loading, error and content, and resets its store in `onMounted` before
 fetching.** The wait is a `SaLoadingState` and the failure a `SaAlert`. It re-reads the record
 when the identifier changes and not when the tab does.
@@ -276,8 +290,9 @@ exception is `RecordTabs`, which scrolls its strip because dropping a tab would 
 closes it on navigation; `SaAppShell` draws the backdrop, puts the control opening the drawer in the
 bar, and sizes the `SaSidebar` that `SidebarNav` hands it.
 
-**Below `sm:` the breadcrumb names the screen alone.** Its ancestors and chevrons drop out, and the
-way back is the drawer. The last item is the page's `h1` at every width.
+**Below `sm:` the control opening the drawer is only on a screen with no ancestors.** A screen with
+ancestors has a link back to the nearest in its place, and names it over its own name. The last item
+is the page's `h1` at every width.
 
 **Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `SaCard` steps its own from
 `p-4` to `sm:p-6`. [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)

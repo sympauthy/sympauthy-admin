@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useIsPhone } from '@/shared/lib'
 import { AudiencesPage } from '@/pages/audiences'
 import { InvitationsPage } from '@/pages/invitations'
 import { ClientsPage } from '@/pages/clients/list'
@@ -9,7 +10,7 @@ import { UsersPage } from '@/pages/users/list'
 import { SessionsPage } from '@/pages/sessions/list'
 import { GrantsPage } from '@/pages/grants/list'
 import { GrantDetailPage } from '@/pages/grants/detail'
-import { UserDetailPage } from '@/pages/users/detail'
+import { UserDetailPage, UserViewsPage } from '@/pages/users/detail'
 import { UserClaimsPage } from '@/pages/users/claims'
 import { UserConsentsPage } from '@/pages/users/consents'
 import { UserMfaPage } from '@/pages/users/mfa'
@@ -37,6 +38,14 @@ declare module 'vue-router' {
     breadcrumb?: {
       label: string
       parent?: string
+    }
+    /**
+     * Names a view of a record, which a phone opens as a screen of its own and a wider screen draws
+     * as a tab. `record` is the route it goes back to.
+     */
+    view?: {
+      label: string
+      record: string
     }
   }
 }
@@ -78,13 +87,12 @@ export function makeRouter() {
         }
       },
       {
-        // The record's shell. Each of its collections is a tab, and each tab is a route, so the
-        // view an operator is on is addressable. Landing on the record itself opens the first of
-        // them, which keeps `router.push({ name: 'userDetail' })` working from the list.
+        // The record's shell. Each of its collections is a view, and each view is a route, so the
+        // one an operator is on is addressable. Landing on the record itself lists them on a phone
+        // and opens the first of them on a wider screen, which keeps
+        // `router.push({ name: 'userDetail' })` working from the list.
         path: '/users/:userId',
-        name: 'userDetail',
         component: UserDetailPage,
-        redirect: { name: 'userClaims' },
         meta: {
           requiresAuth: true,
           requiredScopes: ['admin:users:read'],
@@ -92,13 +100,23 @@ export function makeRouter() {
         },
         children: [
           {
+            path: '',
+            name: 'userDetail',
+            component: UserViewsPage,
+            meta: { requiresAuth: true },
+            beforeEnter: (to) => useIsPhone().value || { name: 'userClaims', params: to.params }
+          },
+          {
             path: 'claims',
             name: 'userClaims',
             component: UserClaimsPage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.userClaims.title', record: 'userDetail' }
+            }
           },
           {
-            // The one tab of the record whose collection is not read under `admin:users:read`:
+            // The one view of the record whose collection is not read under `admin:users:read`:
             // consents come from the consent surface, and an operator can hold one scope and not
             // the other.
             path: 'consents',
@@ -106,20 +124,27 @@ export function makeRouter() {
             component: UserConsentsPage,
             meta: {
               requiresAuth: true,
-              requiredScopes: ['admin:users:read', 'admin:consent:read']
+              requiredScopes: ['admin:users:read', 'admin:consent:read'],
+              view: { label: 'pages.userConsents.title', record: 'userDetail' }
             }
           },
           {
             path: 'mfa',
             name: 'userMfa',
             component: UserMfaPage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.userMfa.title', record: 'userDetail' }
+            }
           },
           {
             path: 'providers',
             name: 'userProviders',
             component: UserProvidersPage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.userProviders.title', record: 'userDetail' }
+            }
           }
         ]
       },

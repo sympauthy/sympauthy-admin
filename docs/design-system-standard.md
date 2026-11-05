@@ -102,7 +102,8 @@ moving the tag, since it does not watch `node_modules`.
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
 | `TableRecord` | the name of a record with a screen of its own, in a `primary` cell |
 | `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` |
-| `RecordTabs` | the views one record is read through |
+| `RecordTabs` | the views one record is read through, from `sm:` |
+| `SaRecordViews` | the views one record is read through, on a phone |
 | `SaDialog` | the shell of any dialog |
 | `SaConfirmDialog` | a destructive action's confirmation |
 | `SaAppShell`, `SaSidebar`, `SaSidebarAccount`, `SaBreadcrumb` | the frame, which only `app/layout` draws |

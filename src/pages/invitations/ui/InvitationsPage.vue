@@ -29,6 +29,14 @@ const invitations = useCollection<InvitationResource, InvitationListResource>({
 })
 
 const showCreateDialog = ref(false)
+const pageActions = computed<ActionItem[]>(() => [
+  {
+    key: 'create',
+    label: t('pages.invitations.create'),
+    icon: PlusIcon,
+    requiredScopes: ['admin:invitations:write']
+  }
+])
 const actions = computed<ActionItem[]>(() => [
   {
     key: 'revoke',
@@ -97,13 +105,17 @@ onMounted(async () => {
 
 <template>
   <SaPageActions>
-    <CommonButton
-      variant="primary"
-      :label="t('pages.invitations.create')"
-      :icon="PlusIcon"
-      :required-scopes="['admin:invitations:write']"
-      @click="showCreateDialog = true"
-    />
+    <ActionsDropdown :actions="pageActions" @action="showCreateDialog = true">
+      <template #expanded>
+        <CommonButton
+          variant="primary"
+          :label="t('pages.invitations.create')"
+          :icon="PlusIcon"
+          :required-scopes="['admin:invitations:write']"
+          @click="showCreateDialog = true"
+        />
+      </template>
+    </ActionsDropdown>
   </SaPageActions>
 
   <CollectionPage :collection="invitations" :search-placeholder="t('pages.invitations.search')">

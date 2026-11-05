@@ -2,13 +2,14 @@
 import { computed } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useBreadcrumb } from '@/shared/lib'
+import { useBreadcrumb, useIsPhone } from '@/shared/lib'
 import { SaBreadcrumb, type SaBreadcrumbItem } from '@sympauthy/design'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const { dynamicLabel } = useBreadcrumb()
+const isPhone = useIsPhone()
 
 const breadcrumbs = computed<SaBreadcrumbItem[]>(() => {
   const items: SaBreadcrumbItem[] = []
@@ -43,10 +44,21 @@ const breadcrumbs = computed<SaBreadcrumbItem[]>(() => {
 
   // Add current page (no link)
   if (currentMeta) {
-    items.push({
-      key: String(route.name),
-      label: dynamicLabel.value ?? t(currentMeta.label)
-    })
+    const label = dynamicLabel.value ?? t(currentMeta.label)
+    const view = route.meta.view
+
+    // A wider screen draws the view as a tab under the record, which stays what the bar names. A
+    // phone opens it as a screen of its own, under the record.
+    if (view && isPhone.value) {
+      items.push({
+        key: view.record,
+        label,
+        link: { to: { name: view.record, params: route.params } }
+      })
+      items.push({ key: String(route.name), label: t(view.label) })
+    } else {
+      items.push({ key: String(route.name), label })
+    }
   }
 
   return items
@@ -54,5 +66,10 @@ const breadcrumbs = computed<SaBreadcrumbItem[]>(() => {
 </script>
 
 <template>
-  <SaBreadcrumb :items="breadcrumbs" :label="t('nav.breadcrumb')" :link-as="RouterLink" />
+  <SaBreadcrumb
+    :items="breadcrumbs"
+    :label="t('nav.breadcrumb')"
+    :link-as="RouterLink"
+    :back-label="(name) => t('nav.backTo', { name })"
+  />
 </template>
