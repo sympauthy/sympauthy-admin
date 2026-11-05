@@ -53,7 +53,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="audience in audiences.items" :key="audience.audience_id">
-        <SaTableCell primary fit>
+        <SaTableCell primary mono>
           {{ audience.audience_id }}
         </SaTableCell>
         <SaTableCell :label="t('terms.audience.registrationMode.label')" fit hidden-below="sm">

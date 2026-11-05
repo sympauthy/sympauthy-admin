@@ -10,7 +10,7 @@ import {
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip } from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -24,6 +24,15 @@ const providerLinks = useCollection<UserProviderLinkResource, UserProviderLinkLi
   page: (params) => api.listProviderLinks(userId.value, params),
   items: (content) => content.providers
 })
+
+const actions = computed<ActionItem[]>(() => [
+  {
+    key: 'unlink',
+    label: t('pages.userProviders.unlink'),
+    danger: true,
+    requiredScopes: ['admin:users:write']
+  }
+])
 
 const unlinkTargetProviderId = ref<string | null>(null)
 
@@ -54,7 +63,6 @@ onMounted(async () => {
   <CollectionPage :collection="providerLinks" :search-placeholder="t('pages.userProviders.search')">
     <template #header>
       <CollectionSortHeader
-        fit
         :collection="providerLinks"
         :label="t('pages.userProviders.provider')"
         field="provider_id"
@@ -70,26 +78,27 @@ onMounted(async () => {
         :label="t('pages.userProviders.linkedAt')"
         field="link_date"
       />
-      <SaTableHeader fit>{{ t('pages.userProviders.actions') }}</SaTableHeader>
+      <SaTableHeader fit>
+        <span class="sr-only">{{ t('pages.userProviders.actions') }}</span>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="link in providerLinks.items" :key="link.provider_id">
-        <SaTableCell primary fit>
+        <SaTableCell primary truncate mono>
           {{ link.provider_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.userProviders.subject.label')" truncate>
+        <SaTableCell :label="t('pages.userProviders.subject.label')" truncate mono>
           {{ link.subject }}
         </SaTableCell>
         <SaTableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">
           {{ formatDate(link.linked_at) }}
         </SaTableCell>
-        <SaTableCell fit>
-          <CommonButton
-            variant="secondary"
-            :label="t('pages.userProviders.unlink')"
-            :required-scopes="['admin:users:write']"
-            @click="unlinkTargetProviderId = link.provider_id"
+        <SaTableCell actions>
+          <ActionsDropdown
+            :record="link.provider_id"
+            :actions="actions"
+            @action="unlinkTargetProviderId = link.provider_id"
           />
         </SaTableCell>
       </tr>

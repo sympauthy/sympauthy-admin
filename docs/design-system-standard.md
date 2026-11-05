@@ -72,7 +72,7 @@ moving the tag, since it does not watch `node_modules`.
 | Component | Use it for |
 | --- | --- |
 | `CommonButton` | every [button](#buttons) |
-| `ActionsDropdown` | the actions of one record or one page |
+| `ActionsDropdown` | the actions of one record or one page, and of one row when passed `record` |
 | `SaSpinner` | a request in flight |
 | `SaLoadingState` | the wait a screen shows while it fetches |
 | `SaAlert` | a failure a screen keeps showing, or a `warning` for what is missing from one |
@@ -100,6 +100,7 @@ moving the tag, since it does not watch `node_modules`.
 | `SaPageActions` | what the screen lets an operator do, drawn in the bar naming it |
 | `SaDefinitionList`, `SaDefinitionRow` | the fields of a record, inside a section |
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
+| `TableRecord` | the name of a record with a screen of its own, in a `primary` cell |
 | `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` |
 | `RecordTabs` | the views one record is read through |
 | `SaDialog` | the shell of any dialog |
@@ -112,7 +113,7 @@ that entity's `ui/` segment — `ClaimTags`, `ClaimKindTag` — so every page dr
 way.
 
 **A component belonging to one action stays with that action**, and this table does not list it.
-`CollectionPage` and the toolbar, the filters and the sort headers under it sit in
+`CollectionPage` and the sort headers under it sit in
 [`features/browse-collection`](../src/features/browse-collection) beside the state they draw,
 governed by [the collection standard](collection-standard.md).
 
@@ -143,7 +144,7 @@ the panel shell, which has no bar to be named in, titles itself in `panel-screen
 
 **A control the kit does not draw is `.sa-control`.** It adds `.sa-control-focus`, or
 `.sa-control-focus-within` where it is made of more than one focusable part, and `.sa-control-field`
-where it takes typed text. A collection's filter is the case to copy.
+where it takes typed text.
 
 **What the panel draws itself and a person presses is at least `control-height`.** A link inside a
 sentence is the one exception, as [Control
@@ -156,28 +157,40 @@ height](https://sympauthy.github.io/sympauthy-design/foundations/control-height)
 `requiredScopes`, which draws it refused and names what the token lacks.
 
 **`variant="danger"` appears inside a `SaConfirmDialog` only.** What opens that confirmation is
-`variant="secondary"`, in a table row as anywhere else.
+`variant="secondary"`, or a `danger` item of an `ActionsDropdown`.
 
 **A destructive action is confirmed by a `SaConfirmDialog`** before it reaches the API.
 
 **`variant="primary"` is the one action a collection's toolbar or a dialog exists for.** Everything
 beside it is `variant="secondary"`, so a filled button is never repeated down a table.
 
-**A button inside a table row keeps its label at every supported width.** Below `sm:` that row is a
-card, which has the width the label needs. A control of a toolbar is passed `collapseLabel` and an
-`icon`, since a toolbar is one row of controls whatever the width.
+**A table row holds no button.** What can be done to it is a menu drawn as its mark, and the way into
+it is its name, as [the page layout standard](page-layout-standard.md#table-rows) has it. A control
+of a toolbar is passed `collapseLabel` and an `icon`.
 
 **A menu is an `ActionsDropdown`, and never a `SaMenu`.** It adds `requiredScopes` to each item, and
 what those scopes do is [Authentication's](authentication.md#what-the-token-granted).
+
+**A row's action button takes these states, from [the global
+stylesheet](../src/app/styles/style.css).** It is lighter at rest than a toolbar's, since it repeats
+down a column, and no page writes them.
+
+| State | Fill | Border |
+| --- | --- | --- |
+| at rest | `gray-50` | `gray-200` |
+| under the pointer | `gray-100` | `gray-200` |
+| its menu open | `gray-100` | `gray-400` |
+
+**The row holds `gray-50` while its menu is open.** An open menu takes the pointer from the page, so
+the row's own hover cannot say which record the menu acts on.
 
 ## Overlays
 
 **A dialog is built on `SaDialog`, and a destructive action's question on `SaConfirmDialog`.**
 `SaTooltipProvider` goes once, at the root in `App.vue`, and every `SaTooltip` reads it.
 
-**An overlay the kit cannot draw wraps a [reka-ui](https://reka-ui.com) primitive directly.** A
-collection's filter and its field list do, since each places itself and moves the focus in ways
-`SaPopover` does not offer. Never hand-roll a click-outside, an Escape handler or focus management.
+**An overlay the kit cannot draw wraps a [reka-ui](https://reka-ui.com) primitive directly.** Never
+hand-roll a click-outside, an Escape handler or focus management.
 
 **That overlay is drawn from the design system's classes:** `.sa-popover` or `.sa-menu` for its box,
 `.sa-menu-item` for a line of it, and `.sa-overlay-animated` for its motion.

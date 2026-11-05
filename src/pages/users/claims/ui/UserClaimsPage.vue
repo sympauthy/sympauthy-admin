@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { CheckCircleIcon } from '@heroicons/vue/20/solid'
 import {
   UserApi,
   userClaimValueLabel,
@@ -10,7 +11,7 @@ import {
 } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { SaEmptyValue, SaTableCell, SaTag } from '@sympauthy/design'
 import { OriginTag } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -38,7 +39,6 @@ onMounted(async () => {
   <CollectionPage :collection="claims" :search-placeholder="t('pages.userClaims.search')">
     <template #header>
       <CollectionSortHeader
-        fit
         :collection="claims"
         :label="t('pages.userClaims.claim')"
         field="claim_id"
@@ -54,7 +54,6 @@ onMounted(async () => {
         :label="t('terms.origin.label')"
         field="origin"
       />
-      <SaTableHeader fit>{{ t('pages.userClaims.tags') }}</SaTableHeader>
       <CollectionSortHeader
         fit
         :collection="claims"
@@ -71,25 +70,31 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="claim in claims.items" :key="claim.claim_id">
-        <SaTableCell primary fit>
-          {{ claim.claim_id }}
+        <SaTableCell primary truncate>
+          <div class="flex flex-wrap items-center gap-2">
+            {{ claim.claim_id }}
+            <ClaimTags :required="claim.required" :identifier="claim.identifier" />
+          </div>
         </SaTableCell>
         <SaTableCell :label="t('pages.userClaims.value')" truncate>
           <span v-if="claim.value != null">{{ userClaimValueLabel(claim) }}</span>
-          <SaEmptyValue v-else />
+          <span v-else class="inline-flex items-center gap-2">
+            <SaEmptyValue />
+            <SaTag color="yellow">{{ t('pages.userClaims.notCollected') }}</SaTag>
+          </span>
         </SaTableCell>
         <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="claim.origin" />
-        </SaTableCell>
-        <SaTableCell :label="t('pages.userClaims.tags')" fit>
-          <ClaimTags :required="claim.required" :identifier="claim.identifier" />
         </SaTableCell>
         <SaTableCell :label="t('pages.userClaims.collectedAt')" fit>
           <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
           <SaEmptyValue v-else />
         </SaTableCell>
         <SaTableCell :label="t('pages.userClaims.verifiedAt')" fit>
-          <span v-if="claim.verified_at">{{ formatDate(claim.verified_at) }}</span>
+          <span v-if="claim.verified_at" class="inline-flex items-center gap-1">
+            <CheckCircleIcon class="size-4 text-tag-green" />
+            {{ formatDate(claim.verified_at) }}
+          </span>
           <SaEmptyValue v-else />
         </SaTableCell>
       </tr>

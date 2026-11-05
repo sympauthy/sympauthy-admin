@@ -1,20 +1,17 @@
 <script lang="ts" setup>
 import { computed, useSlots } from 'vue'
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
+import { useI18n } from 'vue-i18n'
 import { SaTableHeader } from '@sympauthy/design'
 import type { Collection } from '../model/useCollection'
 
 /**
- * A column header, which the caller can order the collection on where the collection says it orders
- * on that field.
+ * A column header of a collection, which orders it where the collection says it orders on that field
+ * and says so where a filter narrows it.
  *
  * Whether the column is sortable is read from the capability document rather than passed in, so a
- * page hands every column through here and the ones the server cannot order on simply do not
- * respond to a click. The label stays the page's own string: the document names a filter and a sort
- * key, not a column.
- *
- * The term a column is read under is the page's to explain, so a `SaPopover` goes in the `help`
- * slot rather than beside the header, which would put the explanation outside the box that sorts.
+ * page hands every column through here and the ones the server cannot order on draw as a plain
+ * header. The label stays the page's own string: the document names a filter and a sort key, not a
+ * column.
  */
 const props = withDefaults(
   defineProps<{
@@ -33,41 +30,24 @@ const props = withDefaults(
 )
 
 const slots = useSlots()
+const { t } = useI18n()
 
-const sortable = computed(() => props.collection.sortsOn(props.field))
-
-// The arrow follows the order the collection actually reads in, which is the collection's own until
-// the caller names a key — so the column a list arrives sorted on says so before anything is
-// clicked.
-const key = computed(() => props.collection.sortKeys.find((sort) => sort.field === props.field))
-
-function onClick() {
-  if (sortable.value) {
-    props.collection.toggleSort(props.field)
-  }
-}
+const filteredLabel = computed(() =>
+  props.collection.filters.isFiltered(props.field) ? t('common.collection.filtered') : undefined
+)
 </script>
 
 <template>
   <SaTableHeader
     :fit="props.fit"
     :hidden-below="props.hiddenBelow"
-    :class="sortable ? 'h-control cursor-pointer select-none hover:bg-gray-100' : ''"
-    :aria-sort="key ? (key.descending ? 'descending' : 'ascending') : undefined"
-    @click="onClick"
+    :sorting="props.collection.sort"
+    :field="props.field"
+    :filtered-label="filteredLabel"
   >
-    <span class="inline-flex items-center gap-1">
-      {{ props.label }}
-      <!-- The help is a control of its own inside a header that reorders the list when it is
-           clicked, so its click stops here: asking what a column means is not asking for another
-           order. -->
-      <span v-if="slots.help" @click.stop>
-        <slot name="help" />
-      </span>
-      <!-- An icon matches the text it sits in, and a column's label is the one `text-xs` on a
-           screen. -->
-      <ChevronUpIcon v-if="key && !key.descending" class="size-3" />
-      <ChevronDownIcon v-else-if="key" class="size-3" />
-    </span>
+    {{ props.label }}
+    <template v-if="slots.help" #help>
+      <slot name="help" />
+    </template>
   </SaTableHeader>
 </template>

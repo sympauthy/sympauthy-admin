@@ -131,8 +131,8 @@ and emits `page-size-change`; the collection answers by refetching at the new si
 
 **The `empty` slot is a sentence from the bundle**, not a blank table.
 
-**Below `sm:` the table is drawn as a card per record**, by `SaTable`, from the same `#header`
-and `#rows` a wider screen reads. A page describes its records once; it does not write a phone
+**Below `sm:` each record is laid out down rather than across**, by `SaTable`, from the same
+`#header` and `#rows` a wider screen reads. A page describes its records once; it does not write a phone
 layout of its own, and a column added to it reaches the phone with it.
 
 ## Table columns
@@ -146,15 +146,20 @@ says which step each takes, and the component takes it.
 
 | Kind of column | Props on the header | Props on the cell |
 | --- | --- | --- |
-| status, date, actions | `fit` | `fit` |
+| status, date | `fit` | `fit` |
 | name, identifier, value | none | `truncate` |
-| the column identifying the record | — | `primary` |
+| the column identifying the record | none | `primary` |
+| a row's actions | `fit` | `actions` |
 | an address, a token, a key | — | `mono` |
 | secondary, dropped on a phone | `hidden-below="sm"` | `hidden-below="sm"` |
 | secondary, dropped below a desktop | `hidden-below="lg"` | `hidden-below="lg"` |
 
 **A `fit` column takes only the space its content needs, and a column without it takes the rest.**
 That is the whole sizing model.
+
+**A `primary` cell is also `truncate` where a column beside it is.** A truncated column is capped, so
+an uncapped one takes everything the table has left and cuts its neighbours down to their headers,
+with the room they needed standing empty. Capped alike, they share it.
 
 **Never write a fixed width.** `w-[100px]` and `w-[10%]` hold at one breakpoint and break at the
 next, and `SaTable` keeps `table-layout: auto` for that reason.
@@ -165,9 +170,50 @@ did not fill read alike; a dash does not.
 **A cell's `hidden-below` matches its header's.** They are two components and one column, and a
 column dropped on a phone stays dropped once the row is a card.
 
-**Every cell carries its column's name as `label`,** which is what the card shows above the value.
-The two that do not are the `primary` cell, which is the card's title, and the cell holding the
-row's actions.
+**Every cell carries its column's name as `label`,** which a phone shows beside the value. The two
+that do not are the `primary` cell, which names the record, and the cell holding the row's actions. A
+status is `label-hidden`, since the word reads without it.
+
+## Table rows
+
+**A row reads in one order: what the record is, what state it is in, what else is known of it, what
+can be done to it.** The `primary` column comes first and is never a status, the status follows it,
+and the actions close the row. Scopes keep their status last, after the claims they publish, which
+are what that list is read for.
+
+**A record with a screen of its own is named by a `TableRecord`,** whose link is the way into it, so
+a row carries no *View* button beside it. Its `detail` is the identifier under the name, where the
+name is not already that identifier.
+
+**A record with no screen is named by its value alone,** and `mono` where that is an identifier.
+
+**A record is named by what an operator would call it.** An account by its first identifier, a
+session by its purpose and a grant by its type, each with its identifier under it. A row of identifiers
+alone has nothing to tell apart at a glance.
+
+**What can be done to a row is an `ActionsDropdown` passed `record`,** in an `actions` cell. The
+button is its mark alone and named after the record, the column's name is `sr-only`, and [the design
+system standard](design-system-standard.md#buttons) gives its states.
+
+**An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
+it.**
+
+**A row with nothing to offer holds the height of the button,** so rows stay one height.
+
+**Below `sm:` a row's action button stands beside the record, from [the global
+stylesheet](../src/app/styles/style.css), rather than on its first line.** In the line, its height
+would float the name away from the values it belongs with.
+
+**An identifier in any column is `mono`:** a client, an audience, a subject, an address. A value
+naming a record the configuration may no longer declare stays plain text rather than a link, since a
+link landing on an error page is worse than no link.
+
+**A set of values wraps as tags,** one `SaTag` each, rather than a list joined by commas: the claims
+of a scope, the scopes of a consent. A row may be taller for it.
+
+**A value the record has not collected says so,** with a `yellow` tag beside its dash, since a claim
+missing and a claim empty are different things to an operator. A date that proves something — a
+claim's verification — carries the green check beside it.
 
 ## Record pages
 
@@ -237,8 +283,9 @@ way back is the drawer. The last item is the page's `h1` at every width.
 `p-4` to `sm:p-6`. [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
 holds the whole scale.
 
-**A toolbar is one row at every width.** Its controls give up their labels rather than their
-place — a second row costs the list below it a record, and the field beside them still reads.
+**A toolbar is what [Table](https://sympauthy.github.io/sympauthy-design/components/table) lays it
+out as:** one row from `sm:`, and below it the search field on the first line with the controls
+sharing the next.
 
 **A pagination bar is one row too.** Below `sm:` it drops the range it reads and centres the pager,
 which already says which page of how many; a phone is not told the same thing twice at the price of

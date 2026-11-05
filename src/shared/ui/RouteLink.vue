@@ -21,9 +21,12 @@ const props = withDefaults(
      * around an inline link. It takes the height itself instead, and the ellipsis with it.
      */
     block?: boolean
+    /** For a caller drawing the target itself, which any height taken here would only open up. */
+    bare?: boolean
   }>(),
   {
-    block: false
+    block: false,
+    bare: false
   }
 )
 
@@ -33,11 +36,14 @@ const hint = computed(() => missingScopesHint(missingScopes(props.to.name, props
 
 // Padding on an inline box is a target that opens up no line, so a link keeps to the value around it.
 // A block one lines up with its neighbours: a cell centres them, and a field starts them at the top.
-const targetClasses = computed(() =>
-  props.block
+const targetClasses = computed(() => {
+  if (props.bare) {
+    return ''
+  }
+  return props.block
     ? 'block min-h-control w-fit max-w-full overflow-hidden text-ellipsis in-[td]:content-center'
     : 'py-3.5'
-)
+})
 </script>
 
 <template>

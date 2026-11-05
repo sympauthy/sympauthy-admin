@@ -1,5 +1,12 @@
 import { computed, reactive, ref, type Ref } from 'vue'
 import {
+  saFilterKnownFields,
+  useSaFilters,
+  useSaSort,
+  type SaFilters,
+  type SaSort
+} from '@sympauthy/design'
+import {
   getErrorMessage,
   isSuccess,
   type CollectionCapabilitiesResource,
@@ -7,17 +14,7 @@ import {
   type ErrorApiResponse,
   type SuccessApiResponse
 } from '@/shared/api'
-import { knownCollectionFilters, type CollectionFilter } from './CollectionFilter'
-import {
-  collectionQueryParams,
-  effectiveSortKeys,
-  emptyCollectionCriteria,
-  isCriterionComplete,
-  type CollectionCriteria,
-  type CollectionCriterion,
-  type CollectionSortKey
-} from './CollectionCriteria'
-import { defaultCollectionOperator } from './CollectionOperatorUtils'
+import { collectionQueryParams, collectionSortKeys } from './CollectionCriteria'
 
 /**
  * A criteria change waits this long before it is asked of the server, so that the letters of a word
@@ -66,21 +63,16 @@ export interface Collection<T> {
   capabilities: CollectionCapabilitiesResource | null
   /** Set where the document could not be read; the records are still listed without it. */
   capabilitiesError: string | null
-  criteria: CollectionCriteria
-  /** The fields the collection filters on that this panel knows how to render. */
-  readonly filters: CollectionFilter[]
+  /** The free text the collection is searched by. */
+  query: string
+  /** What narrows it, over the fields the collection filters on that the package can draw. */
+  readonly filters: SaFilters
+  /** The order it reads in, which is the collection's own where none was asked. */
+  readonly sort: SaSort
   readonly searchable: boolean
-  /** The order the collection reads in, which is the collection's own where none was asked. */
-  readonly sortKeys: CollectionSortKey[]
-  sortsOn: (field: string) => boolean
   fetch: (page?: number) => Promise<void>
   setSize: (size: number) => void
   setSearch: (query: string) => void
-  /** The id of the criterion it opened, which is how the toolbar opens the one it just added. */
-  addFilter: (field: string) => number | undefined
-  updateFilter: (id: number, patch: Partial<Omit<CollectionCriterion, 'id'>>) => void
-  removeFilter: (id: number) => void
-  toggleSort: (field: string) => void
 }
 
 /**
@@ -106,13 +98,12 @@ export function useCollection<T, R extends CollectionPageResource>(
 
   const capabilities = ref<CollectionCapabilitiesResource | null>(null)
   const capabilitiesError = ref<string | null>(null)
-  const criteria = ref<CollectionCriteria>(emptyCollectionCriteria())
+  const query = ref('')
 
   // Set once a first response has arrived. A page size change before that would request a page the
   // component is about to request anyway.
   const loaded = ref(false)
   let capabilitiesInFlight = false
-  let nextFilterId = 0
   let criteriaTimeout: ReturnType<typeof setTimeout> | undefined
   // Which page request is the current one. A response from any earlier one is dropped rather than
   // painted: two requests can be in flight — a debounced criteria change and a page click — and the
@@ -120,13 +111,19 @@ export function useCollection<T, R extends CollectionPageResource>(
   let currentRequest = 0
 
   const totalPages = computed(() => Math.max(1, Math.ceil(total.value / size.value)))
-  const filters = computed(() => knownCollectionFilters(capabilities.value))
   const searchable = computed(() => (capabilities.value?.search?.fields.length ?? 0) > 0)
-  const sortKeys = computed(() => effectiveSortKeys(criteria.value, capabilities.value))
 
-  function sortsOn(field: string): boolean {
-    return capabilities.value?.sorts.some((sort) => sort.field === field) ?? false
-  }
+  const filters = useSaFilters({
+    fields: () => saFilterKnownFields(capabilities.value?.filters ?? []),
+    onChange: refetchOnCriteriaChange
+  })
+
+  const sort = useSaSort({
+    fields: () => capabilities.value?.sorts ?? [],
+    defaultKeys: () => collectionSortKeys(capabilities.value?.default_sort),
+    // One deliberate act, so it is not delayed.
+    onChange: () => void fetch(0)
+  })
 
   /**
    * Reads the document, unless a read of it is already in flight.
@@ -164,7 +161,11 @@ export function useCollection<T, R extends CollectionPageResource>(
 
     const response = await source.page({
       ...(source.selection?.() ?? {}),
-      ...collectionQueryParams(criteria.value, requestedPage, size.value)
+      ...collectionQueryParams(
+        { filters: filters.complete, sort: sort.asked, query: query.value },
+        requestedPage,
+        size.value
+      )
     })
 
     // A later request went out while this one was travelling, so this answer is to a question
@@ -197,79 +198,9 @@ export function useCollection<T, R extends CollectionPageResource>(
     criteriaTimeout = setTimeout(() => void fetch(0), CRITERIA_DELAY_IN_MS)
   }
 
-  function setSearch(query: string) {
-    criteria.value.query = query
+  function setSearch(typed: string) {
+    query.value = typed
     refetchOnCriteriaChange()
-  }
-
-  function addFilter(field: string): number | undefined {
-    const filter = filters.value.find((candidate) => candidate.field === field)
-    if (!filter) {
-      return undefined
-    }
-    const criterion: CollectionCriterion = {
-      id: nextFilterId++,
-      field,
-      operator: defaultCollectionOperator(filter.type, filter.operators),
-      value: '',
-      values: []
-    }
-    criteria.value.filters.push(criterion)
-    // A filter the caller has just opened holds no value yet and narrows nothing — unless its
-    // operator takes none, which a field admitting `is_null` first opens on: that one is
-    // answerable the moment it is added, and waiting for an edit that may never come would leave
-    // a filter on the row that the list below it does not answer.
-    if (isCriterionComplete(criterion)) {
-      refetchOnCriteriaChange()
-    }
-    return criterion.id
-  }
-
-  function updateFilter(id: number, patch: Partial<Omit<CollectionCriterion, 'id'>>) {
-    const criterion = criteria.value.filters.find((candidate) => candidate.id === id)
-    if (!criterion) {
-      return
-    }
-    const wasComplete = isCriterionComplete(criterion)
-    Object.assign(criterion, patch)
-    // A criterion unanswerable on both sides of the patch was left out of the request before and
-    // is left out of it after, so asking again would ask what is already on screen — and would
-    // take the caller back to its first page to do it. Trying two operators before typing a value
-    // is that case, and it is the common one.
-    if (wasComplete || isCriterionComplete(criterion)) {
-      refetchOnCriteriaChange()
-    }
-  }
-
-  function removeFilter(id: number) {
-    const criterion = criteria.value.filters.find((candidate) => candidate.id === id)
-    if (!criterion) {
-      return
-    }
-    criteria.value.filters = criteria.value.filters.filter((candidate) => candidate.id !== id)
-    // One that was never answerable was never sent, and dropping it widens nothing. A filter the
-    // caller opened and left closes that way, so this is the path most removals take.
-    if (isCriterionComplete(criterion)) {
-      refetchOnCriteriaChange()
-    }
-  }
-
-  /**
-   * Reads the collection on [field], ascending, then descending, then back to the order the
-   * collection takes on its own. A header names one key at a time; the criteria hold a list because
-   * the grammar does.
-   */
-  function toggleSort(field: string) {
-    const current = criteria.value.sort
-    const only = current.length === 1 && current[0].field === field ? current[0] : undefined
-    if (!only) {
-      criteria.value.sort = [{ field, descending: false }]
-    } else if (!only.descending) {
-      criteria.value.sort = [{ field, descending: true }]
-    } else {
-      criteria.value.sort = []
-    }
-    void fetch(0)
   }
 
   // Adjusts the number of items per page. The page holding the first item currently displayed is
@@ -295,17 +226,12 @@ export function useCollection<T, R extends CollectionPageResource>(
     totalPages,
     capabilities,
     capabilitiesError,
-    criteria,
+    query,
     filters,
+    sort,
     searchable,
-    sortKeys,
-    sortsOn,
     fetch,
     setSize,
-    setSearch,
-    addFilter,
-    updateFilter,
-    removeFilter,
-    toggleSort
+    setSearch
   }) as Collection<T>
 }

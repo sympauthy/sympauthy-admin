@@ -14,7 +14,7 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "@sympauthy/design": "github:sympauthy/sympauthy-design#v0.5.0",
+    "@sympauthy/design": "github:sympauthy/sympauthy-design#v0.6.0",
     "@tailwindcss/vite": "^4.2.1",
     "ajv": "^8.12.0",
     "oidc-client-ts": "^3.4.1",

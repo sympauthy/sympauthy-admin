@@ -10,7 +10,7 @@ import {
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip } from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -24,6 +24,15 @@ const mfaMethods = useCollection<UserMfaMethodResource, UserMfaMethodListResourc
   page: (params) => api.listMfaMethods(userId.value, params),
   items: (content) => content.mfa_methods
 })
+
+const actions = computed<ActionItem[]>(() => [
+  {
+    key: 'revoke',
+    label: t('pages.userMfa.revoke'),
+    danger: true,
+    requiredScopes: ['admin:users:write']
+  }
+])
 
 const revokeTargetMfaId = ref<string | null>(null)
 
@@ -53,37 +62,34 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="mfaMethods">
     <template #header>
-      <SaTableHeader fit>
+      <SaTableHeader>
         {{ t('pages.userMfa.type.label') }}
         <DocHelpTooltip term="pages.userMfa.type" />
       </SaTableHeader>
-      <!-- The set has nothing else to say about a method, and a table of nothing but shrink-wrapped
-           columns would bunch them against the left edge. This one takes what is left. -->
-      <SaTableHeader />
       <CollectionSortHeader
         fit
         :collection="mfaMethods"
         :label="t('pages.userMfa.registeredAt')"
         field="confirmed_date"
       />
-      <SaTableHeader fit>{{ t('pages.userMfa.actions') }}</SaTableHeader>
+      <SaTableHeader fit>
+        <span class="sr-only">{{ t('pages.userMfa.actions') }}</span>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="method in mfaMethods.items" :key="method.mfa_id">
-        <SaTableCell primary fit>
+        <SaTableCell primary>
           {{ method.type }}
         </SaTableCell>
-        <SaTableCell />
         <SaTableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
         </SaTableCell>
-        <SaTableCell fit>
-          <CommonButton
-            variant="secondary"
-            :label="t('pages.userMfa.revoke')"
-            :required-scopes="['admin:users:write']"
-            @click="revokeTargetMfaId = method.mfa_id"
+        <SaTableCell actions>
+          <ActionsDropdown
+            :record="method.type"
+            :actions="actions"
+            @action="revokeTargetMfaId = method.mfa_id"
           />
         </SaTableCell>
       </tr>

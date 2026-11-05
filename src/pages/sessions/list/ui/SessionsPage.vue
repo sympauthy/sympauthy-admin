@@ -1,23 +1,21 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { EyeIcon } from '@heroicons/vue/20/solid'
 import {
   InteractiveFlowSessionApi,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel,
+  purposeLabel,
   type InteractiveFlowSessionListResource,
   type InteractiveFlowSessionSummaryResource
 } from '@/entities/session'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip, RouteLink } from '@/shared/ui'
+import { DocHelpTooltip, RouteLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
-const router = useRouter()
 const api = new InteractiveFlowSessionApi()
 
 const sessions = useCollection<
@@ -37,6 +35,11 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="sessions" :search-placeholder="t('pages.sessions.search')">
     <template #header>
+      <CollectionSortHeader
+        :collection="sessions"
+        :label="t('pages.sessions.session')"
+        field="purpose"
+      />
       <CollectionSortHeader
         fit
         :collection="sessions"
@@ -63,22 +66,28 @@ onMounted(async () => {
         :label="t('pages.sessions.started')"
         field="session_date"
       />
-      <SaTableHeader fit>{{ t('pages.sessions.actions') }}</SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="session in sessions.items" :key="session.id">
-        <SaTableCell :label="t('pages.sessions.status')" fit>
+        <SaTableCell primary truncate>
+          <TableRecord
+            :name="purposeLabel(session.initiating_purpose)"
+            :detail="session.id"
+            :to="{ name: 'sessionDetail', params: { sessionId: session.id } }"
+          />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.sessions.status')" label-hidden fit>
           <SaTag :color="interactiveFlowSessionStatusColor(session.status)">
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </SaTag>
         </SaTableCell>
-        <SaTableCell primary truncate>
+        <SaTableCell :label="t('pages.sessions.user')" truncate>
           <RouteLink
             v-if="session.user"
             block
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-            class="font-medium text-gray-900"
+            class="text-gray-900"
           >
             {{ userIdentifierLabel(session.user) }}
           </RouteLink>
@@ -89,20 +98,12 @@ onMounted(async () => {
         </SaTableCell>
         <!-- Plain text rather than a link: a live session may name a client the configuration no
              longer declares, and a link landing on an error page is worse than no link. -->
-        <SaTableCell :label="t('pages.sessions.client')" truncate>
+        <SaTableCell :label="t('pages.sessions.client')" truncate mono>
           <span v-if="session.client_id">{{ session.client_id }}</span>
           <SaEmptyValue v-else />
         </SaTableCell>
         <SaTableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
           {{ formatDateTime(session.session_date) }}
-        </SaTableCell>
-        <SaTableCell fit>
-          <CommonButton
-            variant="secondary"
-            :label="t('pages.sessions.view')"
-            :icon="EyeIcon"
-            @click="router.push({ name: 'sessionDetail', params: { sessionId: session.id } })"
-          />
         </SaTableCell>
       </tr>
     </template>

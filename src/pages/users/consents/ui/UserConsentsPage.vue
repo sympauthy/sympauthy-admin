@@ -9,7 +9,7 @@ import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import { CommonButton, DocHelpTooltip } from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -22,6 +22,15 @@ const consents = useCollection<ConsentResource, ConsentListResource>({
   page: (params) => api.listConsents(userId.value, params),
   items: (content) => content.consents
 })
+
+const actions = computed<ActionItem[]>(() => [
+  {
+    key: 'revoke',
+    label: t('pages.userConsents.revoke'),
+    danger: true,
+    requiredScopes: ['admin:consent:write']
+  }
+])
 
 const revokeTargetAudienceId = ref<string | null>(null)
 const revokeLoading = ref(false)
@@ -62,7 +71,6 @@ onMounted(async () => {
   <CollectionPage :collection="consents" :search-placeholder="t('pages.userConsents.search')">
     <template #header>
       <CollectionSortHeader
-        fit
         :collection="consents"
         :label="t('pages.userConsents.audience')"
         field="audience_id"
@@ -94,15 +102,17 @@ onMounted(async () => {
         :label="t('pages.userConsents.consentedAt')"
         field="consented_at"
       />
-      <SaTableHeader fit>{{ t('pages.userConsents.actions') }}</SaTableHeader>
+      <SaTableHeader fit>
+        <span class="sr-only">{{ t('pages.userConsents.actions') }}</span>
+      </SaTableHeader>
     </template>
 
     <template #rows>
       <tr v-for="consent in consents.items" :key="consent.audience_id">
-        <SaTableCell primary fit>
+        <SaTableCell primary mono>
           {{ consent.audience_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.userConsents.client.label')" fit hidden-below="sm">
+        <SaTableCell :label="t('pages.userConsents.client.label')" fit mono hidden-below="sm">
           {{ consent.prompted_by_client_id }}
         </SaTableCell>
         <SaTableCell :label="t('pages.userConsents.scopes.label')">
@@ -115,12 +125,11 @@ onMounted(async () => {
         <SaTableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">
           {{ formatDateTime(consent.consented_at) }}
         </SaTableCell>
-        <SaTableCell fit>
-          <CommonButton
-            variant="secondary"
-            :label="t('pages.userConsents.revoke')"
-            :required-scopes="['admin:consent:write']"
-            @click="revokeTargetAudienceId = consent.audience_id"
+        <SaTableCell actions>
+          <ActionsDropdown
+            :record="consent.audience_id"
+            :actions="actions"
+            @action="revokeTargetAudienceId = consent.audience_id"
           />
         </SaTableCell>
       </tr>

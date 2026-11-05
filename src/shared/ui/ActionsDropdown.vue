@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, type Component } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { EllipsisHorizontalIcon } from '@heroicons/vue/20/solid'
 import { SaMenu } from '@sympauthy/design'
 import { missingScopesHint, useAuthStore } from '@/shared/auth'
 
@@ -23,6 +24,8 @@ export interface ActionItem {
  */
 const props = defineProps<{
   actions: ActionItem[]
+  /** What a table row's actions are done to, which draws the button as its mark alone. */
+  record?: string
 }>()
 
 const emit = defineEmits<{
@@ -44,5 +47,10 @@ const items = computed(() =>
 </script>
 
 <template>
-  <SaMenu :label="t('common.actions')" :items="items" @select="emit('action', $event)" />
+  <SaMenu
+    :label="props.record ? t('common.actionsFor', { name: props.record }) : t('common.actions')"
+    :icon="props.record ? EllipsisHorizontalIcon : undefined"
+    :items="items"
+    @select="emit('action', $event)"
+  />
 </template>

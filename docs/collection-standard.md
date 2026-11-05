@@ -43,16 +43,16 @@ records is the state that dies with the screen, and a tab opened on the next rec
 transient failure must not leave a collection without a toolbar until the tab is reloaded.
 
 **A field whose type or operators the panel does not know is dropped, and the rest still render.**
-`knownCollectionFilters` decides that. A server ahead of its panel must cost the one field it added,
+`saFilterKnownFields` decides that. A server ahead of its panel must cost the one field it added,
 not the whole toolbar.
 
 **A failed document is a warning, not a page failure.** The records still list;
-`capabilitiesError` is what the toolbar says instead of the filters.
+`capabilitiesError` is what `CollectionPage` says above the card, in place of the filters.
 
 ## Criteria
 
-**A criterion is a field, an operator and a value**, and `CollectionCriteria` holds the filters, the
-sort keys and the free text together.
+**A criterion is a field, an operator and a value**, held by the package while it is on screen.
+`CollectionCriteria` is what the filters, the sort keys and the free text travel as.
 
 **`collectionQueryParams` is the only thing that writes the grammar.** A bare `field=` for `eq` and
 a dotted suffix for everything else, `in` comma-separated, `sort` an ordered list each descending
@@ -67,10 +67,6 @@ narrows nothing, and sending it would be a `400` while they are still typing.
 **A criteria change is asked of the server once it has settled**, after
 `CRITERIA_DELAY_IN_MS`. Paging, sorting and resizing are each one deliberate act and are not
 delayed.
-
-**Adding a filter asks the collection again only where that filter is already answerable.** One
-holding no value narrows nothing and waits to be filled in; one whose operator takes none — a field
-opening on `is_null` — is answerable the moment it is added, and the list under it has to say so.
 
 **A criteria change asks for the first page.** A narrowed collection has a different first page, so
 the one being read is never the one to come back to.
@@ -148,13 +144,12 @@ the collection whole:
 <CollectionPage :collection="users" :search-placeholder="t('pages.users.search')">
 ```
 
-**The components are the feature's**, and its `index.ts` publishes what a page names —
-`useCollection`, `CollectionPage`, `CollectionSortHeader`. The toolbar, the filters and the value
-controls are parts of that page rather than pieces of the kit, so nothing outside the slice reaches
-them.
+**The feature's `index.ts` publishes what a page names** — `useCollection`, `CollectionPage`,
+`CollectionSortHeader`. The package draws the filters and the order, and the page never names them.
 
 **A page writes its columns and its rows, and nothing else.** The toolbar, the operators, the value
-controls, the sort arrows and the query string all come from the collection.
+controls, the sort arrows and the query string all come from the collection, and
+[the page layout standard](page-layout-standard.md#table-rows) says what a row holds.
 
 **Every column goes through `CollectionSortHeader`.** It asks the document whether the field is
 sortable and draws a plain header where it is not, so a page never decides that itself.
@@ -172,70 +167,26 @@ is the document's answer, not a prop.
 request is built from, so a value the DOM holds and they do not is a filter the collection is never
 narrowed by.
 
-**What the page could not draw goes in the `notice` slot**, above the table. The toolbar says the
-same of a capability document it failed to read.
+**What the page could not draw goes in the `notice` slot**, above the table. `CollectionPage` says
+the same of a capability document it failed to read.
 
-## The filter bar
+## Filters and ordering
 
-**A filter is a control, and never a chip.** It takes the box every other control shares — one
-height, one radius, one border — because the row it sits in is under the row holding the search
-field, and a tag beside a field is two families on one screen.
+**What narrows and what orders a collection are the package's.** `useCollection` holds a `useSaFilters`
+and a `useSaSort`, and `CollectionPage` draws them in `SaTable`'s `#toolbar` and `#filters`, so
+[TableFilters](https://sympauthy.github.io/sympauthy-design/components/table-filters) and
+[TableSort](https://sympauthy.github.io/sympauthy-design/components/table-sort) own how a filter reads,
+what its popover holds, and when one is dropped. This standard owns what the panel hands them.
 
-**A filter holds its own box with `.sa-control-focus-within`.** The trigger reading it and the
-control removing it are two focusable parts of one control, so the box shows the focus either of
-them takes and removing a filter stays one press.
+**The fields come from the document,** through `saFilterKnownFields`, and the words from the bundle,
+through `useCollectionLabels`. A page hands neither.
 
-**A filter reads its criterion as a sentence** — the field, the operator, the value — and truncates
-it, since a value has no length the panel knows. The value stands in as
-`common.collection.selectValue` until there is one.
+**`collectionQueryParams` reads what is answerable.** It is handed `filters.complete` and `sort.asked`
+and never a filter still being filled, and the comma an `in` travels under stays there, so no operator
+learns the separator.
 
-**The fields are searched, not read down.** `CollectionFieldPicker` is a popover over a
-`SaListbox`, because the set is the deployment's: an instance publishing a field per claim renders
-a menu taller than the viewport, and a menu has nowhere to type.
-
-**The operator and the value are filled in from the filter's own popover.** Inside the sentence
-neither had room for a box, and a control without one cannot be seen.
-
-**A filter opens on the operator its field's type reads best and offers the rest the field
-admits.** `contains` over text, `eq` over a word, `gte` over a number or a moment; a field narrowing
-its set falls back to the first operator it lists.
-
-**The value control is the set the field publishes, or the field's type where it publishes none:**
-
-| The field | The control |
-| --- | --- |
-| publishes `values` | a `SaListbox` of them, `multiple` under `in` |
-| `boolean` | the same list, over the *Yes* and *No* the panel names |
-| under `in` publishing no values | a `SaTagsInput`, one value entered at a time |
-| `date`, `date_time` | a date or datetime input |
-| `number` | a number input |
-| `string`, `email`, `phone_number`, `uuid`, `timezone` | a text input |
-| under `is_null` | none |
-
-**`collectionFilterValues` answers which of the two a field is.** It reads the published values
-whatever the field's type, and gives a boolean the set of two the panel names rather than the
-server.
-
-**The comma stays in `collectionQueryParams`.** A list is entered one value at a time, so no
-operator learns the separator the values travel under.
-
-**A newly added filter opens on its value.** `addFilter` answers the criterion's id and the toolbar
-holds it, so the control it created opens focused on what the caller opened the field list to
-write.
-
-**Enter in a value field closes the popover.** The value is written and the two controls above it
-already say the rest. Neither list reads Enter that way — one adds a value with it and the other
-picks one — and an input method confirming a candidate is not a caller pressing it.
-
-**A criterion still incomplete when its popover closes is dropped.** It narrows nothing, and
-leaving it on the row is a sentence that stops halfway beside an affordance an operator has to
-guess at.
-
-**Changing a filter's operator clears its value.** `in` holds a list where the others hold one, so
-carrying a value across would ask the new operator the old question.
-
-**`is_null` is offered as *is empty* and sends `true`.** The panel does not offer its other half;
-a caller wanting *carries any value* writes the query string themselves.
+**`is_null` is offered as *is empty* and sends `true`.** The panel does not offer its other half; a
+caller wanting *carries any value* writes the query string themselves.
 
 ## Naming
 
