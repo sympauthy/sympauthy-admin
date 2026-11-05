@@ -103,7 +103,10 @@ onMounted(async () => {
             </SaTag>
           </span>
         </SaTableCell>
-        <SaTableCell :label="t('pages.userClaims.collectedAt')" fit>
+        <!-- The package ends a phone's first line with a break that the row's gap falls on both sides
+             of, so the name stands twice that gap above the value. This line matches it, so the three
+             read evenly spaced. -->
+        <SaTableCell :label="t('pages.userClaims.collectedAt')" fit class="max-sm:mt-1">
           <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
           <SaEmptyValue v-else />
         </SaTableCell>
