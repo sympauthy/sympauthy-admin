@@ -611,9 +611,10 @@
       "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
       "claim": "Claim",
       "notCollected": "not collected",
+      "requiredNotCollected": "required, not collected",
       "value": "Value",
       "collectedAt": "Collected at",
-      "verifiedAt": "Verified at",
+      "verified": "Verified {date}",
       "empty": "No claims found.",
       "search": "Search by claim or value"
     },
