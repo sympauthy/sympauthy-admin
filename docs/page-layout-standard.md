@@ -208,10 +208,11 @@ router.
 ## What this standard does not cover
 
 **Filters in the URL.** A search or a filter lives with the screen that asked for it, and reloading
-a collection page clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks ending that.
+a collection page clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks
+ending that.
 
-**Which columns a phone keeps.** Nothing has curated them for a record laid out down;
-[#136](https://github.com/sympauthy/sympauthy-admin/issues/136) tracks doing so.
+**Which columns a phone keeps.** Nothing has curated them for a record laid out down, and the
+redesign takes that up.
 
 **A view only some of a record's instances carry, and the landing a shell replaces once it has read
 the record.** One record does both — a session's failure is a tab a session that ended in one
