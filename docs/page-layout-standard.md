@@ -1,6 +1,6 @@
 ---
-description: What a route, a collection page and a record page are made of, how a table's columns
-  are sized, and how each adapts to the width it is given.
+description: What a route, a collection page and a record page are made of, and what the panel
+  decides about a table's columns and rows.
 paths:
   - "src/pages/**"
   - "src/app/**"
@@ -79,18 +79,10 @@ system's Navigation foundation](https://sympauthy.github.io/sympauthy-design/fou
 
 ## Page actions
 
-**What a screen lets an operator do is a `SaPageActions`.** It draws the control in the bar naming
-the screen, so it sits in one position on every screen and does not move when a filter appears
-under it. Nothing else a screen writes goes in that bar.
-
-**Below `sm:` a screen's actions are always a `⋯` mark with no border, even for a single action.**
-The bar's row holds the control opening the drawer, the name and the mark, and the name is what
-truncates, so that a phone finds what it can do in the same place and the same shape on every screen.
-`ActionsDropdown` draws the mark, and a screen with one action passes the button a wider screen
-shows in its `#expanded` slot.
-
-**A collection's action is a button, and a record's actions an `ActionsDropdown`.** A collection has
-one or two — open a create dialog, re-read a live list — and a record has a set, read together.
+**A screen's actions are drawn where and as
+[Breadcrumb](https://sympauthy.github.io/sympauthy-design/components/breadcrumb) and
+[Navigation](https://sympauthy.github.io/sympauthy-design/foundations/navigation) have them.**
+Nothing else a screen writes goes in that bar.
 
 **A record's action stays with the record, even where it fills a tab below it.** Enrolling a factor
 and linking a provider each create a record in a tab under the account, and are listed beside
@@ -98,10 +90,6 @@ forcing a logout all the same: an action an operator has to open a tab to find i
 know about first. **A tab adds nothing to the bar** — one screen, one set of actions. The one
 exception is a phone's link to the open view's help, first in the record's menu, since a phone has
 no tab to draw it beside.
-
-**A record's action names the scopes its call is made under**, and the menu draws it disabled
-where the token lacks one, in the order [menus](#menus) sets — [authentication](authentication.md#what-the-token-granted) owns the
-rule.
 
 **The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
 summary panel under it renders the record and nothing else.
@@ -111,19 +99,15 @@ operator do it draws itself, inside its own content — the no-access page's sig
 
 ## Menus
 
-**A menu lists what it offers from the most used to the least.** The sidebar orders its sections
-and the entries in each that way, and a record's `ActionsDropdown` its actions. The panel keeps no
-usage data, so the order is a judgement, written in
-[the navigation](../src/app/router/navigation.ts) and at each menu's call site, and revised when it
-stops being true.
+**The sidebar lists its sections and the entries in each from the most used to the least,** as
+[Menu](https://sympauthy.github.io/sympauthy-design/components/menu) orders a menu. The panel keeps
+no usage data, so the order is a judgement, written in [the
+navigation](../src/app/router/navigation.ts) and at each menu's call site, and revised when it stops
+being true.
 
 **The sidebar's first entry is the page the panel lands on**, since `/` sends the operator to the
 first entry their token opens — the most used page is therefore the one an operator starts on. The
 sidebar's head links to `/`, so it reaches that page whatever the token opens.
-
-**A destructive action closes its menu, whatever its use**, under a separator `SaMenu`
-draws before it. The item a slip of the pointer lands on is never the one that cannot be undone,
-and a `SaConfirmDialog` behind it is the second guard, not the only one.
 
 ## Collection pages
 
@@ -131,58 +115,25 @@ and a `SaConfirmDialog` behind it is the second guard, not the only one.
 root element.** [The collection standard](collection-standard.md#the-page) owns what it is handed
 and what it draws; this section owns where it sits.
 
-**The page never scrolls.** Rows scroll inside the table, under a pinned header row and above a
-pinned pagination bar.
+**The page never scrolls.** `CollectionPage` hands `SaTable` `fill` and `auto-page-size`, as
+[Table](https://sympauthy.github.io/sympauthy-design/components/table) describes them, and the
+collection refetches at the size it emits.
 
-**The number of rows per page is derived from the height available**, down to one where one is
-all that fits — a card below `sm:` is several times the height of the row it replaces, so a floor
-written for rows would put the list back into a scroll. `SaTable` measures it
-and emits `page-size-change`; the collection answers by refetching at the new size.
-
-**The `empty` slot is a sentence from the bundle**, not a blank table.
-
-**Below `sm:` each record is laid out down rather than across**, by `SaTable`, from the same
-`#header` and `#rows` a wider screen reads. A page describes its records once; it does not write a phone
-layout of its own, and a column added to it reaches the phone with it.
+**A page describes its records once, in `#header` and `#rows`, and writes no phone layout of its
+own.** `SaTable` lays them out for one, so a column added to a page reaches the phone with it.
 
 ## Table columns
 
-**A column is a `CollectionSortHeader` where the collection may order on it, and a `SaTableHeader`
-where it may not.** Both draw the same header; only one of them responds to a click.
+**A column is a `SaTableHeader`.** [The collection standard](collection-standard.md#the-page) says
+what one over a field of the collection is handed.
 
-**Every cell under one is a `SaTableCell`.** Neither a page's header nor its rows write a padding, a
-text size or a colour — [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
-says which step each takes, and the component takes it.
-
-| Kind of column | Props on the header | Props on the cell |
-| --- | --- | --- |
-| status, date | `fit` | `fit` |
-| name, identifier, value | none | `truncate` |
-| the column identifying the record | none | `primary` |
-| a row's actions | `fit` | `actions` |
-| an address, a token, a key | — | `mono` |
-| secondary, dropped on a phone | `hidden-below="sm"` | `hidden-below="sm"` |
-| secondary, dropped below a desktop | `hidden-below="lg"` | `hidden-below="lg"` |
-
-**A `fit` column takes only the space its content needs, and a column without it takes the rest.**
-That is the whole sizing model.
+**What each prop of a header and a cell is for is
+[Table](https://sympauthy.github.io/sympauthy-design/components/table)'s.** A name, an identifier or
+a value in a column without `fit` is `truncate`.
 
 **A `primary` cell is also `truncate` where a column beside it is.** A truncated column is capped, so
 an uncapped one takes everything the table has left and cuts its neighbours down to their headers,
 with the room they needed standing empty. Capped alike, they share it.
-
-**Never write a fixed width.** `w-[100px]` and `w-[10%]` hold at one breakpoint and break at the
-next, and `SaTable` keeps `table-layout: auto` for that reason.
-
-**A cell the record has no value for holds an `SaEmptyValue`.** A blank cell and a cell the fetch
-did not fill read alike; a dash does not.
-
-**A cell's `hidden-below` matches its header's.** They are two components and one column, and a
-column dropped on a phone stays dropped once the row is a card.
-
-**Every cell carries its column's name as `label`,** which a phone shows beside the value. The two
-that do not are the `primary` cell, which names the record, and the cell holding the row's actions. A
-status is `label-hidden`, since the word reads without it.
 
 ## Table rows
 
@@ -191,9 +142,8 @@ can be done to it.** The `primary` column comes first and is never a status, the
 and the actions close the row. Scopes keep their status last, after the claims they publish, which
 are what that list is read for.
 
-**A record with a screen of its own is named by a `TableRecord`,** whose link is the way into it, so
-a row carries no *View* button beside it. Its `detail` is the identifier under the name, where the
-name is not already that identifier.
+**A record with a screen of its own is named by a `TableRecord`.** Its `detail` is the identifier
+under the name, where the name is not already that identifier.
 
 **A record with no screen is named by its value alone,** and `mono` where that is an identifier.
 
@@ -201,22 +151,13 @@ name is not already that identifier.
 session by its purpose and a grant by its type, each with its identifier under it. A row of identifiers
 alone has nothing to tell apart at a glance.
 
-**What can be done to a row is an `ActionsDropdown` passed `record`,** in an `actions` cell. The
-button is its mark alone and named after the record, the column's name is `sr-only`, and [the design
-system standard](design-system-standard.md#buttons) gives its states.
-
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
 
 **A row with nothing to offer holds the height of the button,** so rows stay one height.
 
-**Below `sm:` a row's action button stands beside the record, from [the global
-stylesheet](../src/app/styles/style.css), rather than on its first line.** In the line, its height
-would float the name away from the values it belongs with.
-
-**An identifier in any column is `mono`:** a client, an audience, a subject, an address. A value
-naming a record the configuration may no longer declare stays plain text rather than a link, since a
-link landing on an error page is worse than no link.
+**A value naming a record the configuration may no longer declare stays plain text rather than a
+link,** since a link landing on an error page is worse than no link.
 
 **A set of values wraps as tags,** one `SaTag` each, rather than a list joined by commas: the claims
 of a scope, the scopes of a consent. A row may be taller for it.
@@ -230,21 +171,14 @@ claim's verification — carries the green check beside it.
 **A record's page is a shell: its summary panel, a `RecordTabs` strip, and the tab's own page
 filling what is left.** Its root is `flex h-full min-h-0 flex-col`, so the tab below the strip gets
 a height and its table scrolls rather than the page.
-
-**Below `sm:` a record with views opens on its summary and a `SaRecordViews`,** and each view fills a
-screen of its own with neither the summary nor a strip above it. There is no room for the three
-together on a phone, and a view is read longer than the summary is.
+[RecordPage](https://sympauthy.github.io/sympauthy-design/components/record-page) says what the
+summary and the sections hold, and
+[Navigation](https://sympauthy.github.io/sympauthy-design/foundations/navigation) what a phone draws
+in place of the strip.
 
 **A record's page renders loading, error and content, and resets its store in `onMounted` before
 fetching.** The wait is a `SaLoadingState` and the failure a `SaAlert`. It re-reads the record
 when the identifier changes and not when the tab does.
-
-**The first thing on the page is a `SaSummaryCard` of `SaSummaryField`s**, one per value that
-identifies the record, and no heading — the bar above names the record and carries what is done to
-it. The record's identifier is a `SaCopyableValue`.
-
-**Everything below it is a `SaDetailSection`,** whose `#help` slot takes the `SaPopover` when the
-section needs one.
 
 **A section is laid out by what it holds:**
 
@@ -265,57 +199,19 @@ component owns them.
 
 ## The widths it is for
 
-**The panel is built for 360px and up.** That is the narrowest phone still in use; below it nothing
-is checked and nothing is promised.
+**Which widths the panel supports, and where it changes, is
+[Layout](https://sympauthy.github.io/sympauthy-design/foundations/layout)'s.**
 
-**It stops growing at `max-w-page`**, the design system's `--container-page` token, and centres past
-it. A label and the value beside it drifting a monitor apart is not more readable for the room.
-
-**Three arrangements carry that range, and there is no fourth.**
-
-| Width | Sidebar | A collection | A record's fields |
-| --- | --- | --- | --- |
-| 360–639 | drawer | a card per record | one column |
-| 640–1023 (`sm:`) | drawer | a table | three columns |
-| 1024+ (`lg:`) | permanent | a table | three columns |
-
-**Write the phone layout first and add the wider ones with `sm:` and `lg:`.** The panel uses the
-design system's two breakpoints and no other.
-
-**Nothing scrolls sideways at any supported width** — not the page, and not a table inside it. A
-column that cannot be made to fit is dropped with `hidden-below`, not left to overflow. The one
-exception is `RecordTabs`, which scrolls its strip because dropping a tab would hide a view.
-
-**The sidebar is a drawer below `lg:` and permanent from it.** `useSidebar` holds the state and
-closes it on navigation; `SaAppShell` draws the backdrop, puts the control opening the drawer in the
-bar, and sizes the `SaSidebar` that `SidebarNav` hands it.
-
-**Below `sm:` the control opening the drawer is only on a screen with no ancestors.** A screen with
-ancestors has a link back to the nearest in its place, and names it over its own name. The last item
-is the page's `h1` at every width.
-
-**Padding steps once**: `p-4` becomes `lg:p-6` for the page, and `SaCard` steps its own from
-`p-4` to `sm:p-6`. [Spacing](https://sympauthy.github.io/sympauthy-design/foundations/spacing)
-holds the whole scale.
-
-**A toolbar is what [Table](https://sympauthy.github.io/sympauthy-design/components/table) lays it
-out as:** one row from `sm:`, and below it the search field on the first line with the controls
-sharing the next.
-
-**A pagination bar is one row too.** Below `sm:` it drops the range it reads and centres the pager,
-which already says which page of how many; a phone is not told the same thing twice at the price of
-a record.
+**`useSidebar` holds the drawer's state and closes it on navigation,** since the package knows no
+router.
 
 ## What this standard does not cover
 
-**A `md:` layout.** No screen has a third arrangement.
+**Filters in the URL.** A search or a filter lives with the screen that asked for it, and reloading
+a collection page clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks ending that.
 
-**Filters in the URL.** A search or a filter lives in its store, and reloading a collection page
-clears it; [#133](https://github.com/sympauthy/sympauthy-admin/issues/133) tracks ending that.
-
-**Which fields a card shows, and how tightly.** A card stacks every column a phone keeps, a label
-over each value, so a screen reads one or two records;
-[#136](https://github.com/sympauthy/sympauthy-admin/issues/136) tracks curating and tightening it.
+**Which columns a phone keeps.** Nothing has curated them for a record laid out down;
+[#136](https://github.com/sympauthy/sympauthy-admin/issues/136) tracks doing so.
 
 **A view only some of a record's instances carry, and the landing a shell replaces once it has read
 the record.** One record does both — a session's failure is a tab a session that ended in one

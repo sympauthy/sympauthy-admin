@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { UserApi, type UserListResource, type UserResource } from '@/entities/user'
 import { ClaimApi, type ClaimResource } from '@/entities/claim'
 import { getErrorMessage, isSuccess } from '@/shared/api'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaAlert, SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
@@ -108,38 +108,48 @@ onMounted(async () => {
     </template>
 
     <template #header>
-      <CollectionSortHeader
-        :collection="users"
-        :label="t('pages.users.user')"
+      <SaTableHeader
+        :sorting="users.sort"
         :field="identifierClaims[0]?.id ?? 'user_id'"
+        :filtered-label="users.filteredLabel(identifierClaims[0]?.id ?? 'user_id')"
       >
+        {{ t('pages.users.user') }}
         <template #help>
           <DocHelpTooltip term="terms.claim.identifier" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader fit :collection="users" :label="t('pages.users.status')" field="status">
+      </SaTableHeader>
+      <SaTableHeader
+        fit
+        :sorting="users.sort"
+        field="status"
+        :filtered-label="users.filteredLabel('status')"
+      >
+        {{ t('pages.users.status') }}
         <template #help>
           <DocHelpTooltip term="terms.user.status" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
+      </SaTableHeader>
+      <SaTableHeader
         v-for="claim in otherIdentifierClaims"
         :key="claim.id"
-        :collection="users"
-        :label="claim.id"
+        :sorting="users.sort"
         :field="claim.id"
+        :filtered-label="users.filteredLabel(claim.id)"
       >
+        {{ claim.id }}
         <template #help>
           <DocHelpTooltip term="terms.claim.identifier" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="users"
-        :label="t('pages.users.createdAt')"
+        :sorting="users.sort"
         field="created_at"
-      />
+        :filtered-label="users.filteredLabel('created_at')"
+      >
+        {{ t('pages.users.createdAt') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         <span class="sr-only">{{ t('pages.users.actions') }}</span>
       </SaTableHeader>

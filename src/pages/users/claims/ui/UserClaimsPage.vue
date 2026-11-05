@@ -10,8 +10,8 @@ import {
   type UserClaimResource
 } from '@/entities/user'
 import { ClaimTags } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { SaEmptyValue, SaTableCell, SaTag } from '@sympauthy/design'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
+import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { OriginTag } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -38,34 +38,44 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="claims" :search-placeholder="t('pages.userClaims.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="claims"
-        :label="t('pages.userClaims.claim')"
+      <SaTableHeader
+        :sorting="claims.sort"
         field="claim_id"
-      />
-      <CollectionSortHeader
-        :collection="claims"
-        :label="t('pages.userClaims.value')"
+        :filtered-label="claims.filteredLabel('claim_id')"
+      >
+        {{ t('pages.userClaims.claim') }}
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="claims.sort"
         field="value"
-      />
-      <CollectionSortHeader
+        :filtered-label="claims.filteredLabel('value')"
+      >
+        {{ t('pages.userClaims.value') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('terms.origin.label')"
+        :sorting="claims.sort"
         field="origin"
-      />
-      <CollectionSortHeader
+        :filtered-label="claims.filteredLabel('origin')"
+      >
+        {{ t('terms.origin.label') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('pages.userClaims.collectedAt')"
+        :sorting="claims.sort"
         field="collected"
-      />
-      <CollectionSortHeader
+        :filtered-label="claims.filteredLabel('collected')"
+      >
+        {{ t('pages.userClaims.collectedAt') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('pages.userClaims.verifiedAt')"
+        :sorting="claims.sort"
         field="verified"
-      />
+        :filtered-label="claims.filteredLabel('verified')"
+      >
+        {{ t('pages.userClaims.verifiedAt') }}
+      </SaTableHeader>
     </template>
 
     <template #rows>

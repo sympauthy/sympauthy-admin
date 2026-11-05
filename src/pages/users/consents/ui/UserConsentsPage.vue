@@ -7,7 +7,7 @@ import type { ConsentListResource } from '../model/ConsentListResource'
 import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 
@@ -70,38 +70,44 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="consents" :search-placeholder="t('pages.userConsents.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="consents"
-        :label="t('pages.userConsents.audience')"
+      <SaTableHeader
+        :sorting="consents.sort"
         field="audience_id"
-      />
-      <CollectionSortHeader
+        :filtered-label="consents.filteredLabel('audience_id')"
+      >
+        {{ t('pages.userConsents.audience') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="consents"
-        :label="t('pages.userConsents.client.label')"
+        :sorting="consents.sort"
         field="prompted_by_client_id"
+        :filtered-label="consents.filteredLabel('prompted_by_client_id')"
       >
+        {{ t('pages.userConsents.client.label') }}
         <template #help>
           <DocHelpTooltip term="pages.userConsents.client" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
-        :collection="consents"
-        :label="t('pages.userConsents.scopes.label')"
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="consents.sort"
         field="scope"
+        :filtered-label="consents.filteredLabel('scope')"
       >
+        {{ t('pages.userConsents.scopes.label') }}
         <template #help>
           <DocHelpTooltip term="pages.userConsents.scopes" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="consents"
-        :label="t('pages.userConsents.consentedAt')"
+        :sorting="consents.sort"
         field="consented_at"
-      />
+        :filtered-label="consents.filteredLabel('consented_at')"
+      >
+        {{ t('pages.userConsents.consentedAt') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         <span class="sr-only">{{ t('pages.userConsents.actions') }}</span>
       </SaTableHeader>

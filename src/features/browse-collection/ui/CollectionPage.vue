@@ -68,8 +68,8 @@ const labels = useCollectionLabels()
       @page-size-change="props.collection.setSize"
     >
       <template #toolbar>
-        <!-- Bound to the collection rather than left to the DOM: the store outlives the page, so a
-             query still narrowing the collection would otherwise come back to an empty field. -->
+        <!-- Bound to the collection rather than left to the DOM: `query` is what the request is
+             built from. -->
         <SaInput
           v-if="props.collection.searchable"
           class="min-w-0 flex-1 basis-60"

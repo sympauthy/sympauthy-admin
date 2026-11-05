@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { DocHelpTooltip, TableRecord } from '@/shared/ui'
 
@@ -23,22 +23,29 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="clients" :search-placeholder="t('pages.clients.search')">
     <template #header>
-      <CollectionSortHeader :collection="clients" :label="t('pages.clients.clientId')" field="id" />
+      <SaTableHeader
+        :sorting="clients.sort"
+        field="id"
+        :filtered-label="clients.filteredLabel('id')"
+      >
+        {{ t('pages.clients.clientId') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         {{ t('pages.clients.type') }}
         <DocHelpTooltip term="terms.client.type" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="clients"
-        :label="t('pages.clients.audience')"
+        :sorting="clients.sort"
         field="audience_id"
+        :filtered-label="clients.filteredLabel('audience_id')"
       >
+        {{ t('pages.clients.audience') }}
         <template #help>
           <DocHelpTooltip term="terms.audience.id" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader>{{ t('pages.clients.redirectUris') }}</SaTableHeader>
     </template>
 

@@ -1,4 +1,5 @@
 import { computed, reactive, ref, type Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   saFilterKnownFields,
   useSaFilters,
@@ -70,6 +71,8 @@ export interface Collection<T> {
   /** The order it reads in, which is the collection's own where none was asked. */
   readonly sort: SaSort
   readonly searchable: boolean
+  /** What a column over [field] hands `SaTableHeader` as `filteredLabel`. */
+  filteredLabel: (field: string) => string | undefined
   fetch: (page?: number) => Promise<void>
   setSize: (size: number) => void
   setSearch: (query: string) => void
@@ -89,6 +92,7 @@ export interface Collection<T> {
 export function useCollection<T, R extends CollectionPageResource>(
   source: CollectionSource<T, R>
 ): Collection<T> {
+  const { t } = useI18n()
   const items = ref([]) as Ref<T[]>
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -124,6 +128,10 @@ export function useCollection<T, R extends CollectionPageResource>(
     // One deliberate act, so it is not delayed.
     onChange: () => void fetch(0)
   })
+
+  function filteredLabel(field: string): string | undefined {
+    return filters.isFiltered(field) ? t('common.collection.filtered') : undefined
+  }
 
   /**
    * Reads the document, unless a read of it is already in flight.
@@ -230,6 +238,7 @@ export function useCollection<T, R extends CollectionPageResource>(
     filters,
     sort,
     searchable,
+    filteredLabel,
     fetch,
     setSize,
     setSearch

@@ -6,7 +6,7 @@ import { InvitationApi } from '../api/InvitationApi'
 import type { InvitationListResource } from '../model/InvitationListResource'
 import type { InvitationResource } from '../model/InvitationResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import {
   SaConfirmDialog,
   SaEmptyValue,
@@ -124,33 +124,37 @@ onMounted(async () => {
         {{ t('pages.invitations.tokenPrefix.label') }}
         <DocHelpTooltip term="pages.invitations.tokenPrefix" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
-        :collection="invitations"
-        :label="t('pages.invitations.status.label')"
+        :sorting="invitations.sort"
         field="status"
+        :filtered-label="invitations.filteredLabel('status')"
       >
+        {{ t('pages.invitations.status.label') }}
         <template #help>
           <DocHelpTooltip term="pages.invitations.status" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
-        :collection="invitations"
-        :label="t('pages.invitations.audience')"
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="invitations.sort"
         field="audience_id"
+        :filtered-label="invitations.filteredLabel('audience_id')"
       >
+        {{ t('pages.invitations.audience') }}
         <template #help>
           <DocHelpTooltip term="terms.audience.id" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader hidden-below="sm">{{ t('pages.invitations.note') }}</SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="invitations"
-        :label="t('pages.invitations.expiresAt')"
+        :sorting="invitations.sort"
         field="expires_at"
-      />
+        :filtered-label="invitations.filteredLabel('expires_at')"
+      >
+        {{ t('pages.invitations.expiresAt') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         <span class="sr-only">{{ t('pages.invitations.actions') }}</span>
       </SaTableHeader>

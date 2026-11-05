@@ -8,7 +8,7 @@ import {
   type AudienceListResource,
   type AudienceResource
 } from '@/entities/audience'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip } from '@/shared/ui'
 
@@ -29,26 +29,29 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="audiences" :search-placeholder="t('pages.audiences.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="audiences"
-        :label="t('pages.audiences.audienceId')"
+      <SaTableHeader
+        :sorting="audiences.sort"
         field="id"
+        :filtered-label="audiences.filteredLabel('id')"
       >
+        {{ t('pages.audiences.audienceId') }}
         <template #help>
           <DocHelpTooltip term="terms.audience.id" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader fit hidden-below="sm">
         {{ t('terms.audience.registrationMode.label') }}
         <DocHelpTooltip term="terms.audience.registrationMode" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="audiences"
-        :label="t('pages.audiences.clientsCount')"
+        :sorting="audiences.sort"
         field="client_count"
-      />
+        :filtered-label="audiences.filteredLabel('client_count')"
+      >
+        {{ t('pages.audiences.clientsCount') }}
+      </SaTableHeader>
     </template>
 
     <template #rows>

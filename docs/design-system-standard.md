@@ -60,9 +60,9 @@ standard](i18n-standard.md#keys) has it.
 **The package knows no router.** A component drawing links is handed `RouterLink` as `link-as`, and
 told which entry is current, by the wrapper that knows: `RecordTabs` and `app/layout`.
 
-**It is installed from its git tag, `github:sympauthy/sympauthy-design#vX.Y.Z`,** and never with
-`--ignore-scripts`: npm builds its `dist/` through `prepare`. Restart a running dev server after
-moving the tag, since it does not watch `node_modules`.
+**A running dev server is restarted after moving the package's tag,** since it does not watch
+`node_modules`. [Using in the apps](https://sympauthy.github.io/sympauthy-design/using-in-apps) says
+how it is installed.
 
 ## The kit
 
@@ -114,9 +114,8 @@ that entity's `ui/` segment — `ClaimTags`, `ClaimKindTag` — so every page dr
 way.
 
 **A component belonging to one action stays with that action**, and this table does not list it.
-`CollectionPage` and the sort headers under it sit in
-[`features/browse-collection`](../src/features/browse-collection) beside the state they draw,
-governed by [the collection standard](collection-standard.md).
+`CollectionPage` sits in [`features/browse-collection`](../src/features/browse-collection) beside
+the state it draws, governed by [the collection standard](collection-standard.md).
 
 ## What a screen writes
 
@@ -129,27 +128,15 @@ itself is spaced in the steps
 is the ink scale, so `ink-500` is written `text-gray-500`, and a hex value or a raw `var()` is never
 written.
 
-**A width is never written.** A column is shrink-wrapped or takes what is left, and everything else
-is sized by its parent; [the page layout standard](page-layout-standard.md#table-columns) owns
-which.
-
-**A heading is drawn by the component that owns it.** `SaBreadcrumb` draws the `h1` naming the
-screen, `SaDetailSection` the `h2` of a section and `SaDialog` the `h3` of a dialog; a screen outside
-the panel shell, which has no bar to be named in, titles itself in `panel-screen-title`.
+**A width is never written.** A column is shrink-wrapped or takes what is left, as
+[Table](https://sympauthy.github.io/sympauthy-design/components/table) has it, and everything else
+is sized by its parent.
 
 ## Controls
-
-**A field names its control.** Give the control an `id` and pass it to `SaField` as `for`; a
-`SaListbox`, a `SaTagsInput` and a `SaRadioGroup`, which that label cannot point at, take an
-`aria-label` instead.
 
 **A control the kit does not draw is `.sa-control`.** It adds `.sa-control-focus`, or
 `.sa-control-focus-within` where it is made of more than one focusable part, and `.sa-control-field`
 where it takes typed text.
-
-**What the panel draws itself and a person presses is at least `control-height`.** A link inside a
-sentence is the one exception, as [Control
-height](https://sympauthy.github.io/sympauthy-design/foundations/control-height) has it.
 
 ## Buttons
 
@@ -157,38 +144,13 @@ height](https://sympauthy.github.io/sympauthy-design/foundations/control-height)
 [Button](https://sympauthy.github.io/sympauthy-design/components/button) takes, and adds
 `requiredScopes`, which draws it refused and names what the token lacks.
 
-**`variant="danger"` appears inside a `SaConfirmDialog` only.** What opens that confirmation is
-`variant="secondary"`, or a `danger` item of an `ActionsDropdown`.
-
-**A destructive action is confirmed by a `SaConfirmDialog`** before it reaches the API.
-
-**`variant="primary"` is the one action a collection's toolbar or a dialog exists for.** Everything
-beside it is `variant="secondary"`, so a filled button is never repeated down a table.
-
-**A table row holds no button.** What can be done to it is a menu drawn as its mark, and the way into
-it is its name, as [the page layout standard](page-layout-standard.md#table-rows) has it. A control
-of a toolbar is passed `collapseLabel` and an `icon`.
-
 **A menu is an `ActionsDropdown`, and never a `SaMenu`.** It adds `requiredScopes` to each item, and
 what those scopes do is [Authentication's](authentication.md#what-the-token-granted).
-
-**A row's action button takes these states, from [the global
-stylesheet](../src/app/styles/style.css).** It is lighter at rest than a toolbar's, since it repeats
-down a column, and no page writes them.
-
-| State | Fill | Border |
-| --- | --- | --- |
-| at rest | `gray-50` | `gray-200` |
-| under the pointer | `gray-100` | `gray-200` |
-| its menu open | `gray-100` | `gray-400` |
 
 **The row holds `gray-50` while its menu is open.** An open menu takes the pointer from the page, so
 the row's own hover cannot say which record the menu acts on.
 
 ## Overlays
-
-**A dialog is built on `SaDialog`, and a destructive action's question on `SaConfirmDialog`.**
-`SaTooltipProvider` goes once, at the root in `App.vue`, and every `SaTooltip` reads it.
 
 **An overlay the kit cannot draw wraps a [reka-ui](https://reka-ui.com) primitive directly.** Never
 hand-roll a click-outside, an Escape handler or focus management.
@@ -197,9 +159,6 @@ hand-roll a click-outside, an Escape handler or focus management.
 `.sa-menu-item` for a line of it, and `.sa-overlay-animated` for its motion.
 
 ## Text
-
-**An identifier is the `mono` prop of the cell, field or row holding it**, and one an operator has
-to paste elsewhere is a `SaCopyableValue`.
 
 **A value the panel cannot tell an identifier from takes the body face.** A session's debug
 information is a list of strings the server labelled, and an identifier among them is
@@ -247,31 +206,13 @@ the bundle once already, so a component per term would be a file that prevents n
 
 ## The deployment's brand
 
-**A deployment's brand is what the server answers under `/branding`,** so changing one is a change
-of its configuration and a restart rather than a rebuild of the panel.
+**How a deployment's brand reaches a page is [Using in the
+apps](https://sympauthy.github.io/sympauthy-design/using-in-apps), and what the server answers is
+[Branding a deployment](https://sympauthy.github.io/sympauthy-design/branding).**
 
-| Path | Reached by |
-| --- | --- |
-| `/branding/tokens.css` | a link in `index.html`, ahead of the app's own stylesheet |
-| `/branding/icon` | a link in `index.html` |
-| `/branding/logo`, `/branding/logo-dark` | `SaBrandLogo` |
-| `/branding/brand.json` | `fetchBrand` in `main.ts`, once, before mounting |
-
-**The stylesheet and the icon are linked, not fetched,** so a deployment's colours never flash
-SympAuthy's first. `vite-ignore` keeps them out of the bundle and off the base path: they are the
-server's, at its root.
-
-**The name reaches a component through `useBrand`,** and is `SympAuthy` where the server configures
-none. `BrandWordmark` draws it and `main.ts` titles the document with it, so neither is written
-anywhere else.
-
-**The ground under a logo chooses its file.** `SaBrandLogo` is passed `dark` on the sidebar, and
-draws the light logo on `ground` and `surface` everywhere else; the device's preference has no say,
-since the panel is pinned light.
-
-**An unreadable brand draws the panel as SympAuthy's.** `fetchBrand` never rejects and gives up
-after 3 seconds, `theme.css` carries the light values the stylesheet would have answered, and
-`SaBrandLogo` draws the logo the package ships.
+**`main.ts` reads it with `fetchBrand`, once, before mounting, and the name reaches a component
+through `useBrand`,** and is `SympAuthy` where the server configures none. `BrandWordmark` draws it
+and `main.ts` titles the document with it, so neither is written anywhere else.
 
 ## What this standard does not cover
 
@@ -283,7 +224,7 @@ after 3 seconds, `theme.css` carries the light values the stylesheet would have 
 **A lint rule over the scale.** Prettier sorts a class list and the components own the steps, but
 nothing rejects a step written by hand.
 
-**A width below 360px.** [The page layout standard](page-layout-standard.md#the-widths-it-is-for)
+**A width below 360px.** [Layout](https://sympauthy.github.io/sympauthy-design/foundations/layout)
 names the range, and nothing under it is checked.
 
 **An audit of the panel's own screens.** The design system's pages state the accessibility its

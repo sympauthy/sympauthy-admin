@@ -9,8 +9,8 @@ import {
   type GrantListResource,
   type GrantSummaryResource
 } from '@/entities/grant'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
-import { SaEmptyValue, SaTableCell, SaTag } from '@sympauthy/design'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
+import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, RouteLink, TableRecord } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
@@ -31,44 +31,58 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="grants" :search-placeholder="t('pages.grants.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="grants"
-        :label="t('pages.grants.grant')"
+      <SaTableHeader
+        :sorting="grants.sort"
         field="grant_type"
-      />
-      <CollectionSortHeader
-        fit
-        :collection="grants"
-        :label="t('pages.grants.status')"
-        field="status"
+        :filtered-label="grants.filteredLabel('grant_type')"
       >
+        {{ t('pages.grants.grant') }}
+      </SaTableHeader>
+      <SaTableHeader
+        fit
+        :sorting="grants.sort"
+        field="status"
+        :filtered-label="grants.filteredLabel('status')"
+      >
+        {{ t('pages.grants.status') }}
         <template #help>
           <DocHelpTooltip term="terms.grant.status" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader :collection="grants" :label="t('pages.grants.user')" field="user_id">
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="grants.sort"
+        field="user_id"
+        :filtered-label="grants.filteredLabel('user_id')"
+      >
+        {{ t('pages.grants.user') }}
         <template #help>
           <DocHelpTooltip term="terms.grant.user" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
-        :collection="grants"
-        :label="t('pages.grants.client')"
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="grants.sort"
         field="client_id"
-      />
-      <CollectionSortHeader
+        :filtered-label="grants.filteredLabel('client_id')"
+      >
+        {{ t('pages.grants.client') }}
+      </SaTableHeader>
+      <SaTableHeader
         hidden-below="sm"
-        :collection="grants"
-        :label="t('pages.grants.audience')"
+        :sorting="grants.sort"
         field="audience_id"
-      />
-      <CollectionSortHeader
+        :filtered-label="grants.filteredLabel('audience_id')"
+      >
+        {{ t('pages.grants.audience') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="lg"
-        :collection="grants"
-        :label="t('pages.grants.createdAt')"
+        :sorting="grants.sort"
         field="created_at"
-      />
+        :filtered-label="grants.filteredLabel('created_at')"
+      >
+        {{ t('pages.grants.createdAt') }}
+      </SaTableHeader>
     </template>
 
     <template #rows>

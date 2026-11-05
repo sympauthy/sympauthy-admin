@@ -8,7 +8,7 @@ import {
   type UserMfaMethodResource
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -66,12 +66,14 @@ onMounted(async () => {
         {{ t('pages.userMfa.type.label') }}
         <DocHelpTooltip term="pages.userMfa.type" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
-        :collection="mfaMethods"
-        :label="t('pages.userMfa.registeredAt')"
+        :sorting="mfaMethods.sort"
         field="confirmed_date"
-      />
+        :filtered-label="mfaMethods.filteredLabel('confirmed_date')"
+      >
+        {{ t('pages.userMfa.registeredAt') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         <span class="sr-only">{{ t('pages.userMfa.actions') }}</span>
       </SaTableHeader>

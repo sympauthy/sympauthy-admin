@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { ScopeApi } from '../api/ScopeApi'
 import type { ScopeListResource } from '../model/ScopeListResource'
 import type { ScopeResource } from '../model/ScopeResource'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, OriginTag } from '@/shared/ui'
 
@@ -36,17 +36,24 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="scopes" :search-placeholder="t('pages.scopes.search')">
     <template #header>
-      <CollectionSortHeader :collection="scopes" :label="t('pages.scopes.id')" field="scope" />
-      <CollectionSortHeader
-        fit
-        :collection="scopes"
-        :label="t('pages.scopes.type.label')"
-        field="type"
+      <SaTableHeader
+        :sorting="scopes.sort"
+        field="scope"
+        :filtered-label="scopes.filteredLabel('scope')"
       >
+        {{ t('pages.scopes.id') }}
+      </SaTableHeader>
+      <SaTableHeader
+        fit
+        :sorting="scopes.sort"
+        field="type"
+        :filtered-label="scopes.filteredLabel('type')"
+      >
+        {{ t('pages.scopes.type.label') }}
         <template #help>
           <DocHelpTooltip term="pages.scopes.type" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader fit>
         {{ t('terms.origin.label') }}
         <DocHelpTooltip term="pages.scopes.origin" />
@@ -55,16 +62,17 @@ onMounted(async () => {
         {{ t('pages.scopes.claims.label') }}
         <DocHelpTooltip term="pages.scopes.claims" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
-        :collection="scopes"
-        :label="t('pages.scopes.status.label')"
+        :sorting="scopes.sort"
         field="enabled"
+        :filtered-label="scopes.filteredLabel('enabled')"
       >
+        {{ t('pages.scopes.status.label') }}
         <template #help>
           <DocHelpTooltip term="pages.scopes.status" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
     </template>
 
     <template #rows>
