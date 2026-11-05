@@ -12,7 +12,6 @@ import {
 import { ClaimTags } from '@/entities/claim'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import { OriginTag } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
 const route = useRoute()
@@ -55,26 +54,10 @@ onMounted(async () => {
       <SaTableHeader
         fit
         :sorting="claims.sort"
-        field="origin"
-        :filtered-label="claims.filteredLabel('origin')"
-      >
-        {{ t('terms.origin.label') }}
-      </SaTableHeader>
-      <SaTableHeader
-        fit
-        :sorting="claims.sort"
         field="collected"
         :filtered-label="claims.filteredLabel('collected')"
       >
         {{ t('pages.userClaims.collectedAt') }}
-      </SaTableHeader>
-      <SaTableHeader
-        fit
-        :sorting="claims.sort"
-        field="verified"
-        :filtered-label="claims.filteredLabel('verified')"
-      >
-        {{ t('pages.userClaims.verifiedAt') }}
       </SaTableHeader>
     </template>
 
@@ -83,28 +66,38 @@ onMounted(async () => {
         <SaTableCell primary truncate>
           <div class="flex flex-wrap items-center gap-2">
             {{ claim.claim_id }}
-            <ClaimTags :required="claim.required" :identifier="claim.identifier" />
+            <ClaimTags :identifier="claim.identifier" />
           </div>
         </SaTableCell>
-        <SaTableCell :label="t('pages.userClaims.value')" truncate>
-          <span v-if="claim.value != null">{{ userClaimValueLabel(claim) }}</span>
+        <!-- The value names itself on a phone, read under the claim it belongs to. Its verification
+             sits beside it rather than in a column of its own, since it is what proves that value. -->
+        <SaTableCell :label="t('pages.userClaims.value')" label-hidden truncate>
+          <div
+            v-if="claim.value != null"
+            class="flex flex-wrap items-center gap-x-2.5 gap-y-1 sm:flex-nowrap"
+          >
+            <span class="min-w-0 sm:truncate">{{ userClaimValueLabel(claim) }}</span>
+            <span
+              v-if="claim.verified_at"
+              class="inline-flex shrink-0 items-center gap-1 text-xs font-medium whitespace-nowrap text-tag-green"
+            >
+              <CheckCircleIcon class="size-3.5" />
+              {{ t('pages.userClaims.verified', { date: formatDate(claim.verified_at) }) }}
+            </span>
+          </div>
           <span v-else class="inline-flex items-center gap-2">
             <SaEmptyValue />
-            <SaTag color="yellow">{{ t('pages.userClaims.notCollected') }}</SaTag>
+            <SaTag color="yellow">
+              {{
+                claim.required
+                  ? t('pages.userClaims.requiredNotCollected')
+                  : t('pages.userClaims.notCollected')
+              }}
+            </SaTag>
           </span>
-        </SaTableCell>
-        <SaTableCell :label="t('terms.origin.label')" fit>
-          <OriginTag :origin="claim.origin" />
         </SaTableCell>
         <SaTableCell :label="t('pages.userClaims.collectedAt')" fit>
           <span v-if="claim.collected_at">{{ formatDate(claim.collected_at) }}</span>
-          <SaEmptyValue v-else />
-        </SaTableCell>
-        <SaTableCell :label="t('pages.userClaims.verifiedAt')" fit>
-          <span v-if="claim.verified_at" class="inline-flex items-center gap-1">
-            <CheckCircleIcon class="size-4 text-tag-green" />
-            {{ formatDate(claim.verified_at) }}
-          </span>
           <SaEmptyValue v-else />
         </SaTableCell>
       </tr>

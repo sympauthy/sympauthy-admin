@@ -3,10 +3,15 @@ import { useI18n } from 'vue-i18n'
 import { SaTag } from '@sympauthy/design'
 import { DocHelpTooltip } from '@/shared/ui'
 
-defineProps<{
-  required: boolean
-  identifier: boolean
-}>()
+// A screen showing whether a claim is required elsewhere in its row leaves [required] out: an
+// account's claims say it beside a value that was not collected, the one place it asks for action.
+withDefaults(
+  defineProps<{
+    required?: boolean
+    identifier?: boolean
+  }>(),
+  { required: false, identifier: false }
+)
 
 const { t } = useI18n()
 </script>
@@ -21,7 +26,7 @@ const { t } = useI18n()
         <DocHelpTooltip term="terms.claim.required" />
       </template>
     </SaTag>
-    <SaTag v-if="identifier" color="yellow">
+    <SaTag v-if="identifier" color="blue">
       {{ t('pages.claims.identifier') }}
       <template #help>
         <DocHelpTooltip term="terms.claim.identifier" />

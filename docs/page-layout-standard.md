@@ -164,7 +164,8 @@ of a scope, the scopes of a consent. A row may be taller for it.
 
 **A value the record has not collected says so,** with a `yellow` tag beside its dash, since a claim
 missing and a claim empty are different things to an operator. A date that proves something — a
-claim's verification — carries the green check beside it.
+claim's verification — carries the green check, beside the value it proves rather than in a column
+of its own.
 
 ## Record pages
 
