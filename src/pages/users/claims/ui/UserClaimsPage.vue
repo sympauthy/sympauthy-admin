@@ -69,9 +69,16 @@ onMounted(async () => {
             <ClaimTags :identifier="claim.identifier" />
           </div>
         </SaTableCell>
-        <!-- The value names itself on a phone, read under the claim it belongs to. Its verification
-             sits beside it rather than in a column of its own, since it is what proves that value. -->
-        <SaTableCell :label="t('pages.userClaims.value')" label-hidden truncate>
+        <!-- The value names itself on a phone, read under the claim it belongs to, and takes that line
+             whole so that when it was collected always reads on the next one, however short it is.
+             Its verification sits beside it rather than in a column of its own, since it is what
+             proves that value. -->
+        <SaTableCell
+          :label="t('pages.userClaims.value')"
+          label-hidden
+          truncate
+          class="max-sm:basis-full"
+        >
           <div
             v-if="claim.value != null"
             class="flex flex-wrap items-center gap-x-2.5 gap-y-1 sm:flex-nowrap"
