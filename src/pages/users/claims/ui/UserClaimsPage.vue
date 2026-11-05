@@ -81,14 +81,16 @@ onMounted(async () => {
         >
           <div
             v-if="claim.value != null"
-            class="flex flex-wrap items-center gap-x-2.5 gap-y-1 sm:flex-nowrap"
+            class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 sm:flex-nowrap"
           >
             <span class="min-w-0 sm:truncate">{{ userClaimValueLabel(claim) }}</span>
+            <!-- On the value's baseline, smaller as it is: the check is centred on its own words, and
+                 kept out of the alignment so the mark's baseline is theirs. -->
             <span
               v-if="claim.verified_at"
-              class="inline-flex shrink-0 items-center gap-1 text-xs font-medium whitespace-nowrap text-tag-green"
+              class="inline-flex shrink-0 items-baseline gap-1 text-xs font-medium whitespace-nowrap text-tag-green"
             >
-              <CheckCircleIcon class="size-3.5" />
+              <CheckCircleIcon class="size-3.5 self-center" />
               {{ t('pages.userClaims.verified', { date: formatDate(claim.verified_at) }) }}
             </span>
           </div>
