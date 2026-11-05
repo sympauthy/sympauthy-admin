@@ -253,6 +253,7 @@
     "panel": "Admin",
     "main": "Main",
     "breadcrumb": "Where you are",
+    "backTo": "Back to {name}",
     "sectionUsers": "Users",
     "sectionConfiguration": "Configuration",
     "sectionDiagnostics": "Diagnostics",
@@ -603,6 +604,8 @@
     },
     "userClaims": {
       "title": "Claims",
+      "summary": "What this server knows about the user.",
+      "about": "About claims",
       "help": "A claim is a piece of information this server holds about a person — their name, their email address, a tier a backend computed. These are the values this account holds, with when each was collected and whether it has been verified. See {link} for details.",
       "helpLinkText": "claims documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/claims.html",
@@ -616,6 +619,8 @@
     },
     "userConsents": {
       "title": "Consents",
+      "summary": "Scopes the user agreed to disclose to an audience.",
+      "about": "About consents",
       "help": "A consent is the person's agreement to disclose some of their claims to an audience, given in the flow when a client asked for a scope. Every client of that audience reads it, and revoking it asks the person again the next time one of them needs the scope. See {link} for details.",
       "helpLinkText": "consents documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/consent.html",
@@ -643,6 +648,8 @@
     },
     "userMfa": {
       "title": "MFA methods",
+      "summary": "Second factors the user set up to sign in.",
+      "about": "About MFA methods",
       "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
       "helpLinkText": "authentication documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
@@ -662,6 +669,8 @@
     },
     "userProviders": {
       "title": "Provider links",
+      "summary": "External accounts the user signs in with.",
+      "about": "About provider links",
       "help": "External identity providers linked to this user's account. Unlinking a provider will prevent the user from signing in with it. See {link} for details.",
       "helpLinkText": "providers documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#third-party-providers",

@@ -9,7 +9,7 @@ import {
   type ClaimListResource,
   type ClaimResource
 } from '@/entities/claim'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, OriginTag } from '@/shared/ui'
 
@@ -30,37 +30,42 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="claims" :search-placeholder="t('pages.claims.search')">
     <template #header>
-      <CollectionSortHeader :collection="claims" :label="t('pages.claims.id')" field="id" />
-      <CollectionSortHeader
+      <SaTableHeader :sorting="claims.sort" field="id" :filtered-label="claims.filteredLabel('id')">
+        {{ t('pages.claims.id') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('pages.claims.status.label')"
+        :sorting="claims.sort"
         field="enabled"
+        :filtered-label="claims.filteredLabel('enabled')"
       >
+        {{ t('pages.claims.status.label') }}
         <template #help>
           <DocHelpTooltip term="pages.claims.status" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('terms.origin.label')"
+        :sorting="claims.sort"
         field="origin"
+        :filtered-label="claims.filteredLabel('origin')"
       >
+        {{ t('terms.origin.label') }}
         <template #help>
           <DocHelpTooltip term="pages.claims.origin" />
         </template>
-      </CollectionSortHeader>
-      <CollectionSortHeader
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="claims"
-        :label="t('pages.claims.kind.label')"
+        :sorting="claims.sort"
         field="kind"
+        :filtered-label="claims.filteredLabel('kind')"
       >
+        {{ t('pages.claims.kind.label') }}
         <template #help>
           <DocHelpTooltip term="pages.claims.kind" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader fit>{{ t('pages.claims.tags') }}</SaTableHeader>
       <SaTableHeader fit>
         {{ t('pages.claims.publishedIn.label') }}

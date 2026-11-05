@@ -62,8 +62,7 @@ the parent decides the consequence.
 `empty`, so a page fills a table it never renders itself.
 
 **A slot that changes the layout when it is filled is read through `useSlots()`.** A collection
-page's actions row exists because `slots.actions` is defined, and a dialog's title because
-`slots.title` is.
+page's notice exists because `slots.notice` is defined.
 
 ## State
 

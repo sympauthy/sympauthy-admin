@@ -8,7 +8,7 @@ import {
   type InteractiveFlowSessionSecurityContextListResource,
   type InteractiveFlowSessionSecurityContextResource
 } from '@/entities/session'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { formatDateTime } from '@/shared/lib'
 
@@ -43,38 +43,48 @@ onMounted(async () => {
     <template #header>
       <SaTableHeader fit>{{ t('pages.sessionSecurityContexts.ip') }}</SaTableHeader>
       <SaTableHeader>{{ t('pages.sessionSecurityContexts.userAgent') }}</SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         hidden-below="lg"
-        :collection="securityContexts"
-        :label="t('pages.sessionSecurityContexts.location')"
+        :sorting="securityContexts.sort"
         field="country_code"
-      />
-      <CollectionSortHeader
+        :filtered-label="securityContexts.filteredLabel('country_code')"
+      >
+        {{ t('pages.sessionSecurityContexts.location') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="securityContexts"
-        :label="t('pages.sessionSecurityContexts.requests')"
+        :sorting="securityContexts.sort"
         field="observation_count"
-      />
-      <CollectionSortHeader
+        :filtered-label="securityContexts.filteredLabel('observation_count')"
+      >
+        {{ t('pages.sessionSecurityContexts.requests') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="lg"
-        :collection="securityContexts"
-        :label="t('pages.sessionSecurityContexts.firstSeen')"
+        :sorting="securityContexts.sort"
         field="first_seen_date"
-      />
-      <CollectionSortHeader
+        :filtered-label="securityContexts.filteredLabel('first_seen_date')"
+      >
+        {{ t('pages.sessionSecurityContexts.firstSeen') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="securityContexts"
-        :label="t('pages.sessionSecurityContexts.lastSeen')"
+        :sorting="securityContexts.sort"
         field="last_seen_date"
-      />
-      <CollectionSortHeader
+        :filtered-label="securityContexts.filteredLabel('last_seen_date')"
+      >
+        {{ t('pages.sessionSecurityContexts.lastSeen') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
-        :collection="securityContexts"
-        :label="t('pages.sessionSecurityContexts.proven')"
+        :sorting="securityContexts.sort"
         field="proven_date"
-      />
+        :filtered-label="securityContexts.filteredLabel('proven_date')"
+      >
+        {{ t('pages.sessionSecurityContexts.proven') }}
+      </SaTableHeader>
     </template>
 
     <template #rows>

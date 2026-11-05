@@ -8,7 +8,7 @@ import {
   type UserProviderLinkResource
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
@@ -62,22 +62,26 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="providerLinks" :search-placeholder="t('pages.userProviders.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="providerLinks"
-        :label="t('pages.userProviders.provider')"
+      <SaTableHeader
+        :sorting="providerLinks.sort"
         field="provider_id"
-      />
+        :filtered-label="providerLinks.filteredLabel('provider_id')"
+      >
+        {{ t('pages.userProviders.provider') }}
+      </SaTableHeader>
       <SaTableHeader>
         {{ t('pages.userProviders.subject.label') }}
         <DocHelpTooltip term="pages.userProviders.subject" />
       </SaTableHeader>
-      <CollectionSortHeader
+      <SaTableHeader
         fit
         hidden-below="sm"
-        :collection="providerLinks"
-        :label="t('pages.userProviders.linkedAt')"
+        :sorting="providerLinks.sort"
         field="link_date"
-      />
+        :filtered-label="providerLinks.filteredLabel('link_date')"
+      >
+        {{ t('pages.userProviders.linkedAt') }}
+      </SaTableHeader>
       <SaTableHeader fit>
         <span class="sr-only">{{ t('pages.userProviders.actions') }}</span>
       </SaTableHeader>

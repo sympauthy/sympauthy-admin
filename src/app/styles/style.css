@@ -13,37 +13,7 @@
   }
 }
 
-/**
- * A row's action button, which the package's menu draws as any secondary button, with no state for
- * being open. Outside every layer, to reach the utilities that button is drawn with.
- */
-.sa-cell-actions [aria-haspopup='menu'] {
-  @apply bg-gray-50 hover:bg-gray-100;
-}
-
-.sa-cell-actions [aria-haspopup='menu'][aria-expanded='true'] {
-  @apply border-gray-400 bg-gray-100;
-}
-
 /* An open menu takes the pointer from the page, so the row's own hover cannot say whose it is. */
 tr:has(.sa-cell-actions [aria-haspopup='menu'][aria-expanded='true']) {
   @apply bg-gray-50;
-}
-
-/**
- * Below `sm:` a row's action button stands beside the record rather than on its first line. In the
- * line, its height would set that line's and float the name away from the values it belongs with.
- */
-@media (width < theme(--breakpoint-sm)) {
-  .sa-table-as-cards tr:has(.sa-cell-actions) {
-    @apply relative py-3.5;
-  }
-
-  .sa-table-as-cards tr:has(.sa-cell-actions:not(.hidden)) {
-    @apply min-h-[calc(var(--spacing-control)+var(--spacing)*4)] pr-16;
-  }
-
-  .sa-table-as-cards td.sa-cell-actions {
-    @apply absolute top-2 right-3;
-  }
 }

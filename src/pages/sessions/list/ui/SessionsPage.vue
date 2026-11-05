@@ -9,7 +9,7 @@ import {
   type InteractiveFlowSessionListResource,
   type InteractiveFlowSessionSummaryResource
 } from '@/entities/session'
-import { CollectionPage, CollectionSortHeader, useCollection } from '@/features/browse-collection'
+import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, RouteLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
@@ -35,37 +35,44 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="sessions" :search-placeholder="t('pages.sessions.search')">
     <template #header>
-      <CollectionSortHeader
-        :collection="sessions"
-        :label="t('pages.sessions.session')"
+      <SaTableHeader
+        :sorting="sessions.sort"
         field="purpose"
-      />
-      <CollectionSortHeader
-        fit
-        :collection="sessions"
-        :label="t('pages.sessions.status')"
-        field="status"
+        :filtered-label="sessions.filteredLabel('purpose')"
       >
+        {{ t('pages.sessions.session') }}
+      </SaTableHeader>
+      <SaTableHeader
+        fit
+        :sorting="sessions.sort"
+        field="status"
+        :filtered-label="sessions.filteredLabel('status')"
+      >
+        {{ t('pages.sessions.status') }}
         <template #help>
           <DocHelpTooltip term="terms.interactiveFlowSession.status" />
         </template>
-      </CollectionSortHeader>
+      </SaTableHeader>
       <SaTableHeader>
         {{ t('pages.sessions.user') }}
         <DocHelpTooltip term="terms.interactiveFlowSession.user" />
       </SaTableHeader>
-      <CollectionSortHeader
-        :collection="sessions"
-        :label="t('pages.sessions.client')"
+      <SaTableHeader
+        :sorting="sessions.sort"
         field="client"
-      />
-      <CollectionSortHeader
+        :filtered-label="sessions.filteredLabel('client')"
+      >
+        {{ t('pages.sessions.client') }}
+      </SaTableHeader>
+      <SaTableHeader
         fit
         hidden-below="lg"
-        :collection="sessions"
-        :label="t('pages.sessions.started')"
+        :sorting="sessions.sort"
         field="session_date"
-      />
+        :filtered-label="sessions.filteredLabel('session_date')"
+      >
+        {{ t('pages.sessions.started') }}
+      </SaTableHeader>
     </template>
 
     <template #rows>

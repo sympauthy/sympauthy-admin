@@ -10,6 +10,8 @@ export interface ActionItem {
   label: string
   icon?: Component
   danger?: boolean
+  /** Draws a rule before the action, for a group that is not about destroying. */
+  startsGroup?: boolean
   /**
    * The admin scopes the call behind the action is made under. An item the token is not granted
    * all of is drawn disabled, naming them, rather than offered to fail at the server.
@@ -36,11 +38,12 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 
 const items = computed(() =>
-  props.actions.map(({ key, label, icon, danger, requiredScopes }) => ({
+  props.actions.map(({ key, label, icon, danger, startsGroup, requiredScopes }) => ({
     key,
     label,
     icon,
     danger,
+    startsGroup,
     disabledReason: missingScopesHint(authStore.missingScopes(requiredScopes ?? []))
   }))
 )
@@ -50,7 +53,12 @@ const items = computed(() =>
   <SaMenu
     :label="props.record ? t('common.actionsFor', { name: props.record }) : t('common.actions')"
     :icon="props.record ? EllipsisHorizontalIcon : undefined"
+    :collapsed-icon="props.record ? undefined : EllipsisHorizontalIcon"
     :items="items"
     @select="emit('action', $event)"
-  />
+  >
+    <template v-if="$slots.expanded" #expanded>
+      <slot name="expanded" />
+    </template>
+  </SaMenu>
 </template>
