@@ -16,7 +16,7 @@ import {
 } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
-import { formatDate } from '@/shared/lib'
+import { formatDate, formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -151,6 +151,14 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader
         fit
+        :sorting="users.sort"
+        field="last_authenticated_at"
+        :filtered-label="users.filteredLabel('last_authenticated_at')"
+      >
+        {{ t('pages.users.lastAuthenticatedAt') }}
+      </SaTableHeader>
+      <SaTableHeader
+        fit
         hidden-below="sm"
         :sorting="users.sort"
         field="created_at"
@@ -187,6 +195,12 @@ onMounted(async () => {
           :label="claim.id"
         >
           <span v-if="user.claims?.[claim.id] != null">{{ user.claims[claim.id] }}</span>
+          <SaEmptyValue v-else />
+        </SaTableCell>
+        <SaTableCell :label="t('pages.users.lastAuthenticatedAt')" fit>
+          <template v-if="user.last_authenticated_at">
+            {{ formatDateTime(user.last_authenticated_at) }}
+          </template>
           <SaEmptyValue v-else />
         </SaTableCell>
         <SaTableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
