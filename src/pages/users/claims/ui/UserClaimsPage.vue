@@ -30,7 +30,7 @@ const claims = useCollection<UserClaimResource, UserClaimListResource>({
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await claims.fetch()
+  await claims.load()
 })
 </script>
 

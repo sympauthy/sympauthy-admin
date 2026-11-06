@@ -63,9 +63,9 @@ an agent when a file it governs is read.
 - **Read what the server accepts, do not encode it.** A collection publishes the fields it filters,
   orders and searches on, and the panel draws its filter bar from that answer — so a deployment's
   own claims, clients and audiences are filterable without a release.
-- **Fit the viewport, from 360px up.** A list fills the height it is given and the page never
-  scrolls, on a phone as on a desktop. Below `sm:` a record is laid out down rather than across,
-  from the same description the wider screen reads.
+- **Fit the viewport, from 360px up.** From `sm:` a list fills the height it is given and the page
+  never scrolls; on a phone the list grows as the page is scrolled. Below `sm:` a record is laid out
+  down rather than across, from the same description the wider screen reads.
 - **Say what went wrong.** Every call resolves — a failed fetch, a rejected status and a body that
   did not match its schema all end up as a message on the screen that asked for it.
 - **Keep the structure checked, not agreed.** Steiger, ESLint, Prettier and the type-checker run in

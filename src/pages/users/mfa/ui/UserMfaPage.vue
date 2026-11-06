@@ -10,7 +10,7 @@ import {
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
-import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { SaConfirmDialog, SaTableActions, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -56,7 +56,7 @@ async function confirmRemove() {
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await mfaMethods.fetch()
+  await mfaMethods.load()
 })
 </script>
 
@@ -97,13 +97,13 @@ onMounted(async () => {
         <SaTableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
         </SaTableCell>
-        <SaTableCell actions>
+        <SaTableActions>
           <ActionsDropdown
             :record="userMfaMethodTypeLabel(method.type)"
             :actions="actions"
             @action="removeTargetMfaId = method.mfa_id"
           />
-        </SaTableCell>
+        </SaTableActions>
       </tr>
     </template>
 

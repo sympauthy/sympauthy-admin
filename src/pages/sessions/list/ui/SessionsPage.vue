@@ -28,7 +28,7 @@ const sessions = useCollection<
 })
 
 onMounted(async () => {
-  await sessions.fetch()
+  await sessions.load()
 })
 </script>
 

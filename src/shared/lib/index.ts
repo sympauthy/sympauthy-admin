@@ -1,5 +1,6 @@
 export * from './ArrayUtils'
 export * from './DateUtils'
+export * from './DomUtils'
 export * from './StringUtils'
 export * from './VueUtils'
 export * from './useBrand'

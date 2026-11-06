@@ -16,7 +16,7 @@ const clients = useCollection<ClientSummaryResource, ClientListResource>({
 })
 
 onMounted(async () => {
-  await clients.fetch()
+  await clients.load()
 })
 </script>
 

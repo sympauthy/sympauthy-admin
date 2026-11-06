@@ -29,7 +29,7 @@ function typeColor(type: string): 'blue' | 'purple' | 'gray' {
 }
 
 onMounted(async () => {
-  await scopes.fetch()
+  await scopes.load()
 })
 </script>
 

@@ -100,8 +100,10 @@ how it is installed.
 | `SaPageActions` | what the screen lets an operator do, drawn in the bar naming it |
 | `SaDefinitionList`, `SaDefinitionRow` | the fields of a record, inside a section |
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
+| `SaTableActions` | the cell holding a row's `ActionsDropdown` |
 | `TableRecord` | the name of a record with a screen of its own, in a `primary` cell |
-| `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` |
+| `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` from `sm:` |
+| `SaTableEnd` | the end of a collection's rows below `sm:`, where the list grows |
 | `RecordTabs` | the views one record is read through, from `sm:` |
 | `SaRecordViews` | the views one record is read through, on a phone |
 | `SaDialog` | the shell of any dialog |

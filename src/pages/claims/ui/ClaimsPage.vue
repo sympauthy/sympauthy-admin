@@ -23,7 +23,7 @@ const claims = useCollection<ClaimResource, ClaimListResource>({
 })
 
 onMounted(async () => {
-  await claims.fetch()
+  await claims.load()
 })
 </script>
 

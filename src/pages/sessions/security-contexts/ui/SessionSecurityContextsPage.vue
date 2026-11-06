@@ -31,7 +31,7 @@ const securityContexts = useCollection<
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await securityContexts.fetch()
+  await securityContexts.load()
 })
 </script>
 

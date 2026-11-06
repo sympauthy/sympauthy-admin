@@ -115,9 +115,12 @@ sidebar's head links to `/`, so it reaches that page whatever the token opens.
 root element.** [The collection standard](collection-standard.md#the-page) owns what it is handed
 and what it draws; this section owns where it sits.
 
-**The page never scrolls.** `CollectionPage` hands `SaTable` `fill` and `auto-page-size`, as
-[Table](https://sympauthy.github.io/sympauthy-design/components/table) describes them, and the
-collection refetches at the size it emits.
+**From `sm:` the page never scrolls.** `CollectionPage` hands `SaTable` `fill` and
+`auto-page-size`, as [Table](https://sympauthy.github.io/sympauthy-design/components/table)
+describes them, and the collection refetches at the size it emits.
+
+**Below `sm:` the card ends with its rows and the page scrolls**, since the list grows as it does;
+[the collection standard](collection-standard.md#the-page) says how.
 
 **A page describes its records once, in `#header` and `#rows`, and writes no phone layout of its
 own.** `SaTable` lays them out for one, so a column added to a page reaches the phone with it.
@@ -154,7 +157,9 @@ alone has nothing to tell apart at a glance.
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
 
-**A row with nothing to offer holds the height of the button,** so rows stay one height.
+**A row's actions are a `SaTableActions` holding its `ActionsDropdown`.** A row with nothing to
+offer keeps the cell and leaves it empty: the cell holds the row's height from `sm:` and draws
+nothing on a phone.
 
 **A value naming a record with a screen of its own links to it,** with a `RouteLink`, or a
 `TableRecord` where it names the row: the client of a grant, a session or a consent, the user of a

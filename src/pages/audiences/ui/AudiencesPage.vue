@@ -22,7 +22,7 @@ const audiences = useCollection<AudienceResource, AudienceListResource>({
 })
 
 onMounted(async () => {
-  await audiences.fetch()
+  await audiences.load()
 })
 </script>
 

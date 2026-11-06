@@ -24,7 +24,7 @@ const grants = useCollection<GrantSummaryResource, GrantListResource>({
 })
 
 onMounted(async () => {
-  await grants.fetch()
+  await grants.load()
 })
 </script>
 
