@@ -39,14 +39,14 @@ const { t } = useI18n()
         {{ t('pages.users.disabled') }}
       </SaTag>
     </SaSummaryField>
+    <SaSummaryField :label="t('pages.userDetail.createdAt')">
+      {{ formatDate(user.created_at) }}
+    </SaSummaryField>
     <SaSummaryField :label="t('pages.userDetail.lastAuthenticatedAt')">
       <template v-if="user.last_authenticated_at">
         {{ formatDateTime(user.last_authenticated_at) }}
       </template>
       <SaEmptyValue v-else />
-    </SaSummaryField>
-    <SaSummaryField :label="t('pages.userDetail.createdAt')">
-      {{ formatDate(user.created_at) }}
     </SaSummaryField>
   </SaSummaryCard>
 </template>
