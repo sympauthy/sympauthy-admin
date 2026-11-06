@@ -73,8 +73,8 @@ onMounted(async () => {
     <template #header>
       <SaTableHeader
         :sorting="grants.sort"
-        field="user_id"
-        :filtered-label="grants.filteredLabel('user_id')"
+        field="user"
+        :filtered-label="grants.filteredLabel('user')"
       >
         {{ t('pages.grants.grant') }}
         <template #help>
@@ -137,7 +137,7 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="grant in grants.items" :key="grant.grant_id">
-        <SaTableCell primary truncate mono>
+        <SaTableCell primary truncate>
           <TableRecord
             :name="grantName(grant)"
             :detail="grant.grant_id"

@@ -14,6 +14,7 @@ import {
   grantTypeLabel,
   type GrantDetailResource
 } from '@/entities/grant'
+import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
 
 defineProps<{
@@ -51,11 +52,10 @@ const { t } = useI18n()
         <DocHelpTooltip term="terms.grant.user" />
       </template>
       <RecordLink
-        v-if="grant.user_id"
-        mono
+        v-if="grant.user"
         truncate
-        :name="grant.user_id"
-        :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
+        :name="userIdentifierLabel(grant.user)"
+        :to="{ name: 'userDetail', params: { userId: grant.user.user_id } }"
       />
       <SaEmptyValue v-else />
     </SaSummaryField>

@@ -153,9 +153,7 @@ under the name, where the name is not already that identifier.
 **A record is named by what an operator would call it.** An account by its first identifier and a
 session by its purpose, each with its identifier under it. A row of identifiers alone has nothing to
 tell apart at a glance. A grant is named by the account it was opened for, or by its client where it
-names none, since that is what an operator looks one up by. The grant summary carries the account's
-identifier alone, so that name is the identifier until
-[sympauthy#680](https://github.com/sympauthy/sympauthy/issues/680) embeds its claims.
+names none, since that is what an operator looks one up by.
 
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
