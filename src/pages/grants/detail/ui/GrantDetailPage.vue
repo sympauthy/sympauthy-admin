@@ -36,9 +36,9 @@ const notFound = ref(false)
 // The grant revoked is the one the operator read and confirmed, whatever the URL has moved to.
 const revokeGrantId = ref<string | null>(null)
 
-// A phone draws no help beside the status, so the menu links to what a grant is, first. Only a live
-// grant is offered for revoking: the server leaves any other as it is, so the action would succeed
-// and change nothing.
+// A phone's record menu opens on the help of what the screen shows, as a user's does for its view,
+// and a grant has no views, so it links to what a grant is. Only a live grant is offered for
+// revoking: the server leaves any other as it is, so the action would succeed and change nothing.
 const actions = computed<ActionItem[]>(() => {
   const live = grant.value !== null && grantIsLive(grant.value)
   return [
@@ -49,7 +49,7 @@ const actions = computed<ActionItem[]>(() => {
       ? [
           {
             key: 'revoke',
-            label: t('pages.grantDetail.revoke'),
+            label: t('revokeGrantDialog.action'),
             icon: NoSymbolIcon,
             danger: true,
             startsGroup: isPhone.value,
@@ -136,6 +136,7 @@ onMounted(() => load(grantId.value))
 
   <RevokeGrantDialog
     :grant-id="revokeGrantId"
+    :open="revokeGrantId !== null"
     @revoked="load(grantId)"
     @close="revokeGrantId = null"
   />

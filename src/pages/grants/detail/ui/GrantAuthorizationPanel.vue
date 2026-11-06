@@ -40,7 +40,6 @@ const { t } = useI18n()
           v-if="grant.actor_grant_id"
           mono
           truncate
-          :title="grant.actor_grant_id"
           :name="grant.actor_grant_id"
           :to="{ name: 'grantDetail', params: { grantId: grant.actor_grant_id } }"
         />

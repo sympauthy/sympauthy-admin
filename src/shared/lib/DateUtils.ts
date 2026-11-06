@@ -34,3 +34,11 @@ export function formatTime(dateStr: string): string {
 export function compareApiDates(a: string, b: string): number {
   return parseApiDate(a).getTime() - parseApiDate(b).getTime()
 }
+
+/**
+ * A date the API sent, as the ISO string a `<time datetime>` reads. The API's own string carries no
+ * zone designator, which that attribute would read as a local time.
+ */
+export function isoDateTime(dateStr: string): string {
+  return parseApiDate(dateStr).toISOString()
+}

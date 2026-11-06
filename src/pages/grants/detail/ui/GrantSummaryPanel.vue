@@ -54,7 +54,6 @@ const { t } = useI18n()
         v-if="grant.user_id"
         mono
         truncate
-        :title="grant.user_id"
         :name="grant.user_id"
         :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
       />
@@ -64,7 +63,6 @@ const { t } = useI18n()
       <RecordLink
         mono
         truncate
-        :title="grant.client_id"
         :name="grant.client_id"
         :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }"
       />

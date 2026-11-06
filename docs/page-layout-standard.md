@@ -167,10 +167,9 @@ nothing on a phone.
 **A value naming a record with a screen of its own links to it,** with a `RecordLink`, or a
 `TableRecord` where it names the row: the client of a grant, a session or a consent, the user of a
 grant, the grant a client acted through. It is `mono` where the name is an identifier, and
-`truncate` where its line holds that one value — a summary field, a `truncate` column — with the
-name whole in its `title`. A value whose record has no screen — an audience — stays plain text. A
-client the configuration no longer declares still gets its link: the screen it opens says so, which
-plain text would hide.
+`truncate` where its line holds that one value — a summary field, a `truncate` column. A value whose
+record has no screen — an audience — stays plain text. A client the configuration no longer
+declares still gets its link: the screen it opens says so, which plain text would hide.
 
 **A set of values wraps as tags,** one `SaTag` each, rather than a list joined by commas: the claims
 of a scope, the scopes of a consent. A row may be taller for it.

@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import {
   GrantApi,
   grantIsLive,
+  grantName,
   grantStatusColor,
   grantStatusLabel,
   grantTypeLabel,
@@ -36,15 +37,6 @@ const grants = useCollection<GrantSummaryResource, GrantListResource>({
 
 const revokeGrantId = ref<string | null>(null)
 
-/**
- * Who the grant was opened for, or the client a client credentials grant is held by alone. The
- * identifier rather than the person's claims: a grant names its user and nothing more, and the
- * search field is what finds one by the address they sign in with.
- */
-function grantName(grant: GrantSummaryResource): string {
-  return grant.user_id ?? grant.client_id
-}
-
 // Only a live grant is offered for revoking: the server leaves any other as it is, so the action
 // would succeed and change nothing.
 function actions(grant: GrantSummaryResource): ActionItem[] {
@@ -54,7 +46,7 @@ function actions(grant: GrantSummaryResource): ActionItem[] {
       ? [
           {
             key: 'revoke',
-            label: t('pages.grants.revoke'),
+            label: t('revokeGrantDialog.action'),
             danger: true,
             requiredScopes: ['admin:grants:write']
           }
@@ -118,8 +110,11 @@ onMounted(async () => {
       >
         {{ t('pages.grants.client') }}
       </SaTableHeader>
+      <!-- Audience and creation are dropped between sm: and lg:, where the shrink-wrapped columns
+           beside them would leave the grant's name no width; a phone stacks them, and keeps them. -->
       <SaTableHeader
         fit
+        class="sm:max-lg:hidden"
         :sorting="grants.sort"
         field="audience_id"
         :filtered-label="grants.filteredLabel('audience_id')"
@@ -128,6 +123,7 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader
         fit
+        class="sm:max-lg:hidden"
         :sorting="grants.sort"
         field="created_at"
         :filtered-label="grants.filteredLabel('created_at')"
@@ -179,16 +175,21 @@ onMounted(async () => {
           :label="t('pages.grants.audience')"
           fit
           mono
-          class="max-sm:mt-1 max-sm:basis-full"
+          class="max-sm:mt-1 max-sm:basis-full sm:max-lg:hidden"
         >
           {{ grant.audience_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.grants.createdAt')" fit class="max-sm:mt-1 max-sm:basis-full">
+        <SaTableCell
+          :label="t('pages.grants.createdAt')"
+          fit
+          class="max-sm:mt-1 max-sm:basis-full sm:max-lg:hidden"
+        >
           {{ formatDateTime(grant.created_at) }}
         </SaTableCell>
         <SaTableActions>
+          <!-- Named by the grant rather than its person, who holds many. -->
           <ActionsDropdown
-            :record="grantName(grant)"
+            :record="grant.grant_id"
             :actions="actions(grant)"
             @action="onAction($event, grant)"
           />
@@ -203,6 +204,7 @@ onMounted(async () => {
 
   <RevokeGrantDialog
     :grant-id="revokeGrantId"
+    :open="revokeGrantId !== null"
     @revoked="grants.fetch(grants.page)"
     @close="revokeGrantId = null"
   />

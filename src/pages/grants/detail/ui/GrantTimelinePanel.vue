@@ -10,7 +10,7 @@ import {
   grantTypeLabel,
   type GrantDetailResource
 } from '@/entities/grant'
-import { compareApiDates, formatDate, formatTime } from '@/shared/lib'
+import { compareApiDates, formatDate, formatTime, isoDateTime } from '@/shared/lib'
 
 const props = defineProps<{
   grant: GrantDetailResource
@@ -90,22 +90,33 @@ const events = computed<TimelineEvent[]>(() => {
   return all.sort((a, b) => compareApiDates(a.at, b.at))
 })
 
+interface TimelineEntry extends TimelineEvent {
+  /** The latest event of all, whose dot is filled. */
+  latest: boolean
+  /** The last event of its day, where the rail stops. */
+  lastOfDay: boolean
+}
+
 /** The events under the day each happened on, so a date is read once above them. */
 const days = computed(() => {
-  const grouped: { date: string; events: TimelineEvent[] }[] = []
-  for (const event of events.value) {
+  const grouped: { date: string; entries: TimelineEntry[] }[] = []
+  events.value.forEach((event, index) => {
     const date = formatDate(event.at)
+    const next = events.value[index + 1]
+    const entry: TimelineEntry = {
+      ...event,
+      latest: next === undefined,
+      lastOfDay: next === undefined || formatDate(next.at) !== date
+    }
     const day = grouped[grouped.length - 1]
     if (day?.date === date) {
-      day.events.push(event)
+      day.entries.push(entry)
     } else {
-      grouped.push({ date, events: [event] })
+      grouped.push({ date, entries: [entry] })
     }
-  }
+  })
   return grouped
 })
-
-const lastKey = computed(() => events.value[events.value.length - 1]?.key)
 </script>
 
 <template>
@@ -115,19 +126,19 @@ const lastKey = computed(() => events.value[events.value.length - 1]?.key)
         <section v-for="day in days" :key="day.date" class="space-y-4">
           <h3 class="sa-field-label">{{ day.date }}</h3>
           <ol>
-            <li v-for="(event, index) in day.events" :key="event.key" class="flex gap-3">
+            <li v-for="event in day.entries" :key="event.key" class="flex gap-3">
               <!-- The rail: a dot per event, filled on the latest, and the line down to the next one
                    that day. -->
               <div aria-hidden="true" class="flex w-5 shrink-0 flex-col items-center">
                 <span
                   class="mt-1.5 size-2.5 rounded-full border-2 border-primary"
-                  :class="event.key === lastKey ? 'bg-primary' : 'bg-white'"
+                  :class="event.latest ? 'bg-primary' : 'bg-white'"
                 />
-                <span v-if="index < day.events.length - 1" class="mt-1 w-px flex-1 bg-gray-200" />
+                <span v-if="!event.lastOfDay" class="mt-1 w-px flex-1 bg-gray-200" />
               </div>
               <div
                 class="flex min-w-0 flex-col gap-0.5 text-sm"
-                :class="index < day.events.length - 1 ? 'pb-5' : ''"
+                :class="{ 'pb-5': !event.lastOfDay }"
               >
                 <span class="font-medium text-gray-900">{{ event.title }}</span>
                 <span v-if="event.detail" class="text-gray-600">{{ event.detail }}</span>
@@ -136,11 +147,10 @@ const lastKey = computed(() => events.value[events.value.length - 1]?.key)
                   mono
                   truncate
                   class="self-start"
-                  :title="event.userId"
                   :name="event.userId"
                   :to="{ name: 'userDetail', params: { userId: event.userId } }"
                 />
-                <time :datetime="event.at" class="font-mono text-xs text-gray-600">
+                <time :datetime="isoDateTime(event.at)" class="font-mono text-xs text-gray-600">
                   {{ formatTime(event.at) }}
                 </time>
               </div>

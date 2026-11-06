@@ -6,11 +6,12 @@ import { GrantApi } from '@/entities/grant'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 
 /**
- * Revokes one grant, once the operator confirms it. The dialog is open while it names a grant, and
- * emits `revoked` before `close` so the screen behind it reads what changed.
+ * Revokes one grant, once the operator confirms it. It emits `revoked` before `close`, so the screen
+ * behind it reads what changed.
  */
 const props = defineProps<{
   grantId: string | null
+  open: boolean
 }>()
 
 const emit = defineEmits<{
@@ -25,9 +26,9 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 
 watch(
-  () => props.grantId,
-  (grantId) => {
-    if (grantId) {
+  () => props.open,
+  (isOpen) => {
+    if (isOpen) {
       loading.value = false
       error.value = null
     }
@@ -54,7 +55,7 @@ async function onConfirm() {
 
 <template>
   <SaConfirmDialog
-    :open="grantId !== null"
+    :open="open"
     :confirm-label="t('revokeGrantDialog.confirm')"
     :cancel-label="t('common.cancel')"
     :loading="loading"

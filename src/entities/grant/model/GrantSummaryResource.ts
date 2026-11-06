@@ -69,6 +69,15 @@ export function grantIsLive(grant: Pick<GrantSummaryResource, 'status'>): boolea
   return grant.status === 'live'
 }
 
+/**
+ * What an operator calls a grant: who it was opened for, or the client a client credentials grant is
+ * held by alone. The identifier rather than the person's claims, since a grant names its user and
+ * nothing more; the search finds one by the address they sign in with.
+ */
+export function grantName(grant: Pick<GrantSummaryResource, 'user_id' | 'client_id'>): string {
+  return grant.user_id ?? grant.client_id
+}
+
 export function grantStatusColor(status: string): 'green' | 'red' | 'yellow' | 'gray' {
   switch (status) {
     case 'live':

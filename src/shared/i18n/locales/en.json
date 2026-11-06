@@ -286,6 +286,7 @@
     "confirm": "Force logout"
   },
   "revokeGrantDialog": {
+    "action": "Revoke grant…",
     "title": "Revoke this grant?",
     "description": "Every token issued under this grant stops working at once, and so does every grant a client obtained by exchanging one of them. The client will need a new authorization. This cannot be undone.",
     "confirm": "Revoke grant"
@@ -538,7 +539,6 @@
       "createdAt": "Created at",
       "actions": "Actions",
       "view": "View grant",
-      "revoke": "Revoke grant…",
       "search": "Search by user, client or audience",
       "empty": "No grants found."
     },
@@ -596,7 +596,6 @@
         "expired": "Expired"
       },
       "about": "About grants",
-      "revoke": "Revoke grant…",
       "notFound": "This grant no longer exists. The cleanup job collects a grant once it is finished."
     },
     "sessions": {
