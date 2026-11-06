@@ -58,7 +58,10 @@
       "ascending": "ascending",
       "descending": "descending",
       "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "loadingMore": "Loading more records…",
+      "end": "{total} record | All {total} records shown",
+      "retry": "Retry"
     },
     "operators": {
       "eq": "is",

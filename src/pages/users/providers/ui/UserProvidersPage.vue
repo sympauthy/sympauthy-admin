@@ -9,7 +9,13 @@ import {
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
-import { SaConfirmDialog, SaCopyableValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import {
+  SaConfirmDialog,
+  SaCopyableValue,
+  SaTableActions,
+  SaTableCell,
+  SaTableHeader
+} from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -22,7 +28,8 @@ const userId = computed(() => route.params.userId as string)
 const providerLinks = useCollection<UserProviderLinkResource, UserProviderLinkListResource>({
   capabilities: () => api.getProviderLinkCapabilities(userId.value),
   page: (params) => api.listProviderLinks(userId.value, params),
-  items: (content) => content.providers
+  items: (content) => content.providers,
+  key: (link) => link.provider_id
 })
 
 const actions = computed<ActionItem[]>(() => [
@@ -55,7 +62,7 @@ async function confirmUnlink() {
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await providerLinks.fetch()
+  await providerLinks.load()
 })
 </script>
 
@@ -114,13 +121,13 @@ onMounted(async () => {
         <SaTableCell :label="t('pages.userProviders.linkedAt')" fit class="max-sm:mt-1">
           {{ formatDate(link.linked_at) }}
         </SaTableCell>
-        <SaTableCell actions>
+        <SaTableActions>
           <ActionsDropdown
             :record="link.provider_id"
             :actions="actions"
             @action="unlinkTargetProviderId = link.provider_id"
           />
-        </SaTableCell>
+        </SaTableActions>
       </tr>
     </template>
 

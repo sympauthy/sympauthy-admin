@@ -18,11 +18,12 @@ const api = new AudienceApi()
 const audiences = useCollection<AudienceResource, AudienceListResource>({
   capabilities: () => api.getAudienceCapabilities(),
   page: (params) => api.listAudiences(params),
-  items: (content) => content.audiences
+  items: (content) => content.audiences,
+  key: (audience) => audience.audience_id
 })
 
 onMounted(async () => {
-  await audiences.fetch()
+  await audiences.load()
 })
 </script>
 

@@ -8,7 +8,13 @@ import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
-import { SaConfirmDialog, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import {
+  SaConfirmDialog,
+  SaTableActions,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
+} from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 
 const route = useRoute()
@@ -20,7 +26,8 @@ const userId = computed(() => route.params.userId as string)
 const consents = useCollection<ConsentResource, ConsentListResource>({
   capabilities: () => api.getConsentCapabilities(userId.value),
   page: (params) => api.listConsents(userId.value, params),
-  items: (content) => content.consents
+  items: (content) => content.consents,
+  key: (consent) => consent.audience_id
 })
 
 const actions = computed<ActionItem[]>(() => [
@@ -63,7 +70,7 @@ async function confirmRevoke(): Promise<void> {
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await consents.fetch()
+  await consents.load()
 })
 </script>
 
@@ -144,13 +151,13 @@ onMounted(async () => {
         <SaTableCell :label="t('pages.userConsents.consentedAt')" fit class="max-sm:mt-1">
           {{ formatDateTime(consent.consented_at) }}
         </SaTableCell>
-        <SaTableCell actions>
+        <SaTableActions>
           <ActionsDropdown
             :record="consent.audience_id"
             :actions="actions"
             @action="revokeTargetAudienceId = consent.audience_id"
           />
-        </SaTableCell>
+        </SaTableActions>
       </tr>
     </template>
 

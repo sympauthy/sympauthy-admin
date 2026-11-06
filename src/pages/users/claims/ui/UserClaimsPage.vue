@@ -23,14 +23,15 @@ const userId = computed(() => route.params.userId as string)
 const claims = useCollection<UserClaimResource, UserClaimListResource>({
   capabilities: () => api.getUserClaimCapabilities(userId.value),
   page: (params) => api.listUserClaims(userId.value, params),
-  items: (content) => content.claims
+  items: (content) => content.claims,
+  key: (claim) => claim.claim_id
 })
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await claims.fetch()
+  await claims.load()
 })
 </script>
 

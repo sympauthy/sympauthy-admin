@@ -12,11 +12,12 @@ const api = new ClientApi()
 const clients = useCollection<ClientSummaryResource, ClientListResource>({
   capabilities: () => api.getClientCapabilities(),
   page: (params) => api.listClients(params),
-  items: (content) => content.clients
+  items: (content) => content.clients,
+  key: (client) => client.client_id
 })
 
 onMounted(async () => {
-  await clients.fetch()
+  await clients.load()
 })
 </script>
 

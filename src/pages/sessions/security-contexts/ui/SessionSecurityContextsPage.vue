@@ -24,14 +24,15 @@ const securityContexts = useCollection<
 >({
   capabilities: () => api.getSessionSecurityContextCapabilities(sessionId.value),
   page: (params) => api.listSessionSecurityContexts(sessionId.value, params),
-  items: (content) => content.security_contexts
+  items: (content) => content.security_contexts,
+  key: (context) => `${context.ip}|${context.user_agent ?? ''}`
 })
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
 // mounts it again — so this collection is the mount's own, and follows the record without a watcher
 // and with nothing to disown.
 onMounted(async () => {
-  await securityContexts.fetch()
+  await securityContexts.load()
 })
 </script>
 

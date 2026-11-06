@@ -6,7 +6,14 @@ import { UserApi, type UserListResource, type UserResource } from '@/entities/us
 import { ClaimApi, type ClaimResource } from '@/entities/claim'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
-import { SaAlert, SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
+import {
+  SaAlert,
+  SaEmptyValue,
+  SaTableActions,
+  SaTableCell,
+  SaTableHeader,
+  SaTag
+} from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 import { LogoutDialog } from '@/features/logout-user'
 import { formatDate } from '@/shared/lib'
@@ -50,6 +57,7 @@ const users = useCollection<UserResource, UserListResource>({
   capabilities: () => api.getUserCapabilities(),
   page: (params) => api.listUsers(params),
   items: (content) => content.users,
+  key: (user) => user.user_id,
   selection: () => ({
     claims: selectedClaimIds.value.length > 0 ? selectedClaimIds.value.join(',') : undefined
   })
@@ -95,7 +103,7 @@ function onAction(key: string, user: UserResource) {
 onMounted(async () => {
   await fetchIdentifierClaims()
   selectedClaimIds.value = identifierClaims.value.map((c) => c.id)
-  await users.fetch()
+  await users.load()
 })
 </script>
 
@@ -184,13 +192,13 @@ onMounted(async () => {
         <SaTableCell :label="t('pages.users.createdAt')" fit hidden-below="sm">
           {{ formatDate(user.created_at) }}
         </SaTableCell>
-        <SaTableCell actions>
+        <SaTableActions>
           <ActionsDropdown
             :record="userName(user)"
             :actions="actions"
             @action="onAction($event, user)"
           />
-        </SaTableCell>
+        </SaTableActions>
       </tr>
     </template>
 

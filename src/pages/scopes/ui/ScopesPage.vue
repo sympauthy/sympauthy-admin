@@ -14,7 +14,8 @@ const api = new ScopeApi()
 const scopes = useCollection<ScopeResource, ScopeListResource>({
   capabilities: () => api.getScopeCapabilities(),
   page: (params) => api.listScopes(params),
-  items: (content) => content.scopes
+  items: (content) => content.scopes,
+  key: (scope) => scope.id
 })
 
 function typeColor(type: string): 'blue' | 'purple' | 'gray' {
@@ -29,7 +30,7 @@ function typeColor(type: string): 'blue' | 'purple' | 'gray' {
 }
 
 onMounted(async () => {
-  await scopes.fetch()
+  await scopes.load()
 })
 </script>
 

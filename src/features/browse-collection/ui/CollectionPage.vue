@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useSlots } from 'vue'
+import { nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import {
@@ -8,9 +8,11 @@ import {
   SaPagination,
   SaTable,
   SaTableFilterPicker,
+  SaTableEnd,
   SaTableFilters,
   SaTableSort
 } from '@sympauthy/design'
+import { scrollParent } from '@/shared/lib'
 import { CommonButton } from '@/shared/ui'
 import { useCollectionLabels } from '../model/useCollectionLabels'
 import type { Collection } from '../model/useCollection'
@@ -18,7 +20,9 @@ import type { Collection } from '../model/useCollection'
 /**
  * The root of a page showing one collection: one card holding what narrows it, its rows and its
  * pages, filling the remaining height. The number of rows requested per page is derived from that
- * height, so a page never scrolls as a whole.
+ * height, so a page never scrolls as a whole. Below `sm:` the card ends with its rows instead, the
+ * page scrolls, and the list grows as it does: `SaTableEnd` asks for each next page where the pager
+ * would have been.
  *
  * Everything but the columns comes from the collection it is handed: what can be searched, filtered
  * and ordered from the capability document, the paging and the order from what the caller asked. The
@@ -42,10 +46,40 @@ const props = withDefaults(
 const slots = useSlots()
 const { t } = useI18n()
 const labels = useCollectionLabels()
+
+const root = ref<HTMLElement | null>(null)
+
+// The box that scrolls is the app shell's, which outlives the page, so where a phone's list was left
+// is read off it and put back on it. Put back once the page has made its first read, which is when
+// the rows have what they are drawn with, and so the height they were left at.
+watch(
+  () => props.collection.opened,
+  async (opened) => {
+    if (!opened || props.collection.returnedScroll === null || !root.value) {
+      return
+    }
+    await nextTick()
+    const scrolled = root.value && scrollParent(root.value)
+    if (scrolled) {
+      scrolled.scrollTop = props.collection.returnedScroll
+    }
+  },
+  { immediate: true }
+)
+
+// Only a phone's list is kept for the operator to come back to.
+onBeforeUnmount(() => {
+  const scrolled = props.collection.grows && root.value && scrollParent(root.value)
+  if (scrolled) {
+    props.collection.keepScroll(scrolled.scrollTop)
+  }
+})
 </script>
 
 <template>
-  <div class="flex h-full min-h-0 flex-col">
+  <!-- Holds the card to the height it is given from `sm:` alone: a phone's card ends with its rows,
+       which a column of fixed height would squeeze into a box of their own to scroll. -->
+  <div ref="root" class="flex flex-col sm:h-full sm:min-h-0">
     <!-- The records list without the document; what is missing is what narrows them. -->
     <SaAlert v-if="props.collection.capabilitiesError" color="warning" class="mb-4 shrink-0">
       {{ t('common.collection.capabilitiesFailed') }}
@@ -57,7 +91,7 @@ const labels = useCollectionLabels()
     </div>
 
     <SaTable
-      class="min-h-0 flex-1"
+      class="sm:min-h-0 sm:flex-1"
       fill
       auto-page-size
       :loading-label="t('common.loading')"
@@ -117,15 +151,24 @@ const labels = useCollectionLabels()
       </template>
       <template #rows>
         <slot name="rows" />
+        <SaTableEnd
+          v-if="props.collection.grows && props.collection.opened"
+          :more="props.collection.hasMore"
+          :loading="props.collection.moreLoading"
+          :error="props.collection.moreError"
+          :loading-label="t('common.collection.loadingMore')"
+          :end-label="
+            t('common.collection.end', { total: props.collection.total }, props.collection.total)
+          "
+          :retry-label="t('common.collection.retry')"
+          @more="props.collection.fetchMore"
+        />
       </template>
       <template #empty>
         <slot name="empty" />
       </template>
-      <!-- Kept on screen for a single page: hiding it would give the rows more room, which in turn
-           feeds back into the number of rows per page. -->
-      <template #footer>
+      <template v-if="!props.collection.grows" #footer>
         <SaPagination
-          always-shown
           :page="props.collection.page"
           :total-pages="props.collection.totalPages"
           :size="props.collection.size"

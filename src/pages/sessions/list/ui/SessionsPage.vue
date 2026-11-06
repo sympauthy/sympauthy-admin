@@ -24,11 +24,12 @@ const sessions = useCollection<
 >({
   capabilities: () => api.getSessionCapabilities(),
   page: (params) => api.listSessions(params),
-  items: (content) => content.sessions
+  items: (content) => content.sessions,
+  key: (session) => session.id
 })
 
 onMounted(async () => {
-  await sessions.fetch()
+  await sessions.load()
 })
 </script>
 

@@ -11,6 +11,7 @@ import {
   SaConfirmDialog,
   SaEmptyValue,
   SaPageActions,
+  SaTableActions,
   SaTableCell,
   SaTableHeader,
   SaTag
@@ -25,7 +26,8 @@ const api = new InvitationApi()
 const invitations = useCollection<InvitationResource, InvitationListResource>({
   capabilities: () => api.getInvitationCapabilities(),
   page: (params) => api.listInvitations(params),
-  items: (content) => content.invitations
+  items: (content) => content.invitations,
+  key: (invitation) => invitation.invitation_id
 })
 
 const showCreateDialog = ref(false)
@@ -99,7 +101,7 @@ function onInvitationCreated() {
 }
 
 onMounted(async () => {
-  await invitations.fetch()
+  await invitations.load()
 })
 </script>
 
@@ -181,17 +183,15 @@ onMounted(async () => {
           <span v-if="invitation.expires_at">{{ formatDate(invitation.expires_at) }}</span>
           <SaEmptyValue v-else />
         </SaTableCell>
-        <!-- Only a pending invitation can be revoked. Another keeps the height the button would give
-             its row, so rows stay one height, and has no empty line to draw below `sm:`. -->
-        <SaTableCell actions :hidden-below="invitation.status === 'pending' ? undefined : 'sm'">
+        <!-- Only a pending invitation can be revoked, and another leaves the cell empty. -->
+        <SaTableActions>
           <ActionsDropdown
             v-if="invitation.status === 'pending'"
             :record="invitation.token_prefix"
             :actions="actions"
             @action="onRevoke(invitation.invitation_id)"
           />
-          <div v-else class="min-h-control" />
-        </SaTableCell>
+        </SaTableActions>
       </tr>
     </template>
 

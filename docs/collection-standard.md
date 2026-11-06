@@ -21,8 +21,9 @@ grammar; this one owns what the panel makes of it.
 the wire [`shared/api`](../src/shared/api) declares, and drawn by the design system.**
 [Table](https://sympauthy.github.io/sympauthy-design/components/table),
 [TableFilters](https://sympauthy.github.io/sympauthy-design/components/table-filters),
-[TableSort](https://sympauthy.github.io/sympauthy-design/components/table-sort) and
-[Pagination](https://sympauthy.github.io/sympauthy-design/components/pagination) own how each part
+[TableSort](https://sympauthy.github.io/sympauthy-design/components/table-sort),
+[Pagination](https://sympauthy.github.io/sympauthy-design/components/pagination) and
+[TableEnd](https://sympauthy.github.io/sympauthy-design/components/table-end) own how each part
 looks and behaves. This standard owns what the panel hands them.
 
 **The panel holds no list of filters.** Every field a collection can be narrowed by is read from
@@ -75,14 +76,16 @@ the collection whole:
 | the order on a phone | `SaTableSort`, in `#toolbar` | `sort` |
 | re-reading the list | `CommonButton`, in `#toolbar` | `fetch`, at the page displayed |
 | the filters applied | `SaTableFilters`, in `#filters` | `filters`, and `total` in `#summary` |
-| the pager | `SaPagination`, in `#footer` | `page`, `totalPages`, `size`, `total`, `fetch` |
+| the pager, from `sm:` | `SaPagination`, in `#footer` | `page`, `totalPages`, `size`, `total`, `fetch` |
+| the end of the list, below `sm:` | `SaTableEnd`, after `#rows` | `hasMore`, `moreLoading`, `moreError`, `total`, `fetchMore` |
 
 **A page writes its columns, its rows and its `empty` sentence, and nothing else.** `CollectionPage`
 forwards them to `SaTable`'s `#header`, `#rows` and `#empty`, and [the page layout
 standard](page-layout-standard.md#table-rows) says what a row holds.
 
 **The feature's `index.ts` publishes what a page names** — `useCollection`, `CollectionPage`. From
-the package a page names `SaTableHeader` and `SaTableCell`, and never what the table above lists.
+the package a page names `SaTableHeader`, `SaTableCell` and `SaTableActions`, and never what the
+table above lists.
 
 **A column over a field of the collection hands its `SaTableHeader` `sorting`, `field` and
 `filtered-label`, and any other column none of them.** A field the document does not order on draws
@@ -109,6 +112,17 @@ by.
 
 **`SaTable`'s `page-size-change` is answered by `setSize`,** which asks again for the page holding
 the first record displayed, so resizing keeps the operator roughly in place.
+
+**Below `sm:` a collection grows rather than pages, while `useSaListGrows` holds.** `CollectionPage`
+ends the page's rows with a `SaTableEnd` and draws no `SaPagination`; `fetchMore` adds the page after
+the last one read below the rows, through `moreLoading` and `moreError` rather than `loading` and
+`error`, so the rows already read stay while the next arrive or fail. A page is
+`GROWING_PAGE_SIZE`, 20 rows, which more than fills a phone, and `SaTable` measures no size there.
+
+**A list that grows reads its first page again wherever a paged one would read the page displayed.**
+The table's wait replaces the rows and the scroll with them, so the refresh and a mutation's refetch
+start it over rather than leave a later page alone. Crossing `sm:` reads the first page too, in the
+other way.
 
 **What the page could not draw goes in the `notice` slot**, above the table.
 
@@ -149,7 +163,27 @@ records starts where its own caller left it, and a dialog listing them cannot mo
 it.
 
 **A page calls one `useCollection` per collection it lists, under the plural of what it holds**, and
-hands it to `CollectionPage` whole.
+hands it to `CollectionPage` whole. Its first read is `load()`, in `onMounted`, once the page has
+read whatever else its rows are drawn with: a list handed back is scrolled and grown from then.
+
+**A source names what tells one record from another in `key`**, as the row's `:key` does. A list
+that grows adds pages read by offset, so a record that moved ahead of the rows already read comes
+back on the next page, and is listed once.
+
+**A phone's list left for one of its rows is handed back to the operator returning to it.** The rows
+read, the page reached, the criteria, the document and the scroll are kept by `CollectionReturn`
+under the screen's path, from the moment the operator opens a path under it until they come back to
+it or go anywhere else, and `load()` then reads nothing. A phone pays a request per page it scrolled
+through, and finds itself back at the top without this; a list from `sm:` holds one page and is read
+again.
+
+**What is kept is the list as it was left.** A change made on a row's screen shows once the operator
+refreshes the list. The list is not kept where it was left while a search or a filter was still
+waiting to be asked, since its rows were read under what came before.
+
+**Coming back is reaching the list's path from under it, by whatever link.** The sidebar's entry for
+the list, followed from one of its rows, hands it back as the back link does; reached from anywhere
+else, the list starts over.
 
 **It constructs the entity's client itself.** `const api = new UserApi()` at the top of the setup:
 the entity publishes the client, the resources and the schemas, and the page is where they meet the
@@ -165,7 +199,8 @@ const userId = computed(() => route.params.userId as string)
 const claims = useCollection<UserClaimResource, UserClaimListResource>({
   capabilities: () => api.getUserClaimCapabilities(userId.value),
   page: (params) => api.listUserClaims(userId.value, params),
-  items: (content) => content.claims
+  items: (content) => content.claims,
+  key: (claim) => claim.claim_id
 })
 ```
 
@@ -272,9 +307,13 @@ anything else.
 **Choosing which columns a page draws.** The columns are written by the page; nothing lets an
 operator add or hide one.
 
-**Continuous scrolling.** The list is paged because the server pages by offset: appending windows of
-a set that moves under the reader duplicates and skips records, and the error grows with the
-scroll. Keyset pagination on the server is what would reopen this.
+**A list that grows from `sm:`.** It pages there, so an operator can jump around a long one.
+
+**A list that grows over a set that moves.** The server pages by offset, so a record added or
+removed ahead of the rows a phone has read shifts the next page by one, and a row is repeated or
+skipped. The design system grows a phone's list anyway, since a pager makes a phone hop from page to
+page, and the panel accepts the drift there: on a phone, a page is 20 rows of a list an operator
+re-reads by refreshing. Keyset pagination on the server is what would end it.
 
 ---
 
