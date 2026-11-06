@@ -7,7 +7,7 @@ import {
   SaEmptyValue,
   SaTag
 } from '@sympauthy/design'
-import { DocHelpTooltip, RouteLink } from '@/shared/ui'
+import { DocHelpTooltip, RecordLink } from '@/shared/ui'
 import type { GrantDetailResource } from '@/entities/grant'
 import { formatDateTime } from '@/shared/lib'
 
@@ -31,17 +31,18 @@ const { t } = useI18n()
         </template>
         <SaEmptyValue v-else />
       </SaDefinitionRow>
-      <SaDefinitionRow mono>
+      <SaDefinitionRow>
         <template #label>
           {{ t('pages.grantDetail.actorGrant.label') }}
           <DocHelpTooltip term="pages.grantDetail.actorGrant" />
         </template>
-        <RouteLink
+        <RecordLink
           v-if="grant.actor_grant_id"
+          mono
+          truncate
+          :name="grant.actor_grant_id"
           :to="{ name: 'grantDetail', params: { grantId: grant.actor_grant_id } }"
-        >
-          {{ grant.actor_grant_id }}
-        </RouteLink>
+        />
         <SaEmptyValue v-else />
       </SaDefinitionRow>
       <SaDefinitionRow>

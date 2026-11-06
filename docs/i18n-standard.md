@@ -131,7 +131,8 @@ is written as it is.
 
 **Translation tooling.** The bundle is edited by hand in this repository.
 
-**Pluralization.** No key has a plural form, and nothing picks between two.
+**Pluralization beyond English.** A count's key holds two forms joined by ` | `, singular then
+plural, which is English's rule; a language with more forms waits for a second bundle.
 
 **Formatting a date, a number or a duration.** `formatDate` and `formatDateTime` defer to the
 browser's locale, which is not the one the bundle was picked with.

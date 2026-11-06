@@ -90,6 +90,7 @@ how it is installed.
 | `SaTooltip` | why a control cannot be used |
 | `DocLink` | a link into the public documentation |
 | `RouteLink` | a link to another screen, disabled where the token cannot open it |
+| `RecordLink` | the name of another record, in a field or a cell, linking to its screen |
 | `SaField` | one labelled field of a form |
 | `SaInput`, `SaSelect`, `SaTextarea` | the control inside it |
 | `SaListbox` | a choice among a list whose length the deployment decides |
@@ -101,7 +102,7 @@ how it is installed.
 | `SaDefinitionList`, `SaDefinitionRow` | the fields of a record, inside a section |
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
 | `SaTableActions` | the cell holding a row's `ActionsDropdown` |
-| `TableRecord` | the name of a record with a screen of its own, in a `primary` cell |
+| `TableRecord` | the name of a record with a screen of its own, in a `primary` cell, with its identifier or a caption under it |
 | `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` from `sm:` |
 | `SaTableEnd` | the end of a collection's rows below `sm:`, where the list grows |
 | `RecordTabs` | the views one record is read through, from `sm:` |
@@ -167,8 +168,8 @@ information is a list of strings the server labelled, and an identifier among th
 indistinguishable from a date or a word; setting all of them in monospace drew that card unlike
 every other record's fields, the same grant read in two faces on two screens.
 
-**A link inside a sentence is a `DocLink`, drawing `.sa-link`.** A `RouteLink` in a table's column
-is not in a sentence, and underlines on hover.
+**A link inside a sentence is a `DocLink`, drawing `.sa-link`.** A record named in a field or a
+column is not in a sentence: it is a `RecordLink`, whose chevron says it opens another screen.
 
 ## Help
 

@@ -89,7 +89,7 @@ and linking a provider each create a record in a tab under the account, and are 
 forcing a logout all the same: an action an operator has to open a tab to find is one they have to
 know about first. **A tab adds nothing to the bar** — one screen, one set of actions. The one
 exception is a phone's link to the open view's help, first in the record's menu, since a phone has
-no tab to draw it beside.
+no tab to draw it beside — or, on a record without views, to what the record is.
 
 **The shell owns the menu and every dialog it opens.** It holds the flag each is opened by, and the
 summary panel under it renders the record and nothing else.
@@ -146,13 +146,16 @@ and the actions close the row. Scopes keep their status last, after the claims t
 are what that list is read for.
 
 **A record with a screen of its own is named by a `TableRecord`.** Its `detail` is the identifier
-under the name, where the name is not already that identifier.
+under the name, where the name is not already that identifier. A grant's row has its scope count
+under the name instead, as a `caption`, and a phone reads it after the grant type: an operator tells
+one person's grants apart by what each holds, and copies a grant's identifier from its record.
 
 **A record with no screen is named by its value alone,** and `mono` where that is an identifier.
 
-**A record is named by what an operator would call it.** An account by its first identifier, a
-session by its purpose and a grant by its type, each with its identifier under it. A row of identifiers
-alone has nothing to tell apart at a glance.
+**A record is named by what an operator would call it.** An account by its first identifier and a
+session by its purpose, each with its identifier under it. A row of identifiers alone has nothing to
+tell apart at a glance. A grant is named by the account it was opened for, or by its client where it
+names none, since that is what an operator looks one up by.
 
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
@@ -161,11 +164,12 @@ it.**
 offer keeps the cell and leaves it empty: the cell holds the row's height from `sm:` and draws
 nothing on a phone.
 
-**A value naming a record with a screen of its own links to it,** with a `RouteLink`, or a
+**A value naming a record with a screen of its own links to it,** with a `RecordLink`, or a
 `TableRecord` where it names the row: the client of a grant, a session or a consent, the user of a
-grant. A value whose record has no screen — an audience — stays plain text. A client the
-configuration no longer declares still gets its link: the screen it opens says so, which plain
-text would hide.
+grant, the grant a client acted through. It is `mono` where the name is an identifier, and
+`truncate` where its line holds that one value — a summary field, a `truncate` column. A value whose
+record has no screen — an audience — stays plain text. A client the configuration no longer
+declares still gets its link: the screen it opens says so, which plain text would hide.
 
 **A set of values wraps as tags,** one `SaTag` each, rather than a list joined by commas: the claims
 of a scope, the scopes of a consent. A row may be taller for it.

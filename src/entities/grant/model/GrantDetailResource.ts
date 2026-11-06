@@ -1,5 +1,6 @@
 import type { JSONSchemaType } from 'ajv'
 import { translateMessageOr } from '@/shared/i18n'
+import { type UserResource, userResourceSchema } from '@/entities/user/@x/grant'
 
 export type GrantRequestedClaimsResource = {
   id_token: string[]
@@ -24,7 +25,7 @@ export const grantRequestedClaimsResourceSchema: JSONSchemaType<GrantRequestedCl
 
 export type GrantDetailResource = {
   grant_id: string
-  user_id?: string | null
+  user?: UserResource | null
   client_id: string
   audience_id: string
   grant_type: string
@@ -52,8 +53,8 @@ export const grantDetailResourceSchema: JSONSchemaType<GrantDetailResource> = {
     grant_id: {
       type: 'string'
     },
-    user_id: {
-      type: 'string',
+    user: {
+      ...userResourceSchema,
       nullable: true
     },
     client_id: {

@@ -1,9 +1,14 @@
 import type { JSONSchemaType } from 'ajv'
 import { translateMessageOr } from '@/shared/i18n'
+import {
+  type UserResource,
+  userIdentifierLabel,
+  userResourceSchema
+} from '@/entities/user/@x/grant'
 
 export type GrantSummaryResource = {
   grant_id: string
-  user_id?: string | null
+  user?: UserResource | null
   client_id: string
   audience_id: string
   grant_type: string
@@ -13,6 +18,9 @@ export type GrantSummaryResource = {
   revoked_at?: string | null
   revoked_by?: string | null
   actor_grant_id?: string | null
+  granted_scopes: string[]
+  consented_scopes: string[]
+  client_scopes: string[]
 }
 
 export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = {
@@ -21,8 +29,8 @@ export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = 
     grant_id: {
       type: 'string'
     },
-    user_id: {
-      type: 'string',
+    user: {
+      ...userResourceSchema,
       nullable: true
     },
     client_id: {
@@ -55,9 +63,31 @@ export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = 
     actor_grant_id: {
       type: 'string',
       nullable: true
+    },
+    granted_scopes: {
+      type: 'array',
+      items: { type: 'string' }
+    },
+    consented_scopes: {
+      type: 'array',
+      items: { type: 'string' }
+    },
+    client_scopes: {
+      type: 'array',
+      items: { type: 'string' }
     }
   },
-  required: ['grant_id', 'client_id', 'audience_id', 'grant_type', 'status', 'created_at'],
+  required: [
+    'grant_id',
+    'client_id',
+    'audience_id',
+    'grant_type',
+    'status',
+    'created_at',
+    'granted_scopes',
+    'consented_scopes',
+    'client_scopes'
+  ],
   additionalProperties: true
 }
 
@@ -67,6 +97,24 @@ export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = 
  */
 export function grantIsLive(grant: Pick<GrantSummaryResource, 'status'>): boolean {
   return grant.status === 'live'
+}
+
+/**
+ * What an operator calls a grant: the person it was opened for, by the first identifier claim the
+ * server embeds for them, or the client a client credentials grant is held by alone.
+ */
+export function grantName(grant: Pick<GrantSummaryResource, 'user' | 'client_id'>): string {
+  return grant.user ? userIdentifierLabel(grant.user) : grant.client_id
+}
+
+/**
+ * How many scopes a grant holds, each counted once whichever of its sets — granted, consented to or
+ * the client's own — it came through.
+ */
+export function grantScopeCount(
+  grant: Pick<GrantSummaryResource, 'granted_scopes' | 'consented_scopes' | 'client_scopes'>
+): number {
+  return new Set([...grant.granted_scopes, ...grant.consented_scopes, ...grant.client_scopes]).size
 }
 
 export function grantStatusColor(status: string): 'green' | 'red' | 'yellow' | 'gray' {

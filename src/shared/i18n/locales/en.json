@@ -236,23 +236,23 @@
       },
       "revokedBy": {
         "values": {
-          "client": "Its client",
-          "admin": "An administrator",
-          "consent_revoked": "The consent being revoked",
-          "authorization_code_replayed": "Its authorization code being replayed"
+          "client": "By its client",
+          "admin": "By an administrator",
+          "consent_revoked": "By the consent being revoked",
+          "authorization_code_replayed": "By its authorization code being replayed"
         }
       },
       "grantedBy": {
         "values": {
           "auto": "Automatically",
-          "rule": "A scope granting rule",
-          "webhook": "The authorization webhook"
+          "rule": "By a scope granting rule",
+          "webhook": "By the authorization webhook"
         }
       },
       "consentedBy": {
         "values": {
           "auto": "Automatically",
-          "user": "The person"
+          "user": "By the person"
         }
       }
     }
@@ -284,6 +284,12 @@
     "specificClient": "Specific client",
     "selectClient": "Select a client...",
     "confirm": "Force logout"
+  },
+  "revokeGrantDialog": {
+    "action": "Revoke grant…",
+    "title": "Revoke this grant?",
+    "description": "Every token issued under this grant stops working at once, and so does every grant a client obtained by exchanging one of them. The client will need a new authorization. This cannot be undone.",
+    "confirm": "Revoke grant"
   },
   "pages": {
     "noAccess": {
@@ -527,10 +533,13 @@
       "title": "Grants",
       "grant": "Grant",
       "status": "Status",
-      "user": "User",
+      "grantType": "Grant type",
+      "scopeCount": "{n} scope | {n} scopes",
       "client": "Client",
       "audience": "Audience",
       "createdAt": "Created at",
+      "actions": "Actions",
+      "view": "View grant",
       "search": "Search by user, client or audience",
       "empty": "No grants found."
     },
@@ -548,24 +557,19 @@
         "label": "Expires at",
         "help": "Past this moment the grant can no longer be refreshed. A grant without one lasts as long as its tokens are refreshed."
       },
-      "revocation": "Revocation",
-      "revokedAt": "Revoked at",
-      "revokedBy": "Revoked by",
-      "revokedByUser": "Revoking administrator",
       "scopes": "Scopes",
       "grantedScopes": {
-        "label": "Granted scopes",
+        "label": "Granted",
         "help": "The scopes the scope granting rules gave the person, which their consent does not need to cover."
       },
-      "grantedBy": "Granted by",
       "consentedScopes": {
-        "label": "Consented scopes",
+        "label": "Consented",
         "help": "The scopes the person consented to, or that were consented to on their behalf without asking."
       },
-      "consentedBy": "Consented by",
       "clientScopes": {
         "label": "Client scopes",
-        "help": "The scopes the client was given on its own behalf, by the client credentials grant."
+        "help": "The scopes the client was given on its own behalf, by the client credentials grant.",
+        "detail": "Held by the client itself"
       },
       "authorization": "Authorization",
       "authenticatedAt": {
@@ -573,7 +577,7 @@
         "help": "When the person authenticated in the flow the grant was opened from — the auth_time every token under it states. Nobody authenticates for a client credentials grant or a token exchange."
       },
       "actorGrant": {
-        "label": "Grant of the acting client",
+        "label": "Acting client's grant",
         "help": "The grant of the token a token exchange was given. Revoking that grant revokes this one with it."
       },
       "requestedClaims": {
@@ -582,10 +586,17 @@
         "idToken": "ID token",
         "userinfo": "UserInfo"
       },
-      "revoke": "Revoke",
-      "revokeTitle": "Revoke this grant?",
-      "revokeConfirm": "Revoke grant",
-      "revokeDescription": "Every token issued under this grant stops working at once, and so does every grant a client obtained by exchanging one of them. The client will need a new authorization. This cannot be undone.",
+      "timeline": {
+        "title": "Timeline",
+        "created": "Created",
+        "consented": "Consented",
+        "authenticated": "Authenticated",
+        "authenticatedAt": "Signed in at {client}",
+        "granted": "Granted",
+        "revoked": "Revoked",
+        "expired": "Expired"
+      },
+      "about": "About grants",
       "notFound": "This grant no longer exists. The cleanup job collects a grant once it is finished."
     },
     "sessions": {
