@@ -14,7 +14,8 @@ const api = new ScopeApi()
 const scopes = useCollection<ScopeResource, ScopeListResource>({
   capabilities: () => api.getScopeCapabilities(),
   page: (params) => api.listScopes(params),
-  items: (content) => content.scopes
+  items: (content) => content.scopes,
+  key: (scope) => scope.id
 })
 
 function typeColor(type: string): 'blue' | 'purple' | 'gray' {

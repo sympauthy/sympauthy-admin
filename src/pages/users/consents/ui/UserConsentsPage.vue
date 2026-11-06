@@ -26,7 +26,8 @@ const userId = computed(() => route.params.userId as string)
 const consents = useCollection<ConsentResource, ConsentListResource>({
   capabilities: () => api.getConsentCapabilities(userId.value),
   page: (params) => api.listConsents(userId.value, params),
-  items: (content) => content.consents
+  items: (content) => content.consents,
+  key: (consent) => consent.audience_id
 })
 
 const actions = computed<ActionItem[]>(() => [

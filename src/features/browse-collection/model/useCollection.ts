@@ -52,6 +52,12 @@ export interface CollectionSource<T, R extends CollectionPageResource> {
   page: (params: Record<string, string | number | undefined>) => ApiResponse<R>
   items: (content: R) => T[]
   /**
+   * What tells one record from another, as the row's `:key` does. A list that grows adds pages read
+   * by offset, and a record that moved ahead of the rows already read comes back on the next page:
+   * it is listed once.
+   */
+  key: (item: T) => string
+  /**
    * Parameters the collection reads for something other than a criterion — `/admin/users`'s
    * `claims`, which selects what is published rather than what is kept.
    */
@@ -86,6 +92,11 @@ export interface Collection<T> {
   moreLoading: boolean
   /** Why the last page [fetchMore] asked for could not be added. */
   moreError: string | null
+  /**
+   * Whether the screen has made its first read through [load], and so has what its rows are drawn
+   * with: a list handed back is only scrolled or grown from then.
+   */
+  readonly opened: boolean
   capabilities: CollectionCapabilitiesResource | null
   /** Set where the document could not be read; the records are still listed without it. */
   capabilitiesError: string | null
@@ -139,7 +150,10 @@ export function useCollection<T, R extends CollectionPageResource>(
 
   // Read once: the path of this screen, which the one an operator returns to has to match.
   const listPath = route.path
-  const returned = grows.value ? takeCollectionReturn(listPath) : undefined
+  // Taken at every width, so that a list kept on a phone and come back to on a wider screen is
+  // dropped rather than handed back long after.
+  const kept = takeCollectionReturn(listPath)
+  const returned = grows.value ? kept : undefined
 
   const items = ref((returned?.items as T[]) ?? []) as Ref<T[]>
   const loading = ref(false)
@@ -161,6 +175,7 @@ export function useCollection<T, R extends CollectionPageResource>(
   const loaded = ref(returned !== undefined)
   // Consumed by the first `load`, which then reads nothing.
   let returning = returned !== undefined
+  const opened = ref(false)
   const returnedScroll = returned?.scrollTop ?? null
   let scrollTop = 0
   let capabilitiesInFlight = false
@@ -263,7 +278,16 @@ export function useCollection<T, R extends CollectionPageResource>(
   }
 
   async function fetchMore(): Promise<void> {
-    if (!grows.value || loading.value || moreLoading.value || !hasMore.value) {
+    // A criterion waiting to be asked has already changed what a page is read under, and the first
+    // page it reads replaces the rows: a page added now would belong to neither list.
+    if (
+      !grows.value ||
+      !opened.value ||
+      criteriaTimeout ||
+      loading.value ||
+      moreLoading.value ||
+      !hasMore.value
+    ) {
       return
     }
 
@@ -279,7 +303,9 @@ export function useCollection<T, R extends CollectionPageResource>(
     }
 
     if (isSuccess<R>(response)) {
-      items.value = [...items.value, ...source.items(response.content)]
+      const listed = new Set(items.value.map(source.key))
+      const added = source.items(response.content).filter((item) => !listed.has(source.key(item)))
+      items.value = [...items.value, ...added]
       page.value = response.content.page
       total.value = response.content.total
     } else {
@@ -291,6 +317,7 @@ export function useCollection<T, R extends CollectionPageResource>(
   }
 
   function load(): Promise<void> {
+    opened.value = true
     if (returning) {
       returning = false
       // A document that failed was not kept, and is asked for again as a first page would.
@@ -310,7 +337,10 @@ export function useCollection<T, R extends CollectionPageResource>(
     if (criteriaTimeout) {
       clearTimeout(criteriaTimeout)
     }
-    criteriaTimeout = setTimeout(() => void fetch(0), CRITERIA_DELAY_IN_MS)
+    criteriaTimeout = setTimeout(() => {
+      criteriaTimeout = undefined
+      void fetch(0)
+    }, CRITERIA_DELAY_IN_MS)
   }
 
   function setSearch(typed: string) {
@@ -332,11 +362,11 @@ export function useCollection<T, R extends CollectionPageResource>(
   }
 
   // Crossing `sm:` turns pages into a list that grows or back, and what was read is neither: the
-  // first page is read again in the other way. A size `SaTable` measures on the way is asked from
-  // there too.
+  // first page is read again in the other way, and so is one still on its way, asked at the size
+  // being left. A size `SaTable` measures on the way is asked from there too.
   watch(grows, () => {
     page.value = 0
-    if (loaded.value) {
+    if (loaded.value || loading.value) {
       void fetch(0)
     }
   })
@@ -348,9 +378,17 @@ export function useCollection<T, R extends CollectionPageResource>(
   // After the screen's children have gone, so that `CollectionPage` has recorded the scroll, and
   // after the navigation, so that where the operator went is known. Only a row of this list, or a
   // screen under it, is a place they come back from.
+  //
+  // A criterion still waiting is dropped with the screen, and the list is not kept: its rows were
+  // read under what the operator had typed before.
   onUnmounted(() => {
+    const pending = criteriaTimeout !== undefined
+    clearTimeout(criteriaTimeout)
+    criteriaTimeout = undefined
+
     const to = router.currentRoute.value.path
     if (
+      pending ||
       !grows.value ||
       !loaded.value ||
       loading.value ||
@@ -384,6 +422,7 @@ export function useCollection<T, R extends CollectionPageResource>(
     hasMore,
     moreLoading,
     moreError,
+    opened,
     capabilities,
     capabilitiesError,
     query,

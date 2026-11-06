@@ -23,7 +23,8 @@ const userId = computed(() => route.params.userId as string)
 const mfaMethods = useCollection<UserMfaMethodResource, UserMfaMethodListResource>({
   capabilities: () => api.getMfaCapabilities(userId.value),
   page: (params) => api.listMfaMethods(userId.value, params),
-  items: (content) => content.mfa_methods
+  items: (content) => content.mfa_methods,
+  key: (method) => method.mfa_id
 })
 
 const actions = computed<ActionItem[]>(() => [

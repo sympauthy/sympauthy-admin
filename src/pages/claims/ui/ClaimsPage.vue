@@ -19,7 +19,8 @@ const api = new ClaimApi()
 const claims = useCollection<ClaimResource, ClaimListResource>({
   capabilities: () => api.getClaimCapabilities(),
   page: (params) => api.listClaims(params),
-  items: (content) => content.claims
+  items: (content) => content.claims,
+  key: (claim) => claim.id
 })
 
 onMounted(async () => {

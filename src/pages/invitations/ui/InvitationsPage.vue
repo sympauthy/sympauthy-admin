@@ -26,7 +26,8 @@ const api = new InvitationApi()
 const invitations = useCollection<InvitationResource, InvitationListResource>({
   capabilities: () => api.getInvitationCapabilities(),
   page: (params) => api.listInvitations(params),
-  items: (content) => content.invitations
+  items: (content) => content.invitations,
+  key: (invitation) => invitation.invitation_id
 })
 
 const showCreateDialog = ref(false)

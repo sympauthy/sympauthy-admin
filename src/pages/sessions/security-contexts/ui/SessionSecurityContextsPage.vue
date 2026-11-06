@@ -24,7 +24,8 @@ const securityContexts = useCollection<
 >({
   capabilities: () => api.getSessionSecurityContextCapabilities(sessionId.value),
   page: (params) => api.listSessionSecurityContexts(sessionId.value, params),
-  items: (content) => content.security_contexts
+  items: (content) => content.security_contexts,
+  key: (context) => `${context.ip}|${context.user_agent ?? ''}`
 })
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and

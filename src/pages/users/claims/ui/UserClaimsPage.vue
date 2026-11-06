@@ -23,7 +23,8 @@ const userId = computed(() => route.params.userId as string)
 const claims = useCollection<UserClaimResource, UserClaimListResource>({
   capabilities: () => api.getUserClaimCapabilities(userId.value),
   page: (params) => api.listUserClaims(userId.value, params),
-  items: (content) => content.claims
+  items: (content) => content.claims,
+  key: (claim) => claim.claim_id
 })
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and

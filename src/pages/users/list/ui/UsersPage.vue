@@ -57,6 +57,7 @@ const users = useCollection<UserResource, UserListResource>({
   capabilities: () => api.getUserCapabilities(),
   page: (params) => api.listUsers(params),
   items: (content) => content.users,
+  key: (user) => user.user_id,
   selection: () => ({
     claims: selectedClaimIds.value.length > 0 ? selectedClaimIds.value.join(',') : undefined
   })

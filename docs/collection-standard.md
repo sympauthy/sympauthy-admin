@@ -84,7 +84,8 @@ forwards them to `SaTable`'s `#header`, `#rows` and `#empty`, and [the page layo
 standard](page-layout-standard.md#table-rows) says what a row holds.
 
 **The feature's `index.ts` publishes what a page names** — `useCollection`, `CollectionPage`. From
-the package a page names `SaTableHeader` and `SaTableCell`, and never what the table above lists.
+the package a page names `SaTableHeader`, `SaTableCell` and `SaTableActions`, and never what the
+table above lists.
 
 **A column over a field of the collection hands its `SaTableHeader` `sorting`, `field` and
 `filtered-label`, and any other column none of them.** A field the document does not order on draws
@@ -162,14 +163,27 @@ records starts where its own caller left it, and a dialog listing them cannot mo
 it.
 
 **A page calls one `useCollection` per collection it lists, under the plural of what it holds**, and
-hands it to `CollectionPage` whole. Its first read is `load()`, in `onMounted`.
+hands it to `CollectionPage` whole. Its first read is `load()`, in `onMounted`, once the page has
+read whatever else its rows are drawn with: a list handed back is scrolled and grown from then.
+
+**A source names what tells one record from another in `key`**, as the row's `:key` does. A list
+that grows adds pages read by offset, so a record that moved ahead of the rows already read comes
+back on the next page, and is listed once.
 
 **A phone's list left for one of its rows is handed back to the operator returning to it.** The rows
 read, the page reached, the criteria, the document and the scroll are kept by `CollectionReturn`
 under the screen's path, from the moment the operator opens a path under it until they come back to
 it or go anywhere else, and `load()` then reads nothing. A phone pays a request per page it scrolled
 through, and finds itself back at the top without this; a list from `sm:` holds one page and is read
-again, as a screen reached from the sidebar always is.
+again.
+
+**What is kept is the list as it was left.** A change made on a row's screen shows once the operator
+refreshes the list. The list is not kept where it was left while a search or a filter was still
+waiting to be asked, since its rows were read under what came before.
+
+**Coming back is reaching the list's path from under it, by whatever link.** The sidebar's entry for
+the list, followed from one of its rows, hands it back as the back link does; reached from anywhere
+else, the list starts over.
 
 **It constructs the entity's client itself.** `const api = new UserApi()` at the top of the setup:
 the entity publishes the client, the resources and the schemas, and the page is where they meet the
@@ -185,7 +199,8 @@ const userId = computed(() => route.params.userId as string)
 const claims = useCollection<UserClaimResource, UserClaimListResource>({
   capabilities: () => api.getUserClaimCapabilities(userId.value),
   page: (params) => api.listUserClaims(userId.value, params),
-  items: (content) => content.claims
+  items: (content) => content.claims,
+  key: (claim) => claim.claim_id
 })
 ```
 

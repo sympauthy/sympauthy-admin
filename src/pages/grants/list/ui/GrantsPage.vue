@@ -20,7 +20,8 @@ const api = new GrantApi()
 const grants = useCollection<GrantSummaryResource, GrantListResource>({
   capabilities: () => api.getGrantCapabilities(),
   page: (params) => api.listGrants(params),
-  items: (content) => content.grants
+  items: (content) => content.grants,
+  key: (grant) => grant.grant_id
 })
 
 onMounted(async () => {

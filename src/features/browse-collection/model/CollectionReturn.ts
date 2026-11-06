@@ -31,8 +31,8 @@ export function collectionReturnWithin(path: string, listPath: string): boolean 
 }
 
 /**
- * Keeps what the list at [listPath] held until the operator comes back to it, or goes anywhere
- * that is not under it: a screen reached through the sidebar is one they start over on.
+ * Keeps what the list at [listPath] held until the operator comes back to it, by whatever link, or
+ * goes anywhere that is not under it: the list reached from elsewhere is one they start over on.
  */
 export function keepCollectionReturn(router: Router, listPath: string, held: CollectionReturn) {
   kept.set(listPath, held)

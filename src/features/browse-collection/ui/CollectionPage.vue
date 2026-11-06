@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref, useSlots } from 'vue'
+import { nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
 import {
@@ -50,16 +50,26 @@ const labels = useCollectionLabels()
 const root = ref<HTMLElement | null>(null)
 
 // The box that scrolls is the app shell's, which outlives the page, so where a phone's list was left
-// is read off it and put back on it.
-onMounted(() => {
-  const scrolled = root.value && scrollParent(root.value)
-  if (scrolled && props.collection.returnedScroll !== null) {
-    scrolled.scrollTop = props.collection.returnedScroll
-  }
-})
+// is read off it and put back on it. Put back once the page has made its first read, which is when
+// the rows have what they are drawn with, and so the height they were left at.
+watch(
+  () => props.collection.opened,
+  async (opened) => {
+    if (!opened || props.collection.returnedScroll === null || !root.value) {
+      return
+    }
+    await nextTick()
+    const scrolled = root.value && scrollParent(root.value)
+    if (scrolled) {
+      scrolled.scrollTop = props.collection.returnedScroll
+    }
+  },
+  { immediate: true }
+)
 
+// Only a phone's list is kept for the operator to come back to.
 onBeforeUnmount(() => {
-  const scrolled = root.value && scrollParent(root.value)
+  const scrolled = props.collection.grows && root.value && scrollParent(root.value)
   if (scrolled) {
     props.collection.keepScroll(scrolled.scrollTop)
   }
@@ -142,7 +152,7 @@ onBeforeUnmount(() => {
       <template #rows>
         <slot name="rows" />
         <SaTableEnd
-          v-if="props.collection.grows"
+          v-if="props.collection.grows && props.collection.opened"
           :more="props.collection.hasMore"
           :loading="props.collection.moreLoading"
           :error="props.collection.moreError"

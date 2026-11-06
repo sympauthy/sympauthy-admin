@@ -28,7 +28,8 @@ const userId = computed(() => route.params.userId as string)
 const providerLinks = useCollection<UserProviderLinkResource, UserProviderLinkListResource>({
   capabilities: () => api.getProviderLinkCapabilities(userId.value),
   page: (params) => api.listProviderLinks(userId.value, params),
-  items: (content) => content.providers
+  items: (content) => content.providers,
+  key: (link) => link.provider_id
 })
 
 const actions = computed<ActionItem[]>(() => [
