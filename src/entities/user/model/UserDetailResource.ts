@@ -5,6 +5,7 @@ export type UserDetailResource = {
   identifier_claims?: Record<string, string | number | null> | null
   status: string
   created_at: string
+  last_authenticated_at?: string | null
 }
 
 /**
@@ -36,6 +37,10 @@ export const userDetailResourceSchema: JSONSchemaType<UserDetailResource> = {
     },
     created_at: {
       type: 'string'
+    },
+    last_authenticated_at: {
+      type: 'string',
+      nullable: true
     }
   },
   required: ['user_id', 'status', 'created_at'],
