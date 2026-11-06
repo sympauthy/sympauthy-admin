@@ -24,3 +24,13 @@ export function formatDate(dateStr: string): string {
 export function formatDateTime(dateStr: string): string {
   return parseApiDate(dateStr).toLocaleString()
 }
+
+/** Formats the time of day of a date the API sent, in the reader's own zone. */
+export function formatTime(dateStr: string): string {
+  return parseApiDate(dateStr).toLocaleTimeString()
+}
+
+/** Orders two dates the API sent, the earlier first, whatever zone designator each carries. */
+export function compareApiDates(a: string, b: string): number {
+  return parseApiDate(a).getTime() - parseApiDate(b).getTime()
+}

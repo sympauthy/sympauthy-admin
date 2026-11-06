@@ -7,7 +7,7 @@ import {
   SaSummaryField,
   SaTag
 } from '@sympauthy/design'
-import { DocHelpTooltip, RouteLink } from '@/shared/ui'
+import { DocHelpTooltip, RecordLink } from '@/shared/ui'
 import {
   grantStatusColor,
   grantStatusLabel,
@@ -24,6 +24,8 @@ const { t } = useI18n()
 </script>
 
 <template>
+  <!-- A line per question, three fields across from sm:: which grant it is and where it stands, who
+       and what it was opened for, and when. -->
   <SaSummaryCard>
     <SaSummaryField mono :label="t('pages.grantDetail.grantId')">
       <SaCopyableValue
@@ -44,29 +46,35 @@ const { t } = useI18n()
     <SaSummaryField :label="t('pages.grantDetail.grantType')">
       {{ grantTypeLabel(grant.grant_type) }}
     </SaSummaryField>
-    <SaSummaryField mono :label="t('pages.grantDetail.user')">
+    <SaSummaryField :label="t('pages.grantDetail.user')">
       <template #help>
         <DocHelpTooltip term="terms.grant.user" />
       </template>
-      <RouteLink
+      <RecordLink
         v-if="grant.user_id"
-        block
+        mono
+        truncate
+        :title="grant.user_id"
+        :name="grant.user_id"
         :to="{ name: 'userDetail', params: { userId: grant.user_id } }"
-      >
-        {{ grant.user_id }}
-      </RouteLink>
+      />
       <SaEmptyValue v-else />
     </SaSummaryField>
-    <SaSummaryField mono :label="t('pages.grantDetail.client')">
-      <RouteLink block :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }">
-        {{ grant.client_id }}
-      </RouteLink>
+    <SaSummaryField :label="t('pages.grantDetail.client')">
+      <RecordLink
+        mono
+        truncate
+        :title="grant.client_id"
+        :name="grant.client_id"
+        :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }"
+      />
     </SaSummaryField>
+    <!-- An audience has no screen, so it stays plain text, cut by the field itself. -->
     <SaSummaryField mono :label="t('pages.grantDetail.audience')">
       <template #help>
         <DocHelpTooltip term="terms.audience.id" />
       </template>
-      {{ grant.audience_id }}
+      <span :title="grant.audience_id">{{ grant.audience_id }}</span>
     </SaSummaryField>
     <SaSummaryField :label="t('pages.grantDetail.createdAt')">
       {{ formatDateTime(grant.created_at) }}

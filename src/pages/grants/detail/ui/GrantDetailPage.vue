@@ -2,16 +2,17 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { NoSymbolIcon } from '@heroicons/vue/20/solid'
+import { InformationCircleIcon, NoSymbolIcon } from '@heroicons/vue/20/solid'
 import { GrantApi, grantIsLive, type GrantDetailResource } from '@/entities/grant'
 import { getErrorMessage, isSuccess } from '@/shared/api'
-import { useBreadcrumb } from '@/shared/lib'
-import { SaAlert, SaCard, SaConfirmDialog, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { useBreadcrumb, useIsPhone } from '@/shared/lib'
+import { SaAlert, SaCard, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { RevokeGrantDialog } from '@/features/revoke-grant'
 import { type ActionItem, ActionsDropdown } from '@/shared/ui'
 import GrantSummaryPanel from './GrantSummaryPanel.vue'
-import GrantRevocationPanel from './GrantRevocationPanel.vue'
 import GrantScopesPanel from './GrantScopesPanel.vue'
 import GrantAuthorizationPanel from './GrantAuthorizationPanel.vue'
+import GrantTimelinePanel from './GrantTimelinePanel.vue'
 
 /**
  * One grant: everything it records, and the revocation an operator can make of it while it is live.
@@ -21,6 +22,7 @@ const route = useRoute()
 const { t } = useI18n()
 const api = new GrantApi()
 const { setLabel } = useBreadcrumb()
+const isPhone = useIsPhone()
 
 const grantId = computed(() => route.params.grantId as string)
 
@@ -31,30 +33,38 @@ const error = ref<string | null>(null)
 // of reading an old link rather than a failure, so it gets its own copy.
 const notFound = ref(false)
 
-const revokeOpen = ref(false)
-const revokeLoading = ref(false)
-const revokeError = ref<string | null>(null)
+// The grant revoked is the one the operator read and confirmed, whatever the URL has moved to.
+const revokeGrantId = ref<string | null>(null)
 
-// Only a live grant is offered for revoking: the server leaves any other as it is, so the action
-// would succeed and change nothing.
-const actions = computed<ActionItem[]>(() =>
-  grant.value && grantIsLive(grant.value)
-    ? [
-        {
-          key: 'revoke',
-          label: t('pages.grantDetail.revoke'),
-          icon: NoSymbolIcon,
-          danger: true,
-          requiredScopes: ['admin:grants:write']
-        }
-      ]
-    : []
-)
+// A phone draws no help beside the status, so the menu links to what a grant is, first. Only a live
+// grant is offered for revoking: the server leaves any other as it is, so the action would succeed
+// and change nothing.
+const actions = computed<ActionItem[]>(() => {
+  const live = grant.value !== null && grantIsLive(grant.value)
+  return [
+    ...(isPhone.value
+      ? [{ key: 'help', label: t('pages.grantDetail.about'), icon: InformationCircleIcon }]
+      : []),
+    ...(live
+      ? [
+          {
+            key: 'revoke',
+            label: t('pages.grantDetail.revoke'),
+            icon: NoSymbolIcon,
+            danger: true,
+            startsGroup: isPhone.value,
+            requiredScopes: ['admin:grants:write']
+          }
+        ]
+      : [])
+  ]
+})
 
 function onAction(key: string) {
-  if (key === 'revoke') {
-    revokeError.value = null
-    revokeOpen.value = true
+  if (key === 'help') {
+    window.open(t('terms.grant.status.helpLinkUrl'), '_blank', 'noopener,noreferrer')
+  } else if (key === 'revoke' && grant.value) {
+    revokeGrantId.value = grant.value.grant_id
   }
 }
 
@@ -82,25 +92,6 @@ async function load(id: string) {
   }
 
   loading.value = false
-}
-
-async function onRevoke() {
-  if (!grant.value) return
-  const id = grant.value.grant_id
-
-  revokeLoading.value = true
-  revokeError.value = null
-
-  // The grant revoked is the one the operator read and confirmed, whatever the URL has moved to.
-  const response = await api.revokeGrants({ grant_ids: [id] })
-
-  revokeLoading.value = false
-  if (isSuccess(response)) {
-    revokeOpen.value = false
-    await load(grantId.value)
-  } else {
-    revokeError.value = getErrorMessage(response)
-  }
 }
 
 // The grant a token exchange was given links to another grant, which is the same route under
@@ -131,24 +122,21 @@ onMounted(() => load(grantId.value))
         <ActionsDropdown :actions="actions" @action="onAction" />
       </SaPageActions>
       <GrantSummaryPanel :grant="grant" />
-      <GrantRevocationPanel v-if="grant.revoked_at" :grant="grant" />
-      <GrantScopesPanel :grant="grant" />
-      <GrantAuthorizationPanel :grant="grant" />
+      <!-- What the grant holds, and beside it from lg: what happened to it; a narrower screen reads
+           the timeline last. -->
+      <div class="grid gap-6 lg:grid-cols-3 lg:items-start">
+        <div class="space-y-6 lg:col-span-2">
+          <GrantScopesPanel :grant="grant" />
+          <GrantAuthorizationPanel :grant="grant" />
+        </div>
+        <GrantTimelinePanel :grant="grant" />
+      </div>
     </div>
   </div>
 
-  <SaConfirmDialog
-    :open="revokeOpen"
-    :confirm-label="t('pages.grantDetail.revokeConfirm')"
-    :cancel-label="t('common.cancel')"
-    :loading="revokeLoading"
-    :error="revokeError"
-    @confirm="onRevoke"
-    @cancel="revokeOpen = false"
-  >
-    <template #title>
-      {{ t('pages.grantDetail.revokeTitle') }}
-    </template>
-    <p class="text-sm text-gray-600">{{ t('pages.grantDetail.revokeDescription') }}</p>
-  </SaConfirmDialog>
+  <RevokeGrantDialog
+    :grant-id="revokeGrantId"
+    @revoked="load(grantId)"
+    @close="revokeGrantId = null"
+  />
 </template>
