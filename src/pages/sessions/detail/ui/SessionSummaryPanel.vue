@@ -49,7 +49,13 @@ const { t } = useI18n()
       {{ purposeLabel(session.initiating_purpose) }}
     </SaSummaryField>
     <SaSummaryField mono :label="t('pages.sessionDetail.client')">
-      <span v-if="session.client_id">{{ session.client_id }}</span>
+      <RouteLink
+        v-if="session.client_id"
+        block
+        :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
+      >
+        {{ session.client_id }}
+      </RouteLink>
       <SaEmptyValue v-else />
     </SaSummaryField>
     <SaSummaryField mono :label="t('pages.sessionDetail.flow')">

@@ -9,7 +9,7 @@ import { getErrorMessage, isSuccess } from '@/shared/api'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaConfirmDialog, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -72,15 +72,6 @@ onMounted(async () => {
     <template #header>
       <SaTableHeader
         :sorting="consents.sort"
-        field="audience_id"
-        :filtered-label="consents.filteredLabel('audience_id')"
-      >
-        {{ t('pages.userConsents.audience') }}
-      </SaTableHeader>
-      <SaTableHeader
-        fit
-        hidden-below="sm"
-        :sorting="consents.sort"
         field="prompted_by_client_id"
         :filtered-label="consents.filteredLabel('prompted_by_client_id')"
       >
@@ -88,6 +79,13 @@ onMounted(async () => {
         <template #help>
           <DocHelpTooltip term="pages.userConsents.client" />
         </template>
+      </SaTableHeader>
+      <SaTableHeader
+        :sorting="consents.sort"
+        field="audience_id"
+        :filtered-label="consents.filteredLabel('audience_id')"
+      >
+        {{ t('pages.userConsents.audience') }}
       </SaTableHeader>
       <SaTableHeader
         :sorting="consents.sort"
@@ -101,7 +99,6 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader
         fit
-        hidden-below="sm"
         :sorting="consents.sort"
         field="consented_at"
         :filtered-label="consents.filteredLabel('consented_at')"
@@ -115,20 +112,36 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="consent in consents.items" :key="consent.audience_id">
-        <SaTableCell primary mono>
+        <!-- Named by the client that prompted the person, which is who an operator recognises. -->
+        <SaTableCell primary truncate mono>
+          <TableRecord
+            :name="consent.prompted_by_client_id"
+            :to="{ name: 'clientDetail', params: { clientId: consent.prompted_by_client_id } }"
+          />
+        </SaTableCell>
+        <!-- A phone reads each value on a line of its own, as the canvas lists them, rather than
+             wherever two fit. The package ends that phone's first line with a break that the row's gap
+             falls on both sides of, so the name stands twice that gap above the audience; each line
+             after it matches, so the four read evenly spaced. -->
+        <SaTableCell
+          :label="t('pages.userConsents.audience')"
+          truncate
+          mono
+          class="max-sm:basis-full"
+        >
           {{ consent.audience_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.userConsents.client.label')" fit mono hidden-below="sm">
-          {{ consent.prompted_by_client_id }}
-        </SaTableCell>
-        <SaTableCell :label="t('pages.userConsents.scopes.label')">
+        <SaTableCell
+          :label="t('pages.userConsents.scopes.label')"
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
           <div class="flex flex-wrap gap-1">
             <SaTag v-for="scope in consent.scopes ?? []" :key="scope" color="blue">
               {{ scope }}
             </SaTag>
           </div>
         </SaTableCell>
-        <SaTableCell :label="t('pages.userConsents.consentedAt')" fit hidden-below="sm">
+        <SaTableCell :label="t('pages.userConsents.consentedAt')" fit class="max-sm:mt-1">
           {{ formatDateTime(consent.consented_at) }}
         </SaTableCell>
         <SaTableCell actions>

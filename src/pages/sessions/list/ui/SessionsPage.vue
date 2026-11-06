@@ -103,10 +103,15 @@ onMounted(async () => {
           </SaTag>
           <SaEmptyValue v-else />
         </SaTableCell>
-        <!-- Plain text rather than a link: a live session may name a client the configuration no
-             longer declares, and a link landing on an error page is worse than no link. -->
         <SaTableCell :label="t('pages.sessions.client')" truncate mono>
-          <span v-if="session.client_id">{{ session.client_id }}</span>
+          <RouteLink
+            v-if="session.client_id"
+            block
+            :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
+            class="text-gray-900"
+          >
+            {{ session.client_id }}
+          </RouteLink>
           <SaEmptyValue v-else />
         </SaTableCell>
         <SaTableCell :label="t('pages.sessions.started')" fit hidden-below="lg">

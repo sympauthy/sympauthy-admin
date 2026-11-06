@@ -133,6 +133,11 @@
         "help": "An account is one person this server authenticates and holds the claims of. A disabled one is refused when it signs in with a password, and told what somebody typing the wrong password is told; it keeps everything it holds, since disabling an account deletes nothing of it. See {link} for details.",
         "helpLinkText": "end-user management documentation",
         "helpLinkUrl": "https://sympauthy.github.io/functional/end-user_management.html"
+      },
+      "mfaType": {
+        "values": {
+          "totp": "Authenticator app"
+        }
       }
     },
     "origin": {
@@ -332,7 +337,8 @@
         "help": "What this server does when the call does not answer — a timeout, an error, a host that is down. deny_all denies every scope the request asked for; fallback_to_rules applies this deployment's granting rules as though no webhook were configured. See {link} for details.",
         "helpLinkText": "failure behaviour documentation",
         "helpLinkUrl": "https://sympauthy.github.io/technical/authorization_webhook.html#failure-behavior"
-      }
+      },
+      "notFound": "This server's configuration declares no client with this identifier. It may have been removed since the grant, session or consent naming it was recorded."
     },
     "users": {
       "title": "Users",
@@ -641,7 +647,7 @@
       "empty": "No active consents.",
       "consentedAt": "Consented at",
       "actions": "Actions",
-      "revoke": "Revoke…",
+      "revoke": "Revoke consent…",
       "revokeTitle": "Revoke this consent?",
       "revokeDescription": "The person is asked to agree again the next time a client of this audience needs one of these scopes.",
       "revokeConfirm": "Revoke consent",
@@ -651,7 +657,7 @@
       "title": "MFA methods",
       "summary": "Second factors the user set up to sign in.",
       "about": "About MFA methods",
-      "help": "Multi-factor authentication methods registered by this user. Revoking a method will require the user to set it up again. See {link} for details.",
+      "help": "Multi-factor authentication methods registered by this user. Removing a method will require the user to set it up again. See {link} for details.",
       "helpLinkText": "authentication documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/authentication.html#multi-factor-authentication-mfa",
       "type": {
@@ -662,11 +668,11 @@
       },
       "registeredAt": "Registered at",
       "empty": "No MFA methods registered.",
-      "revokeTitle": "Revoke this MFA method?",
-      "revokeConfirm": "Revoke MFA method",
-      "revokeDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
+      "removeTitle": "Remove this MFA method?",
+      "removeConfirm": "Remove MFA method",
+      "removeDescription": "This will remove the MFA method from the user's account. They will need to set it up again.",
       "actions": "Actions",
-      "revoke": "Revoke…"
+      "remove": "Remove MFA method…"
     },
     "userProviders": {
       "title": "Provider links",
@@ -680,8 +686,9 @@
         "label": "Subject",
         "help": "The identifier the provider itself issued for this person, which this account is linked to. It is the provider's own string and names nothing on this server."
       },
+      "copySubject": "Copy subject",
       "linkedAt": "Linked at",
-      "unlink": "Unlink…",
+      "unlink": "Unlink provider…",
       "empty": "No provider links found.",
       "unlinkTitle": "Unlink this provider?",
       "unlinkConfirm": "Unlink provider",

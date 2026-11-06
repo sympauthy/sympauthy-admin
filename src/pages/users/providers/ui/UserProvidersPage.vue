@@ -9,7 +9,7 @@ import {
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
-import { SaConfirmDialog, SaTableCell, SaTableHeader } from '@sympauthy/design'
+import { SaConfirmDialog, SaCopyableValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { type ActionItem, ActionsDropdown, DocHelpTooltip } from '@/shared/ui'
 import { formatDate } from '@/shared/lib'
 
@@ -71,11 +71,12 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader>
         {{ t('pages.userProviders.subject.label') }}
-        <DocHelpTooltip term="pages.userProviders.subject" />
+        <template #help>
+          <DocHelpTooltip term="pages.userProviders.subject" />
+        </template>
       </SaTableHeader>
       <SaTableHeader
         fit
-        hidden-below="sm"
         :sorting="providerLinks.sort"
         field="link_date"
         :filtered-label="providerLinks.filteredLabel('link_date')"
@@ -92,10 +93,25 @@ onMounted(async () => {
         <SaTableCell primary truncate mono>
           {{ link.provider_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.userProviders.subject.label')" truncate mono>
-          {{ link.subject }}
+        <!-- Copied beside it rather than from the row's menu: the subject is the provider's own string,
+             read there to find this person, and nothing an operator types by hand. On a phone it takes
+             its line whole, so when it was linked always reads on the next one. -->
+        <SaTableCell
+          :label="t('pages.userProviders.subject.label')"
+          truncate
+          mono
+          class="max-sm:basis-full"
+        >
+          <SaCopyableValue
+            :value="link.subject"
+            :label="t('pages.userProviders.copySubject')"
+            :copied-label="t('common.copied')"
+            :failed-label="t('common.copyFailed')"
+          />
         </SaTableCell>
-        <SaTableCell :label="t('pages.userProviders.linkedAt')" fit hidden-below="sm">
+        <!-- The package ends a phone's first line with a break that the row's gap falls on both sides
+             of, so the name stands twice that gap above the subject. This line matches it. -->
+        <SaTableCell :label="t('pages.userProviders.linkedAt')" fit class="max-sm:mt-1">
           {{ formatDate(link.linked_at) }}
         </SaTableCell>
         <SaTableCell actions>

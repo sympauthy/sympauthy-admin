@@ -9,7 +9,7 @@ import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
-import { SaAlert, SaLoadingState } from '@sympauthy/design'
+import { SaAlert, SaCard, SaLoadingState } from '@sympauthy/design'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -21,6 +21,10 @@ const clientId = computed(() => route.params.clientId as string)
 const client = ref<ClientDetailResource | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+// A grant, a session or a consent links here by the client it names, which the configuration may have
+// stopped declaring since. That is an outcome of following the link rather than a failure, so it gets
+// its own copy.
+const notFound = ref(false)
 
 onMounted(async () => {
   loading.value = true
@@ -30,6 +34,8 @@ onMounted(async () => {
   if (isSuccess(response)) {
     client.value = response.content
     setLabel(client.value.client_id)
+  } else if (response.response?.status === 404) {
+    notFound.value = true
   } else {
     error.value = getErrorMessage(response)
   }
@@ -42,6 +48,11 @@ onMounted(async () => {
   <div>
     <!-- Loading state -->
     <SaLoadingState v-if="loading" :label="t('common.loading')" />
+
+    <!-- Undeclared state -->
+    <SaCard v-else-if="notFound">
+      <p class="text-sm text-gray-600">{{ t('pages.clientDetail.notFound') }}</p>
+    </SaCard>
 
     <!-- Error state -->
     <SaAlert v-else-if="error" color="danger">
