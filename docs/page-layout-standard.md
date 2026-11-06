@@ -146,7 +146,9 @@ and the actions close the row. Scopes keep their status last, after the claims t
 are what that list is read for.
 
 **A record with a screen of its own is named by a `TableRecord`.** Its `detail` is the identifier
-under the name, where the name is not already that identifier.
+under the name, where the name is not already that identifier. A grant's row has its scope count
+under the name instead, as a `caption`, and a phone reads it after the grant type: an operator tells
+one person's grants apart by what each holds, and copies a grant's identifier from its record.
 
 **A record with no screen is named by its value alone,** and `mono` where that is an identifier.
 

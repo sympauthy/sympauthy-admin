@@ -107,6 +107,16 @@ export function grantName(grant: Pick<GrantSummaryResource, 'user' | 'client_id'
   return grant.user ? userIdentifierLabel(grant.user) : grant.client_id
 }
 
+/**
+ * How many scopes a grant holds, each counted once whichever of its sets — granted, consented to or
+ * the client's own — it came through.
+ */
+export function grantScopeCount(
+  grant: Pick<GrantSummaryResource, 'granted_scopes' | 'consented_scopes' | 'client_scopes'>
+): number {
+  return new Set([...grant.granted_scopes, ...grant.consented_scopes, ...grant.client_scopes]).size
+}
+
 export function grantStatusColor(status: string): 'green' | 'red' | 'yellow' | 'gray' {
   switch (status) {
     case 'live':

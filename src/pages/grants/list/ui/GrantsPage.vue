@@ -6,6 +6,7 @@ import {
   GrantApi,
   grantIsLive,
   grantName,
+  grantScopeCount,
   grantStatusColor,
   grantStatusLabel,
   grantTypeLabel,
@@ -53,6 +54,10 @@ function actions(grant: GrantSummaryResource): ActionItem[] {
         ]
       : [])
   ]
+}
+
+function scopeCount(grant: GrantSummaryResource): string {
+  return t('pages.grants.scopeCount', grantScopeCount(grant))
 }
 
 function onAction(key: string, grant: GrantSummaryResource) {
@@ -138,9 +143,11 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="grant in grants.items" :key="grant.grant_id">
         <SaTableCell primary truncate>
+          <!-- The canvas counts the grant's scopes under its name rather than giving its identifier,
+               which the record's summary carries to be copied. -->
           <TableRecord
             :name="grantName(grant)"
-            :detail="grant.grant_id"
+            :caption="scopeCount(grant)"
             :to="{ name: 'grantDetail', params: { grantId: grant.grant_id } }"
           />
         </SaTableCell>
@@ -151,9 +158,11 @@ onMounted(async () => {
         </SaTableCell>
         <!-- As small as the labelled values under it on a phone, as the canvas sets the line it shares
              with the status: the package makes only a labelled cell small, so this one would keep the
-             body size. -->
+             body size. A phone shows no caption under the name, so the canvas moves the scope count
+             to the end of this line. -->
         <SaTableCell :label="t('pages.grants.grantType')" label-hidden fit class="max-sm:text-xs">
-          {{ grantTypeLabel(grant.grant_type) }}
+          {{ grantTypeLabel(grant.grant_type)
+          }}<span class="sm:hidden"> · {{ scopeCount(grant) }}</span>
         </SaTableCell>
         <!-- A phone reads the client, the audience and the creation each on a line of its own, as
              the canvas lists them, under the line the status and the type share. The package ends

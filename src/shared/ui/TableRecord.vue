@@ -15,15 +15,26 @@ defineProps<{
   to: { name: string; params?: RouteParamsRawGeneric }
   /** A value read character by character, under the name from `sm:`. */
   detail?: string
+  /**
+   * Words under the name from `sm:`, in place of a detail: what the record holds, rather than an
+   * identifier. The package sets its detail in monospace, so this one is drawn beside it, in the
+   * detail's size and ink.
+   */
+  caption?: string
 }>()
 </script>
 
 <template>
-  <SaTableRecord
-    class="whitespace-normal"
-    :name="name"
-    :detail="detail"
-    :link="{ to, bare: true }"
-    :link-as="RouteLink"
-  />
+  <div class="flex min-w-0 flex-col items-start">
+    <SaTableRecord
+      class="whitespace-normal"
+      :name="name"
+      :detail="detail"
+      :link="{ to, bare: true }"
+      :link-as="RouteLink"
+    />
+    <span v-if="caption" class="hidden max-w-full truncate text-xs text-gray-500 sm:block">
+      {{ caption }}
+    </span>
+  </div>
 </template>

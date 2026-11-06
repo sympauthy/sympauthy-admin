@@ -102,7 +102,7 @@ how it is installed.
 | `SaDefinitionList`, `SaDefinitionRow` | the fields of a record, inside a section |
 | `SaTableHeader`, `SaTableCell` | a column of a table, and every cell under one |
 | `SaTableActions` | the cell holding a row's `ActionsDropdown` |
-| `TableRecord` | the name of a record with a screen of its own, in a `primary` cell |
+| `TableRecord` | the name of a record with a screen of its own, in a `primary` cell, with its identifier or a caption under it |
 | `SaTable`, `SaPagination` | any table of records, and the pager in its `#footer` from `sm:` |
 | `SaTableEnd` | the end of a collection's rows below `sm:`, where the list grows |
 | `RecordTabs` | the views one record is read through, from `sm:` |

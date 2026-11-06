@@ -534,6 +534,7 @@
       "grant": "Grant",
       "status": "Status",
       "grantType": "Grant type",
+      "scopeCount": "{n} scope | {n} scopes",
       "client": "Client",
       "audience": "Audience",
       "createdAt": "Created at",
