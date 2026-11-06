@@ -156,8 +156,11 @@ it.**
 
 **A row with nothing to offer holds the height of the button,** so rows stay one height.
 
-**A value naming a record the configuration may no longer declare stays plain text rather than a
-link,** since a link landing on an error page is worse than no link.
+**A value naming a record with a screen of its own links to it,** with a `RouteLink`, or a
+`TableRecord` where it names the row: the client of a grant, a session or a consent, the user of a
+grant. A value whose record has no screen — an audience — stays plain text. A client the
+configuration no longer declares still gets its link: the screen it opens says so, which plain
+text would hide.
 
 **A set of values wraps as tags,** one `SaTag` each, rather than a list joined by commas: the claims
 of a scope, the scopes of a consent. A row may be taller for it.

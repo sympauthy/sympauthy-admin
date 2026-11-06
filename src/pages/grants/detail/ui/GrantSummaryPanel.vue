@@ -57,10 +57,10 @@ const { t } = useI18n()
       </RouteLink>
       <SaEmptyValue v-else />
     </SaSummaryField>
-    <!-- Plain text rather than links: a grant may name a client or an audience the configuration
-         no longer declares. -->
     <SaSummaryField mono :label="t('pages.grantDetail.client')">
-      {{ grant.client_id }}
+      <RouteLink block :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }">
+        {{ grant.client_id }}
+      </RouteLink>
     </SaSummaryField>
     <SaSummaryField mono :label="t('pages.grantDetail.audience')">
       <template #help>

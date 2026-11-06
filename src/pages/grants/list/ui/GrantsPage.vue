@@ -112,11 +112,14 @@ onMounted(async () => {
           </RouteLink>
           <SaEmptyValue v-else />
         </SaTableCell>
-        <!-- Plain text rather than a link: a grant may name a client or an audience the
-             configuration no longer declares, and a link landing on an error page is worse than
-             no link. -->
         <SaTableCell :label="t('pages.grants.client')" truncate mono>
-          {{ grant.client_id }}
+          <RouteLink
+            block
+            :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }"
+            class="text-gray-900"
+          >
+            {{ grant.client_id }}
+          </RouteLink>
         </SaTableCell>
         <SaTableCell :label="t('pages.grants.audience')" truncate mono hidden-below="sm">
           {{ grant.audience_id }}

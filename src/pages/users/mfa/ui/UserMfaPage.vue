@@ -5,7 +5,8 @@ import { useI18n } from 'vue-i18n'
 import {
   UserMfaApi,
   type UserMfaMethodListResource,
-  type UserMfaMethodResource
+  type UserMfaMethodResource,
+  userMfaMethodTypeLabel
 } from '@/entities/user'
 import { getErrorMessage, isSuccess } from '@/shared/api'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
@@ -27,20 +28,20 @@ const mfaMethods = useCollection<UserMfaMethodResource, UserMfaMethodListResourc
 
 const actions = computed<ActionItem[]>(() => [
   {
-    key: 'revoke',
-    label: t('pages.userMfa.revoke'),
+    key: 'remove',
+    label: t('pages.userMfa.remove'),
     danger: true,
     requiredScopes: ['admin:users:write']
   }
 ])
 
-const revokeTargetMfaId = ref<string | null>(null)
+const removeTargetMfaId = ref<string | null>(null)
 
-// The list is read again at the page it is displaying rather than from the first, so revoking the
+// The list is read again at the page it is displaying rather than from the first, so removing the
 // last enrolment of a page does not send the operator back to the top of the list.
-async function confirmRevoke() {
-  if (revokeTargetMfaId.value) {
-    const response = await api.revokeMfaMethod(userId.value, revokeTargetMfaId.value)
+async function confirmRemove() {
+  if (removeTargetMfaId.value) {
+    const response = await api.revokeMfaMethod(userId.value, removeTargetMfaId.value)
 
     if (isSuccess(response)) {
       await mfaMethods.fetch(mfaMethods.page)
@@ -48,7 +49,7 @@ async function confirmRevoke() {
       mfaMethods.error = getErrorMessage(response)
     }
   }
-  revokeTargetMfaId.value = null
+  removeTargetMfaId.value = null
 }
 
 // The shell above this route nulls the record before re-reading it, which unmounts this tab and
@@ -64,7 +65,9 @@ onMounted(async () => {
     <template #header>
       <SaTableHeader>
         {{ t('pages.userMfa.type.label') }}
-        <DocHelpTooltip term="pages.userMfa.type" />
+        <template #help>
+          <DocHelpTooltip term="pages.userMfa.type" />
+        </template>
       </SaTableHeader>
       <SaTableHeader
         fit
@@ -81,17 +84,24 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="method in mfaMethods.items" :key="method.mfa_id">
+        <!-- Named by what an operator calls the method, with the type the server sent under it, or
+             beside it on a phone, where the row has the width to spare and not the height. -->
         <SaTableCell primary>
-          {{ method.type }}
+          <div
+            class="flex flex-col max-sm:flex-row max-sm:flex-wrap max-sm:items-baseline max-sm:gap-x-2"
+          >
+            <span>{{ userMfaMethodTypeLabel(method.type) }}</span>
+            <span class="font-mono text-xs font-normal text-gray-500">{{ method.type }}</span>
+          </div>
         </SaTableCell>
         <SaTableCell :label="t('pages.userMfa.registeredAt')" fit>
           {{ formatDate(method.registered_at) }}
         </SaTableCell>
         <SaTableCell actions>
           <ActionsDropdown
-            :record="method.type"
+            :record="userMfaMethodTypeLabel(method.type)"
             :actions="actions"
-            @action="revokeTargetMfaId = method.mfa_id"
+            @action="removeTargetMfaId = method.mfa_id"
           />
         </SaTableCell>
       </tr>
@@ -103,17 +113,17 @@ onMounted(async () => {
   </CollectionPage>
 
   <SaConfirmDialog
-    :open="revokeTargetMfaId !== null"
-    :confirm-label="t('pages.userMfa.revokeConfirm')"
+    :open="removeTargetMfaId !== null"
+    :confirm-label="t('pages.userMfa.removeConfirm')"
     :cancel-label="t('common.cancel')"
-    @confirm="confirmRevoke"
-    @cancel="revokeTargetMfaId = null"
+    @confirm="confirmRemove"
+    @cancel="removeTargetMfaId = null"
   >
     <template #title>
-      {{ t('pages.userMfa.revokeTitle') }}
+      {{ t('pages.userMfa.removeTitle') }}
     </template>
     <p class="text-sm text-gray-600">
-      {{ t('pages.userMfa.revokeDescription') }}
+      {{ t('pages.userMfa.removeDescription') }}
     </p>
   </SaConfirmDialog>
 </template>
