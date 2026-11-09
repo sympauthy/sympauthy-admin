@@ -1,32 +1,47 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SaCard, SaDetailSection } from '@sympauthy/design'
+import {
+  SaCopyButton,
+  SaDetailSection,
+  SaTable,
+  SaTableActions,
+  SaTableCell
+} from '@sympauthy/design'
 import type { ClientDetailResource } from '@/entities/client'
 
-defineProps<{
+const props = defineProps<{
   client: ClientDetailResource
 }>()
 
 const { t } = useI18n()
+
+const uris = computed(() => props.client.allowed_redirect_uris ?? [])
 </script>
 
 <template>
   <SaDetailSection :title="t('pages.clientDetail.redirectUris')">
-    <!-- A list of one kind of value rather than a record's fields, so it is a card of them rather
-         than a definition list with nothing to put in the labels. -->
-    <SaCard>
-      <div v-if="client.allowed_redirect_uris && client.allowed_redirect_uris.length > 0">
-        <div
-          v-for="uri in client.allowed_redirect_uris"
-          :key="uri"
-          class="truncate font-mono text-sm text-gray-900"
-        >
-          {{ uri }}
-        </div>
-      </div>
-      <p v-else class="text-sm text-gray-500">
-        {{ t('pages.clientDetail.noRedirectUris') }}
-      </p>
-    </SaCard>
+    <!-- A list of one kind of value rather than a record's fields, so it is a table of them, drawn
+         without its header row since the section's title already names its one column. It is
+         never loading: the record it reads is fetched by the shell. Each is copied on its own, since
+         an operator registering the client elsewhere pastes one URI at a time. -->
+    <SaTable :loading-label="t('common.loading')" :empty="uris.length === 0">
+      <template #rows>
+        <tr v-for="uri in uris" :key="uri">
+          <SaTableCell primary mono>{{ uri }}</SaTableCell>
+          <SaTableActions>
+            <SaCopyButton
+              :value="uri"
+              :label="t('pages.clientDetail.copyRedirectUri', { uri })"
+              :copied-label="t('common.copied')"
+              :failed-label="t('common.copyFailed')"
+            />
+          </SaTableActions>
+        </tr>
+      </template>
+      <template #empty>
+        <p class="text-sm text-gray-600">{{ t('pages.clientDetail.noRedirectUris') }}</p>
+      </template>
+    </SaTable>
   </SaDetailSection>
 </template>

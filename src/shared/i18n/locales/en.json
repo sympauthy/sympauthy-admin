@@ -128,7 +128,21 @@
       "type": {
         "help": "A client is an application that delegates the sign-in of its users to this server. A confidential client can keep a secret, and authenticates with a client id and a secret — a server-side application, a backend job. A public client cannot, because its code runs where the person can read it — a single-page application, a mobile app — so it authenticates with its client id alone. See {link} for details.",
         "helpLinkText": "clients documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/functional/client.html#confidential-and-public-clients"
+        "helpLinkUrl": "https://sympauthy.github.io/functional/client.html#confidential-and-public-clients",
+        "values": {
+          "public": "Public",
+          "confidential": "Confidential"
+        }
+      }
+    },
+    "scope": {
+      "type": {
+        "legend": "What the colour of a scope says",
+        "values": {
+          "consentable": "consentable",
+          "grantable": "grantable",
+          "client": "client"
+        }
       }
     },
     "user": {
@@ -299,39 +313,52 @@
     },
     "clients": {
       "title": "Clients",
-      "clientId": "Client ID",
+      "client": "Client",
       "type": "Type",
       "audience": "Audience",
       "redirectUris": "Redirect URIs",
+      "moreRedirectUris": "+{n} more",
+      "moreRedirectUrisShort": "+{n}",
       "empty": "No clients found.",
-      "search": "Search clients..."
+      "search": "Search by client ID"
     },
     "clientDetail": {
       "title": "Client",
       "clientId": "Client ID",
+      "about": "About clients",
       "copyClientId": "Copy client ID",
       "type": "Type",
+      "typeCaption": {
+        "public": "No secret; proves itself with PKCE",
+        "confidential": "Authenticates with its own secret"
+      },
       "audience": "Audience",
       "grantTypes": {
         "label": "Grant types",
         "help": "The OAuth 2.1 grants this client may use: authorization_code sends a person through the sign-in flow, refresh_token trades a refresh token in for new ones, and client_credentials gets the client a token of its own with nobody signed in. See {link} for details.",
         "helpLinkText": "grant types documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id-allowed-grant-types"
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id-allowed-grant-types",
+        "detail": "How the client obtains tokens"
       },
       "scopes": "Scopes",
       "allowedScopes": {
         "label": "Allowed scopes",
         "help": "The scopes this client may ask for: an authorization request naming one outside the list has it dropped rather than refused. A client the configuration restricts in no way reads as Every scope, and one allowed none reads as None. See {link} for details.",
         "helpLinkText": "client configuration documentation",
-        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id"
+        "helpLinkUrl": "https://sympauthy.github.io/technical/configuration/client.html#clients-id",
+        "detail": "No scope the client may request | {n} scope the client may request | {n} scopes the client may request",
+        "detailUnrestricted": "Any scope the client asks for"
       },
       "defaultScopes": {
         "label": "Default scopes",
-        "help": "The scopes an authorization request is treated as asking for when it names none of its own. Nothing here means such a request asks for nothing."
+        "help": "The scopes an authorization request is treated as asking for when it names none of its own. Nothing here means such a request asks for nothing.",
+        "detail": "Asked for when a request names none"
       },
       "noScopes": "None",
       "allScopes": "Every scope",
+      "everyAllowedScope": "Every allowed scope",
       "redirectUris": "Redirect URIs",
+      "copyRedirectUri": "Copy {uri}",
       "noRedirectUris": "No redirect URIs configured.",
       "authorization": "Authorization",
       "authorizationFlow": "Flow",
@@ -438,9 +465,6 @@
       },
       "enabled": "enabled",
       "disabled": "disabled",
-      "consentable": "consentable",
-      "grantable": "grantable",
-      "client": "client",
       "empty": "No scopes found.",
       "search": "Search scopes..."
     },

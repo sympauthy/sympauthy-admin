@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ScopeApi } from '../api/ScopeApi'
-import type { ScopeListResource } from '../model/ScopeListResource'
-import type { ScopeResource } from '../model/ScopeResource'
+import {
+  ScopeApi,
+  ScopeTag,
+  scopeTypeLabel,
+  type ScopeListResource,
+  type ScopeResource
+} from '@/entities/scope'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, OriginTag } from '@/shared/ui'
@@ -17,17 +21,6 @@ const scopes = useCollection<ScopeResource, ScopeListResource>({
   items: (content) => content.scopes,
   key: (scope) => scope.id
 })
-
-function typeColor(type: string): 'blue' | 'purple' | 'gray' {
-  switch (type) {
-    case 'consentable':
-      return 'blue'
-    case 'grantable':
-      return 'purple'
-    default:
-      return 'gray'
-  }
-}
 
 onMounted(async () => {
   await scopes.load()
@@ -82,9 +75,9 @@ onMounted(async () => {
           {{ scope.id }}
         </SaTableCell>
         <SaTableCell :label="t('pages.scopes.type.label')" fit>
-          <SaTag :color="typeColor(scope.type)">
-            {{ t(`pages.scopes.${scope.type}`) }}
-          </SaTag>
+          <ScopeTag :type="scope.type">
+            {{ scopeTypeLabel(scope.type) }}
+          </ScopeTag>
         </SaTableCell>
         <SaTableCell :label="t('terms.origin.label')" fit>
           <OriginTag :origin="scope.origin" />

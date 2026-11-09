@@ -80,3 +80,16 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
 export function clientRestrictsScopes(client: ClientDetailResource): boolean {
   return client.allowed_scopes != null
 }
+
+/**
+ * Whether `client` asks for every scope it is allowed when a request names none: the configuration
+ * restricts its scopes, and its default ones are those same scopes, in whatever order.
+ */
+export function clientDefaultsToAllowedScopes(client: ClientDetailResource): boolean {
+  const allowed = client.allowed_scopes
+  if (allowed == null || allowed.length === 0) {
+    return false
+  }
+  const defaults = new Set(client.default_scopes)
+  return defaults.size === new Set(allowed).size && allowed.every((scope) => defaults.has(scope))
+}

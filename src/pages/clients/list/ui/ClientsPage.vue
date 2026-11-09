@@ -1,7 +1,12 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ClientApi, type ClientListResource, type ClientSummaryResource } from '@/entities/client'
+import {
+  ClientApi,
+  clientTypeLabel,
+  type ClientListResource,
+  type ClientSummaryResource
+} from '@/entities/client'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
 import { DocHelpTooltip, TableRecord } from '@/shared/ui'
@@ -29,7 +34,7 @@ onMounted(async () => {
         field="id"
         :filtered-label="clients.filteredLabel('id')"
       >
-        {{ t('pages.clients.clientId') }}
+        {{ t('pages.clients.client') }}
       </SaTableHeader>
       <SaTableHeader fit>
         {{ t('pages.clients.type') }}
@@ -37,7 +42,6 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader
         fit
-        hidden-below="sm"
         :sorting="clients.sort"
         field="audience_id"
         :filtered-label="clients.filteredLabel('audience_id')"
@@ -52,31 +56,68 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="client in clients.items" :key="client.client_id">
-        <SaTableCell primary mono>
+        <SaTableCell primary mono truncate>
           <TableRecord
             :name="client.client_id"
             :to="{ name: 'clientDetail', params: { clientId: client.client_id } }"
           />
         </SaTableCell>
         <SaTableCell :label="t('pages.clients.type')" fit>
-          {{ client.type }}
+          {{ clientTypeLabel(client.type) }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.clients.audience')" fit mono hidden-below="sm">
+        <!-- A phone reads the audience and the redirect URIs each on a line of their own, as the
+             canvas lists them under the type. The package ends that phone's first line with a break
+             that the row's gap falls on both sides of, so each line after it adds that gap again to
+             read evenly spaced. -->
+        <SaTableCell
+          :label="t('pages.clients.audience')"
+          fit
+          mono
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
           {{ client.audience_id }}
         </SaTableCell>
-        <SaTableCell :label="t('pages.clients.redirectUris')" mono>
-          <template v-if="client.allowed_redirect_uris?.length">
-            <div v-for="uri in client.allowed_redirect_uris" :key="uri" class="truncate">
-              {{ uri }}
-            </div>
-          </template>
+        <!-- The first URI stands for the rest, which are counted beside it and read in full on the
+             record: a row as tall as its longest list would leave a page of clients a few rows long. -->
+        <SaTableCell
+          :label="t('pages.clients.redirectUris')"
+          truncate
+          mono
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
+          <span
+            v-if="client.allowed_redirect_uris?.length"
+            class="flex min-w-0 items-baseline gap-2"
+            :title="client.allowed_redirect_uris.join('\n')"
+          >
+            <span class="truncate">{{ client.allowed_redirect_uris[0] }}</span>
+            <span
+              v-if="client.allowed_redirect_uris.length > 1"
+              class="shrink-0 font-sans text-xs text-gray-500"
+            >
+              <span class="hidden sm:inline">
+                {{
+                  t('pages.clients.moreRedirectUris', {
+                    n: client.allowed_redirect_uris.length - 1
+                  })
+                }}
+              </span>
+              <span class="sm:hidden">
+                {{
+                  t('pages.clients.moreRedirectUrisShort', {
+                    n: client.allowed_redirect_uris.length - 1
+                  })
+                }}
+              </span>
+            </span>
+          </span>
           <SaEmptyValue v-else />
         </SaTableCell>
       </tr>
     </template>
 
     <template #empty>
-      <p class="text-sm text-gray-600">{{ t('pages.clients.empty') }}</p>
+      <p class="max-w-prose text-center text-sm text-gray-600">{{ t('pages.clients.empty') }}</p>
     </template>
   </CollectionPage>
 </template>
