@@ -1,6 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "description": "The Node types follow the Node major in .nvmrc (lts/krypton, Node 24): raise this bound with it, not ahead of it.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25"
+    }
   ]
 }
