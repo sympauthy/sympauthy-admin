@@ -44,6 +44,22 @@ is checked by those and by running it.
 The dev server needs a SympAuthy on `localhost:8080`, started with the `admin` environment. Full
 setup is `docs/running-locally.md`.
 
+**A phone width is checked in a 390px frame, not by resizing the browser**, which will not shrink a
+window that narrow. Serve a page of iframes from the scratchpad on another port of `localhost` —
+never `127.0.0.1`, a different site, which loses the signed-in session — and open it:
+
+```sh
+cat > index.html <<'EOF'
+<!doctype html><body style="margin:0;display:flex;gap:12px;background:#ddd">
+<iframe src="http://localhost:5174/clients" width="390" height="680"></iframe>
+<iframe src="http://localhost:5174/clients/admin" width="390" height="680"></iframe>
+</body>
+EOF
+python3 -I -m http.server 8765 --bind 127.0.0.1   # then open http://localhost:8765/
+```
+
+One frame per screen to compare, side by side; stop the server when done.
+
 ## Issues
 
 **A new issue opens in the earliest open milestone**, unless the user names another. That milestone

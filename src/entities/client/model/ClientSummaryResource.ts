@@ -1,4 +1,5 @@
 import type { JSONSchemaType } from 'ajv'
+import { translateMessageOr } from '@/shared/i18n'
 
 export type ClientSummaryResource = {
   client_id: string
@@ -27,4 +28,12 @@ export const clientSummaryResourceSchema: JSONSchemaType<ClientSummaryResource> 
   },
   required: ['client_id', 'type', 'audience_id'],
   additionalProperties: true
+}
+
+/**
+ * Label a client's type is read under. The set is the server's, and a value this panel holds no
+ * translation for renders as itself.
+ */
+export function clientTypeLabel(type: string): string {
+  return translateMessageOr(`terms.client.type.values.${type}`, type)
 }

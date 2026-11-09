@@ -198,7 +198,13 @@ when the identifier changes and not when the tab does.
 | Holds | Rendered as |
 | --- | --- |
 | fields of one record | a `SaDefinitionList` of `SaDefinitionRow`s |
-| plain values | a `SaCard` listing them |
+| a list of one kind of value | a `SaTable` without its `#header`, which the section's title names |
+
+**A scope is a `ScopeTag` wherever it is listed, and a section listing scopes says what each look
+means.** A scope's name does not tell a consentable scope from a grantable one, so its tag is all
+that does: filled blue, ringed purple, or ink for a client's own. A `ScopeTypeLegend` on the right of
+the section's title names all three, whichever the section draws, so the key reads the same on
+every record — a client's allowed and default scopes, a grant's three sets.
 
 **Records are not a section.** A paged set of them is a collection, and a collection is a tab of its
 own — [the collection standard](collection-standard.md#a-collection-under-a-record) says how one
