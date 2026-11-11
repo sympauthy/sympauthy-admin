@@ -11,7 +11,7 @@ import {
 } from '@/entities/session'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import { DocHelpTooltip, RouteLink, TableRecord } from '@/shared/ui'
+import { DocHelpTooltip, RecordLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
 
@@ -90,29 +90,39 @@ onMounted(async () => {
             {{ interactiveFlowSessionStatusLabel(session.status) }}
           </SaTag>
         </SaTableCell>
-        <SaTableCell :label="t('pages.sessions.user')" truncate>
-          <RouteLink
+        <!-- A phone reads the user and the client each on a line of its own, under the status, as the
+             grant list does: left to wrap, a row's lines would depend on how long its user's
+             identifier is, and a row without one would read differently. The package ends that
+             phone's first line with a break that the row's gap falls on both sides of, so each line
+             after it adds that gap again to read evenly spaced. -->
+        <SaTableCell
+          :label="t('pages.sessions.user')"
+          truncate
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
+          <RecordLink
             v-if="session.user"
-            block
+            truncate
+            :name="userIdentifierLabel(session.user)"
             :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-            class="text-gray-900"
-          >
-            {{ userIdentifierLabel(session.user) }}
-          </RouteLink>
+          />
           <SaTag v-else-if="session.signed_up" color="gray">
             {{ t('pages.sessions.signingUp') }}
           </SaTag>
           <SaEmptyValue v-else />
         </SaTableCell>
-        <SaTableCell :label="t('pages.sessions.client')" truncate mono>
-          <RouteLink
+        <SaTableCell
+          :label="t('pages.sessions.client')"
+          truncate
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
+          <RecordLink
             v-if="session.client_id"
-            block
+            mono
+            truncate
+            :name="session.client_id"
             :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
-            class="text-gray-900"
-          >
-            {{ session.client_id }}
-          </RouteLink>
+          />
           <SaEmptyValue v-else />
         </SaTableCell>
         <SaTableCell :label="t('pages.sessions.started')" fit hidden-below="lg">

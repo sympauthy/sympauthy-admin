@@ -8,7 +8,7 @@ import {
   SaSummaryField,
   SaTag
 } from '@sympauthy/design'
-import { DocHelpTooltip, RouteLink } from '@/shared/ui'
+import { DocHelpTooltip, RecordLink } from '@/shared/ui'
 import {
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel,
@@ -61,25 +61,25 @@ const lifetime = computed(() => {
       <template #help>
         <DocHelpTooltip term="terms.interactiveFlowSession.user" />
       </template>
-      <RouteLink
+      <RecordLink
         v-if="session.user"
+        truncate
+        :name="userIdentifierLabel(session.user)"
         :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-      >
-        {{ userIdentifierLabel(session.user) }}
-      </RouteLink>
+      />
       <SaTag v-else-if="session.signed_up" color="gray">
         {{ t('pages.sessions.signingUp') }}
       </SaTag>
       <SaEmptyValue v-else />
     </SaSummaryField>
-    <SaSummaryField mono :label="t('pages.sessionDetail.client')">
-      <RouteLink
+    <SaSummaryField :label="t('pages.sessionDetail.client')">
+      <RecordLink
         v-if="session.client_id"
-        block
+        mono
+        truncate
+        :name="session.client_id"
         :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
-      >
-        {{ session.client_id }}
-      </RouteLink>
+      />
       <SaEmptyValue v-else />
     </SaSummaryField>
     <!-- How long the session may run, from when it started to when it expires. A session lives
