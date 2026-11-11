@@ -1,5 +1,5 @@
 export * from './api/InteractiveFlowSessionApi'
-export * from './model/InteractiveFlowPurposeResource'
+export * from './model/InteractiveFlowPurpose'
 export * from './model/InteractiveFlowSessionDebugInformationResource'
 export * from './model/InteractiveFlowSessionDetailResource'
 export * from './model/InteractiveFlowSessionListResource'

@@ -5,13 +5,13 @@ import { useI18n } from 'vue-i18n'
 import {
   interactiveFlowSessionCarriesFailure,
   interactiveFlowSessionEndedInFailure,
+  purposeLabel,
   useInteractiveFlowSessionDetailStore
 } from '@/entities/session'
-import { useBreadcrumb } from '@/shared/lib'
+import { formatDateTime, useBreadcrumb } from '@/shared/lib'
 import SessionSummaryPanel from './SessionSummaryPanel.vue'
 import { SaAlert, SaCard, SaLoadingState } from '@sympauthy/design'
 import { type RecordTab, RecordTabs } from '@/shared/ui'
-import { userIdentifierLabel } from '@/entities/user'
 
 /**
  * One interactive flow session: its summary, and a tab per view below it. Each tab is a route of
@@ -52,7 +52,14 @@ async function load(id: string) {
   if (!store.session) {
     return
   }
-  setLabel(store.session.user ? userIdentifierLabel(store.session.user) : store.session.id)
+  // A session is named as its row in the list is, by what it was started for, and told from the
+  // others started for the same by when it started. The user it identified is in the summary.
+  setLabel(
+    t('pages.sessionDetail.label', {
+      purpose: purposeLabel(store.session.initiating_purpose),
+      started: formatDateTime(store.session.session_date)
+    })
+  )
 
   // The record's route falls back to the purposes, which every session has, and it does so before
   // the session has been read. Once it has, one that ended in a failure is moved on to the tab its

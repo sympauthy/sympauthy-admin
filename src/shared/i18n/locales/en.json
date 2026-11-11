@@ -195,11 +195,101 @@
         "reauthentication": "Proving the account again",
         "link_provider": "Linking a third-party provider"
       },
+      "valuesHelp": {
+        "confirm": "The person is asked to approve an action a client or an administrator started on their behalf.",
+        "oauth2_authorize": "The client sent the person here to sign in and come back with an authorization code.",
+        "mfa_enrollment": "The person sets up a second factor on their account.",
+        "mfa_challenge": "The person proves a second factor before the flow goes on.",
+        "reauthentication": "The person proves their primary credential again before a sensitive action goes on.",
+        "link_provider": "The person links a third-party provider to their account."
+      },
       "status": {
         "values": {
           "completed": "completed",
           "current": "current",
           "pending": "pending"
+        }
+      },
+      "debug": {
+        "client_id": {
+          "label": "Client"
+        },
+        "redirect_uri": {
+          "label": "Redirect URI"
+        },
+        "requested_scopes": {
+          "label": "Requested"
+        },
+        "consented_scopes": {
+          "label": "Consented"
+        },
+        "consented_at": {
+          "label": "Consented at"
+        },
+        "consented_by": {
+          "label": "Consented by"
+        },
+        "granted_scopes": {
+          "label": "Granted"
+        },
+        "granted_at": {
+          "label": "Granted at"
+        },
+        "granted_by": {
+          "label": "Granted by"
+        },
+        "invitation_id": {
+          "label": "Invitation"
+        },
+        "state": {
+          "label": "State",
+          "help": "Guards the redirect back to the client against forgery."
+        },
+        "nonce": {
+          "label": "Nonce",
+          "help": "Binds the ID token to this request. Optional with the authorization code flow."
+        },
+        "code_challenge": {
+          "label": "Code challenge",
+          "help": "PKCE binds the authorization code to the client that asked for it."
+        },
+        "code_challenge_method": {
+          "label": "Code challenge method"
+        },
+        "action": {
+          "label": "Action",
+          "values": {
+            "enroll_mfa": "Enrolling a second factor",
+            "link_provider": "Linking a third-party provider"
+          }
+        },
+        "initiated_by": {
+          "label": "Initiated by",
+          "values": {
+            "client": "A client",
+            "admin": "An administrator"
+          }
+        },
+        "confirmed_at": {
+          "label": "Confirmed at"
+        },
+        "enrolled_methods": {
+          "label": "Enrolled methods"
+        },
+        "mfa_passed_at": {
+          "label": "Second factor passed at"
+        },
+        "challengeable_methods": {
+          "label": "Methods it can challenge"
+        },
+        "primary_credential_proven_at": {
+          "label": "Primary credential proven at"
+        },
+        "target_provider_id": {
+          "label": "Provider to link"
+        },
+        "authorizing_provider_id": {
+          "label": "Provider authorizing now"
         }
       }
     },
@@ -636,16 +726,16 @@
     },
     "sessionDetail": {
       "title": "Session",
+      "label": "{purpose} · {started}",
       "views": "Views of this session",
       "sessionId": "Session ID",
       "copySessionId": "Copy session ID",
       "status": "Status",
-      "startedFor": "Started for",
       "client": "Client",
       "flow": "Flow",
       "user": "User",
-      "startedAt": "Started at",
-      "expiresAt": "Expires at",
+      "lifetime": "Lifetime",
+      "lifetimeRange": "{start} → {end}",
       "notFound": "This session no longer exists. It may have completed and been collected — expired sessions are collected every fifteen minutes."
     },
     "userClaims": {
@@ -753,10 +843,17 @@
     },
     "sessionPurposes": {
       "title": "Purposes",
-      "help": "A purpose is something a flow can only settle with the person in front of a browser: signing in for an application, enrolling a second factor, confirming an action. One card per purpose this session carries, in the order it drives them, each labelled as the server wrote it rather than in this panel's language. See {link} for details.",
+      "help": "A purpose is something a flow can only settle with the person in front of a browser: signing in for an application, enrolling a second factor, confirming an action. One card per purpose this session carries, in the order it drives them, with what the session holds for each. See {link} for details.",
       "helpLinkText": "interactive flow documentation",
       "helpLinkUrl": "https://sympauthy.github.io/functional/interactive_flow.html",
-      "noDebugInformation": "This purpose has nothing to say about the session."
+      "noDebugInformation": "This purpose has nothing to say about the session.",
+      "scopeCount": "{n} scope | {n} scopes",
+      "checks": "Request parameters",
+      "presence": {
+        "present": "present",
+        "absent": "absent",
+        "unknown": "unknown"
+      }
     },
     "sessionFailure": {
       "title": "Failure",
