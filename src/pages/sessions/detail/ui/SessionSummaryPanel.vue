@@ -50,6 +50,24 @@ const lifetime = computed(() => {
         {{ interactiveFlowSessionStatusLabel(session.status) }}
       </SaTag>
     </SaSummaryField>
+    <!-- How long the session may run, from when it started to when it expires. A session lives
+         minutes, so the day is said once under the two times, and in full where it crosses one. -->
+    <SaSummaryField :label="t('pages.sessionDetail.lifetime')">
+      <i18n-t
+        keypath="pages.sessionDetail.lifetimeRange"
+        tag="span"
+        scope="global"
+        class="block tabular-nums"
+      >
+        <template #start>
+          <time :datetime="isoDateTime(session.session_date)">{{ lifetime.start }}</time>
+        </template>
+        <template #end>
+          <time :datetime="isoDateTime(session.expiration_date)">{{ lifetime.end }}</time>
+        </template>
+      </i18n-t>
+      <span v-if="lifetime.day" class="block text-xs text-gray-600">{{ lifetime.day }}</span>
+    </SaSummaryField>
     <SaSummaryField mono :label="t('pages.sessionDetail.flow')">
       <template #help>
         <DocHelpTooltip term="terms.flow.id" />
@@ -81,24 +99,6 @@ const lifetime = computed(() => {
         :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
       />
       <SaEmptyValue v-else />
-    </SaSummaryField>
-    <!-- How long the session may run, from when it started to when it expires. A session lives
-         minutes, so the day is said once under the two times, and in full where it crosses one. -->
-    <SaSummaryField :label="t('pages.sessionDetail.lifetime')">
-      <i18n-t
-        keypath="pages.sessionDetail.lifetimeRange"
-        tag="span"
-        scope="global"
-        class="block tabular-nums"
-      >
-        <template #start>
-          <time :datetime="isoDateTime(session.session_date)">{{ lifetime.start }}</time>
-        </template>
-        <template #end>
-          <time :datetime="isoDateTime(session.expiration_date)">{{ lifetime.end }}</time>
-        </template>
-      </i18n-t>
-      <span v-if="lifetime.day" class="block text-xs text-gray-600">{{ lifetime.day }}</span>
     </SaSummaryField>
   </SaSummaryCard>
 </template>
