@@ -8,42 +8,51 @@ import {
   purposeLabel,
   useInteractiveFlowSessionDetailStore
 } from '@/entities/session'
-import { formatDateTime, useBreadcrumb } from '@/shared/lib'
+import { formatDateTime, useBreadcrumb, useIsPhone } from '@/shared/lib'
 import SessionSummaryPanel from './SessionSummaryPanel.vue'
-import { SaAlert, SaCard, SaLoadingState } from '@sympauthy/design'
-import { type RecordTab, RecordTabs } from '@/shared/ui'
+import { SaAlert, SaCard, SaLoadingState, SaPageActions } from '@sympauthy/design'
+import { type ActionItem, ActionsDropdown, RecordTabs } from '@/shared/ui'
+import { InformationCircleIcon } from '@heroicons/vue/20/solid'
+import { useInteractiveFlowSessionViews } from '../model/useInteractiveFlowSessionViews'
 
 /**
  * One interactive flow session: its summary, and a tab per view below it. Each tab is a route of
  * its own, so the view an operator is on is addressable and survives a reload.
+ *
+ * A phone has no room for the summary, the tabs and a view together, so it opens on the summary and
+ * a list of the views, and each view fills a screen of its own.
  */
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const store = useInteractiveFlowSessionDetailStore()
 const { setLabel } = useBreadcrumb()
+const isPhone = useIsPhone()
+const views = useInteractiveFlowSessionViews()
 
 const sessionId = computed(() => route.params.sessionId as string)
 
-// A tab names its own view and carries that view's explanation, both read under the route it opens.
-// Neither sentence carries a link, so neither declares one.
-//
-// Why a session ended where it did is a view of its own rather than a panel above the strip: it
-// belongs to a session that ended in a failure, and a section held for some would cost every
-// session the height it takes. It comes first, since it is the question an operator opens such a
-// session with — the record still falls back to the purposes, which every session has.
-const tabs = computed<RecordTab[]>(() => {
-  const params = { sessionId: sessionId.value }
-  const failure =
-    store.session && interactiveFlowSessionEndedInFailure(store.session.status)
-      ? (['sessionFailure'] as const)
-      : []
-  const names = ['sessionPurposes', 'sessionSecurityContexts'] as const
-  return [...failure, ...names].map((name) => ({
-    label: t(`pages.${name}.title`),
-    to: { name, params },
-    help: `pages.${name}`
-  }))
+const isOverview = computed(() => route.name === 'sessionDetail')
+// What explains the view on screen, which a phone reads from the menu: it has no tab to draw it beside.
+const help = computed(() =>
+  isPhone.value ? views.value.find(({ name }) => name === route.name)?.help : undefined
+)
+const actions = computed<ActionItem[]>(() =>
+  help.value ? [{ key: 'help', label: t(`${help.value}.about`), icon: InformationCircleIcon }] : []
+)
+
+function onAction(key: string) {
+  if (key === 'help') {
+    window.open(t(`${help.value}.helpLinkUrl`), '_blank', 'noopener,noreferrer')
+  }
+}
+
+// The route opens the purposes on a wider screen, and this does the same for a phone turned or a
+// window widened while the list of views is open.
+watch([isPhone, isOverview], ([phone, overview]) => {
+  if (!phone && overview) {
+    router.replace({ name: 'sessionPurposes', params: route.params })
+  }
 })
 
 async function load(id: string) {
@@ -61,9 +70,10 @@ async function load(id: string) {
     })
   )
 
-  // The record's route falls back to the purposes, which every session has, and it does so before
-  // the session has been read. Once it has, one that ended in a failure is moved on to the tab its
-  // strip opens with, so the question it was opened with is answered without a click. Only that
+  // From sm: the record's route falls back to the purposes, which every session has, and it does so
+  // before the session has been read. Once it has, one that ended in a failure is moved on to the
+  // tab its strip opens with, so the question it was opened with is answered without a click. A
+  // phone lands on the list of views, which names the failure first. Only that
   // fallback is replaced — a URL naming a tab is where the operator asked to be, and a reload of
   // one stays there — and only while the session read is still the one on screen.
   //
@@ -104,11 +114,19 @@ onMounted(() => load(sessionId.value))
 
     <!-- Content -->
     <template v-else-if="store.session">
-      <SessionSummaryPanel class="shrink-0" :session="store.session" />
-      <RecordTabs :tabs="tabs" :label="t('pages.sessionDetail.views')" />
-      <!-- The tab fills what the summary and the strip leave, so its table scrolls rather than the
-           page. The purposes are shorter than the viewport and scroll inside the same box. -->
-      <div class="min-h-0 flex-1 overflow-y-auto">
+      <SaPageActions v-if="actions.length > 0">
+        <ActionsDropdown :actions="actions" @action="onAction" />
+      </SaPageActions>
+      <SessionSummaryPanel
+        v-if="!isPhone || isOverview"
+        class="shrink-0"
+        :session="store.session"
+      />
+      <RecordTabs v-if="!isPhone" :tabs="views" :label="t('pages.sessionDetail.views')" />
+      <!-- From sm: the tab fills what the summary and the strip leave, so its table scrolls rather
+           than the page, and the purposes scroll inside the same box. A phone's view is a screen of
+           its own, which the page scrolls. -->
+      <div class="min-h-0 flex-1 sm:overflow-y-auto">
         <RouterView />
       </div>
     </template>
