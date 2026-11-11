@@ -104,8 +104,9 @@ const purposes = computed(() =>
           </SaDefinitionRow>
         </dl>
 
-        <!-- What the session holds but the server does not publish, each as whether it is there:
-             the value exists so that only the client and the browser hold it. -->
+        <!-- What the request carried: whether it held each value the server does not publish, since
+             that value exists so that only the client and the browser hold it, and the invitation it
+             named. -->
         <section
           v-if="purpose.checks.length > 0"
           :aria-label="t('pages.sessionPurposes.checks')"
@@ -135,7 +136,10 @@ const purposes = computed(() =>
                   <span :class="check.state === 'present' ? 'text-green-800' : 'text-gray-700'">
                     {{ t(`pages.sessionPurposes.presence.${check.state}`) }}
                   </span>
-                  <span v-if="check.detail" class="ml-1 font-mono font-normal text-gray-700">
+                  <span
+                    v-if="check.detail"
+                    class="ml-1 font-mono font-normal break-all text-gray-700"
+                  >
                     {{ check.detail }}
                   </span>
                 </p>

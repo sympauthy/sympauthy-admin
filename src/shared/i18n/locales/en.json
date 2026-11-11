@@ -239,7 +239,8 @@
           "label": "Granted by"
         },
         "invitation_id": {
-          "label": "Invitation"
+          "label": "Invitation",
+          "help": "The client passed an invitation with its request, letting the person sign up where its audience takes sign-ups by invitation only."
         },
         "state": {
           "label": "State",

@@ -45,6 +45,13 @@ const DETAILS: Record<string, string> = {
   code_challenge: 'code_challenge_method'
 }
 
+/**
+ * An entry read among the request's parameters, and only where the request carried it: an invitation
+ * is what a sign-up was asked through, and an authorization without one is the common case rather
+ * than a field left empty.
+ */
+const PARAMETERS_WHEN_SET = new Set(['invitation_id'])
+
 // Every entry read as another's caption or detail.
 const FOLDED_CODES = new Set([
   ...Object.values(SCOPE_LISTS).flatMap(({ by, at }) => [by, at]),
@@ -58,7 +65,6 @@ const FOLDED_CODES = new Set([
 const MONO_CODES = new Set([
   'client_id',
   'redirect_uri',
-  'invitation_id',
   'target_provider_id',
   'authorizing_provider_id'
 ])
@@ -84,7 +90,7 @@ export interface PurposeCheck {
   label: string
   /** Whether the session holds the value; `unknown` where the purpose has no record to ask. */
   state: 'present' | 'absent' | 'unknown'
-  /** The entry read beside the presence, as the method of a code challenge. */
+  /** The value read beside the presence: the method of a code challenge, an invitation's ID. */
   detail?: string
   help?: string
 }
@@ -98,7 +104,8 @@ export interface PurposeEntries {
 
 /**
  * The entries of one purpose as its card draws them: a row for each value, and a check for each
- * value the session holds but the server does not publish.
+ * parameter the request carried — whether it held a value the server does not publish, and the
+ * invitation it named, where it named one.
  *
  * The order is the server's. An entry another one reads as its caption or its detail is not drawn
  * twice, and neither is a client the session's summary already names.
@@ -114,6 +121,19 @@ export function purposeEntries(
   for (const information of progress.debug) {
     const { code } = information
     if (FOLDED_CODES.has(code) || (code === 'client_id' && information.value === sessionClientId)) {
+      continue
+    }
+
+    if (PARAMETERS_WHEN_SET.has(code)) {
+      if (typeof information.value === 'string' && information.value) {
+        checks.push({
+          code,
+          label: debugInformationLabel(code),
+          state: 'present',
+          detail: information.value,
+          help: debugInformationHelp(code)
+        })
+      }
       continue
     }
 
