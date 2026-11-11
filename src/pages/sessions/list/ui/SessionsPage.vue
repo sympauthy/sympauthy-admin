@@ -13,7 +13,7 @@ import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, RecordLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
-import { formatDateTime } from '@/shared/lib'
+import { formatDateTime, isoDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
 const api = new InteractiveFlowSessionApi()
@@ -67,7 +67,6 @@ onMounted(async () => {
       </SaTableHeader>
       <SaTableHeader
         fit
-        hidden-below="lg"
         :sorting="sessions.sort"
         field="session_date"
         :filtered-label="sessions.filteredLabel('session_date')"
@@ -125,8 +124,12 @@ onMounted(async () => {
           />
           <SaEmptyValue v-else />
         </SaTableCell>
-        <SaTableCell :label="t('pages.sessions.started')" fit hidden-below="lg">
-          {{ formatDateTime(session.session_date) }}
+        <!-- When a session started is what an operator finds the one a person had by, so it is read
+             at every width, on a phone on a line of its own after the client. -->
+        <SaTableCell :label="t('pages.sessions.started')" fit class="max-sm:mt-1 max-sm:basis-full">
+          <time :datetime="isoDateTime(session.session_date)">
+            {{ formatDateTime(session.session_date) }}
+          </time>
         </SaTableCell>
       </tr>
     </template>
