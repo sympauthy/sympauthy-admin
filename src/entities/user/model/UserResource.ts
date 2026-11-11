@@ -2,7 +2,7 @@ import type { JSONSchemaType } from 'ajv'
 
 export type UserResource = {
   user_id: string
-  claims?: Record<string, string | number | boolean | null> | null
+  claims?: Record<string, string | number | boolean | Record<string, unknown> | null> | null
   status: string
   created_at: string
   last_authenticated_at?: string | null
@@ -12,8 +12,9 @@ export type UserResource = {
  * A claim value embedded in an account, as a schema.
  *
  * A claim is published with the type it is declared under, so a `number` claim arrives as a JSON
- * number and not as a string. A schema accepting strings alone would reject the whole response over
- * one such claim.
+ * number and a `json` one as the object it holds. A schema accepting strings alone would reject the
+ * whole response over one such claim — and the user collection embeds every enabled claim when
+ * `claims` is not sent, so a `json` one reaches it even though no identifier can be one.
  *
  * AJV's `JSONSchemaType` cannot type a union that includes null, so this one is written plainly and
  * declared past it. The looseness is the schema's type and not the schema: what it validates is
@@ -21,7 +22,13 @@ export type UserResource = {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const claimValueSchema: any = {
-  oneOf: [{ type: 'string' }, { type: 'number' }, { type: 'boolean' }, { type: 'null' }]
+  oneOf: [
+    { type: 'string' },
+    { type: 'number' },
+    { type: 'boolean' },
+    { type: 'object' },
+    { type: 'null' }
+  ]
 }
 
 export const userResourceSchema: JSONSchemaType<UserResource> = {
