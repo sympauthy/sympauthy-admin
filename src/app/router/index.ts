@@ -15,7 +15,7 @@ import { UserClaimsPage } from '@/pages/users/claims'
 import { UserConsentsPage } from '@/pages/users/consents'
 import { UserMfaPage } from '@/pages/users/mfa'
 import { UserProvidersPage } from '@/pages/users/providers'
-import { SessionDetailPage } from '@/pages/sessions/detail'
+import { SessionDetailPage, SessionViewsPage } from '@/pages/sessions/detail'
 import { SessionPurposesPage } from '@/pages/sessions/purposes'
 import { SessionSecurityContextsPage } from '@/pages/sessions/security-contexts'
 import { SessionFailurePage } from '@/pages/sessions/failure'
@@ -239,10 +239,10 @@ export function makeRouter() {
         }
       },
       {
+        // The record's shell, laid out as the user's: landing on it lists its views on a phone and
+        // opens the purposes on a wider screen.
         path: '/sessions/:sessionId',
-        name: 'sessionDetail',
         component: SessionDetailPage,
-        redirect: { name: 'sessionPurposes' },
         meta: {
           requiresAuth: true,
           requiredScopes: ['admin:interactive-flow-sessions:read'],
@@ -250,22 +250,39 @@ export function makeRouter() {
         },
         children: [
           {
+            path: '',
+            name: 'sessionDetail',
+            component: SessionViewsPage,
+            meta: { requiresAuth: true },
+            beforeEnter: (to) =>
+              useIsPhone().value || { name: 'sessionPurposes', params: to.params }
+          },
+          {
             path: 'purposes',
             name: 'sessionPurposes',
             component: SessionPurposesPage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.sessionPurposes.title', record: 'sessionDetail' }
+            }
           },
           {
             path: 'security-contexts',
             name: 'sessionSecurityContexts',
             component: SessionSecurityContextsPage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.sessionSecurityContexts.title', record: 'sessionDetail' }
+            }
           },
           {
             path: 'failure',
             name: 'sessionFailure',
             component: SessionFailurePage,
-            meta: { requiresAuth: true }
+            meta: {
+              requiresAuth: true,
+              view: { label: 'pages.sessionFailure.title', record: 'sessionDetail' }
+            }
           }
         ]
       }

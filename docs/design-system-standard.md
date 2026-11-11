@@ -163,10 +163,10 @@ hand-roll a click-outside, an Escape handler or focus management.
 
 ## Text
 
-**A value the panel cannot tell an identifier from takes the body face.** A session's debug
-information is a list of strings the server labelled, and an identifier among them is
-indistinguishable from a date or a word; setting all of them in monospace drew that card unlike
-every other record's fields, the same grant read in two faces on two screens.
+**A value the panel cannot tell an identifier from takes the body face.** A session's debug entries
+are named by codes, and only the ones the panel knows to hold an identifier — a client, a redirect
+URI, an invitation — are set in monospace. A code it does not know yet may hold a word as well as an
+identifier, and setting all of them in monospace drew that card unlike every other record's fields.
 
 **A link inside a sentence is a `DocLink`, drawing `.sa-link`.** A record named in a field or a
 column is not in a sentence: it is a `RecordLink`, whose chevron says it opens another screen.

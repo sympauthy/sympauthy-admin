@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   SaCopyableValue,
@@ -7,21 +8,28 @@ import {
   SaSummaryField,
   SaTag
 } from '@sympauthy/design'
-import { DocHelpTooltip, RouteLink } from '@/shared/ui'
+import { DocHelpTooltip, RecordLink } from '@/shared/ui'
 import {
-  purposeLabel,
   interactiveFlowSessionStatusColor,
   interactiveFlowSessionStatusLabel,
   type InteractiveFlowSessionDetailResource
 } from '@/entities/session'
 import { userIdentifierLabel } from '@/entities/user'
-import { formatDateTime } from '@/shared/lib'
+import { formatDate, formatDateTime, formatTime, isoDateTime } from '@/shared/lib'
 
-defineProps<{
+const props = defineProps<{
   session: InteractiveFlowSessionDetailResource
 }>()
 
 const { t } = useI18n()
+
+const lifetime = computed(() => {
+  const { session_date: start, expiration_date: end } = props.session
+  const day = formatDate(start)
+  return day === formatDate(end)
+    ? { start: formatTime(start), end: formatTime(end), day }
+    : { start: formatDateTime(start), end: formatDateTime(end), day: undefined }
+})
 </script>
 
 <template>
@@ -42,21 +50,23 @@ const { t } = useI18n()
         {{ interactiveFlowSessionStatusLabel(session.status) }}
       </SaTag>
     </SaSummaryField>
-    <SaSummaryField :label="t('pages.sessionDetail.startedFor')">
-      <template #help>
-        <DocHelpTooltip term="terms.interactiveFlowPurpose" />
-      </template>
-      {{ purposeLabel(session.initiating_purpose) }}
-    </SaSummaryField>
-    <SaSummaryField mono :label="t('pages.sessionDetail.client')">
-      <RouteLink
-        v-if="session.client_id"
-        block
-        :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
+    <!-- How long the session may run, from when it started to when it expires. A session lives
+         minutes, so the day is said once under the two times, and in full where it crosses one. -->
+    <SaSummaryField :label="t('pages.sessionDetail.lifetime')">
+      <i18n-t
+        keypath="pages.sessionDetail.lifetimeRange"
+        tag="span"
+        scope="global"
+        class="block tabular-nums"
       >
-        {{ session.client_id }}
-      </RouteLink>
-      <SaEmptyValue v-else />
+        <template #start>
+          <time :datetime="isoDateTime(session.session_date)">{{ lifetime.start }}</time>
+        </template>
+        <template #end>
+          <time :datetime="isoDateTime(session.expiration_date)">{{ lifetime.end }}</time>
+        </template>
+      </i18n-t>
+      <span v-if="lifetime.day" class="block text-xs text-gray-600">{{ lifetime.day }}</span>
     </SaSummaryField>
     <SaSummaryField mono :label="t('pages.sessionDetail.flow')">
       <template #help>
@@ -69,22 +79,26 @@ const { t } = useI18n()
       <template #help>
         <DocHelpTooltip term="terms.interactiveFlowSession.user" />
       </template>
-      <RouteLink
+      <RecordLink
         v-if="session.user"
+        truncate
+        :name="userIdentifierLabel(session.user)"
         :to="{ name: 'userDetail', params: { userId: session.user.user_id } }"
-      >
-        {{ userIdentifierLabel(session.user) }}
-      </RouteLink>
+      />
       <SaTag v-else-if="session.signed_up" color="gray">
         {{ t('pages.sessions.signingUp') }}
       </SaTag>
       <SaEmptyValue v-else />
     </SaSummaryField>
-    <SaSummaryField :label="t('pages.sessionDetail.startedAt')">
-      {{ formatDateTime(session.session_date) }}
-    </SaSummaryField>
-    <SaSummaryField :label="t('pages.sessionDetail.expiresAt')">
-      {{ formatDateTime(session.expiration_date) }}
+    <SaSummaryField :label="t('pages.sessionDetail.client')">
+      <RecordLink
+        v-if="session.client_id"
+        mono
+        truncate
+        :name="session.client_id"
+        :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
+      />
+      <SaEmptyValue v-else />
     </SaSummaryField>
   </SaSummaryCard>
 </template>

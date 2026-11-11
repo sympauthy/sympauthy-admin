@@ -1,10 +1,6 @@
 import type { JSONSchemaType } from 'ajv'
 import { type UserResource, userResourceSchema } from '@/entities/user/@x/session'
 import {
-  type InteractiveFlowPurposeResource,
-  interactiveFlowPurposeResourceSchema
-} from '@/entities/session/model/InteractiveFlowPurposeResource'
-import {
   type InteractiveFlowSessionPurposeProgressResource,
   interactiveFlowSessionPurposeProgressResourceSchema
 } from '@/entities/session/model/InteractiveFlowSessionPurposeProgressResource'
@@ -21,7 +17,7 @@ import {
 export type InteractiveFlowSessionDetailResource = {
   id: string
   status: string
-  initiating_purpose: InteractiveFlowPurposeResource
+  initiating_purpose: string
   client_id?: string | null
   flow_id?: string | null
   user?: UserResource | null
@@ -46,7 +42,9 @@ export const interactiveFlowSessionDetailResourceSchema: JSONSchemaType<Interact
       status: {
         type: 'string'
       },
-      initiating_purpose: { ...interactiveFlowPurposeResourceSchema },
+      initiating_purpose: {
+        type: 'string'
+      },
       client_id: {
         type: 'string',
         nullable: true
