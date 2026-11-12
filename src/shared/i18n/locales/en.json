@@ -381,11 +381,7 @@
     "sessions": "Sessions",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "preferences": "Preferences",
-    "notKept": {
-      "refused": "Your preferences are kept in this browser only: this server keeps none for you.",
-      "unreachable": "Your preferences are kept in this browser only: the server could not be reached."
-    }
+    "preferences": "Preferences"
   },
   "logoutDialog": {
     "title": "Force this user to log out?",
