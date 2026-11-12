@@ -53,7 +53,9 @@ function readBrowserCopy(operator: string): BrowserCopy | undefined {
 
 function writeBrowserCopy(operator: string, copy: BrowserCopy): void {
   const { preferences, updatedAt } = copy.saved
-  const document = toPreferencesDocument(preferences, updatedAt ?? new Date().toISOString())
+  // An undated document stays undated: stamping it now would make it newer than the account it
+  // was read from, and the next startup would write it back for nothing.
+  const document = toPreferencesDocument(preferences, updatedAt)
   try {
     localStorage.setItem(storageKey(operator), JSON.stringify({ document, taken: copy.taken }))
   } catch (error) {
@@ -61,8 +63,8 @@ function writeBrowserCopy(operator: string, copy: BrowserCopy): void {
   }
 }
 
-// A failure with no response never reached the server. One that did is a refusal, whatever it
-// says: none of them is the operator's to change.
+// A failure the server answered carries the response it came in, and is a refusal whatever it says:
+// none of them is the operator's to change. One with none never reached the server.
 function notKept(response: ErrorApiResponse): PreferencesNotKept {
   return response.response === undefined ? 'unreachable' : 'refused'
 }
@@ -74,11 +76,11 @@ export const usePreferencesStore = defineStore('preferences', () => {
   const darkModeAvailable = ref(true)
   /** The operator whose preferences are applied, once their browser copy has been. */
   const operator = ref<string | null>(null)
-  /**
-   * Why the browser's copy is not on the account, from the startup that failed to write it until a
-   * write succeeds.
-   */
+  /** Why the browser's copy is not on the account, from the write that failed until one succeeds. */
   const notKeptReason = ref<PreferencesNotKept | null>(null)
+  // Counts the saves, so a startup still reading the account knows one ran under it: what the
+  // operator just chose is never replaced by what the account held before they chose it.
+  let saves = 0
 
   /** Whether the panel is drawn dark, for what the stylesheet cannot choose. */
   const dark = computed(
@@ -116,6 +118,18 @@ export const usePreferencesStore = defineStore('preferences', () => {
     applyTheme()
   }
 
+  /**
+   * Applies the browser's copy of [stored]'s preferences, before anything is mounted. [stored] is
+   * the operator the browser holds a session for, which [start] confirms once the guard has signed
+   * them in, so the screens before it — the wait, the sign-in callback — are drawn with their copy.
+   */
+  function applyBrowserCopy(stored: string): void {
+    const copy = readBrowserCopy(stored)
+    if (copy !== undefined) {
+      apply(copy.saved.preferences)
+    }
+  }
+
   async function writeToAccount(saved: SavedPreferences): Promise<ErrorApiResponse | undefined> {
     const document = toPreferencesDocument(
       saved.preferences,
@@ -126,10 +140,10 @@ export const usePreferencesStore = defineStore('preferences', () => {
   }
 
   /**
-   * Applies [signedIn]'s preferences: the browser's copy at once, so the first screen is drawn with
-   * it, then the account's where it was saved more recently. The browser's is written to the
-   * account where it is the more recent one. Called on every navigation, and does nothing for an
-   * operator already applied.
+   * Applies [signedIn]'s preferences: the browser's copy at once, so the screen is drawn with it,
+   * then the account's where it wins. The browser's is written to the account where it was saved
+   * more recently and the account has not taken it yet. Called on every navigation, and does
+   * nothing for an operator already applied.
    */
   async function start(signedIn: string): Promise<void> {
     if (operator.value === signedIn) {
@@ -140,8 +154,10 @@ export const usePreferencesStore = defineStore('preferences', () => {
     const copy = readBrowserCopy(signedIn)
     apply(copy?.saved.preferences ?? DEFAULT_PREFERENCES)
 
+    const savesBefore = saves
+    const superseded = () => operator.value !== signedIn || saves !== savesBefore
     const response = await api.getOwnClaims()
-    if (operator.value !== signedIn) {
+    if (superseded()) {
       return
     }
     if (!isSuccess(response)) {
@@ -152,12 +168,17 @@ export const usePreferencesStore = defineStore('preferences', () => {
     }
 
     const account = readPreferencesDocument(response.content.claims[PREFERENCES_CLAIM])
-    if (account !== undefined && (copy === undefined || isSavedAfter(account, copy.saved))) {
+    // A copy the account took and no longer matches was replaced there since, from another browser,
+    // so the account wins whatever the two clocks say. Only a copy it never took is compared.
+    const accountWins =
+      account !== undefined &&
+      (copy === undefined || copy.taken || isSavedAfter(account, copy.saved))
+    if (accountWins) {
       apply(account.preferences)
       writeBrowserCopy(signedIn, { saved: account, taken: true })
-    } else if (copy !== undefined && isSavedAfter(copy.saved, account)) {
+    } else if (copy !== undefined && (account === undefined || isSavedAfter(copy.saved, account))) {
       const failure = await writeToAccount(copy.saved)
-      if (operator.value !== signedIn) {
+      if (superseded()) {
         return
       }
       writeBrowserCopy(signedIn, { saved: copy.saved, taken: failure === undefined })
@@ -169,20 +190,24 @@ export const usePreferencesStore = defineStore('preferences', () => {
   }
 
   /**
-   * Saves [next] to the account, then to the browser whatever the account answered, and applies it
-   * either way. Resolves to why the account did not keep it, or `undefined` where it did.
+   * Applies [next] at once, then saves it to the account, and to the browser whatever the account
+   * answered. Resolves to why the account did not keep it, or `undefined` where it did.
    */
   async function save(next: Preferences): Promise<PreferencesNotKept | undefined> {
+    saves++
+    // The operator who pressed Save, whoever is signed in once the account has answered.
+    const savedBy = operator.value
     const saved: SavedPreferences = { preferences: next, updatedAt: new Date().toISOString() }
-    const failure = await writeToAccount(saved)
-    if (operator.value !== null) {
-      writeBrowserCopy(operator.value, { saved, taken: failure === undefined })
-    }
-    if (failure === undefined) {
-      notKeptReason.value = null
-    }
     apply(next)
-    return failure ? notKept(failure) : undefined
+    const failure = await writeToAccount(saved)
+    if (savedBy !== null) {
+      writeBrowserCopy(savedBy, { saved, taken: failure === undefined })
+    }
+    const reason = failure ? notKept(failure) : undefined
+    if (savedBy === operator.value) {
+      notKeptReason.value = reason ?? null
+    }
+    return reason
   }
 
   return {
@@ -191,6 +216,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
     dark,
     notKeptReason,
     setDarkModeAvailable,
+    applyBrowserCopy,
     start,
     save
   }

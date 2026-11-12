@@ -32,9 +32,21 @@ export function setDateDisplay(next: DateDisplay): void {
   display.value = next
 }
 
-/** The zone the device is in, read at each call since it follows the device as it travels. */
-export function browserTimeZone(): string {
+function readDeviceTimeZone(): string {
   return new Intl.DateTimeFormat().resolvedOptions().timeZone
+}
+
+// Building a formatter to learn the zone costs as much as the formatter a date is written with, so
+// it is read once rather than per date, and again whenever the panel comes back into view: a device
+// that travelled changes zone while nobody is looking at it.
+let deviceTimeZone = readDeviceTimeZone()
+document.addEventListener('visibilitychange', () => {
+  deviceTimeZone = readDeviceTimeZone()
+})
+
+/** The zone the device is in. */
+export function browserTimeZone(): string {
+  return deviceTimeZone
 }
 
 /** Every zone the platform names, which is what a zone can be chosen among. */
@@ -64,7 +76,7 @@ const ISO_PARTS: Record<Parts, Intl.DateTimeFormatOptions> = {
     minute: '2-digit',
     hourCycle: 'h23'
   },
-  time: { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }
+  time: { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }
 }
 
 // What `toLocaleDateString`, `toLocaleString` and `toLocaleTimeString` write when given no options,
@@ -97,8 +109,10 @@ function formatter(locale: string, parts: Parts, format: DateFormat, timeZone?: 
 }
 
 /**
- * Writes the parts as ISO 8601 does, `2026-11-11 14:03`. The parts are read from a formatter rather
- * than from the `Date`, since only a formatter knows the date in a zone other than the browser's.
+ * Writes the parts as ISO 8601 does, `2026-11-11 14:03`, and a time alone `14:03:12`: a time is
+ * read beside the others of its day, which one minute does not tell apart. The parts are read from
+ * a formatter rather than from the `Date`, since only a formatter knows the date in a zone other
+ * than the browser's.
  */
 function formatIso(date: Date, parts: Parts, timeZone?: string): string {
   const values: Partial<Record<Intl.DateTimeFormatPartTypes, string>> = {}
@@ -107,11 +121,14 @@ function formatIso(date: Date, parts: Parts, timeZone?: string): string {
   }
   const day = `${values.year}-${values.month}-${values.day}`
   const time = `${values.hour}:${values.minute}`
-  return parts === 'date' ? day : parts === 'time' ? time : `${day} ${time}`
+  return parts === 'date' ? day : parts === 'time' ? `${time}:${values.second}` : `${day} ${time}`
 }
 
 function formatParts(dateStr: string, parts: Parts): string {
-  const { format, timeZone } = display.value
+  const { format, timeZone: chosen } = display.value
+  // The browser's zone is named rather than left to the formatter, so a formatter built before the
+  // device changed zone is never the one a date is written with after.
+  const timeZone = chosen ?? browserTimeZone()
   const date = parseApiDate(dateStr)
   const text =
     format === 'iso'
@@ -119,9 +136,7 @@ function formatParts(dateStr: string, parts: Parts): string {
       : formatter(requestedLocale(), parts, format, timeZone).format(date)
   // A time read in another zone than the device's would be taken for a local one, so it names the
   // zone it is in. A day alone names none: it is the line a time is read under, not a time.
-  return parts !== 'date' && timeZone !== undefined && timeZone !== browserTimeZone()
-    ? `${text} ${timeZone}`
-    : text
+  return parts !== 'date' && timeZone !== browserTimeZone() ? `${text} ${timeZone}` : text
 }
 
 /** Formats a date the API sent, in the operator's date format and zone. */

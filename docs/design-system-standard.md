@@ -226,6 +226,10 @@ the device, and [Themes](https://sympauthy.github.io/sympauthy-design/foundation
 the stylesheet does with each. Every screen is drawn dark as well as light because an operator can
 choose dark, and a choice the panel did not draw would do nothing.
 
+**The operator's theme is drawn from the first paint.** `main.ts` reads the `sub` of the session in
+storage beside the brand, expired or not, and applies that operator's browser copy before mounting,
+so neither the wait nor the sign-in callback is drawn in the device's theme first.
+
 **A deployment whose `dark-mode` is `off` is drawn light.** Its stylesheet carries no Dark values
 and `brand.json` says so, so `main.ts` tells the store before the first screen, and the preferences
 page draws the theme choice disabled and says why.

@@ -13,12 +13,7 @@ import {
 import { CommonButton } from '@/shared/ui'
 import { availableLanguages } from '@/shared/i18n'
 import { browserTimeZone, type DateFormat, timeZones } from '@/shared/lib'
-import {
-  type Preferences,
-  type PreferencesNotKept,
-  type Theme,
-  usePreferencesStore
-} from '@/entities/preference'
+import { type Preferences, type Theme, usePreferencesStore } from '@/entities/preference'
 
 const { t } = useI18n()
 const store = usePreferencesStore()
@@ -33,13 +28,7 @@ const language = ref(BROWSER)
 const dateFormat = ref<DateFormat>('iso')
 const timeZone = ref(BROWSER)
 const submitting = ref(false)
-const result = ref<'saved' | PreferencesNotKept | null>(null)
-
-// Why the server does not hold what this page applies: what the last Save met, or else what the
-// startup met writing the browser's copy, so the operator knows before choosing anything.
-const notKept = computed<PreferencesNotKept | null>(() =>
-  result.value === 'refused' || result.value === 'unreachable' ? result.value : store.notKeptReason
-)
+const saved = ref(false)
 
 // The form starts from what is applied, and starts again when the account's copy replaces the
 // browser's under it: a choice is only ever made against what the panel draws.
@@ -54,11 +43,23 @@ watch(
   { immediate: true }
 )
 
-const themeOptions = computed<{ value: Theme; label: string }[]>(() => [
-  { value: 'system', label: t('pages.preferences.theme.values.system') },
-  { value: 'light', label: t('pages.preferences.theme.values.light') },
-  { value: 'dark', label: t('pages.preferences.theme.values.dark') }
-])
+// What was saved is no longer what the form holds once a choice changes.
+watch([theme, language, dateFormat, timeZone], () => {
+  saved.value = false
+})
+
+// Each option says why it cannot be chosen where the deployment draws light only, as the kit draws
+// a disabled option: the group itself has no disabled state of its own.
+const themeOptions = computed<{ value: Theme; label: string; disabledReason?: string }[]>(() => {
+  const disabledReason = store.darkModeAvailable
+    ? undefined
+    : t('pages.preferences.theme.unavailable')
+  return (['system', 'light', 'dark'] as const).map((value) => ({
+    value,
+    label: t(`pages.preferences.theme.values.${value}`),
+    disabledReason
+  }))
+})
 
 // Each language is named in itself, since an operator who cannot read the panel's current one has
 // to find their own among them.
@@ -102,34 +103,33 @@ async function onSave() {
     timeZone: timeZone.value === BROWSER ? undefined : timeZone.value
   }
   submitting.value = true
-  result.value = null
-  result.value = (await store.save(next)) ?? 'saved'
-  submitting.value = false
+  saved.value = false
+  try {
+    saved.value = (await store.save(next)) === undefined
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
 <template>
   <div class="max-w-card-large space-y-4">
-    <SaAlert v-if="notKept" color="warning">
-      {{ t(`pages.preferences.notKept.${notKept}`) }}
+    <!-- From the startup that met it as from the Save, so the operator knows before choosing. -->
+    <SaAlert v-if="store.notKeptReason" color="warning">
+      {{ t(`pages.preferences.notKept.${store.notKeptReason}`) }}
     </SaAlert>
 
     <SaCard>
       <div class="space-y-6">
-        <SaField
-          :label="t('pages.preferences.theme.label')"
-          :hint="store.darkModeAvailable ? undefined : t('pages.preferences.theme.unavailable')"
-        >
-          <!-- Disabled as a whole: one reason holds for every option, and naming it under each would
-             say it three times. Pulled into the padding of its rows, which are as tall as a target
-             around a line of text, so its first option sits under the label as a select's box
-             does and the next field is as far below its last. -->
+        <SaField :label="t('pages.preferences.theme.label')">
+          <!-- Pulled into the padding of its rows, which are as tall as a target around a line of
+               text, so its first option sits under the label as a select's box does and the next
+               field is as far below its last. A row carrying a reason fills its height already. -->
           <SaRadioGroup
             v-model="theme"
-            class="-my-3"
+            :class="{ '-my-3': store.darkModeAvailable }"
             :options="themeOptions"
             :aria-label="t('pages.preferences.theme.label')"
-            :disabled="!store.darkModeAvailable"
           />
         </SaField>
 
@@ -172,7 +172,7 @@ async function onSave() {
             :submitting="submitting"
             @click="onSave"
           />
-          <p v-if="result === 'saved'" role="status" class="text-sm text-gray-600">
+          <p v-if="saved" role="status" class="text-sm text-gray-600">
             {{ t('pages.preferences.saved') }}
           </p>
         </div>

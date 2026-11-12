@@ -58,6 +58,11 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = false
   }
 
+  /** The operator this browser holds a session for, signed in or not yet renewed. */
+  async function storedUserId(): Promise<string | null> {
+    return await authService.getStoredUserId()
+  }
+
   async function trySilentRenew(): Promise<boolean> {
     const renewedUser = await authService.trySilentRenew()
     if (renewedUser) {
@@ -105,6 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
     hasAllScopes,
     missingScopes,
     initialize,
+    storedUserId,
     trySilentRenew,
     signinRedirect,
     signinRedirectCallback,

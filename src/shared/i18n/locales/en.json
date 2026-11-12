@@ -406,11 +406,9 @@
     "noAccess": {
       "title": "No access",
       "description": "You are signed in as {account}, but the token this console was issued opens none of its pages.",
-      "scopes": "Ask an administrator to grant one of these:",
-      "preferences": "Preferences"
+      "scopes": "Ask an administrator to grant one of these:"
     },
     "preferences": {
-      "title": "Preferences",
       "theme": {
         "label": "Theme",
         "values": {
@@ -418,7 +416,7 @@
           "light": "Light",
           "dark": "Dark"
         },
-        "unavailable": "This deployment draws its pages light only, whatever the device asks for."
+        "unavailable": "This deployment draws its pages light only."
       },
       "language": {
         "label": "Language",

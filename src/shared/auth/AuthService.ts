@@ -85,6 +85,15 @@ export class AuthService {
     return user !== null
   }
 
+  /**
+   * The `sub` of the user in storage, whose token may have expired: the operator this browser
+   * holds a session for, read before the guard has renewed or signed anyone in.
+   */
+  async getStoredUserId(): Promise<string | null> {
+    const user = await this.userManager.getUser()
+    return user?.profile.sub ?? null
+  }
+
   async trySilentRenew(): Promise<User | null> {
     // Only attempt silent renew if there's an existing session to renew.
     // Without this, oidc-client-ts tries an iframe-based auth which times out.

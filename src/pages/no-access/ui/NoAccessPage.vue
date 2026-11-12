@@ -68,7 +68,7 @@ async function logout() {
           class="mt-4 w-full"
           variant="secondary"
           :icon="Cog6ToothIcon"
-          :label="t('pages.noAccess.preferences')"
+          :label="t('nav.preferences')"
           @click="openPreferences"
         />
         <CommonButton

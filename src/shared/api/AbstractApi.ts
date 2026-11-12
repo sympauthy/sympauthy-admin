@@ -168,7 +168,7 @@ export class AbstractApi {
       if (renewed) {
         return await this.fetch(method, options, postOptions)
       }
-      return makeErrorApiResponse('api.unauthorized')
+      return makeErrorApiResponse('api.unauthorized', undefined, response)
     }
     return response
   }
@@ -205,7 +205,7 @@ export class AbstractApi {
           JSON.stringify(options.schema),
           JSON.stringify(content)
         )
-        return makeErrorApiResponse('api.unknown')
+        return makeErrorApiResponse('api.unknown', undefined, response)
       }
     }
     return new SuccessApiResponse(content)
@@ -230,7 +230,7 @@ export class AbstractApi {
       console.error(
         `Server responded with unexpected content-type ${contentType} while fetching path ${options.path}.`
       )
-      return makeErrorApiResponse('api.unknown')
+      return makeErrorApiResponse('api.unknown', undefined, response)
     }
   }
 

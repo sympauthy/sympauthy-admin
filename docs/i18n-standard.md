@@ -136,8 +136,9 @@ is written as it is.
 zone the operator chose. Each reads them during the render, so a screen is drawn again when they
 change.
 
-**ISO 8601 is the default format, written `2026-11-11 14:03` on a 24-hour clock.** It reads the same
-in every language and on every operator's screen.
+**ISO 8601 is the default format, written `2026-11-11 14:03` on a 24-hour clock, and a time alone
+`14:03:12`.** It reads the same in every language and on every operator's screen, and a time alone
+is read beside the others of its day, which one minute does not tell apart.
 
 **The language's own format is the one of `requestedLocale()`**, the language asked for rather than
 the bundle answering it, so a French browser reading the English bundle keeps French dates.

@@ -86,7 +86,7 @@ export function makeRouter() {
         component: PreferencesPage,
         meta: {
           requiresAuth: true,
-          breadcrumb: { label: 'pages.preferences.title' }
+          breadcrumb: { label: 'nav.preferences' }
         }
       },
       {

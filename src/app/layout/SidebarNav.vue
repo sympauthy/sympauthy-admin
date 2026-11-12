@@ -68,7 +68,9 @@ async function logout() {
     <template #foot>
       <!-- `SaSidebarAccount`'s markup, drawn here because it says nothing under the operator's
            name, and this foot says when the server has not taken a copy of their preferences. It
-           goes back to the package once the component can: sympauthy/sympauthy-design#72. -->
+           goes back to the package once the component can: sympauthy/sympauthy-design#72. The
+           sign-out is the package's own button rather than a `CommonButton`, whose variants are
+           drawn for a surface and not for the sidebar's ground, which stays dark in every theme. -->
       <div class="flex flex-col gap-3">
         <div class="flex min-w-0 flex-col">
           <span :title="authStore.userName" class="truncate text-sm font-medium text-nav-strong">

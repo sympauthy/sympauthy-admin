@@ -38,7 +38,7 @@ export type PreferencesDocument = {
   language?: string
   date_format: DateFormat
   time_zone?: string
-  updated_at: string
+  updated_at?: string
 }
 
 function oneOf<T extends string>(value: unknown, values: readonly T[]): T | undefined {
@@ -72,14 +72,14 @@ export function readPreferencesDocument(value: unknown): SavedPreferences | unde
 
 export function toPreferencesDocument(
   preferences: Preferences,
-  updatedAt: string
+  updatedAt: string | undefined
 ): PreferencesDocument {
   return {
     theme: preferences.theme,
     ...(preferences.language !== undefined ? { language: preferences.language } : {}),
     date_format: preferences.dateFormat,
     ...(preferences.timeZone !== undefined ? { time_zone: preferences.timeZone } : {}),
-    updated_at: updatedAt
+    ...(updatedAt !== undefined ? { updated_at: updatedAt } : {})
   }
 }
 
