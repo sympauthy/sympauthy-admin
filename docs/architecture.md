@@ -1,10 +1,10 @@
 # Architecture
 
 SympAuthy Admin is a single page application. It is built by Vite into static assets the
-authorization server serves, and it holds nothing of its own: every screen is a call to the server's
-`/api/v1/admin` surface, authenticated with an access token the panel obtains as a public OIDC
-client. [Authentication](authentication.md) covers how it gets that token, and
-[Technology](technology.md) why each framework was picked.
+authorization server serves, and it holds nothing of its own but each operator's preferences: every
+screen is a call to the server's `/api/v1/admin` surface, authenticated with an access token the
+panel obtains as a public OIDC client. [Authentication](authentication.md) covers how it gets that
+token, and [Technology](technology.md) why each framework was picked.
 
 ## Feature-Sliced Design
 
@@ -39,13 +39,13 @@ A slice is one folder, and its files are split into the segments it needs:
 reserves the segment names, so nothing inside a segment is called `ui/` or `model/`. They are
 `shared/api`, `shared/auth`, `shared/i18n`, `shared/lib` and `shared/ui`.
 
-The slices that exist are the folders under each layer. The entities are the nouns read by more
-than one slice — `user`, `client`, `claim`, `audience`, `session`, `grant`; `features/` holds the actions
-reused by more than one page — `browse-collection`, `logout-user`; and `pages/` holds one slice per
-route in [the router](../src/app/router/index.ts), some of them owning the client and the resources
-only that route reads. A resource with a record groups its routes in a folder of no slice's own —
-`pages/users/` holds `list`, `detail` and a slice per tab — which [the page layout
-standard](page-layout-standard.md#a-route-per-screen) names.
+The slices that exist are the folders under each layer. The entities are the nouns read by more than
+one slice — `user`, `client`, `claim`, `audience`, `session`, `grant`, `preference`; `features/`
+holds the actions reused by more than one page — `browse-collection`, `logout-user`; and `pages/`
+holds one slice per route in [the router](../src/app/router/index.ts), some of them owning the
+client and the resources only that route reads. A resource with a record groups its routes in a
+folder of no slice's own — `pages/users/` holds `list`, `detail` and a slice per tab — which [the
+page layout standard](page-layout-standard.md#a-route-per-screen) names.
 
 ## The public API of a slice
 

@@ -123,7 +123,7 @@ const purposes = computed(() =>
                 class="inline-flex size-5 flex-none items-center justify-center rounded-full"
                 :class="
                   check.state === 'present'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-tag-green-fill text-tag-green'
                     : 'bg-gray-100 text-gray-600'
                 "
               >
@@ -133,7 +133,7 @@ const purposes = computed(() =>
               <div class="min-w-0">
                 <p class="font-medium text-gray-900">
                   {{ check.label }}
-                  <span :class="check.state === 'present' ? 'text-green-800' : 'text-gray-700'">
+                  <span :class="check.state === 'present' ? 'text-tag-green' : 'text-gray-700'">
                     {{ t(`pages.sessionPurposes.presence.${check.state}`) }}
                   </span>
                   <span

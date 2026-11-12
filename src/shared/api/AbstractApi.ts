@@ -60,6 +60,13 @@ export class AbstractApi {
     return this.parseResponseContent(response, options)
   }
 
+  async patch<T>(
+    options: QueryOptions & PostQueryOptions & JsonQueryOptions<T>
+  ): Promise<SuccessApiResponse<T> | ErrorApiResponse> {
+    const response = await this.fetchWithRetry('patch', options, options)
+    return this.parseResponseContent(response, options)
+  }
+
   async postVoid(options: QueryOptions): Promise<SuccessApiResponse<void> | ErrorApiResponse> {
     const response = await this.fetchWithRetry('post', options)
     if (response instanceof ErrorApiResponse) {
@@ -83,7 +90,7 @@ export class AbstractApi {
   }
 
   private async fetch(
-    method: 'get' | 'put' | 'post' | 'delete',
+    method: 'get' | 'put' | 'patch' | 'post' | 'delete',
     options: QueryOptions,
     postOptions?: PostQueryOptions
   ): Promise<Response | ErrorApiResponse> {
@@ -116,7 +123,9 @@ export class AbstractApi {
     postOptions?: PostQueryOptions
   ): Promise<RequestInit> {
     const init: RequestInit = {
-      method: method,
+      // `fetch` normalizes the case of `get`, `post`, `put` and `delete` but sends `patch` as it is
+      // written, which a server matching methods by case refuses.
+      method: method.toUpperCase(),
       headers: await this.makeHeaders(method, options, postOptions),
       credentials: 'same-origin'
     }
@@ -148,7 +157,7 @@ export class AbstractApi {
   }
 
   private async fetchWithRetry(
-    method: 'get' | 'put' | 'post' | 'delete',
+    method: 'get' | 'put' | 'patch' | 'post' | 'delete',
     options: QueryOptions,
     postOptions?: PostQueryOptions
   ): Promise<Response | ErrorApiResponse> {
@@ -159,7 +168,7 @@ export class AbstractApi {
       if (renewed) {
         return await this.fetch(method, options, postOptions)
       }
-      return makeErrorApiResponse('api.unauthorized')
+      return makeErrorApiResponse('api.unauthorized', undefined, response)
     }
     return response
   }
@@ -196,7 +205,7 @@ export class AbstractApi {
           JSON.stringify(options.schema),
           JSON.stringify(content)
         )
-        return makeErrorApiResponse('api.unknown')
+        return makeErrorApiResponse('api.unknown', undefined, response)
       }
     }
     return new SuccessApiResponse(content)
@@ -221,7 +230,7 @@ export class AbstractApi {
       console.error(
         `Server responded with unexpected content-type ${contentType} while fetching path ${options.path}.`
       )
-      return makeErrorApiResponse('api.unknown')
+      return makeErrorApiResponse('api.unknown', undefined, response)
     }
   }
 

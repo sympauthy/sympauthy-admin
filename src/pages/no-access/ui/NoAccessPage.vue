@@ -2,8 +2,9 @@
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/vue/20/solid'
+import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon } from '@heroicons/vue/20/solid'
 import { SaBrandLogo, SaCard, SaTag } from '@sympauthy/design'
+import { usePreferencesStore } from '@/entities/preference'
 import { CommonButton } from '@/shared/ui'
 
 /**
@@ -16,6 +17,7 @@ import { CommonButton } from '@/shared/ui'
 const router = useRouter()
 const { t } = useI18n()
 const authStore = useAuthStore()
+const preferencesStore = usePreferencesStore()
 
 // The scopes that open a page on their own, read off the routes rather than listed here, so a page
 // joining the panel names what it needs once and this screen tells an operator to ask for it.
@@ -33,6 +35,12 @@ const consoleScopes = [
   )
 ].sort()
 
+// The preferences are read and written under no admin scope, so they are the one page of the panel
+// this operator opens. It is drawn in the shell, whose sidebar leads back here.
+function openPreferences() {
+  router.push({ name: 'preferences' })
+}
+
 async function logout() {
   await authStore.signout()
 }
@@ -41,7 +49,7 @@ async function logout() {
 <template>
   <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-md">
-      <SaBrandLogo size="lg" class="mx-auto mb-4" />
+      <SaBrandLogo :dark="preferencesStore.dark" size="lg" class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('pages.noAccess.title') }}
       </h1>
@@ -58,6 +66,13 @@ async function logout() {
         </div>
         <CommonButton
           class="mt-4 w-full"
+          variant="secondary"
+          :icon="Cog6ToothIcon"
+          :label="t('nav.preferences')"
+          @click="openPreferences"
+        />
+        <CommonButton
+          class="mt-2 w-full"
           variant="secondary"
           :icon="ArrowRightStartOnRectangleIcon"
           :label="t('auth.logout')"

@@ -131,9 +131,15 @@ calling it, and which answers nothing for a route the router does not know, so a
 a renamed route loses its entry rather than throwing out of the render that drew it.
 
 **`/` is the panel's root and its no-access page at once.** The guard sends it on to the first entry
-of [the navigation](../src/app/router/navigation.ts) the token can open, and `NoAccessPage` renders
-only when that is none of them — naming the scopes the console reads, off the routes themselves, so
-the operator reading it knows what to ask for.
+of [the navigation](../src/app/router/navigation.ts) the token can open, leaving out the entries
+marked `landing: false`, and `NoAccessPage` renders only when that is none of them — naming the
+scopes the console reads, off the routes themselves, so the operator reading it knows what to ask
+for.
+
+**The preferences open under no admin scope.** Their route names no `requiredScopes`, and they are
+read and written through `/api/v1/user/claims`, which the server gates on the token being the
+operator's own and bound to its DPoP key. The sidebar lists them as any other entry, and an operator
+whose token opens nothing else reaches them from the no-access page.
 
 **A control the token does not cover is drawn disabled, never hidden.** That holds for an entry of
 the sidebar, an item of a record's `ActionsDropdown`, a button and a link to another screen alike:

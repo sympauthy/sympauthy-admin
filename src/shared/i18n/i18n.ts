@@ -30,6 +30,29 @@ export const i18n = createI18n({
 })
 
 /**
+ * Renders the panel in [language], or in the browser's where it is `undefined`, from the next render
+ * on. The document's `lang` follows the bundle the screens are read from.
+ */
+export function setLanguage(language: string | undefined): void {
+  i18n.global.locale.value = language ?? getNavigatorLanguage()
+  document.documentElement.lang = currentLocale()
+}
+
+/** The languages a bundle exists for, each one a language the operator can choose. */
+export function availableLanguages(): string[] {
+  return [...(i18n.global.availableLocales as string[])].sort()
+}
+
+/**
+ * The language asked for, whether or not a bundle exists for it: the browser's, or the one the
+ * operator chose. A date written in the language's own format is written in this one, so a French
+ * browser reading the English bundle keeps French dates.
+ */
+export function requestedLocale(): string {
+  return i18n.global.locale.value
+}
+
+/**
  * The locale the panel is actually rendering in, which is what a request asks the server to answer
  * in.
  *
@@ -40,7 +63,7 @@ export const i18n = createI18n({
  * is served by `fr` where there is an `fr`.
  */
 export function currentLocale(): string {
-  const requested = i18n.global.locale.value
+  const requested = requestedLocale()
   const available = i18n.global.availableLocales as string[]
 
   if (available.includes(requested)) {

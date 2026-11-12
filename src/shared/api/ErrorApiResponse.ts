@@ -35,11 +35,21 @@ export class ErrorApiResponse {
   ) {}
 }
 
-export function makeErrorApiResponse(errorCode: string, descriptionKey?: string): ErrorApiResponse {
+/**
+ * An error the panel raises itself. [response] is the one the server answered with, where it did:
+ * a caller reads its absence as a request that never reached the server.
+ */
+export function makeErrorApiResponse(
+  errorCode: string,
+  descriptionKey?: string,
+  response?: Response
+): ErrorApiResponse {
   return new ErrorApiResponse(
     errorCode,
     translateMessage(errorCode),
-    descriptionKey ? translateMessage(descriptionKey) : undefined
+    descriptionKey ? translateMessage(descriptionKey) : undefined,
+    undefined,
+    response
   )
 }
 

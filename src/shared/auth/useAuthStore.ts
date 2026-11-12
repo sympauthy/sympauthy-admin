@@ -10,6 +10,8 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(true)
 
   const isAuthenticated = computed(() => user.value !== null)
+  /** The `sub` of the signed-in operator, which keys what the browser keeps for each of them. */
+  const userId = computed(() => user.value?.sub ?? null)
   const userName = computed(() => user.value?.name ?? '')
   const userEmail = computed(() => user.value?.email ?? '')
   const grantedScopes = computed(() => user.value?.scopes ?? [])
@@ -56,6 +58,11 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = false
   }
 
+  /** The operator this browser holds a session for, signed in or not yet renewed. */
+  async function storedUserId(): Promise<string | null> {
+    return await authService.getStoredUserId()
+  }
+
   async function trySilentRenew(): Promise<boolean> {
     const renewedUser = await authService.trySilentRenew()
     if (renewedUser) {
@@ -95,6 +102,7 @@ export const useAuthStore = defineStore('auth', () => {
     initialized,
     loading,
     isAuthenticated,
+    userId,
     userName,
     userEmail,
     grantedScopes,
@@ -102,6 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
     hasAllScopes,
     missingScopes,
     initialize,
+    storedUserId,
     trySilentRenew,
     signinRedirect,
     signinRedirectCallback,

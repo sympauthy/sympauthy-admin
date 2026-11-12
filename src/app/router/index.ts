@@ -22,7 +22,9 @@ import { SessionFailurePage } from '@/pages/sessions/failure'
 import { CallbackPage } from '@/pages/callback'
 import { NoAccessPage } from '@/pages/no-access'
 import { RegisterPage } from '@/pages/register'
+import { PreferencesPage } from '@/pages/preferences'
 import { canOpenRoute, useAuthStore } from '@/shared/auth'
+import { usePreferencesStore } from '@/entities/preference'
 import { navEntries } from './navigation'
 
 declare module 'vue-router' {
@@ -75,6 +77,17 @@ export function makeRouter() {
         name: 'noAccess',
         component: NoAccessPage,
         meta: { requiresAuth: true, noLayout: true }
+      },
+      {
+        // Read and written through the user surface, which no admin scope gates: an operator whose
+        // token opens no other page still chooses how the panel is drawn for them.
+        path: '/preferences',
+        name: 'preferences',
+        component: PreferencesPage,
+        meta: {
+          requiresAuth: true,
+          breadcrumb: { label: 'nav.preferences' }
+        }
       },
       {
         path: '/users',
@@ -308,8 +321,16 @@ export function makeRouter() {
       }
     }
 
+    // Not awaited: the browser's copy is applied before this returns, so the screen is drawn with
+    // it, and the account's replaces it once it has been read.
+    if (authStore.userId !== null) {
+      void usePreferencesStore().start(authStore.userId)
+    }
+
     if (to.name === 'noAccess') {
-      const landing = navEntries.find((entry) => canOpenRoute(router, entry.name))
+      const landing = navEntries.find(
+        (entry) => entry.landing !== false && canOpenRoute(router, entry.name)
+      )
       return landing ? { name: landing.name } : true
     }
 

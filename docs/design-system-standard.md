@@ -133,7 +133,8 @@ written.
 
 **A width is never written.** A column is shrink-wrapped or takes what is left, as
 [Table](https://sympauthy.github.io/sympauthy-design/components/table) has it, and everything else
-is sized by its parent.
+is sized by its parent. A form page's card is the one cap, at `card-large`, as [the page layout
+standard](page-layout-standard.md#form-pages) has it.
 
 ## Controls
 
@@ -217,10 +218,31 @@ apps](https://sympauthy.github.io/sympauthy-design/using-in-apps), and what the 
 through `useBrand`,** and is `SympAuthy` where the server configures none. `BrandWordmark` draws it
 and `main.ts` titles the document with it, so neither is written anywhere else.
 
-## What this standard does not cover
+## Themes
 
-**Dark mode.** `data-theme="light"` on `index.html` pins the panel, whatever a deployment's
-`dark-mode` says, and no screen is checked against the Dark values.
+**The panel draws the theme the operator chose, and follows the device until they choose.**
+`usePreferencesStore` sets `data-theme` on `<html>` to `light` or `dark`, or removes it to follow
+the device, and [Themes](https://sympauthy.github.io/sympauthy-design/foundations/themes) says what
+the stylesheet does with each. Every screen is drawn dark as well as light because an operator can
+choose dark, and a choice the panel did not draw would do nothing.
+
+**The operator's theme is drawn from the first paint.** `main.ts` reads the `sub` of the session in
+storage beside the brand, expired or not, and applies that operator's browser copy before mounting,
+so neither the wait nor the sign-in callback is drawn in the device's theme first.
+
+**A deployment whose `dark-mode` is `off` is drawn light.** Its stylesheet carries no Dark values
+and `brand.json` says so, so `main.ts` tells the store before the first screen, and the preferences
+page draws the theme choice disabled and says why.
+
+**Every screen is checked against the Dark values,** at desktop width and in a 390px frame. A colour
+outside the theme, such as Tailwind's own `green-100`, stays light on a dark page, which is one more
+reason a screen writes only the design system's utilities.
+
+**A logo on a ground that follows the theme is passed `:dark="preferencesStore.dark"`.** The
+package's `followDevice` reads the device, not the operator's choice. The sidebar's logo is `dark`
+in every theme, as its ground is.
+
+## What this standard does not cover
 
 **Illustrations and empty state artwork.** An empty table is a sentence.
 
