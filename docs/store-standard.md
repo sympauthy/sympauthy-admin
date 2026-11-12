@@ -4,7 +4,6 @@ description: What a Pinia store holds now that a screen holds its own collection
 paths:
   - "src/**/model/use*.ts"
   - "src/shared/auth/use*.ts"
-  - "src/shared/operator-preferences/use*.ts"
 ---
 
 # Store standard

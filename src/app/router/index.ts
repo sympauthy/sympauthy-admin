@@ -24,7 +24,7 @@ import { NoAccessPage } from '@/pages/no-access'
 import { RegisterPage } from '@/pages/register'
 import { PreferencesPage } from '@/pages/preferences'
 import { canOpenRoute, useAuthStore } from '@/shared/auth'
-import { usePreferencesStore } from '@/shared/operator-preferences'
+import { usePreferencesStore } from '@/entities/preference'
 import { navEntries } from './navigation'
 
 declare module 'vue-router' {

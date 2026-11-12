@@ -3,7 +3,7 @@ import { computed, ref, shallowRef } from 'vue'
 import { type ErrorApiResponse, isSuccess } from '@/shared/api'
 import { setLanguage } from '@/shared/i18n'
 import { setDateDisplay } from '@/shared/lib'
-import { OwnClaimApi } from './OwnClaimApi'
+import { OwnClaimApi } from '../api/OwnClaimApi'
 import {
   DEFAULT_PREFERENCES,
   isSavedAfter,

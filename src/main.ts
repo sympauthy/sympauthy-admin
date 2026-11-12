@@ -6,7 +6,7 @@ import { i18n } from '@/shared/i18n/i18n'
 import { makeRouter } from '@/app/router'
 import { createPinia } from 'pinia'
 import { brandKey, brandName } from '@/shared/lib'
-import { usePreferencesStore } from '@/shared/operator-preferences'
+import { usePreferencesStore } from '@/entities/preference'
 
 const pinia = createPinia()
 const router = makeRouter()

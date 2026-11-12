@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon } from '@heroicons/vue/20/solid'
 import { SaBrandLogo, SaCard, SaTag } from '@sympauthy/design'
-import { usePreferencesStore } from '@/shared/operator-preferences'
+import { usePreferencesStore } from '@/entities/preference'
 import { CommonButton } from '@/shared/ui'
 
 /**

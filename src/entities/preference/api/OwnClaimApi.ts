@@ -1,5 +1,5 @@
 import { AbstractApi, type ErrorApiResponse, type SuccessApiResponse } from '@/shared/api'
-import { type OwnClaimsResource, ownClaimsResourceSchema } from './OwnClaimsResource'
+import { type OwnClaimsResource, ownClaimsResourceSchema } from '../model/OwnClaimsResource'
 
 /**
  * The claims of the operator the token was issued for, on the user surface rather than the admin

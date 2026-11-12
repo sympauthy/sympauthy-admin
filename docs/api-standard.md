@@ -7,8 +7,6 @@ paths:
   - "src/entities/*/model/*Resource.ts"
   - "src/pages/**/api/**"
   - "src/pages/**/model/*Resource.ts"
-  - "src/shared/operator-preferences/*Api.ts"
-  - "src/shared/operator-preferences/*Resource.ts"
 ---
 
 # API standard
@@ -150,8 +148,7 @@ DPoP proof names one request, so they are built again for the retry;
 the `Response` it came in, so a caller telling *refused* from *unreachable* reads that field and no
 status code.
 
-**Nothing outside `shared/api`, a slice's `api/` segment and the `…Api` of a `shared/` segment calls
-`fetch`.**
+**Nothing outside `shared/api` and a slice's `api/` segment calls `fetch`.**
 
 ## What this standard does not cover
 

@@ -91,8 +91,7 @@ The source follows [Feature-Sliced Design](https://feature-sliced.design), and S
 - **`entities/`** — one slice per domain noun more than one slice reads: its API client,
   resources, schemas and stores. A noun one route reads lives in that route's slice until a second
   reader appears; `fsd/insignificant-slice` is on, so this is checked.
-- **`shared/`** — the panel's own kit, HTTP plumbing and the collection wire, auth, i18n, the
-  operator's preferences, utilities.
+- **`shared/`** — the panel's own kit, HTTP plumbing and the collection wire, auth, i18n, utilities.
   No domain knowledge.
 
 A layer imports only from the layers below it, a slice only through another slice's `index.ts`, and

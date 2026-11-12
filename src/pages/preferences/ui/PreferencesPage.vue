@@ -18,7 +18,7 @@ import {
   type PreferencesNotKept,
   type Theme,
   usePreferencesStore
-} from '@/shared/operator-preferences'
+} from '@/entities/preference'
 
 const { t } = useI18n()
 const store = usePreferencesStore()
