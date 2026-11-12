@@ -2,11 +2,9 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { ArrowRightStartOnRectangleIcon, ExclamationTriangleIcon } from '@heroicons/vue/20/solid'
 import { missingScopesHint, useAuthStore, useRouteAccess } from '@/shared/auth'
 import { useSidebar } from '@/shared/lib'
-import { usePreferencesStore } from '@/entities/preference'
-import { SaBrandLogo, SaSidebar, type SaSidebarSection } from '@sympauthy/design'
+import { SaBrandLogo, SaSidebar, SaSidebarAccount, type SaSidebarSection } from '@sympauthy/design'
 import { BrandWordmark } from '@/shared/ui'
 import { navSections } from '../router/navigation'
 
@@ -14,7 +12,6 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
-const preferencesStore = usePreferencesStore()
 const { missingScopes } = useRouteAccess()
 const { closeSidebar } = useSidebar()
 
@@ -66,41 +63,12 @@ async function logout() {
       </span>
     </template>
     <template #foot>
-      <!-- `SaSidebarAccount`'s markup, drawn here because it says nothing under the operator's
-           name, and this foot says when the server has not taken a copy of their preferences. It
-           goes back to the package once the component can: sympauthy/sympauthy-design#72. The
-           sign-out is the package's own button rather than a `CommonButton`, whose variants are
-           drawn for a surface and not for the sidebar's ground, which stays dark in every theme. -->
-      <div class="flex flex-col gap-3">
-        <div class="flex min-w-0 flex-col">
-          <span :title="authStore.userName" class="truncate text-sm font-medium text-nav-strong">
-            {{ authStore.userName }}
-          </span>
-          <span
-            v-if="authStore.userEmail"
-            :title="authStore.userEmail"
-            class="truncate text-xs text-nav-muted"
-          >
-            {{ authStore.userEmail }}
-          </span>
-        </div>
-        <p
-          v-if="preferencesStore.notKeptReason"
-          role="status"
-          class="flex gap-1.5 text-xs text-nav-muted"
-        >
-          <ExclamationTriangleIcon class="mt-px size-4 shrink-0 text-gold" />
-          {{ t(`nav.notKept.${preferencesStore.notKeptReason}`) }}
-        </p>
-        <button
-          type="button"
-          class="flex min-h-control items-center justify-center gap-1.5 rounded-md border border-nav-muted text-sm font-medium -outline-offset-2 outline-nav-text transition-colors hover:bg-nav-hover focus-visible:outline-2"
-          @click="logout"
-        >
-          <ArrowRightStartOnRectangleIcon class="size-4" />
-          {{ t('auth.logout') }}
-        </button>
-      </div>
+      <SaSidebarAccount
+        :name="authStore.userName"
+        :detail="authStore.userEmail"
+        :sign-out-label="t('auth.logout')"
+        @sign-out="logout"
+      />
     </template>
   </SaSidebar>
 </template>
