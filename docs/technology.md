@@ -98,7 +98,8 @@ removed in #124. A form here is a handful of fields checked in the submit handle
 [`shared/lib/DateUtils`](../src/shared/lib/DateUtils.ts) on the platform `Date`.
 
 **No state persistence, no client-side cache.** A store is filled by a request and emptied by a
-`$reset()`; a screen shows what the last response said.
+`$reset()`; a screen shows what the last response said. The operator's preferences are the one thing
+kept in the browser, through `localStorage` directly, so the first screen is drawn with them.
 
 ---
 

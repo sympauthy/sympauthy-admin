@@ -7,13 +7,15 @@ paths:
   - "src/entities/*/model/*Resource.ts"
   - "src/pages/**/api/**"
   - "src/pages/**/model/*Resource.ts"
+  - "src/shared/operator-preferences/*Api.ts"
+  - "src/shared/operator-preferences/*Resource.ts"
 ---
 
 # API standard
 
-Every screen is a call to the server's admin surface. `AbstractApi` holds what every call shares —
-the access token, the schema validation, the renewal retry and the error mapping — and a client per
-surface holds the calls themselves.
+Every screen is a call to the server's admin surface, and the operator's preferences one to its user
+surface. `AbstractApi` holds what every call shares — the access token, the schema validation, the
+renewal retry and the error mapping — and a client per surface holds the calls themselves.
 
 ## Clients
 
@@ -34,8 +36,8 @@ return this.get<UserClaimListResource>({
 })
 ```
 
-**A call expecting a body uses `get`, `post` or `put` and passes its schema.** A call expecting none
-uses `postVoid` or `delete`, and resolves to a `SuccessApiResponse<void>`.
+**A call expecting a body uses `get`, `post`, `put` or `patch` and passes its schema.** A call
+expecting none uses `postVoid` or `delete`, and resolves to a `SuccessApiResponse<void>`.
 
 **The parameters of a call listing a collection are `CollectionParams`.** A collection reading a
 parameter of its own extends it and names that one — `ListUsersParams` adds `claims`. A criterion is
@@ -144,7 +146,12 @@ language its own screens cannot speak.
 DPoP proof names one request, so they are built again for the retry;
 [authentication](authentication.md#presenting-the-token) says what they hold.
 
-**Nothing outside `shared/api` and a slice's `api/` segment calls `fetch`.**
+**A failure with no `response` never reached the server.** Every one the server answered carries
+the `Response` it came in, so a caller telling *refused* from *unreachable* reads that field and no
+status code.
+
+**Nothing outside `shared/api`, a slice's `api/` segment and the `…Api` of a `shared/` segment calls
+`fetch`.**
 
 ## What this standard does not cover
 

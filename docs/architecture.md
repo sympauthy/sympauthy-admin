@@ -1,10 +1,10 @@
 # Architecture
 
 SympAuthy Admin is a single page application. It is built by Vite into static assets the
-authorization server serves, and it holds nothing of its own: every screen is a call to the server's
-`/api/v1/admin` surface, authenticated with an access token the panel obtains as a public OIDC
-client. [Authentication](authentication.md) covers how it gets that token, and
-[Technology](technology.md) why each framework was picked.
+authorization server serves, and it holds nothing of its own but each operator's preferences: every
+screen is a call to the server's `/api/v1/admin` surface, authenticated with an access token the
+panel obtains as a public OIDC client. [Authentication](authentication.md) covers how it gets that
+token, and [Technology](technology.md) why each framework was picked.
 
 ## Feature-Sliced Design
 
@@ -20,7 +20,7 @@ A layer imports from the layers strictly below it, and never sideways or upward.
 | `pages/` | one slice per route: the route component and what only it uses |
 | `features/` | a user action reused by more than one page |
 | `entities/` | a domain noun more than one slice reads: its client, its schemas, its stores |
-| `shared/` | the panel's own kit, the HTTP plumbing and the collection wire, auth, i18n, utilities |
+| `shared/` | the panel's own kit, the HTTP plumbing and the collection wire, auth, i18n, the operator's preferences, utilities |
 
 `src/main.ts` is Vite's entry point and sits outside the layers: it reads the deployment's brand,
 creates the app, the router, the i18n instance and the Pinia instance, and mounts the result.
@@ -37,7 +37,8 @@ A slice is one folder, and its files are split into the segments it needs:
 
 `shared/` has no slices: it is divided into segments directly, and each of them is flat — Steiger
 reserves the segment names, so nothing inside a segment is called `ui/` or `model/`. They are
-`shared/api`, `shared/auth`, `shared/i18n`, `shared/lib` and `shared/ui`.
+`shared/api`, `shared/auth`, `shared/i18n`, `shared/lib`, `shared/operator-preferences` and
+`shared/ui`.
 
 The slices that exist are the folders under each layer. The entities are the nouns read by more
 than one slice — `user`, `client`, `claim`, `audience`, `session`, `grant`; `features/` holds the actions
@@ -81,6 +82,12 @@ reaches across.
    second reader appears.
 4. **`shared/auth` stays in `shared/`,** not in `entities/`: `AbstractApi` depends on
    `useAuthStore`, and `shared` may not import upward.
+5. **`shared/operator-preferences` stays in `shared/` too.** The preferences are no noun of the
+   server's but how the panel is drawn for whoever is signed in, and the router, the sidebar and
+   every page read them. Each concern they reach publishes its own setter in the segment owning it —
+   `setLanguage` in `shared/i18n`, `setDateDisplay` in `shared/lib` — so neither imports the
+   preferences. The segment is not named `preferences`, which is the page slice's name, and Steiger
+   refuses a slice a segment of `shared/` shares a name with.
 
 ## No rule is disabled
 
@@ -122,7 +129,7 @@ src/pages/<route>/       one slice per route, with the api/ and model/ only it r
 src/pages/<resource>/    a record's routes grouped: list/, detail/ and a slice per tab
 src/features/<action>/   an action reused by more than one page
 src/entities/<noun>/     api/, model/, ui/ for one noun more than one slice reads
-src/shared/              api, auth, i18n, lib, ui
+src/shared/              api, auth, i18n, lib, operator-preferences, ui
 ```
 
 Everything outside `src/` configures the build or the tooling: `vite.config.ts` (the dev server, its

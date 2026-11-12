@@ -3,11 +3,13 @@ import { ref, onMounted, useId } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
+import { usePreferencesStore } from '@/shared/operator-preferences'
 import { SaBrandLogo, SaCard, SaField, SaInput } from '@sympauthy/design'
 import { CommonButton } from '@/shared/ui'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const preferencesStore = usePreferencesStore()
 const { t } = useI18n()
 const tokenFieldId = useId()
 
@@ -34,7 +36,7 @@ async function onSubmit() {
 <template>
   <div class="flex min-h-screen items-center justify-center px-4">
     <div class="w-full max-w-sm">
-      <SaBrandLogo size="lg" class="mx-auto mb-4" />
+      <SaBrandLogo :dark="preferencesStore.dark" size="lg" class="mx-auto mb-4" />
       <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
         {{ t('register.title') }}
       </h1>

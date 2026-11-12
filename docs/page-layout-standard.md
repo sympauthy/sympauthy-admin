@@ -8,10 +8,10 @@ paths:
 
 # Page layout standard
 
-Two shapes of screen carry everything the panel does: one collection, and one record with its
-collections under it. [The design system standard](design-system-standard.md) owns the components
-both are built from, and [the collection standard](collection-standard.md) what a collection page
-reads.
+Two shapes of screen carry everything the panel reads: one collection, and one record with its
+collections under it. A third, one form, is what an operator changes about the panel itself. [The
+design system standard](design-system-standard.md) owns the components each is built from, and [the
+collection standard](collection-standard.md) what a collection page reads.
 
 ## A route per screen
 
@@ -95,7 +95,8 @@ no tab to draw it beside — or, on a record without views, to what the record i
 summary panel under it renders the record and nothing else.
 
 **A screen outside the panel shell has no bar, and so no actions.** What one of them lets an
-operator do it draws itself, inside its own content — the no-access page's sign-out.
+operator do it draws itself, inside its own content — the no-access page's preferences and
+sign-out.
 
 ## Menus
 
@@ -108,6 +109,10 @@ being true.
 **The sidebar's first entry is the page the panel lands on**, since `/` sends the operator to the
 first entry their token opens — the most used page is therefore the one an operator starts on. The
 sidebar's head links to `/`, so it reaches that page whatever the token opens.
+
+**A page about the panel rather than the server is an entry of the last section, marked `landing:
+false`.** The preferences open under no scope, so `/` would land every token on them, and one that
+opens nothing else would never reach the no-access page.
 
 ## Collection pages
 
@@ -215,6 +220,24 @@ record is fetched once by the shell, so a section below it reads what is already
 
 **A section is never an action.** [Page actions](#page-actions) says where those go and which
 component owns them.
+
+## Form pages
+
+**A page holding a form is one `SaCard` of `SaField`s, capped at `card-large`, with its Save at its
+foot.** A form is read down one column, and a field the width of the page puts a radio's label a
+screen away from its mark.
+
+**Fields stand `space-6` apart, and a `SaRadioGroup` among them is `-my-3`.** Its rows are as tall
+as a target around a line of text, so without it the first option hangs below its label and the
+next field drifts further below the last.
+
+**A form page changes nothing until Save, and what was left unsaved is gone when it is left.** It is
+local state like a dialog's, so it starts from what is applied each time it opens, and asks nothing
+before the operator navigates away.
+
+**What the server will not keep is a `warning` `SaAlert` above the card, and what a Save kept a
+status line beside its button.** The warning is there from the startup that found it, not only after
+a Save meets it, so the operator knows before choosing anything.
 
 ## The widths it is for
 

@@ -368,7 +368,8 @@
     "breadcrumb": "Where you are",
     "backTo": "Back to {name}",
     "sectionUsers": "Users",
-    "sectionConfiguration": "Configuration",
+    "sectionConfiguration": "Server configuration",
+    "sectionAdmin": "Admin",
     "sectionDiagnostics": "Diagnostics",
     "users": "Users",
     "clients": "Clients",
@@ -379,7 +380,12 @@
     "grants": "Grants",
     "sessions": "Sessions",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "preferences": "Preferences",
+    "notKept": {
+      "refused": "Your preferences are kept in this browser only: this server keeps none for you.",
+      "unreachable": "Your preferences are kept in this browser only: the server could not be reached."
+    }
   },
   "logoutDialog": {
     "title": "Force this user to log out?",
@@ -400,7 +406,43 @@
     "noAccess": {
       "title": "No access",
       "description": "You are signed in as {account}, but the token this console was issued opens none of its pages.",
-      "scopes": "Ask an administrator to grant one of these:"
+      "scopes": "Ask an administrator to grant one of these:",
+      "preferences": "Preferences"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "theme": {
+        "label": "Theme",
+        "values": {
+          "system": "Follow the device",
+          "light": "Light",
+          "dark": "Dark"
+        },
+        "unavailable": "This deployment draws its pages light only, whatever the device asks for."
+      },
+      "language": {
+        "label": "Language",
+        "browser": "The browser's"
+      },
+      "dateFormat": {
+        "label": "Date format",
+        "values": {
+          "iso": "ISO 8601, as 2026-11-11 14:03",
+          "language": "The language's own"
+        }
+      },
+      "timeZone": {
+        "label": "Time zone",
+        "browser": "The browser's ({zone})",
+        "hint": "A time shown in another zone than the browser's names that zone beside it.",
+        "search": "Search zones",
+        "noMatch": "No zone matches."
+      },
+      "saved": "Saved.",
+      "notKept": {
+        "refused": "Your preferences are kept in this browser only. This server keeps none for you, so another browser will not open with them.",
+        "unreachable": "Your preferences are kept in this browser only. The server could not be reached; it is tried again the next time you open the panel or save."
+      }
     },
     "clients": {
       "title": "Clients",

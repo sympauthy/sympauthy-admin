@@ -3,6 +3,12 @@ export interface NavEntry {
   /** The route it opens. Its `requiredScopes` decide whether it is drawn enabled or disabled. */
   name: string
   label: string
+  /**
+   * `false` for a page about the panel rather than the server, which `/` never lands on: the
+   * preferences open under no scope, so landing there would hide the no-access page from a token
+   * that opens nothing else.
+   */
+  landing?: boolean
 }
 
 /** A group of entries under one heading. */
@@ -15,9 +21,9 @@ export interface NavSection {
  * The panel's own index of its pages: the sections the sidebar draws, in the order it draws them —
  * the most used first, sections and the entries in each alike.
  *
- * The router reads the same list to decide where `/` lands — the first entry the token can open —
- * so a page reachable from the sidebar is a page the panel can land on, and the two cannot
- * disagree about which comes first.
+ * The router reads the same list to decide where `/` lands — the first entry the token can open
+ * that is not marked `landing: false` — so the sidebar and the landing cannot disagree about which
+ * comes first.
  */
 export const navSections: NavSection[] = [
   {
@@ -40,6 +46,10 @@ export const navSections: NavSection[] = [
       { name: 'scopes', label: 'nav.scopes' },
       { name: 'audiences', label: 'nav.audiences' }
     ]
+  },
+  {
+    label: 'nav.sectionAdmin',
+    entries: [{ name: 'preferences', label: 'nav.preferences', landing: false }]
   }
 ]
 

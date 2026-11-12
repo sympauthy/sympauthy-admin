@@ -9,8 +9,9 @@ authorization server: it inspects the accounts, clients, claims, scopes, audienc
 grants and interactive flow sessions the server owns, and performs the few actions an operator takes
 on them.
 Vue 3 with `<script setup>`, Vite, Pinia, Vue Router, Tailwind and reka-ui, built into static assets
-the authorization server serves itself. It stores nothing: every screen is a call to
-`/api/v1/admin`, authenticated as an ordinary public OIDC client of that same server.
+the authorization server serves itself. It stores nothing but each operator's preferences: every
+screen is a call to `/api/v1/admin`, authenticated as an ordinary public OIDC client of that same
+server, and the preferences are kept on the operator's account through `/api/v1/user/claims`.
 
 **`docs/` is the authority** (start at `docs/index.md`). Read the document governing a change before
 the code it governs, and put a new design decision there before or alongside its code. The standards
@@ -90,7 +91,8 @@ The source follows [Feature-Sliced Design](https://feature-sliced.design), and S
 - **`entities/`** — one slice per domain noun more than one slice reads: its API client,
   resources, schemas and stores. A noun one route reads lives in that route's slice until a second
   reader appears; `fsd/insignificant-slice` is on, so this is checked.
-- **`shared/`** — the panel's own kit, HTTP plumbing and the collection wire, auth, i18n, utilities.
+- **`shared/`** — the panel's own kit, HTTP plumbing and the collection wire, auth, i18n, the
+  operator's preferences, utilities.
   No domain knowledge.
 
 A layer imports only from the layers below it, a slice only through another slice's `index.ts`, and

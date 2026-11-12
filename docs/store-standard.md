@@ -4,6 +4,7 @@ description: What a Pinia store holds now that a screen holds its own collection
 paths:
   - "src/**/model/use*.ts"
   - "src/shared/auth/use*.ts"
+  - "src/shared/operator-preferences/use*.ts"
 ---
 
 # Store standard
@@ -116,7 +117,8 @@ in; a component asks `formatDate` for the string it draws.
 ## What this standard does not cover
 
 **Persistence and hydration.** Nothing survives a reload except what `shared/auth` keeps for the
-OIDC client.
+OIDC client, and the copy of each operator's preferences `usePreferencesStore` keeps under their
+`sub` so the first screen is drawn with them.
 
 **Invalidating another screen.** An action refetches what it changed where it changed it, and a
 screen showing the same records elsewhere keeps what it last read.

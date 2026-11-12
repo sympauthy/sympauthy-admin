@@ -9,7 +9,8 @@ paths:
 # Internationalization standard
 
 Every string an operator reads comes from a bundle. A screen holds keys, and
-[`shared/i18n`](../src/shared/i18n) resolves them against the locale their browser asks for.
+[`shared/i18n`](../src/shared/i18n) resolves them against the language the operator chose, or the
+one their browser asks for.
 
 ## The bundle
 
@@ -19,8 +20,12 @@ what is there at build time, so adding a language is adding a file and nothing e
 **`en.json` is the source of truth and the fallback.** A key missing from another locale resolves to
 the English string, and a key missing everywhere resolves to itself.
 
-**The locale comes from the browser**, with `en` behind it. Nothing lets an operator pick another
-one.
+**The locale is the language the operator chose on the preferences page, or the browser's**, with
+`en` behind it. `setLanguage` applies it, from the next render on and without a reload.
+
+**The languages offered are `availableLanguages()`, each named in itself.** It answers the bundles
+there are, so a bundle added is an entry added with nothing else to change, and an operator who
+cannot read the panel's current language still finds their own.
 
 **`currentLocale()` is what a request asks the server to answer in**, and it answers the locale a
 bundle exists for rather than the one the browser asked for. A screen rendered from `en.json`
@@ -125,6 +130,21 @@ to say.
 **A template holds no literal a person reads.** The product name is the exception: `SympAuthy Admin`
 is written as it is.
 
+## Dates
+
+**A date is written by `formatDate`, `formatDateTime` or `formatTime`,** in the date format and the
+zone the operator chose. Each reads them during the render, so a screen is drawn again when they
+change.
+
+**ISO 8601 is the default format, written `2026-11-11 14:03` on a 24-hour clock.** It reads the same
+in every language and on every operator's screen.
+
+**The language's own format is the one of `requestedLocale()`**, the language asked for rather than
+the bundle answering it, so a French browser reading the English bundle keeps French dates.
+
+**A time in a zone other than the browser's names that zone after it.** A time read in UTC is then
+never taken for a local one. A day alone names none.
+
 ## What this standard does not cover
 
 **Which languages ship.** English is the only bundle today, and adding one changes nothing here.
@@ -134,8 +154,8 @@ is written as it is.
 **Pluralization beyond English.** A count's key holds two forms joined by ` | `, singular then
 plural, which is English's rule; a language with more forms waits for a second bundle.
 
-**Formatting a date, a number or a duration.** `formatDate` and `formatDateTime` defer to the
-browser's locale, which is not the one the bundle was picked with.
+**Formatting a number or a duration.** Each is written as the browser writes it, in whatever the
+bundle's language is.
 
 **Right-to-left layouts.** Nothing is mirrored, and no screen is checked in one.
 

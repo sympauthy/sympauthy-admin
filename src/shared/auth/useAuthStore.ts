@@ -10,6 +10,8 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(true)
 
   const isAuthenticated = computed(() => user.value !== null)
+  /** The `sub` of the signed-in operator, which keys what the browser keeps for each of them. */
+  const userId = computed(() => user.value?.sub ?? null)
   const userName = computed(() => user.value?.name ?? '')
   const userEmail = computed(() => user.value?.email ?? '')
   const grantedScopes = computed(() => user.value?.scopes ?? [])
@@ -95,6 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
     initialized,
     loading,
     isAuthenticated,
+    userId,
     userName,
     userEmail,
     grantedScopes,

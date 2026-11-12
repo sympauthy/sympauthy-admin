@@ -7,8 +7,10 @@ and performs the few actions an operator takes on them: forcing a logout, revoki
 consent, enrolling a second factor, issuing an invitation.
 
 It is a Vue 3 single page application, built by Vite and served by the authorization server itself.
-It stores nothing: every screen is a call to the server's `/api/v1/admin` surface, authenticated
-with a token the panel obtains as an ordinary public OIDC client of the server it administers.
+It stores nothing but each operator's preferences: every screen is a call to the server's
+`/api/v1/admin` surface, authenticated with a token the panel obtains as an ordinary public OIDC
+client of the server it administers, and the theme, language, date format and time zone an operator
+chooses are kept on their account through `/api/v1/user/claims`, and in their browser.
 [Technology](technology.md) says why each framework was picked.
 
 These documents are the authority on how the panel is built. They are read before the code they
