@@ -15,11 +15,11 @@
     "tokenPlaceholder": "Paste your invitation code",
     "submit": "Sign up",
     "haveAccount": "Already have an account? {signIn}",
-    "signIn": "Sign in",
-    "poweredBy": "Powered by {link}"
+    "signIn": "Sign in"
   },
   "common": {
     "submit": "Submit",
+    "poweredBy": "Powered by {link}",
     "submitting": "Submitting...",
     "loading": "Loading...",
     "copy": "Copy",
