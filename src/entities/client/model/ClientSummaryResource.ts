@@ -3,6 +3,7 @@ import { translateMessageOr } from '@/shared/i18n'
 
 export type ClientSummaryResource = {
   client_id: string
+  display_name?: string | null
   type: string
   audience_id: string
   allowed_redirect_uris?: string[]
@@ -13,6 +14,10 @@ export const clientSummaryResourceSchema: JSONSchemaType<ClientSummaryResource> 
   properties: {
     client_id: {
       type: 'string'
+    },
+    display_name: {
+      type: 'string',
+      nullable: true
     },
     type: {
       type: 'string'

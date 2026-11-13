@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ClientApi,
+  clientName,
   clientTypeLabel,
   type ClientListResource,
   type ClientSummaryResource
@@ -56,9 +57,10 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="client in clients.items" :key="client.client_id">
-        <SaTableCell primary mono truncate>
+        <SaTableCell primary truncate :mono="!client.display_name">
           <TableRecord
-            :name="client.client_id"
+            :name="clientName(client.client_id, client.display_name)"
+            :detail="client.display_name ? client.client_id : undefined"
             :to="{ name: 'clientDetail', params: { clientId: client.client_id } }"
           />
         </SaTableCell>

@@ -28,7 +28,7 @@ const purposes = computed(() =>
     progress,
     label: purposeLabel(progress.purpose),
     description: purposeDescription(progress.purpose),
-    ...purposeEntries(progress, store.session?.client_id, (count) =>
+    ...purposeEntries(progress, store.session?.client?.id, (count) =>
       t('pages.sessionPurposes.scopeCount', count)
     )
   }))

@@ -7,6 +7,7 @@ export type ClientAuthorizationWebhookResource = {
 
 export type ClientDetailResource = {
   client_id: string
+  display_name?: string | null
   type: string
   audience_id: string
   allowed_scopes?: string[]
@@ -33,6 +34,10 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
   properties: {
     client_id: {
       type: 'string'
+    },
+    display_name: {
+      type: 'string',
+      nullable: true
     },
     type: {
       type: 'string'

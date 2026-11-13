@@ -1,8 +1,9 @@
 import type { JSONSchemaType } from 'ajv'
+import { type ClientReferenceResource, clientReferenceResourceSchema } from '@/entities/client'
 
 export type ConsentResource = {
   audience_id: string
-  prompted_by_client_id: string
+  prompted_by_client: ClientReferenceResource
   scopes?: string[] | null
   consented_at: string
 }
@@ -13,9 +14,7 @@ export const consentResourceSchema: JSONSchemaType<ConsentResource> = {
     audience_id: {
       type: 'string'
     },
-    prompted_by_client_id: {
-      type: 'string'
-    },
+    prompted_by_client: clientReferenceResourceSchema,
     scopes: {
       type: 'array',
       items: {
@@ -27,6 +26,6 @@ export const consentResourceSchema: JSONSchemaType<ConsentResource> = {
       type: 'string'
     }
   },
-  required: ['audience_id', 'prompted_by_client_id', 'consented_at'],
+  required: ['audience_id', 'prompted_by_client', 'consented_at'],
   additionalProperties: true
 }

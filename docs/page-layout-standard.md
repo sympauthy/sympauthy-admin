@@ -167,6 +167,15 @@ session by its purpose, each with its identifier under it. A row of identifiers 
 tell apart at a glance. A grant is named by the account it was opened for, or by its client where it
 names none, since that is what an operator looks one up by.
 
+**A client is named by the display name the configuration gives it, and by its identifier where it
+gives none,** wherever the panel shows one: a row, a field, a timeline, a dialog's choice.
+`clientName` is that rule, and a client the configuration no longer declares reads as its
+identifier like any other without a name.
+
+**A client drawn by its name carries its identifier under it, in a row it names and in a summary
+field.** The identifier is what the configuration and a search are written in. A column naming the
+client among other values leaves it to the screen it links to.
+
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
 

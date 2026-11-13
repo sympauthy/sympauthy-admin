@@ -6,6 +6,7 @@ import { ConsentApi } from '../api/ConsentApi'
 import type { ConsentListResource } from '../model/ConsentListResource'
 import type { ConsentResource } from '../model/ConsentResource'
 import { getErrorMessage, isSuccess } from '@/shared/api'
+import { clientReferenceName } from '@/entities/client'
 import { formatDateTime } from '@/shared/lib'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import {
@@ -79,8 +80,8 @@ onMounted(async () => {
     <template #header>
       <SaTableHeader
         :sorting="consents.sort"
-        field="prompted_by_client_id"
-        :filtered-label="consents.filteredLabel('prompted_by_client_id')"
+        field="prompted_by_client"
+        :filtered-label="consents.filteredLabel('prompted_by_client')"
       >
         {{ t('pages.userConsents.client.label') }}
         <template #help>
@@ -120,10 +121,13 @@ onMounted(async () => {
     <template #rows>
       <tr v-for="consent in consents.items" :key="consent.audience_id">
         <!-- Named by the client that prompted the person, which is who an operator recognises. -->
-        <SaTableCell primary truncate mono>
+        <SaTableCell primary truncate :mono="!consent.prompted_by_client.display_name">
           <TableRecord
-            :name="consent.prompted_by_client_id"
-            :to="{ name: 'clientDetail', params: { clientId: consent.prompted_by_client_id } }"
+            :name="clientReferenceName(consent.prompted_by_client)"
+            :detail="
+              consent.prompted_by_client.display_name ? consent.prompted_by_client.id : undefined
+            "
+            :to="{ name: 'clientDetail', params: { clientId: consent.prompted_by_client.id } }"
           />
         </SaTableCell>
         <!-- A phone reads each value on a line of its own, as the canvas lists them, rather than

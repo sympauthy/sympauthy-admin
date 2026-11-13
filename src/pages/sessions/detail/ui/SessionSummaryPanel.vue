@@ -14,6 +14,7 @@ import {
   interactiveFlowSessionStatusLabel,
   type InteractiveFlowSessionDetailResource
 } from '@/entities/session'
+import { clientReferenceName } from '@/entities/client'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDate, formatDateTime, formatTime, isoDateTime } from '@/shared/lib'
 
@@ -91,13 +92,22 @@ const lifetime = computed(() => {
       <SaEmptyValue v-else />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.sessionDetail.client')">
-      <RecordLink
-        v-if="session.client_id"
-        mono
-        truncate
-        :name="session.client_id"
-        :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
-      />
+      <template v-if="session.client">
+        <RecordLink
+          truncate
+          :mono="!session.client.display_name"
+          :name="clientReferenceName(session.client)"
+          :to="{ name: 'clientDetail', params: { clientId: session.client.id } }"
+        />
+        <!-- The identifier under the name, as it is written in the configuration and searched by. -->
+        <span
+          v-if="session.client.display_name"
+          class="block truncate font-mono text-xs text-gray-500"
+          :title="session.client.id"
+        >
+          {{ session.client.id }}
+        </span>
+      </template>
       <SaEmptyValue v-else />
     </SaSummaryField>
   </SaSummaryCard>

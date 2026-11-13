@@ -13,6 +13,7 @@ import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, RecordLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
+import { clientReferenceName } from '@/entities/client'
 import { formatDateTime, isoDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
@@ -116,11 +117,11 @@ onMounted(async () => {
           class="max-sm:mt-1 max-sm:basis-full"
         >
           <RecordLink
-            v-if="session.client_id"
-            mono
+            v-if="session.client"
             truncate
-            :name="session.client_id"
-            :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
+            :mono="!session.client.display_name"
+            :name="clientReferenceName(session.client)"
+            :to="{ name: 'clientDetail', params: { clientId: session.client.id } }"
           />
           <SaEmptyValue v-else />
         </SaTableCell>
