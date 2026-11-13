@@ -110,6 +110,7 @@ how it is installed.
 | `SaDialog` | the shell of any dialog |
 | `SaConfirmDialog` | a destructive action's confirmation |
 | `SaAppShell`, `SaSidebar`, `SaSidebarAccount`, `SaBreadcrumb` | the frame, which only `app/layout` draws |
+| `StandalonePage` | the frame of a screen outside the panel shell: the brand over one card |
 
 **A component that no domain vocabulary reaches belongs in `shared/ui`**, and joins
 [its `index.ts`](../src/shared/ui/index.ts) in the same commit. One that names an entity belongs in
@@ -133,8 +134,8 @@ written.
 
 **A width is never written.** A column is shrink-wrapped or takes what is left, as
 [Table](https://sympauthy.github.io/sympauthy-design/components/table) has it, and everything else
-is sized by its parent. A form page's card is the one cap, at `card-large`, as [the page layout
-standard](page-layout-standard.md#form-pages) has it.
+is sized by its parent. A card is the one thing capped: a form page's at `card-large` and a
+`StandalonePage`'s at `card`, as [the page layout standard](page-layout-standard.md) has them.
 
 ## Controls
 

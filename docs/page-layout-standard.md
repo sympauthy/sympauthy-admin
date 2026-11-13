@@ -65,6 +65,11 @@ so `userConsents` names `admin:users:read` beside the `admin:consent:read` its c
 registration add `requiresAuth: false`; the no-access page is signed in and stays outside all the
 same, since every entry the shell would draw would be disabled.
 
+**A screen outside the shell that an operator reads is a `StandalonePage`**, drawn as the flow's
+auth card: the deployment's logo and name naming the panel, one card at the `card` width, and the
+product under it. The invitation's sign-up and the no-access page are. A wait such as the callback
+draws its spinner alone.
+
 **A detail page names its own record in the breadcrumb** by calling `useBreadcrumb().setLabel()`
 once the record has arrived, falling back to the identifier in the path.
 

@@ -3,9 +3,9 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/shared/auth'
 import { ArrowRightStartOnRectangleIcon, Cog6ToothIcon } from '@heroicons/vue/20/solid'
-import { SaBrandLogo, SaCard, SaTag } from '@sympauthy/design'
+import { SaTag } from '@sympauthy/design'
 import { usePreferencesStore } from '@/entities/preference'
-import { CommonButton } from '@/shared/ui'
+import { CommonButton, StandalonePage } from '@/shared/ui'
 
 /**
  * Where a signed-in operator lands when their token opens no page of the panel — the granting
@@ -47,38 +47,40 @@ async function logout() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center px-4">
-    <div class="w-full max-w-md">
-      <SaBrandLogo :dark="preferencesStore.dark" size="lg" class="mx-auto mb-4" />
-      <h1 class="mb-2 text-center text-2xl font-bold text-gray-900">
+  <StandalonePage :dark="preferencesStore.dark">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">
         {{ t('pages.noAccess.title') }}
       </h1>
-      <p class="mb-6 text-center text-sm text-gray-600">
+      <p class="text-gray-700">
         {{ t('pages.noAccess.description', { account: authStore.userName }) }}
       </p>
-
-      <SaCard>
-        <p class="text-sm text-gray-700">{{ t('pages.noAccess.scopes') }}</p>
-        <div class="mt-3 flex flex-wrap gap-1">
-          <SaTag v-for="scope in consoleScopes" :key="scope" color="blue">
-            {{ scope }}
-          </SaTag>
-        </div>
-        <CommonButton
-          class="mt-4 w-full"
-          variant="secondary"
-          :icon="Cog6ToothIcon"
-          :label="t('nav.preferences')"
-          @click="openPreferences"
-        />
-        <CommonButton
-          class="mt-2 w-full"
-          variant="secondary"
-          :icon="ArrowRightStartOnRectangleIcon"
-          :label="t('auth.logout')"
-          @click="logout"
-        />
-      </SaCard>
     </div>
-  </div>
+
+    <div class="flex flex-col gap-3">
+      <p class="text-gray-700">{{ t('pages.noAccess.scopes') }}</p>
+      <div class="flex flex-wrap gap-1">
+        <SaTag v-for="scope in consoleScopes" :key="scope" color="blue">
+          {{ scope }}
+        </SaTag>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3 border-t border-gray-200 pt-6">
+      <CommonButton
+        variant="secondary"
+        size="large"
+        :icon="Cog6ToothIcon"
+        :label="t('nav.preferences')"
+        @click="openPreferences"
+      />
+      <CommonButton
+        variant="secondary"
+        size="large"
+        :icon="ArrowRightStartOnRectangleIcon"
+        :label="t('auth.logout')"
+        @click="logout"
+      />
+    </div>
+  </StandalonePage>
 </template>
