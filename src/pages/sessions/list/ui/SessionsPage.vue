@@ -13,6 +13,7 @@ import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
 import { DocHelpTooltip, RecordLink, TableRecord } from '@/shared/ui'
 import { userIdentifierLabel } from '@/entities/user'
+import { ClientLink } from '@/entities/client'
 import { formatDateTime, isoDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
@@ -115,13 +116,7 @@ onMounted(async () => {
           truncate
           class="max-sm:mt-1 max-sm:basis-full"
         >
-          <RecordLink
-            v-if="session.client_id"
-            mono
-            truncate
-            :name="session.client_id"
-            :to="{ name: 'clientDetail', params: { clientId: session.client_id } }"
-          />
+          <ClientLink v-if="session.client" truncate :client="session.client" />
           <SaEmptyValue v-else />
         </SaTableCell>
         <!-- When a session started is what an operator finds the one a person had by, so it is read

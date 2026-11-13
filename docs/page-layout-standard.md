@@ -167,6 +167,20 @@ session by its purpose, each with its identifier under it. A row of identifiers 
 tell apart at a glance. A grant is named by the account it was opened for, or by its client where it
 names none, since that is what an operator looks one up by.
 
+**A client is named by the display name the configuration gives it, and by its identifier where it
+gives none,** wherever the panel shows one. `ClientLink` draws it in a field or a column,
+`ClientTableRecord` in the `primary` cell of a row it heads, and `clientReferenceName` everywhere
+else; a client the configuration no longer declares reads as its identifier like any other.
+
+**A client drawn by its name carries its identifier under it where the client is what the row or
+the field is about** — a row of clients or of consents, a grant's or a session's client field. The
+identifier is what the configuration and a search are written in; a column naming the client among
+other values, and a grant row named after its client, leave it to the screen they link to.
+
+**A choice between clients shows each by its name with its identifier beside it,** through
+`clientChoiceLabel`. Nothing keeps two clients from sharing a name, and the choice is what the
+request acts on.
+
 **An item of a row's menu carries no icon, and ends in an ellipsis where a `SaConfirmDialog` follows
 it.**
 

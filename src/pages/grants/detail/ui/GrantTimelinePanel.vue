@@ -10,6 +10,7 @@ import {
   grantTypeLabel,
   type GrantDetailResource
 } from '@/entities/grant'
+import { clientReferenceName } from '@/entities/client'
 import { compareApiDates, formatDate, formatTime, isoDateTime } from '@/shared/lib'
 
 const props = defineProps<{
@@ -58,7 +59,9 @@ const events = computed<TimelineEvent[]>(() => {
       key: 'authenticated',
       at: grant.authenticated_at,
       title: t('pages.grantDetail.timeline.authenticated'),
-      detail: t('pages.grantDetail.timeline.authenticatedAt', { client: grant.client_id })
+      detail: t('pages.grantDetail.timeline.authenticatedAt', {
+        client: clientReferenceName(grant.client)
+      })
     })
   }
   if (grant.granted_at) {

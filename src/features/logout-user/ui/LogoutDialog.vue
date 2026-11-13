@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { SaAlert, SaConfirmDialog, SaRadioGroup, SaSelect } from '@sympauthy/design'
 import { GrantApi } from '@/entities/grant'
-import { useClientStore } from '@/entities/client'
+import { clientChoiceLabel, useClientStore } from '@/entities/client'
 import { isSuccess, getErrorMessage } from '@/shared/api'
 import { missingScopesHint, useAuthStore } from '@/shared/auth'
 
@@ -120,7 +120,7 @@ async function onConfirm() {
           :key="client.client_id"
           :value="client.client_id"
         >
-          {{ client.client_id }}
+          {{ clientChoiceLabel(client) }}
         </option>
       </SaSelect>
     </div>

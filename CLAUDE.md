@@ -45,6 +45,11 @@ is checked by those and by running it.
 The dev server needs a SympAuthy on `localhost:8080`, started with the `admin` environment. Full
 setup is `docs/running-locally.md`.
 
+**Against the local server, the dev server runs with `VITE_OIDC_AUTHORITY=http://localhost:8080`.**
+It sits in `.env.local`, which is not committed, so a fresh worktree starts without it — pass it on
+the command line there: `VITE_OIDC_AUTHORITY=http://localhost:8080 npm run dev`. Without it the
+panel signs in through its own port, and every admin call answers `401`.
+
 **A phone width is checked in a 390px frame, not by resizing the browser**, which will not shrink a
 window that narrow. Serve a page of iframes from the scratchpad on another port of `localhost` —
 never `127.0.0.1`, a different site, which loses the signed-in session — and open it:
@@ -96,7 +101,7 @@ The source follows [Feature-Sliced Design](https://feature-sliced.design), and S
 
 A layer imports only from the layers below it, a slice only through another slice's `index.ts`, and
 two slices on the same layer never import each other — except through an `@x/` cross-import, which
-`entities/user` publishes to `entities/session` and `entities/grant`.
+`entities/user` and `entities/client` each publish to `entities/session` and `entities/grant`.
 
 `src/main.ts` sits outside the layers: it reads the deployment's brand, then mounts the app, the
 router, the i18n instance and Pinia.

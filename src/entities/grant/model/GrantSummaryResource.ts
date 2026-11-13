@@ -5,11 +5,16 @@ import {
   userIdentifierLabel,
   userResourceSchema
 } from '@/entities/user/@x/grant'
+import {
+  type ClientReferenceResource,
+  clientReferenceName,
+  clientReferenceResourceSchema
+} from '@/entities/client/@x/grant'
 
 export type GrantSummaryResource = {
   grant_id: string
   user?: UserResource | null
-  client_id: string
+  client: ClientReferenceResource
   audience_id: string
   grant_type: string
   status: string
@@ -33,9 +38,7 @@ export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = 
       ...userResourceSchema,
       nullable: true
     },
-    client_id: {
-      type: 'string'
-    },
+    client: clientReferenceResourceSchema,
     audience_id: {
       type: 'string'
     },
@@ -79,7 +82,7 @@ export const grantSummaryResourceSchema: JSONSchemaType<GrantSummaryResource> = 
   },
   required: [
     'grant_id',
-    'client_id',
+    'client',
     'audience_id',
     'grant_type',
     'status',
@@ -103,8 +106,8 @@ export function grantIsLive(grant: Pick<GrantSummaryResource, 'status'>): boolea
  * What an operator calls a grant: the person it was opened for, by the first identifier claim the
  * server embeds for them, or the client a client credentials grant is held by alone.
  */
-export function grantName(grant: Pick<GrantSummaryResource, 'user' | 'client_id'>): string {
-  return grant.user ? userIdentifierLabel(grant.user) : grant.client_id
+export function grantName(grant: Pick<GrantSummaryResource, 'user' | 'client'>): string {
+  return grant.user ? userIdentifierLabel(grant.user) : clientReferenceName(grant.client)
 }
 
 /**

@@ -18,6 +18,7 @@
     "signIn": "Sign in"
   },
   "common": {
+    "clientChoice": "{name} ({id})",
     "submit": "Submit",
     "poweredBy": "Powered by {link}",
     "submitting": "Submitting...",

@@ -63,10 +63,10 @@ publishes only its route component; its panels and dialogs stay internal.
 ## Cross-imports
 
 Slices on the same layer may not import each other. The exception is an entity that genuinely nests
-another, handled through FSD's `@x` notation: an interactive flow session embeds the user it
-authenticates and a grant the user it was opened for, so `entities/user/@x/session.ts` and
-`entities/user/@x/grant.ts` publish exactly what each of those slices may use, and nothing else
-reaches across.
+another, handled through FSD's `@x` notation: an interactive flow session and a grant each embed the
+user and the client they were opened for, so `entities/user/@x/` and `entities/client/@x/` each hold
+a `session.ts` and a `grant.ts` publishing exactly what each of those slices may use, and nothing
+else reaches across.
 
 ## Where a new file goes
 

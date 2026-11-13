@@ -3,13 +3,15 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   ClientApi,
+  clientReference,
+  ClientTableRecord,
   clientTypeLabel,
   type ClientListResource,
   type ClientSummaryResource
 } from '@/entities/client'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { SaEmptyValue, SaTableCell, SaTableHeader } from '@sympauthy/design'
-import { DocHelpTooltip, TableRecord } from '@/shared/ui'
+import { DocHelpTooltip } from '@/shared/ui'
 
 const { t } = useI18n()
 const api = new ClientApi()
@@ -56,11 +58,8 @@ onMounted(async () => {
 
     <template #rows>
       <tr v-for="client in clients.items" :key="client.client_id">
-        <SaTableCell primary mono truncate>
-          <TableRecord
-            :name="client.client_id"
-            :to="{ name: 'clientDetail', params: { clientId: client.client_id } }"
-          />
+        <SaTableCell primary truncate>
+          <ClientTableRecord :client="clientReference(client)" />
         </SaTableCell>
         <SaTableCell :label="t('pages.clients.type')" fit>
           {{ clientTypeLabel(client.type) }}

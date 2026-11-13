@@ -14,6 +14,7 @@ import {
   grantTypeLabel,
   type GrantDetailResource
 } from '@/entities/grant'
+import { ClientLink } from '@/entities/client'
 import { userIdentifierLabel } from '@/entities/user'
 import { formatDateTime } from '@/shared/lib'
 
@@ -60,12 +61,7 @@ const { t } = useI18n()
       <SaEmptyValue v-else />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.grantDetail.client')">
-      <RecordLink
-        mono
-        truncate
-        :name="grant.client_id"
-        :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }"
-      />
+      <ClientLink truncate identified :client="grant.client" />
     </SaSummaryField>
     <!-- An audience has no screen, so it stays plain text, cut by the field itself. -->
     <SaSummaryField mono :label="t('pages.grantDetail.audience')">

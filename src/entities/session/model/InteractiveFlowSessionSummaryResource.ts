@@ -1,5 +1,9 @@
 import type { JSONSchemaType } from 'ajv'
 import { type UserResource, userResourceSchema } from '@/entities/user/@x/session'
+import {
+  type ClientReferenceResource,
+  clientReferenceResourceSchema
+} from '@/entities/client/@x/session'
 import { translateMessageOr } from '@/shared/i18n'
 
 /**
@@ -13,7 +17,7 @@ export type InteractiveFlowSessionSummaryResource = {
   status: string
   initiating_purpose: string
   current_purpose?: string | null
-  client_id?: string | null
+  client?: ClientReferenceResource | null
   signed_up: boolean
   user?: UserResource | null
   ip?: string | null
@@ -39,8 +43,8 @@ export const interactiveFlowSessionSummaryResourceSchema: JSONSchemaType<Interac
         type: 'string',
         nullable: true
       },
-      client_id: {
-        type: 'string',
+      client: {
+        ...clientReferenceResourceSchema,
         nullable: true
       },
       signed_up: {

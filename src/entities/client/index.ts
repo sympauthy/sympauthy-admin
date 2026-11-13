@@ -1,5 +1,8 @@
 export * from './api/ClientApi'
 export * from './model/ClientDetailResource'
 export * from './model/ClientListResource'
+export * from './model/ClientReferenceResource'
 export * from './model/ClientSummaryResource'
 export * from './model/useClientStore'
+export { default as ClientLink } from './ui/ClientLink.vue'
+export { default as ClientTableRecord } from './ui/ClientTableRecord.vue'

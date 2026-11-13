@@ -13,16 +13,11 @@ import {
   type GrantListResource,
   type GrantSummaryResource
 } from '@/entities/grant'
+import { ClientLink } from '@/entities/client'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { RevokeGrantDialog } from '@/features/revoke-grant'
 import { SaTableActions, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import {
-  type ActionItem,
-  ActionsDropdown,
-  DocHelpTooltip,
-  RecordLink,
-  TableRecord
-} from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
@@ -108,10 +103,9 @@ onMounted(async () => {
         {{ t('pages.grants.grantType') }}
       </SaTableHeader>
       <SaTableHeader
-        fit
         :sorting="grants.sort"
-        field="client_id"
-        :filtered-label="grants.filteredLabel('client_id')"
+        field="client"
+        :filtered-label="grants.filteredLabel('client')"
       >
         {{ t('pages.grants.client') }}
       </SaTableHeader>
@@ -170,15 +164,10 @@ onMounted(async () => {
              line after it adds that gap again to read evenly spaced. -->
         <SaTableCell
           :label="t('pages.grants.client')"
-          fit
-          mono
+          truncate
           class="max-sm:mt-1 max-sm:basis-full"
         >
-          <RecordLink
-            mono
-            :name="grant.client_id"
-            :to="{ name: 'clientDetail', params: { clientId: grant.client_id } }"
-          />
+          <ClientLink truncate :client="grant.client" />
         </SaTableCell>
         <SaTableCell
           :label="t('pages.grants.audience')"
