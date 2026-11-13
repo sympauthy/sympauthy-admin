@@ -9,11 +9,14 @@
     "logout": "Sign out"
   },
   "register": {
-    "title": "Register",
-    "description": "Enter your invitation code to create an account.",
+    "title": "Sign up",
+    "description": "This panel is invitation-only. Enter the code from your invitation to create your account.",
     "tokenLabel": "Invitation code",
     "tokenPlaceholder": "Paste your invitation code",
-    "submit": "Register"
+    "submit": "Sign up",
+    "haveAccount": "Already have an account? {signIn}",
+    "signIn": "Sign in",
+    "poweredBy": "Powered by {link}"
   },
   "common": {
     "submit": "Submit",
