@@ -1,5 +1,6 @@
 import type { JSONSchemaType } from 'ajv'
-import { translateMessageOr } from '@/shared/i18n'
+import { translateMessage, translateMessageOr } from '@/shared/i18n'
+import type { ClientReferenceResource } from './ClientReferenceResource'
 
 export type ClientSummaryResource = {
   client_id: string
@@ -41,4 +42,26 @@ export const clientSummaryResourceSchema: JSONSchemaType<ClientSummaryResource> 
  */
 export function clientTypeLabel(type: string): string {
   return translateMessageOr(`terms.client.type.values.${type}`, type)
+}
+
+/**
+ * The client a resource of its own describes, as a record would name it, so that it is drawn by
+ * the same rule.
+ */
+export function clientReference(
+  client: Pick<ClientSummaryResource, 'client_id' | 'display_name'>
+): ClientReferenceResource {
+  return { id: client.client_id, display_name: client.display_name }
+}
+
+/**
+ * What a client is offered under in a choice: its display name with its identifier beside it,
+ * since nothing keeps two clients from sharing a name, or its identifier alone.
+ */
+export function clientChoiceLabel(
+  client: Pick<ClientSummaryResource, 'client_id' | 'display_name'>
+): string {
+  return client.display_name
+    ? translateMessage('common.clientChoice', { name: client.display_name, id: client.client_id })
+    : client.client_id
 }

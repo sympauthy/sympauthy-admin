@@ -101,7 +101,7 @@ The source follows [Feature-Sliced Design](https://feature-sliced.design), and S
 
 A layer imports only from the layers below it, a slice only through another slice's `index.ts`, and
 two slices on the same layer never import each other — except through an `@x/` cross-import, which
-`entities/user` publishes to `entities/session` and `entities/grant`.
+`entities/user` and `entities/client` each publish to `entities/session` and `entities/grant`.
 
 `src/main.ts` sits outside the layers: it reads the deployment's brand, then mounts the app, the
 router, the i18n instance and Pinia.

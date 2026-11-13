@@ -3,7 +3,7 @@ import { ref, computed, watch, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { SaAlert, SaDialog, SaField, SaSelect } from '@sympauthy/design'
 import { CommonButton, OneTimeSecret } from '@/shared/ui'
-import { clientName, useClientStore } from '@/entities/client'
+import { clientChoiceLabel, useClientStore } from '@/entities/client'
 import { UserMfaApi, type MfaEnrollmentInput } from '@/entities/user'
 import { isSuccess, getErrorMessage } from '@/shared/api'
 
@@ -141,7 +141,7 @@ async function onSubmit() {
                 :key="client.client_id"
                 :value="client.client_id"
               >
-                {{ clientName(client.client_id, client.display_name) }}
+                {{ clientChoiceLabel(client) }}
               </option>
             </SaSelect>
           </SaField>

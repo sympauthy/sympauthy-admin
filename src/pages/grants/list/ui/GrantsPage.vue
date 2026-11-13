@@ -13,17 +13,11 @@ import {
   type GrantListResource,
   type GrantSummaryResource
 } from '@/entities/grant'
-import { clientReferenceName } from '@/entities/client'
+import { ClientLink } from '@/entities/client'
 import { CollectionPage, useCollection } from '@/features/browse-collection'
 import { RevokeGrantDialog } from '@/features/revoke-grant'
 import { SaTableActions, SaTableCell, SaTableHeader, SaTag } from '@sympauthy/design'
-import {
-  type ActionItem,
-  ActionsDropdown,
-  DocHelpTooltip,
-  RecordLink,
-  TableRecord
-} from '@/shared/ui'
+import { type ActionItem, ActionsDropdown, DocHelpTooltip, TableRecord } from '@/shared/ui'
 import { formatDateTime } from '@/shared/lib'
 
 const { t } = useI18n()
@@ -109,7 +103,6 @@ onMounted(async () => {
         {{ t('pages.grants.grantType') }}
       </SaTableHeader>
       <SaTableHeader
-        fit
         :sorting="grants.sort"
         field="client"
         :filtered-label="grants.filteredLabel('client')"
@@ -169,12 +162,12 @@ onMounted(async () => {
              the canvas lists them, under the line the status and the type share. The package ends
              that phone's first line with a break that the row's gap falls on both sides of, so each
              line after it adds that gap again to read evenly spaced. -->
-        <SaTableCell :label="t('pages.grants.client')" fit class="max-sm:mt-1 max-sm:basis-full">
-          <RecordLink
-            :mono="!grant.client.display_name"
-            :name="clientReferenceName(grant.client)"
-            :to="{ name: 'clientDetail', params: { clientId: grant.client.id } }"
-          />
+        <SaTableCell
+          :label="t('pages.grants.client')"
+          truncate
+          class="max-sm:mt-1 max-sm:basis-full"
+        >
+          <ClientLink truncate :client="grant.client" />
         </SaTableCell>
         <SaTableCell
           :label="t('pages.grants.audience')"

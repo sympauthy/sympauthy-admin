@@ -3,7 +3,12 @@ import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { InformationCircleIcon } from '@heroicons/vue/20/solid'
-import { ClientApi, clientName, type ClientDetailResource } from '@/entities/client'
+import {
+  ClientApi,
+  clientReference,
+  clientReferenceName,
+  type ClientDetailResource
+} from '@/entities/client'
 import { ScopeApi, type ScopeResource } from '@/entities/scope'
 import { fetchAllPages, getErrorMessage, isSuccess } from '@/shared/api'
 import { useBreadcrumb, useIsPhone } from '@/shared/lib'
@@ -62,7 +67,7 @@ onMounted(async () => {
   if (isSuccess(response)) {
     client.value = response.content
     scopes.value = scopesResult.items ?? []
-    setLabel(clientName(client.value.client_id, client.value.display_name))
+    setLabel(clientReferenceName(clientReference(client.value)))
   } else if (response.response?.status === 404) {
     notFound.value = true
   } else {

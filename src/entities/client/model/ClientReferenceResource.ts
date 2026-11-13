@@ -29,13 +29,6 @@ export const clientReferenceResourceSchema: JSONSchemaType<ClientReferenceResour
  * What an operator reads a client as: the display name the configuration gives it, or its
  * identifier where it gives none.
  */
-export function clientName(id: string, displayName: string | null | undefined): string {
-  return displayName || id
-}
-
-/**
- * {@link clientName} of the client a record names.
- */
 export function clientReferenceName(client: ClientReferenceResource): string {
-  return clientName(client.id, client.display_name)
+  return client.display_name || client.id
 }
