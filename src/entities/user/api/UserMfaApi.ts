@@ -17,8 +17,8 @@ import {
 
 export interface MfaEnrollmentInput {
   client_id: string
-  return_uri: string
-  cancel_uri?: string
+  /** Left out, the server returns the person to the client's own `return_uri`. */
+  return_uri?: string
 }
 
 export class UserMfaApi extends AbstractApi {

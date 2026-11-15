@@ -13,6 +13,8 @@ export type ClientDetailResource = {
   allowed_scopes?: string[]
   default_scopes: string[]
   allowed_redirect_uris?: string[]
+  return_uri?: string | null
+  allowed_return_uris: string[]
   allowed_grant_types: string[]
   authorization_flow_id?: string | null
   authorization_webhook?: ClientAuthorizationWebhookResource | null
@@ -59,6 +61,14 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
       items: { type: 'string' },
       nullable: true
     },
+    return_uri: {
+      type: 'string',
+      nullable: true
+    },
+    allowed_return_uris: {
+      type: 'array',
+      items: { type: 'string' }
+    },
     allowed_grant_types: {
       type: 'array',
       items: { type: 'string' }
@@ -72,7 +82,14 @@ export const clientDetailResourceSchema: JSONSchemaType<ClientDetailResource> = 
       nullable: true
     }
   },
-  required: ['client_id', 'type', 'audience_id', 'default_scopes', 'allowed_grant_types'],
+  required: [
+    'client_id',
+    'type',
+    'audience_id',
+    'default_scopes',
+    'allowed_return_uris',
+    'allowed_grant_types'
+  ],
   additionalProperties: true
 }
 
@@ -97,4 +114,15 @@ export function clientDefaultsToAllowedScopes(client: ClientDetailResource): boo
   }
   const defaults = new Set(client.default_scopes)
   return defaults.size === new Set(allowed).size && allowed.every((scope) => defaults.has(scope))
+}
+
+/**
+ * The pages a flow started for `client`, such as an MFA enrollment, may return a person to: its
+ * `return_uri` first, the one the server falls back on when a request names none, then the others it
+ * allows. Empty when the configuration declares none, and the server refuses to start such a flow.
+ */
+export function clientReturnUris(client: ClientDetailResource): string[] {
+  return client.return_uri
+    ? [client.return_uri, ...client.allowed_return_uris]
+    : client.allowed_return_uris
 }
