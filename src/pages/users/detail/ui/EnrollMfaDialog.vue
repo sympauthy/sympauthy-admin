@@ -78,7 +78,7 @@ watch(
   }
 )
 
-// Reset the return URL whenever the client changes — its options come from the selected client.
+// Reset the return URI whenever the client changes — its options come from the selected client.
 watch(clientId, () => {
   returnUri.value = ''
 })
