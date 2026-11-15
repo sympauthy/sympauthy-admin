@@ -89,7 +89,6 @@ async function onConfirm() {
   <SaConfirmDialog
     :open="open"
     :confirm-label="t('logoutDialog.confirm')"
-    :cancel-label="t('common.cancel')"
     :loading="loading"
     :error="error"
     :confirm-disabled="awaitingClient"

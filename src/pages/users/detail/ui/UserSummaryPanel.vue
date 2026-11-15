@@ -21,12 +21,7 @@ const { t } = useI18n()
 <template>
   <SaSummaryCard>
     <SaSummaryField mono :label="t('pages.userDetail.userId')">
-      <SaCopyableValue
-        :value="user.user_id"
-        :label="t('pages.userDetail.copyUserId')"
-        :copied-label="t('common.copied')"
-        :failed-label="t('common.copyFailed')"
-      />
+      <SaCopyableValue :value="user.user_id" :label="t('pages.userDetail.copyUserId')" />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.userDetail.status')">
       <template #help>

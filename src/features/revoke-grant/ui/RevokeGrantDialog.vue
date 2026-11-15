@@ -57,7 +57,6 @@ async function onConfirm() {
   <SaConfirmDialog
     :open="open"
     :confirm-label="t('revokeGrantDialog.confirm')"
-    :cancel-label="t('common.cancel')"
     :loading="loading"
     :error="error"
     @confirm="onConfirm"

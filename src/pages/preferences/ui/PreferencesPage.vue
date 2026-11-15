@@ -159,7 +159,6 @@ async function onSave() {
             :options="timeZoneOptions"
             :selected="[timeZone]"
             :search-placeholder="t('pages.preferences.timeZone.search')"
-            :no-match-label="t('pages.preferences.timeZone.noMatch')"
             :aria-label="t('pages.preferences.timeZone.label')"
             @select="onTimeZoneSelect"
           />

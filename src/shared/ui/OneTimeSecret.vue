@@ -22,12 +22,7 @@ const { t } = useI18n()
 
     <div class="flex items-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
       <code class="flex-1 text-sm break-all">{{ value }}</code>
-      <SaCopyButton
-        :value="value"
-        :label="t('common.copy')"
-        :copied-label="t('common.copied')"
-        :failed-label="t('common.copyFailed')"
-      />
+      <SaCopyButton :value="value" :label="t('common.copy')" />
     </div>
   </div>
 </template>

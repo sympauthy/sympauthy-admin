@@ -40,7 +40,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="sessions.sort"
         field="purpose"
-        :filtered-label="sessions.filteredLabel('purpose')"
+        :filtered="sessions.filters.isFiltered('purpose')"
       >
         {{ t('pages.sessions.session') }}
       </SaTableHeader>
@@ -48,7 +48,7 @@ onMounted(async () => {
         fit
         :sorting="sessions.sort"
         field="status"
-        :filtered-label="sessions.filteredLabel('status')"
+        :filtered="sessions.filters.isFiltered('status')"
       >
         {{ t('pages.sessions.status') }}
         <template #help>
@@ -62,7 +62,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="sessions.sort"
         field="client"
-        :filtered-label="sessions.filteredLabel('client')"
+        :filtered="sessions.filters.isFiltered('client')"
       >
         {{ t('pages.sessions.client') }}
       </SaTableHeader>
@@ -70,7 +70,7 @@ onMounted(async () => {
         fit
         :sorting="sessions.sort"
         field="session_date"
-        :filtered-label="sessions.filteredLabel('session_date')"
+        :filtered="sessions.filters.isFiltered('session_date')"
       >
         {{ t('pages.sessions.started') }}
       </SaTableHeader>

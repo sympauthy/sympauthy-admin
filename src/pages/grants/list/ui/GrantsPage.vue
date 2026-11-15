@@ -74,7 +74,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="grants.sort"
         field="user"
-        :filtered-label="grants.filteredLabel('user')"
+        :filtered="grants.filters.isFiltered('user')"
       >
         {{ t('pages.grants.grant') }}
         <template #help>
@@ -85,7 +85,7 @@ onMounted(async () => {
         fit
         :sorting="grants.sort"
         field="status"
-        :filtered-label="grants.filteredLabel('status')"
+        :filtered="grants.filters.isFiltered('status')"
       >
         {{ t('pages.grants.status') }}
         <template #help>
@@ -98,14 +98,14 @@ onMounted(async () => {
         fit
         :sorting="grants.sort"
         field="grant_type"
-        :filtered-label="grants.filteredLabel('grant_type')"
+        :filtered="grants.filters.isFiltered('grant_type')"
       >
         {{ t('pages.grants.grantType') }}
       </SaTableHeader>
       <SaTableHeader
         :sorting="grants.sort"
         field="client"
-        :filtered-label="grants.filteredLabel('client')"
+        :filtered="grants.filters.isFiltered('client')"
       >
         {{ t('pages.grants.client') }}
       </SaTableHeader>
@@ -116,7 +116,7 @@ onMounted(async () => {
         class="sm:max-lg:hidden"
         :sorting="grants.sort"
         field="audience_id"
-        :filtered-label="grants.filteredLabel('audience_id')"
+        :filtered="grants.filters.isFiltered('audience_id')"
       >
         {{ t('pages.grants.audience') }}
       </SaTableHeader>
@@ -125,7 +125,7 @@ onMounted(async () => {
         class="sm:max-lg:hidden"
         :sorting="grants.sort"
         field="created_at"
-        :filtered-label="grants.filteredLabel('created_at')"
+        :filtered="grants.filters.isFiltered('created_at')"
       >
         {{ t('pages.grants.createdAt') }}
       </SaTableHeader>

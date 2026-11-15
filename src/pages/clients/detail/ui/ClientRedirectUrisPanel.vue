@@ -25,17 +25,12 @@ const uris = computed(() => props.client.allowed_redirect_uris ?? [])
          without its header row since the section's title already names its one column. It is
          never loading: the record it reads is fetched by the shell. Each is copied on its own, since
          an operator registering the client elsewhere pastes one URI at a time. -->
-    <SaTable :loading-label="t('common.loading')" :empty="uris.length === 0">
+    <SaTable :empty="uris.length === 0">
       <template #rows>
         <tr v-for="uri in uris" :key="uri">
           <SaTableCell primary mono>{{ uri }}</SaTableCell>
           <SaTableActions>
-            <SaCopyButton
-              :value="uri"
-              :label="t('pages.clientDetail.copyRedirectUri', { uri })"
-              :copied-label="t('common.copied')"
-              :failed-label="t('common.copyFailed')"
-            />
+            <SaCopyButton :value="uri" :label="t('pages.clientDetail.copyRedirectUri', { uri })" />
           </SaTableActions>
         </tr>
       </template>

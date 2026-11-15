@@ -49,9 +49,7 @@ async function logout() {
 <template>
   <SaSidebar
     :sections="sections"
-    :label="t('nav.main')"
     :home-link="{ to: '/' }"
-    :close-label="t('nav.closeMenu')"
     :link-as="RouterLink"
     @close="closeSidebar"
   >
@@ -66,7 +64,6 @@ async function logout() {
       <SaSidebarAccount
         :name="authStore.userName"
         :detail="authStore.userEmail"
-        :sign-out-label="t('auth.logout')"
         @sign-out="logout"
       />
     </template>

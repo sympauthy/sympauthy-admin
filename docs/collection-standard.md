@@ -88,11 +88,11 @@ the package a page names `SaTableHeader`, `SaTableCell` and `SaTableActions`, an
 table above lists.
 
 **A column over a field of the collection hands its `SaTableHeader` `sorting`, `field` and
-`filtered-label`, and any other column none of them.** A field the document does not order on draws
+`filtered`, and any other column none of them.** A field the document does not order on draws
 as any other, so a page never decides that itself.
 
 ```html
-<SaTableHeader :sorting="users.sort" field="status" :filtered-label="users.filteredLabel('status')">
+<SaTableHeader :sorting="users.sort" field="status" :filtered="users.filters.isFiltered('status')">
   {{ t('pages.users.status') }}
 </SaTableHeader>
 ```
@@ -133,7 +133,7 @@ other way.
 `CollectionCriteria` is what the three travel as: `SaFilterCriterion`s, `SaSortKey`s and a string.
 
 **A page hands neither the fields nor the words.** The fields come from the document, and the words
-from the bundle through `useCollectionLabels`, which builds the `SaFilterLabels` and `SaSortLabels`.
+are the package's own.
 
 **`collectionQueryParams` is the only thing that writes the grammar.** A bare `field=` for `eq` and
 a dotted suffix for everything else, `in` comma-separated, `sort` an ordered list each descending
@@ -239,13 +239,10 @@ in full as [the API standard](api-standard.md#clients) requires.
 
 ## Naming
 
-**The panel names the operators and the server names everything else.** The ten words are closed and
-deliberately unlocalized, so they are read from `common.operators.<operator>`; a field's name, a
-value's name and every set they come from arrive in the document.
-
-**A type whose comparisons read differently declares its own labels.**
-`common.operators.date.<operator>` wins where it exists — *is on or after* rather than *is at
-least*.
+**The package names the operators and the server names everything else.** The ten words are closed
+and deliberately unlocalized, so `SaTableFilters` says them in its own words, a date's comparisons
+as a moment — *is on or after* rather than *is at least*; a field's name, a value's name and every
+set they come from arrive in the document.
 
 **A request carries `Accept-Language`, from the locale the panel renders in.** `AbstractApi` sets
 it, so the language a document is named in and the language around it are the same by construction.

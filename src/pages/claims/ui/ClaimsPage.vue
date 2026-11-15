@@ -31,14 +31,14 @@ onMounted(async () => {
 <template>
   <CollectionPage :collection="claims" :search-placeholder="t('pages.claims.search')">
     <template #header>
-      <SaTableHeader :sorting="claims.sort" field="id" :filtered-label="claims.filteredLabel('id')">
+      <SaTableHeader :sorting="claims.sort" field="id" :filtered="claims.filters.isFiltered('id')">
         {{ t('pages.claims.id') }}
       </SaTableHeader>
       <SaTableHeader
         fit
         :sorting="claims.sort"
         field="enabled"
-        :filtered-label="claims.filteredLabel('enabled')"
+        :filtered="claims.filters.isFiltered('enabled')"
       >
         {{ t('pages.claims.status.label') }}
         <template #help>
@@ -49,7 +49,7 @@ onMounted(async () => {
         fit
         :sorting="claims.sort"
         field="origin"
-        :filtered-label="claims.filteredLabel('origin')"
+        :filtered="claims.filters.isFiltered('origin')"
       >
         {{ t('terms.origin.label') }}
         <template #help>
@@ -60,7 +60,7 @@ onMounted(async () => {
         fit
         :sorting="claims.sort"
         field="kind"
-        :filtered-label="claims.filteredLabel('kind')"
+        :filtered="claims.filters.isFiltered('kind')"
       >
         {{ t('pages.claims.kind.label') }}
         <template #help>

@@ -33,7 +33,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="scopes.sort"
         field="scope"
-        :filtered-label="scopes.filteredLabel('scope')"
+        :filtered="scopes.filters.isFiltered('scope')"
       >
         {{ t('pages.scopes.id') }}
       </SaTableHeader>
@@ -41,7 +41,7 @@ onMounted(async () => {
         fit
         :sorting="scopes.sort"
         field="type"
-        :filtered-label="scopes.filteredLabel('type')"
+        :filtered="scopes.filters.isFiltered('type')"
       >
         {{ t('pages.scopes.type.label') }}
         <template #help>
@@ -60,7 +60,7 @@ onMounted(async () => {
         fit
         :sorting="scopes.sort"
         field="enabled"
-        :filtered-label="scopes.filteredLabel('enabled')"
+        :filtered="scopes.filters.isFiltered('enabled')"
       >
         {{ t('pages.scopes.status.label') }}
         <template #help>

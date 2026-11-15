@@ -1,5 +1,4 @@
 import { computed, onUnmounted, reactive, ref, watch, type Ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import {
   saFilterKnownFields,
@@ -107,8 +106,6 @@ export interface Collection<T> {
   /** The order it reads in, which is the collection's own where none was asked. */
   readonly sort: SaSort
   readonly searchable: boolean
-  /** What a column over [field] hands `SaTableHeader` as `filteredLabel`. */
-  filteredLabel: (field: string) => string | undefined
   /**
    * The first read of the screen: the first page, unless the operator came back to a phone's list
    * from one of its rows, which finds it as they left it.
@@ -143,7 +140,6 @@ export interface Collection<T> {
 export function useCollection<T, R extends CollectionPageResource>(
   source: CollectionSource<T, R>
 ): Collection<T> {
-  const { t } = useI18n()
   const route = useRoute()
   const router = useRouter()
   const grows = useSaListGrows()
@@ -202,10 +198,6 @@ export function useCollection<T, R extends CollectionPageResource>(
     onChange: () => void fetch(0),
     initial: returned?.sort
   })
-
-  function filteredLabel(field: string): string | undefined {
-    return filters.isFiltered(field) ? t('common.collection.filtered') : undefined
-  }
 
   /**
    * Reads the document, unless a read of it is already in flight.
@@ -429,7 +421,6 @@ export function useCollection<T, R extends CollectionPageResource>(
     filters,
     sort,
     searchable,
-    filteredLabel,
     load,
     fetch,
     fetchMore,

@@ -41,14 +41,14 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="claims.sort"
         field="claim_id"
-        :filtered-label="claims.filteredLabel('claim_id')"
+        :filtered="claims.filters.isFiltered('claim_id')"
       >
         {{ t('pages.userClaims.claim') }}
       </SaTableHeader>
       <SaTableHeader
         :sorting="claims.sort"
         field="value"
-        :filtered-label="claims.filteredLabel('value')"
+        :filtered="claims.filters.isFiltered('value')"
       >
         {{ t('pages.userClaims.value') }}
       </SaTableHeader>
@@ -56,7 +56,7 @@ onMounted(async () => {
         fit
         :sorting="claims.sort"
         field="collected"
-        :filtered-label="claims.filteredLabel('collected')"
+        :filtered="claims.filters.isFiltered('collected')"
       >
         {{ t('pages.userClaims.collectedAt') }}
       </SaTableHeader>

@@ -52,10 +52,12 @@ standard](https://github.com/sympauthy/sympauthy-design/blob/main/docs/standards
 admits it, and stays here until then.** What stays names something of this panel: a scope, a route,
 or a sentence of its bundle.
 
-**A package's component is handed its words.** It knows no message bundle, so what it draws is a
-prop filled from ours: `SaLoadingState` takes `common.loading` as its `label`, and a `SaPopover`
-takes `common.moreInformation`. A word two screens hand it goes under `common.`, as [the i18n
-standard](i18n-standard.md#keys) has it.
+**A package's component says its own words, and is handed the panel's.** A word it says the same on
+every screen — "Copied", "No, cancel", a filter's conditions — is the package's, under `sa.`, and
+[`shared/i18n`](../src/shared/i18n) adds it to the instance as [the i18n
+standard](i18n-standard.md#keys) has it. A word naming what is on the screen is a prop filled from
+our bundle: a `SaPopover` takes `common.moreInformation` as its `label`. A word two screens hand it
+goes under `common.`.
 
 **The package knows no router.** A component drawing links is handed `RouterLink` as `link-as`, and
 told which entry is current, by the wrapper that knows: `RecordTabs` and `app/layout`.

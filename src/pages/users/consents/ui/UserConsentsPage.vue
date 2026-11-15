@@ -81,7 +81,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="consents.sort"
         field="prompted_by_client"
-        :filtered-label="consents.filteredLabel('prompted_by_client')"
+        :filtered="consents.filters.isFiltered('prompted_by_client')"
       >
         {{ t('pages.userConsents.client.label') }}
         <template #help>
@@ -91,14 +91,14 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="consents.sort"
         field="audience_id"
-        :filtered-label="consents.filteredLabel('audience_id')"
+        :filtered="consents.filters.isFiltered('audience_id')"
       >
         {{ t('pages.userConsents.audience') }}
       </SaTableHeader>
       <SaTableHeader
         :sorting="consents.sort"
         field="scope"
-        :filtered-label="consents.filteredLabel('scope')"
+        :filtered="consents.filters.isFiltered('scope')"
       >
         {{ t('pages.userConsents.scopes.label') }}
         <template #help>
@@ -109,7 +109,7 @@ onMounted(async () => {
         fit
         :sorting="consents.sort"
         field="consented_at"
-        :filtered-label="consents.filteredLabel('consented_at')"
+        :filtered="consents.filters.isFiltered('consented_at')"
       >
         {{ t('pages.userConsents.consentedAt') }}
       </SaTableHeader>
@@ -167,7 +167,6 @@ onMounted(async () => {
   <SaConfirmDialog
     :open="revokeTargetAudienceId !== null"
     :confirm-label="t('pages.userConsents.revokeConfirm')"
-    :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"
     @confirm="confirmRevoke"

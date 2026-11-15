@@ -25,7 +25,7 @@ const uris = computed(() => clientReturnUris(props.client))
     <!-- Drawn as the redirect URIs above it are, so the two lists an operator compares read alike.
          The client's own `return_uri` comes first and is tagged: it is where a flow started without
          naming one returns, and the one an MFA enrollment or a provider link offers first. -->
-    <SaTable :loading-label="t('common.loading')" :empty="uris.length === 0">
+    <SaTable :empty="uris.length === 0">
       <template #rows>
         <tr v-for="uri in uris" :key="uri">
           <SaTableCell primary mono>
@@ -37,12 +37,7 @@ const uris = computed(() => clientReturnUris(props.client))
             </span>
           </SaTableCell>
           <SaTableActions>
-            <SaCopyButton
-              :value="uri"
-              :label="t('pages.clientDetail.copyReturnUri', { uri })"
-              :copied-label="t('common.copied')"
-              :failed-label="t('common.copyFailed')"
-            />
+            <SaCopyButton :value="uri" :label="t('pages.clientDetail.copyReturnUri', { uri })" />
           </SaTableActions>
         </tr>
       </template>

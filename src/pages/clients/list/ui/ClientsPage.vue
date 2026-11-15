@@ -34,7 +34,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="clients.sort"
         field="id"
-        :filtered-label="clients.filteredLabel('id')"
+        :filtered="clients.filters.isFiltered('id')"
       >
         {{ t('pages.clients.client') }}
       </SaTableHeader>
@@ -46,7 +46,7 @@ onMounted(async () => {
         fit
         :sorting="clients.sort"
         field="audience_id"
-        :filtered-label="clients.filteredLabel('audience_id')"
+        :filtered="clients.filters.isFiltered('audience_id')"
       >
         {{ t('pages.clients.audience') }}
         <template #help>

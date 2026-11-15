@@ -130,7 +130,7 @@ onMounted(async () => {
         fit
         :sorting="invitations.sort"
         field="status"
-        :filtered-label="invitations.filteredLabel('status')"
+        :filtered="invitations.filters.isFiltered('status')"
       >
         {{ t('pages.invitations.status.label') }}
         <template #help>
@@ -140,7 +140,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="invitations.sort"
         field="audience_id"
-        :filtered-label="invitations.filteredLabel('audience_id')"
+        :filtered="invitations.filters.isFiltered('audience_id')"
       >
         {{ t('pages.invitations.audience') }}
         <template #help>
@@ -153,7 +153,7 @@ onMounted(async () => {
         hidden-below="sm"
         :sorting="invitations.sort"
         field="expires_at"
-        :filtered-label="invitations.filteredLabel('expires_at')"
+        :filtered="invitations.filters.isFiltered('expires_at')"
       >
         {{ t('pages.invitations.expiresAt') }}
       </SaTableHeader>
@@ -203,7 +203,6 @@ onMounted(async () => {
   <SaConfirmDialog
     :open="revokeInvitationId !== null"
     :confirm-label="t('pages.invitations.revokeConfirm')"
-    :cancel-label="t('common.cancel')"
     :loading="revokeLoading"
     :error="revokeError"
     @confirm="onConfirmRevoke"

@@ -66,10 +66,5 @@ const breadcrumbs = computed<SaBreadcrumbItem[]>(() => {
 </script>
 
 <template>
-  <SaBreadcrumb
-    :items="breadcrumbs"
-    :label="t('nav.breadcrumb')"
-    :link-as="RouterLink"
-    :back-label="(name) => t('nav.backTo', { name })"
-  />
+  <SaBreadcrumb :items="breadcrumbs" :link-as="RouterLink" />
 </template>

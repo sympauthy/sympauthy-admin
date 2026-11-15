@@ -14,7 +14,6 @@ import {
 } from '@sympauthy/design'
 import { scrollParent } from '@/shared/lib'
 import { CommonButton } from '@/shared/ui'
-import { useCollectionLabels } from '../model/useCollectionLabels'
 import type { Collection } from '../model/useCollection'
 
 /**
@@ -45,7 +44,6 @@ const props = withDefaults(
 
 const slots = useSlots()
 const { t } = useI18n()
-const labels = useCollectionLabels()
 
 const root = ref<HTMLElement | null>(null)
 
@@ -94,7 +92,6 @@ onBeforeUnmount(() => {
       class="sm:min-h-0 sm:flex-1"
       fill
       auto-page-size
-      :loading-label="t('common.loading')"
       :loading="props.collection.loading"
       :error="props.collection.error"
       :empty="props.collection.items.length === 0"
@@ -117,8 +114,8 @@ onBeforeUnmount(() => {
              collection the server searches nothing on. A phone's controls fill theirs. -->
         <div v-else class="hidden flex-1 sm:block" />
 
-        <SaTableFilterPicker :filters="props.collection.filters" :labels="labels.filters.value" />
-        <SaTableSort :sort="props.collection.sort" :labels="labels.sort.value" />
+        <SaTableFilterPicker :filters="props.collection.filters" />
+        <SaTableSort :sort="props.collection.sort" />
 
         <!-- A list can have moved on since it was drawn, whatever it holds, so re-reading it is the
              caller's without any page saying so. -->
@@ -133,7 +130,7 @@ onBeforeUnmount(() => {
         />
       </template>
       <template #filters>
-        <SaTableFilters :filters="props.collection.filters" :labels="labels.filters.value">
+        <SaTableFilters :filters="props.collection.filters">
           <!-- The count of the last answer, which says nothing of a request that was refused. -->
           <template v-if="!props.collection.error" #summary>
             {{
@@ -156,11 +153,7 @@ onBeforeUnmount(() => {
           :more="props.collection.hasMore"
           :loading="props.collection.moreLoading"
           :error="props.collection.moreError"
-          :loading-label="t('common.collection.loadingMore')"
-          :end-label="
-            t('common.collection.end', { total: props.collection.total }, props.collection.total)
-          "
-          :retry-label="t('common.collection.retry')"
+          :total="props.collection.total"
           @more="props.collection.fetchMore"
         />
       </template>
@@ -173,11 +166,6 @@ onBeforeUnmount(() => {
           :total-pages="props.collection.totalPages"
           :size="props.collection.size"
           :total="props.collection.total"
-          :label="t('common.paginationLabel')"
-          :previous-label="t('common.previous')"
-          :next-label="t('common.next')"
-          :page-label="(page, totalPages) => t('common.pagination', { page, totalPages })"
-          :range-label="(range) => t('common.paginationRange', range)"
           @page-change="props.collection.fetch"
         />
       </template>
