@@ -16,6 +16,7 @@ import { type ActionItem, ActionsDropdown } from '@/shared/ui'
 import ClientSummaryPanel from './ClientSummaryPanel.vue'
 import ClientScopesPanel from './ClientScopesPanel.vue'
 import ClientRedirectUrisPanel from './ClientRedirectUrisPanel.vue'
+import ClientReturnUrisPanel from './ClientReturnUrisPanel.vue'
 import ClientAuthorizationPanel from './ClientAuthorizationPanel.vue'
 import { SaAlert, SaCard, SaLoadingState, SaPageActions } from '@sympauthy/design'
 
@@ -102,6 +103,7 @@ onMounted(async () => {
       <ClientAuthorizationPanel :client="client" />
       <ClientScopesPanel :client="client" :scopes="scopes" />
       <ClientRedirectUrisPanel :client="client" />
+      <ClientReturnUrisPanel :client="client" />
     </div>
   </div>
 </template>

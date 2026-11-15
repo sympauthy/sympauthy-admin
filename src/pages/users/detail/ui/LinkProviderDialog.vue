@@ -6,6 +6,7 @@ import { CommonButton, OneTimeSecret } from '@/shared/ui'
 import { clientChoiceLabel, useClientStore } from '@/entities/client'
 import { UserProviderLinkApi, type ProviderLinkStartInput } from '@/entities/user'
 import { isSuccess, getErrorMessage } from '@/shared/api'
+import { useClientReturnUris } from '../model/useClientReturnUris'
 
 interface Props {
   open: boolean
@@ -21,8 +22,7 @@ defineEmits<{
 const { t } = useI18n()
 const providerFieldId = useId()
 const clientFieldId = useId()
-const returnUrlFieldId = useId()
-const cancelUrlFieldId = useId()
+const returnUriFieldId = useId()
 const clientStore = useClientStore()
 const providerLinkApi = new UserProviderLinkApi()
 
@@ -30,18 +30,34 @@ const phase = ref<'form' | 'success'>('form')
 const providerId = ref('')
 const clientId = ref('')
 const returnUri = ref('')
-const cancelUri = ref('')
 const submitting = ref(false)
 const error = ref<string | null>(null)
 const redirectUrl = ref('')
 
-const selectedClient = computed(() =>
-  clientStore.allClients.find((client) => client.client_id === clientId.value)
+const {
+  returnUris,
+  defaultReturnUri,
+  loading: returnUrisLoading,
+  error: returnUrisError
+} = useClientReturnUris(clientId)
+// The default is offered as the empty value, so choosing it sends no `return_uri` at all.
+const otherReturnUris = computed(() =>
+  returnUris.value.filter((uri) => uri !== defaultReturnUri.value)
 )
-const redirectUris = computed(() => selectedClient.value?.allowed_redirect_uris ?? [])
-const hasRedirectUris = computed(() => redirectUris.value.length > 0)
+const declaresNoReturnUri = computed(
+  () =>
+    !!clientId.value &&
+    !returnUrisLoading.value &&
+    !returnUrisError.value &&
+    returnUris.value.length === 0
+)
+const cannotStart = computed(
+  () => !!clientId.value && (returnUrisLoading.value || returnUris.value.length === 0)
+)
 
-const displayError = computed(() => error.value ?? clientStore.allClientsError)
+const displayError = computed(
+  () => error.value ?? returnUrisError.value ?? clientStore.allClientsError
+)
 
 const dialogTitle = computed(() =>
   phase.value === 'form'
@@ -57,7 +73,6 @@ watch(
       providerId.value = ''
       clientId.value = ''
       returnUri.value = ''
-      cancelUri.value = ''
       submitting.value = false
       error.value = null
       redirectUrl.value = ''
@@ -66,10 +81,9 @@ watch(
   }
 )
 
-// Reset the URL pickers whenever the client changes — their options come from the selected client.
+// Reset the return URI whenever the client changes — its options come from the selected client.
 watch(clientId, () => {
   returnUri.value = ''
-  cancelUri.value = ''
 })
 
 async function onSubmit() {
@@ -83,19 +97,18 @@ async function onSubmit() {
     error.value = t('pages.userDetail.linkProviderClientRequired')
     return
   }
-  if (!returnUri.value) {
-    error.value = t('pages.userDetail.linkProviderReturnUrlRequired')
+  if (!returnUri.value && !defaultReturnUri.value) {
+    error.value = t('pages.userDetail.linkProviderReturnUriRequired')
     return
   }
 
   submitting.value = true
 
   const input: ProviderLinkStartInput = {
-    client_id: clientId.value,
-    return_uri: returnUri.value
+    client_id: clientId.value
   }
-  if (cancelUri.value) {
-    input.cancel_uri = cancelUri.value
+  if (returnUri.value) {
+    input.return_uri = returnUri.value
   }
 
   const response = await providerLinkApi.startProviderLink(
@@ -169,27 +182,31 @@ async function onSubmit() {
             </SaSelect>
           </SaField>
 
-          <SaAlert v-if="clientId && !hasRedirectUris" color="warning" urgent>
-            {{ t('pages.userDetail.linkProviderNoRedirectUris') }}
+          <SaAlert v-if="declaresNoReturnUri" color="warning" urgent>
+            {{ t('pages.userDetail.linkProviderNoReturnUris') }}
           </SaAlert>
 
-          <SaField :for="returnUrlFieldId" :label="t('pages.userDetail.linkProviderReturnUrl')">
-            <SaSelect :id="returnUrlFieldId" v-model="returnUri" :disabled="!hasRedirectUris">
-              <option value="" disabled>
-                {{ t('pages.userDetail.linkProviderSelectReturnUrl') }}
+          <SaField
+            :for="returnUriFieldId"
+            :label="t('pages.userDetail.linkProviderReturnUri')"
+            :hint="t('pages.userDetail.linkProviderReturnUriHelp')"
+          >
+            <SaSelect
+              :id="returnUriFieldId"
+              v-model="returnUri"
+              :disabled="!clientId || cannotStart"
+            >
+              <option v-if="defaultReturnUri" value="">
+                {{ t('pages.userDetail.linkProviderDefaultReturnUri', { uri: defaultReturnUri }) }}
               </option>
-              <option v-for="uri in redirectUris" :key="uri" :value="uri">
-                {{ uri }}
+              <option v-else value="" disabled>
+                {{
+                  returnUrisLoading
+                    ? t('common.loading')
+                    : t('pages.userDetail.linkProviderSelectReturnUri')
+                }}
               </option>
-            </SaSelect>
-          </SaField>
-
-          <SaField :for="cancelUrlFieldId" :label="t('pages.userDetail.linkProviderCancelUrl')">
-            <SaSelect :id="cancelUrlFieldId" v-model="cancelUri" :disabled="!hasRedirectUris">
-              <option value="">
-                {{ t('pages.userDetail.linkProviderNoCancelUrl') }}
-              </option>
-              <option v-for="uri in redirectUris" :key="uri" :value="uri">
+              <option v-for="uri in otherReturnUris" :key="uri" :value="uri">
                 {{ uri }}
               </option>
             </SaSelect>
@@ -215,7 +232,7 @@ async function onSubmit() {
           variant="primary"
           :label="t('pages.userDetail.linkProviderGenerate')"
           :submitting="submitting"
-          :disabled="!!clientId && !hasRedirectUris"
+          :disabled="cannotStart"
           @click="onSubmit"
         />
       </template>
