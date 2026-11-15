@@ -21,7 +21,7 @@ defineEmits<{
 
 const { t } = useI18n()
 const clientFieldId = useId()
-const returnUrlFieldId = useId()
+const returnUriFieldId = useId()
 const clientStore = useClientStore()
 const userMfaApi = new UserMfaApi()
 
@@ -91,7 +91,7 @@ async function onSubmit() {
     return
   }
   if (!returnUri.value && !defaultReturnUri.value) {
-    error.value = t('pages.userDetail.enrollMfaReturnUrlRequired')
+    error.value = t('pages.userDetail.enrollMfaReturnUriRequired')
     return
   }
 
@@ -164,23 +164,23 @@ async function onSubmit() {
           </SaAlert>
 
           <SaField
-            :for="returnUrlFieldId"
-            :label="t('pages.userDetail.enrollMfaReturnUrl')"
-            :hint="t('pages.userDetail.enrollMfaReturnUrlHelp')"
+            :for="returnUriFieldId"
+            :label="t('pages.userDetail.enrollMfaReturnUri')"
+            :hint="t('pages.userDetail.enrollMfaReturnUriHelp')"
           >
             <SaSelect
-              :id="returnUrlFieldId"
+              :id="returnUriFieldId"
               v-model="returnUri"
               :disabled="!clientId || cannotStart"
             >
               <option v-if="defaultReturnUri" value="">
-                {{ t('pages.userDetail.enrollMfaDefaultReturnUrl', { uri: defaultReturnUri }) }}
+                {{ t('pages.userDetail.enrollMfaDefaultReturnUri', { uri: defaultReturnUri }) }}
               </option>
               <option v-else value="" disabled>
                 {{
                   returnUrisLoading
                     ? t('common.loading')
-                    : t('pages.userDetail.enrollMfaSelectReturnUrl')
+                    : t('pages.userDetail.enrollMfaSelectReturnUri')
                 }}
               </option>
               <option v-for="uri in otherReturnUris" :key="uri" :value="uri">

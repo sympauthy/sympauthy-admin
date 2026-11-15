@@ -22,7 +22,7 @@ defineEmits<{
 const { t } = useI18n()
 const providerFieldId = useId()
 const clientFieldId = useId()
-const returnUrlFieldId = useId()
+const returnUriFieldId = useId()
 const clientStore = useClientStore()
 const providerLinkApi = new UserProviderLinkApi()
 
@@ -98,7 +98,7 @@ async function onSubmit() {
     return
   }
   if (!returnUri.value && !defaultReturnUri.value) {
-    error.value = t('pages.userDetail.linkProviderReturnUrlRequired')
+    error.value = t('pages.userDetail.linkProviderReturnUriRequired')
     return
   }
 
@@ -187,23 +187,23 @@ async function onSubmit() {
           </SaAlert>
 
           <SaField
-            :for="returnUrlFieldId"
-            :label="t('pages.userDetail.linkProviderReturnUrl')"
-            :hint="t('pages.userDetail.linkProviderReturnUrlHelp')"
+            :for="returnUriFieldId"
+            :label="t('pages.userDetail.linkProviderReturnUri')"
+            :hint="t('pages.userDetail.linkProviderReturnUriHelp')"
           >
             <SaSelect
-              :id="returnUrlFieldId"
+              :id="returnUriFieldId"
               v-model="returnUri"
               :disabled="!clientId || cannotStart"
             >
               <option v-if="defaultReturnUri" value="">
-                {{ t('pages.userDetail.linkProviderDefaultReturnUrl', { uri: defaultReturnUri }) }}
+                {{ t('pages.userDetail.linkProviderDefaultReturnUri', { uri: defaultReturnUri }) }}
               </option>
               <option v-else value="" disabled>
                 {{
                   returnUrisLoading
                     ? t('common.loading')
-                    : t('pages.userDetail.linkProviderSelectReturnUrl')
+                    : t('pages.userDetail.linkProviderSelectReturnUri')
                 }}
               </option>
               <option v-for="uri in otherReturnUris" :key="uri" :value="uri">
