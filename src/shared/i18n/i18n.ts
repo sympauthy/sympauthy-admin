@@ -1,6 +1,7 @@
 import type { NamedValue } from 'vue-i18n'
 import { createI18n } from 'vue-i18n'
 import messages from '@intlify/unplugin-vue-i18n/messages'
+import { loadSaMessages, SA_MESSAGES_EN } from '@sympauthy/design'
 
 const getNavigatorLanguage = () => {
   if (navigator.languages && navigator.languages.length) {
@@ -28,6 +29,28 @@ export const i18n = createI18n({
   fallbackWarn: false,
   missingWarn: false
 })
+
+// The words the design system's components say the same on every screen, under `sa.`. English is in
+// the first load, with no fetch, since it is the language the panel falls back to.
+i18n.global.mergeLocaleMessage(FALLBACK_LOCALE, SA_MESSAGES_EN)
+
+/**
+ * Adds the design system's words to every other language the panel holds a bundle for, before the
+ * panel mounts. Only to those: a language added to the instance is one `availableLanguages()`
+ * offers, and the operator choosing it would read a screen of English around the package's words.
+ */
+export async function addSaMessages(): Promise<void> {
+  const languages = (i18n.global.availableLocales as string[]).filter(
+    (language) => language !== FALLBACK_LOCALE
+  )
+  const words = await Promise.all(languages.map(loadSaMessages))
+  languages.forEach((language, index) => {
+    const languageWords = words[index]
+    if (languageWords) {
+      i18n.global.mergeLocaleMessage(language, languageWords)
+    }
+  })
+}
 
 /**
  * Renders the panel in [language], or in the browser's where it is `undefined`, from the next render

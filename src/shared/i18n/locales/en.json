@@ -24,72 +24,19 @@
     "submitting": "Submitting...",
     "loading": "Loading...",
     "copy": "Copy",
-    "copied": "Copied",
-    "copyFailed": "Could not copy",
     "save": "Save",
     "cancel": "Cancel",
     "actions": "Actions",
     "actionsFor": "Actions for {name}",
     "delete": "Delete",
-    "previous": "Previous",
-    "next": "Next",
     "moreInformation": "More information",
-    "pagination": "Page {page} of {totalPages}",
-    "paginationLabel": "Pages",
-    "paginationRange": "Showing {from}-{to} of {total}",
-    "addFilter": "Add filter",
     "yes": "Yes",
     "no": "No",
-    "remove": "Remove",
-    "list": {
-      "noMatch": "Nothing matches"
-    },
     "collection": {
       "search": "Search",
-      "operator": "Condition",
-      "value": "Value",
-      "selectValue": "Choose…",
-      "searchFields": "Search fields",
-      "searchValues": "Search values",
-      "addValue": "Add a value",
-      "removeFilter": "Remove this filter",
-      "activeFilters": "Active filters",
-      "clearFilters": "Clear filters",
-      "filtered": "Filtered",
       "matches": "{total} record matches | {total} records match",
-      "sort": "Sort",
-      "searchOrders": "Search orders",
-      "ascending": "ascending",
-      "descending": "descending",
       "capabilitiesFailed": "The filters of this list could not be read. The records below are complete.",
-      "refresh": "Refresh",
-      "loadingMore": "Loading more records…",
-      "end": "{total} record | All {total} records shown",
-      "retry": "Retry"
-    },
-    "operators": {
-      "eq": "is",
-      "ne": "is not",
-      "lt": "is less than",
-      "lte": "is at most",
-      "gt": "is more than",
-      "gte": "is at least",
-      "in": "is one of",
-      "contains": "contains",
-      "starts_with": "starts with",
-      "is_null": "is empty",
-      "date": {
-        "eq": "is on",
-        "ne": "is not on",
-        "lt": "is before",
-        "lte": "is on or before",
-        "gt": "is after",
-        "gte": "is on or after",
-        "in": "is one of",
-        "contains": "contains",
-        "starts_with": "starts with",
-        "is_null": "is empty"
-      }
+      "refresh": "Refresh"
     },
     "missingScopes": "Your token is not granted {scopes}."
   },
@@ -368,9 +315,6 @@
   },
   "nav": {
     "panel": "Admin",
-    "main": "Main",
-    "breadcrumb": "Where you are",
-    "backTo": "Back to {name}",
     "sectionUsers": "Users",
     "sectionConfiguration": "Server configuration",
     "sectionAdmin": "Admin",
@@ -383,8 +327,6 @@
     "invitations": "Invitations",
     "grants": "Grants",
     "sessions": "Sessions",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
     "preferences": "Preferences"
   },
   "logoutDialog": {
@@ -433,8 +375,7 @@
         "label": "Time zone",
         "browser": "The browser's ({zone})",
         "hint": "A time shown in another zone than the browser's names that zone beside it.",
-        "search": "Search zones",
-        "noMatch": "No zone matches."
+        "search": "Search zones"
       },
       "saved": "Saved.",
       "notKept": {

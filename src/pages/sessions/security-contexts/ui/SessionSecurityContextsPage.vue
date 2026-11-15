@@ -48,7 +48,7 @@ onMounted(async () => {
         hidden-below="lg"
         :sorting="securityContexts.sort"
         field="country_code"
-        :filtered-label="securityContexts.filteredLabel('country_code')"
+        :filtered="securityContexts.filters.isFiltered('country_code')"
       >
         {{ t('pages.sessionSecurityContexts.location') }}
       </SaTableHeader>
@@ -56,7 +56,7 @@ onMounted(async () => {
         fit
         :sorting="securityContexts.sort"
         field="observation_count"
-        :filtered-label="securityContexts.filteredLabel('observation_count')"
+        :filtered="securityContexts.filters.isFiltered('observation_count')"
       >
         {{ t('pages.sessionSecurityContexts.requests') }}
       </SaTableHeader>
@@ -65,7 +65,7 @@ onMounted(async () => {
         hidden-below="lg"
         :sorting="securityContexts.sort"
         field="first_seen_date"
-        :filtered-label="securityContexts.filteredLabel('first_seen_date')"
+        :filtered="securityContexts.filters.isFiltered('first_seen_date')"
       >
         {{ t('pages.sessionSecurityContexts.firstSeen') }}
       </SaTableHeader>
@@ -74,7 +74,7 @@ onMounted(async () => {
         hidden-below="sm"
         :sorting="securityContexts.sort"
         field="last_seen_date"
-        :filtered-label="securityContexts.filteredLabel('last_seen_date')"
+        :filtered="securityContexts.filters.isFiltered('last_seen_date')"
       >
         {{ t('pages.sessionSecurityContexts.lastSeen') }}
       </SaTableHeader>
@@ -82,7 +82,7 @@ onMounted(async () => {
         fit
         :sorting="securityContexts.sort"
         field="proven_date"
-        :filtered-label="securityContexts.filteredLabel('proven_date')"
+        :filtered="securityContexts.filters.isFiltered('proven_date')"
       >
         {{ t('pages.sessionSecurityContexts.proven') }}
       </SaTableHeader>

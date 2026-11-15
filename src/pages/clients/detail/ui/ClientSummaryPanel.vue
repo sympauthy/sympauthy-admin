@@ -25,12 +25,7 @@ const typeCaption = computed(() =>
        authorization section beside the three. -->
   <SaSummaryCard>
     <SaSummaryField mono :label="t('pages.clientDetail.clientId')">
-      <SaCopyableValue
-        :value="client.client_id"
-        :label="t('pages.clientDetail.copyClientId')"
-        :copied-label="t('common.copied')"
-        :failed-label="t('common.copyFailed')"
-      />
+      <SaCopyableValue :value="client.client_id" :label="t('pages.clientDetail.copyClientId')" />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.clientDetail.type')">
       <template #help>

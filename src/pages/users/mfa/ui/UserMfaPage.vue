@@ -74,7 +74,7 @@ onMounted(async () => {
         fit
         :sorting="mfaMethods.sort"
         field="confirmed_date"
-        :filtered-label="mfaMethods.filteredLabel('confirmed_date')"
+        :filtered="mfaMethods.filters.isFiltered('confirmed_date')"
       >
         {{ t('pages.userMfa.registeredAt') }}
       </SaTableHeader>
@@ -116,7 +116,6 @@ onMounted(async () => {
   <SaConfirmDialog
     :open="removeTargetMfaId !== null"
     :confirm-label="t('pages.userMfa.removeConfirm')"
-    :cancel-label="t('common.cancel')"
     @confirm="confirmRemove"
     @cancel="removeTargetMfaId = null"
   >

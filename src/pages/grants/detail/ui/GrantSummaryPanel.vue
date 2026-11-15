@@ -30,12 +30,7 @@ const { t } = useI18n()
        and what it was opened for, and when. -->
   <SaSummaryCard>
     <SaSummaryField mono :label="t('pages.grantDetail.grantId')">
-      <SaCopyableValue
-        :value="grant.grant_id"
-        :label="t('pages.grantDetail.copyGrantId')"
-        :copied-label="t('common.copied')"
-        :failed-label="t('common.copyFailed')"
-      />
+      <SaCopyableValue :value="grant.grant_id" :label="t('pages.grantDetail.copyGrantId')" />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.grantDetail.status')">
       <template #help>

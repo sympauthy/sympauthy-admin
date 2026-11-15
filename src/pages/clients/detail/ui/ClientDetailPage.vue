@@ -82,7 +82,7 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Loading state -->
-    <SaLoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" />
 
     <!-- Undeclared state -->
     <SaCard v-else-if="notFound">

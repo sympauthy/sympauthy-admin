@@ -119,7 +119,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="users.sort"
         :field="identifierClaims[0]?.id ?? 'user_id'"
-        :filtered-label="users.filteredLabel(identifierClaims[0]?.id ?? 'user_id')"
+        :filtered="users.filters.isFiltered(identifierClaims[0]?.id ?? 'user_id')"
       >
         {{ t('pages.users.user') }}
         <template #help>
@@ -130,7 +130,7 @@ onMounted(async () => {
         fit
         :sorting="users.sort"
         field="status"
-        :filtered-label="users.filteredLabel('status')"
+        :filtered="users.filters.isFiltered('status')"
       >
         {{ t('pages.users.status') }}
         <template #help>
@@ -142,7 +142,7 @@ onMounted(async () => {
         :key="claim.id"
         :sorting="users.sort"
         :field="claim.id"
-        :filtered-label="users.filteredLabel(claim.id)"
+        :filtered="users.filters.isFiltered(claim.id)"
       >
         {{ claim.id }}
         <template #help>
@@ -153,7 +153,7 @@ onMounted(async () => {
         fit
         :sorting="users.sort"
         field="last_authenticated_at"
-        :filtered-label="users.filteredLabel('last_authenticated_at')"
+        :filtered="users.filters.isFiltered('last_authenticated_at')"
       >
         {{ t('pages.users.lastAuthenticatedAt') }}
       </SaTableHeader>
@@ -162,7 +162,7 @@ onMounted(async () => {
         hidden-below="sm"
         :sorting="users.sort"
         field="created_at"
-        :filtered-label="users.filteredLabel('created_at')"
+        :filtered="users.filters.isFiltered('created_at')"
       >
         {{ t('pages.users.createdAt') }}
       </SaTableHeader>

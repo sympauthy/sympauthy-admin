@@ -78,11 +78,15 @@ differs. `terms.origin.label` names a column on the claims screen and on the sco
 `pages.claims.origin.help` beside `pages.scopes.origin.help` are the two sets of values and the two
 pages of documentation behind it.
 
-**A word the protocol fixes is the panel's to name.** The ten collection operators are closed and
-deliberately unlocalized on the wire, so `common.operators.<operator>` holds their labels, with
-`common.operators.date.<operator>` overriding the comparisons that read differently over a moment.
-They carry no `values` segment, because the set is the protocol's rather than the server's: nothing
-is ever added to it that the nested `date` could be mistaken for.
+**A word a component of `@sympauthy/design` says on every screen is the package's, under `sa.`** —
+the pager, the filters and their conditions, the copy controls, a confirmation's way out. `en.json`
+holds none of them, and a screen reads none of them: the package renames its keys in its own
+releases.
+
+**The package's words are added to each language the panel holds a bundle for, and to no other.**
+English at once, as the instance is built, and the others by `addSaMessages` before the panel
+mounts. A language added to the instance is one `availableLanguages()` offers, so adding the
+package's words in a language the panel lacks would offer a screen of English around them.
 
 **A term belonging to one entity lives under `terms.<entity>.<term>`,** whichever screens explain
 it: `terms.claim.identifier`, `terms.client.type`, `terms.audience.registrationMode`.
@@ -108,7 +112,7 @@ passed and nothing of `en.json`. The mode is what decides that, and it is the on
 leaves — the legacy mode is removed there.
 
 **A value is interpolated by name**, written `{name}` in the bundle and passed as an object:
-`t('common.pagination', { page, totalPages })`.
+`t('common.actionsFor', { name })`.
 
 **A string carrying a link is rendered with `<i18n-t>`,** the link supplied as a named slot:
 

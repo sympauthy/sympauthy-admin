@@ -104,7 +104,7 @@ onMounted(() => load(grantId.value))
 <template>
   <div>
     <!-- Loading state -->
-    <SaLoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" />
 
     <!-- Collected state -->
     <SaCard v-else-if="notFound">

@@ -72,7 +72,7 @@ onMounted(async () => {
       <SaTableHeader
         :sorting="providerLinks.sort"
         field="provider_id"
-        :filtered-label="providerLinks.filteredLabel('provider_id')"
+        :filtered="providerLinks.filters.isFiltered('provider_id')"
       >
         {{ t('pages.userProviders.provider') }}
       </SaTableHeader>
@@ -86,7 +86,7 @@ onMounted(async () => {
         fit
         :sorting="providerLinks.sort"
         field="link_date"
-        :filtered-label="providerLinks.filteredLabel('link_date')"
+        :filtered="providerLinks.filters.isFiltered('link_date')"
       >
         {{ t('pages.userProviders.linkedAt') }}
       </SaTableHeader>
@@ -109,12 +109,7 @@ onMounted(async () => {
           mono
           class="max-sm:basis-full"
         >
-          <SaCopyableValue
-            :value="link.subject"
-            :label="t('pages.userProviders.copySubject')"
-            :copied-label="t('common.copied')"
-            :failed-label="t('common.copyFailed')"
-          />
+          <SaCopyableValue :value="link.subject" :label="t('pages.userProviders.copySubject')" />
         </SaTableCell>
         <!-- The package ends a phone's first line with a break that the row's gap falls on both sides
              of, so the name stands twice that gap above the subject. This line matches it. -->
@@ -139,7 +134,6 @@ onMounted(async () => {
   <SaConfirmDialog
     :open="unlinkTargetProviderId !== null"
     :confirm-label="t('pages.userProviders.unlinkConfirm')"
-    :cancel-label="t('common.cancel')"
     @confirm="confirmUnlink"
     @cancel="unlinkTargetProviderId = null"
   >

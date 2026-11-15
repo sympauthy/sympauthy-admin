@@ -132,7 +132,7 @@ onMounted(() => load(userId.value))
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4">
     <!-- Loading state -->
-    <SaLoadingState v-if="loading" :label="t('common.loading')" />
+    <SaLoadingState v-if="loading" />
 
     <!-- Error state -->
     <SaAlert v-else-if="error" color="danger">

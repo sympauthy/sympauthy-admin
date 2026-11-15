@@ -36,12 +36,7 @@ const lifetime = computed(() => {
 <template>
   <SaSummaryCard>
     <SaSummaryField mono :label="t('pages.sessionDetail.sessionId')">
-      <SaCopyableValue
-        :value="session.id"
-        :label="t('pages.sessionDetail.copySessionId')"
-        :copied-label="t('common.copied')"
-        :failed-label="t('common.copyFailed')"
-      />
+      <SaCopyableValue :value="session.id" :label="t('pages.sessionDetail.copySessionId')" />
     </SaSummaryField>
     <SaSummaryField :label="t('pages.sessionDetail.status')">
       <template #help>
